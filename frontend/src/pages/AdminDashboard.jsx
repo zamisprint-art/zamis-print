@@ -1,0 +1,337 @@
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Package, ShoppingBag, PlusCircle, Settings, Edit, Trash2, X, Upload } from 'lucide-react';
+import { useAuthStore } from '../store/useAuthStore';
+
+const AdminDashboard = () => {
+  const [activeTab, setActiveTab] = useState('orders');
+  const [orders, setOrders] = useState([]);
+  const [products, setProducts] = useState([]);
+  const { userInfo } = useAuthStore();
+
+  // Product Modal State
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [currentProduct, setCurrentProduct] = useState({
+    _id: '', name: '', price: 0, category: '', countInStock: 0, description: '', image: '', model3D: ''
+  });
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [uploadingModel, setUploadingModel] = useState(false);
+
+  const fetchData = async () => {
+    try {
+      const [ordersRes, productsRes] = await Promise.all([
+        axios.get('/api/orders'),
+        axios.get('/api/products')
+      ]);
+      setOrders(ordersRes.data);
+      setProducts(productsRes.data);
+    } catch (error) {
+      console.error('Error fetching admin data:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (userInfo && userInfo.isAdmin) {
+      fetchData();
+    }
+  }, [userInfo]);
+
+  // --- PRODUCT CRUD HANDLERS ---
+  const handleOpenCreateModal = () => {
+    setIsEditing(false);
+    setCurrentProduct({ _id: '', name: '', price: 0, category: '', countInStock: 0, description: '', image: '', model3D: '' });
+    setIsModalOpen(true);
+  };
+
+  const handleOpenEditModal = (product) => {
+    setIsEditing(true);
+    setCurrentProduct({ ...product });
+    setIsModalOpen(true);
+  };
+
+  const handleDeleteProduct = async (id) => {
+    if (window.confirm('¿Estás seguro de eliminar este producto?')) {
+      try {
+        await axios.delete(`/api/products/${id}`);
+        fetchData();
+      } catch (error) {
+        alert(error.response?.data?.message || 'Error al eliminar');
+      }
+    }
+  };
+
+  const handleSaveProduct = async (e) => {
+    e.preventDefault();
+    try {
+      if (isEditing) {
+        await axios.put(`/api/products/${currentProduct._id}`, currentProduct);
+      } else {
+        // Create sample then update immediately
+        const { data: created } = await axios.post('/api/products', {});
+        await axios.put(`/api/products/${created._id}`, currentProduct);
+      }
+      setIsModalOpen(false);
+      fetchData();
+    } catch (error) {
+      alert(error.response?.data?.message || 'Error al guardar');
+    }
+  };
+
+  const uploadFileHandler = async (e, type) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append('file', file);
+
+    if (type === 'image') setUploadingImage(true);
+    else setUploadingModel(true);
+
+    try {
+      const config = { headers: { 'Content-Type': 'multipart/form-data' } };
+      const { data } = await axios.post('/api/upload', formData, config);
+      
+      if (type === 'image') {
+        setCurrentProduct({ ...currentProduct, image: data.filePath });
+        setUploadingImage(false);
+      } else {
+        setCurrentProduct({ ...currentProduct, model3D: data.filePath });
+        setUploadingModel(false);
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Error subiendo el archivo');
+      if (type === 'image') setUploadingImage(false);
+      else setUploadingModel(false);
+    }
+  };
+
+  const handleOrderStatusChange = async (id, status) => {
+    try {
+      await axios.put(`/api/orders/${id}/status`, { status });
+      fetchData();
+    } catch (error) {
+      alert('Error cambiando estado');
+    }
+  };
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col md:flex-row gap-8">
+      {/* Sidebar */}
+      <div className="w-full md:w-64 flex flex-col gap-2">
+        <div className="glass-panel p-6 rounded-2xl mb-4">
+          <h2 className="text-xl font-bold mb-1">Panel Admin</h2>
+          <p className="text-sm text-primary">ZAMIS Print</p>
+        </div>
+        
+        <button 
+          onClick={() => setActiveTab('orders')}
+          className={`flex items-center gap-3 p-4 rounded-xl transition-colors ${activeTab === 'orders' ? 'bg-primary text-white' : 'glass-panel hover:bg-white/5'}`}
+        >
+          <ShoppingBag size={20} /> Órdenes
+        </button>
+        <button 
+          onClick={() => setActiveTab('products')}
+          className={`flex items-center gap-3 p-4 rounded-xl transition-colors ${activeTab === 'products' ? 'bg-primary text-white' : 'glass-panel hover:bg-white/5'}`}
+        >
+          <Package size={20} /> Productos
+        </button>
+        <button 
+          onClick={() => setActiveTab('settings')}
+          className={`flex items-center gap-3 p-4 rounded-xl transition-colors ${activeTab === 'settings' ? 'bg-primary text-white' : 'glass-panel hover:bg-white/5'}`}
+        >
+          <Settings size={20} /> Configuración
+        </button>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 glass-panel rounded-2xl p-6 md:p-8 min-h-[600px] relative">
+        {activeTab === 'orders' && (
+          <div>
+            <div className="flex justify-between items-center mb-8">
+              <h2 className="text-2xl font-bold">Gestión de Órdenes</h2>
+            </div>
+            
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="border-b border-white/10 text-gray-400">
+                    <th className="py-4 px-4">ID Pedido</th>
+                    <th className="py-4 px-4">Fecha</th>
+                    <th className="py-4 px-4">Cliente</th>
+                    <th className="py-4 px-4">Total</th>
+                    <th className="py-4 px-4">Estado</th>
+                    <th className="py-4 px-4">Acción</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {orders.map((order) => (
+                    <tr key={order._id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                      <td className="py-4 px-4 font-mono text-sm">{order._id.substring(0, 8)}...</td>
+                      <td className="py-4 px-4">{new Date(order.createdAt).toLocaleDateString()}</td>
+                      <td className="py-4 px-4">{order.user?.name || 'Invitado'}</td>
+                      <td className="py-4 px-4 font-bold">${order.totalPrice}</td>
+                      <td className="py-4 px-4">
+                        <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                          order.orderStatus === 'Pendiente' ? 'bg-yellow-500/20 text-yellow-400' :
+                          order.orderStatus === 'En Producción' ? 'bg-blue-500/20 text-blue-400' :
+                          'bg-green-500/20 text-green-400'
+                        }`}>
+                          {order.orderStatus}
+                        </span>
+                      </td>
+                      <td className="py-4 px-4">
+                        <select 
+                          className="bg-dark border border-white/20 rounded p-1 text-sm focus:outline-none focus:border-primary"
+                          value={order.orderStatus}
+                          onChange={(e) => handleOrderStatusChange(order._id, e.target.value)}
+                        >
+                          <option value="Pendiente">Pendiente</option>
+                          <option value="En Producción">En Producción</option>
+                          <option value="Enviado">Enviado</option>
+                        </select>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'products' && (
+          <div>
+            <div className="flex justify-between items-center mb-8">
+              <h2 className="text-2xl font-bold">Catálogo</h2>
+              <button onClick={handleOpenCreateModal} className="btn-primary flex items-center gap-2 py-2 px-4 text-sm">
+                <PlusCircle size={18} /> Nuevo Producto
+              </button>
+            </div>
+            
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="border-b border-white/10 text-gray-400">
+                    <th className="py-4 px-4">Nombre</th>
+                    <th className="py-4 px-4">Categoría</th>
+                    <th className="py-4 px-4">Precio</th>
+                    <th className="py-4 px-4">Stock</th>
+                    <th className="py-4 px-4 text-right">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {products.map((product) => (
+                    <tr key={product._id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                      <td className="py-4 px-4 font-bold">{product.name}</td>
+                      <td className="py-4 px-4">{product.category}</td>
+                      <td className="py-4 px-4">${product.price}</td>
+                      <td className="py-4 px-4">{product.countInStock}</td>
+                      <td className="py-4 px-4 flex justify-end gap-2">
+                        <button onClick={() => handleOpenEditModal(product)} className="p-2 bg-blue-500/20 text-blue-400 rounded hover:bg-blue-500 hover:text-white transition-colors">
+                          <Edit size={16} />
+                        </button>
+                        <button onClick={() => handleDeleteProduct(product._id)} className="p-2 bg-red-500/20 text-red-400 rounded hover:bg-red-500 hover:text-white transition-colors">
+                          <Trash2 size={16} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+        
+        {activeTab === 'settings' && (
+          <div>
+            <h2 className="text-2xl font-bold mb-8">Configuración Integraciones</h2>
+            <div className="space-y-6 max-w-2xl">
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">MercadoPago Access Token</label>
+                <input type="password" value="TEST-****************" disabled className="input-field opacity-50" />
+                <p className="text-xs text-gray-400 mt-1">Configurado vía variables de entorno (.env)</p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Resend API Key</label>
+                <input type="password" value="re_****************" disabled className="input-field opacity-50" />
+                <p className="text-xs text-gray-400 mt-1">Configurado vía variables de entorno (.env)</p>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Product Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-darker/80 backdrop-blur-sm">
+          <div className="glass-panel w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl p-6 relative shadow-2xl">
+            <button 
+              onClick={() => setIsModalOpen(false)}
+              className="absolute top-4 right-4 p-2 text-gray-400 hover:text-white rounded-full hover:bg-white/10 transition-colors"
+            >
+              <X size={24} />
+            </button>
+            <h2 className="text-2xl font-bold mb-6">{isEditing ? 'Editar Producto' : 'Crear Producto'}</h2>
+            
+            <form onSubmit={handleSaveProduct} className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Nombre</label>
+                  <input type="text" required value={currentProduct.name} onChange={(e) => setCurrentProduct({...currentProduct, name: e.target.value})} className="input-field" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Categoría</label>
+                  <input type="text" required value={currentProduct.category} onChange={(e) => setCurrentProduct({...currentProduct, category: e.target.value})} className="input-field" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Precio ($)</label>
+                  <input type="number" required value={currentProduct.price} onChange={(e) => setCurrentProduct({...currentProduct, price: e.target.value})} className="input-field" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Stock</label>
+                  <input type="number" required value={currentProduct.countInStock} onChange={(e) => setCurrentProduct({...currentProduct, countInStock: e.target.value})} className="input-field" />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Descripción</label>
+                <textarea rows="3" required value={currentProduct.description} onChange={(e) => setCurrentProduct({...currentProduct, description: e.target.value})} className="input-field"></textarea>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border border-white/10 rounded-xl bg-black/20">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2 flex items-center gap-2">
+                    <Upload size={16} className="text-primary"/> Subir Imagen (JPG/PNG)
+                  </label>
+                  <input type="file" onChange={(e) => uploadFileHandler(e, 'image')} className="text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/20 file:text-primary hover:file:bg-primary/30" />
+                  {uploadingImage && <p className="text-xs text-blue-400 mt-1">Subiendo...</p>}
+                  {currentProduct.image && <p className="text-xs text-green-400 mt-1 truncate">{currentProduct.image}</p>}
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2 flex items-center gap-2">
+                    <Upload size={16} className="text-accent"/> Subir Modelo 3D (.GLB)
+                  </label>
+                  <input type="file" onChange={(e) => uploadFileHandler(e, 'model')} className="text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-accent/20 file:text-accent hover:file:bg-accent/30" />
+                  {uploadingModel && <p className="text-xs text-blue-400 mt-1">Subiendo...</p>}
+                  {currentProduct.model3D && <p className="text-xs text-green-400 mt-1 truncate">{currentProduct.model3D}</p>}
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-3 mt-8">
+                <button type="button" onClick={() => setIsModalOpen(false)} className="btn-outline" disabled={uploadingImage || uploadingModel}>Cancelar</button>
+                <button 
+                  type="submit" 
+                  className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed" 
+                  disabled={uploadingImage || uploadingModel}
+                >
+                  {uploadingImage || uploadingModel ? 'Subiendo archivos...' : 'Guardar Producto'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default AdminDashboard;

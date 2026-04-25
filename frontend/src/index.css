@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #8b5cf6; /* Violet 500 */
+  --color-primary-dark: #6d28d9; /* Violet 700 */
+  --color-accent: #3b82f6; /* Blue 500 */
+  
+  --color-dark: #0f172a; /* Slate 900 */
+  --color-darker: #020617; /* Slate 950 */
+  --color-light: #f8fafc; /* Slate 50 */
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+  
+  body {
+    @apply bg-darker text-light min-h-screen font-sans antialiased;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply bg-dark/70 backdrop-blur-md border border-white/10 shadow-xl;
+  }
+  
+  .btn-primary {
+    @apply bg-primary hover:bg-primary-dark text-white font-medium py-2 px-4 rounded-lg transition-colors duration-300 shadow-lg shadow-primary/20;
+  }
+  
+  .btn-outline {
+    @apply border border-white/20 hover:border-primary/50 hover:bg-white/5 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-300;
+  }
+  
+  .input-field {
+    @apply bg-dark border border-white/20 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-300 w-full;
+  }
+}
