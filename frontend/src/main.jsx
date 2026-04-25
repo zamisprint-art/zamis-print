@@ -6,7 +6,10 @@ import './index.css'
 import App from './App.jsx'
 
 // Configure Axios to send cookies automatically
-axios.defaults.withCredentials = true
+axios.defaults.withCredentials = true;
+
+// Set baseURL for production (Render URL), locally it will use Vite Proxy or relative paths
+axios.defaults.baseURL = import.meta.env.VITE_API_URL || '';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

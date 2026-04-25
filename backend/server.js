@@ -34,6 +34,12 @@ const connectDB = async () => {
 
 // Routes
 app.use('/api/users', userRoutes);
+
+// Keep-Alive Ping Route for UptimeRobot/Render
+app.get('/api/ping', (req, res) => {
+  res.status(200).send('Server is awake');
+});
+
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/payments', paymentRoutes);
