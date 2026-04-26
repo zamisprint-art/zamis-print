@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, Send, Instagram, Facebook } from 'lucide-react';
+import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { Button } from '../components/ui';
 
 const Contact = () => {
@@ -84,8 +84,8 @@ const Contact = () => {
             
             {/* Socials */}
             <div className="flex gap-4 mt-4 px-2">
-              <a href="#" className="w-10 h-10 rounded-full bg-neutral-200 text-neutral-600 flex items-center justify-center hover:bg-brand-500 hover:text-white transition-colors"><Instagram size={20}/></a>
-              <a href="#" className="w-10 h-10 rounded-full bg-neutral-200 text-neutral-600 flex items-center justify-center hover:bg-brand-500 hover:text-white transition-colors"><Facebook size={20}/></a>
+              <a href="#" className="w-10 h-10 rounded-full bg-neutral-200 text-neutral-600 flex items-center justify-center hover:bg-brand-500 hover:text-white transition-colors font-bold text-sm">IG</a>
+              <a href="#" className="w-10 h-10 rounded-full bg-neutral-200 text-neutral-600 flex items-center justify-center hover:bg-brand-500 hover:text-white transition-colors font-bold text-sm">FB</a>
             </div>
           </motion.div>
 

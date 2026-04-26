@@ -84,19 +84,19 @@ const Checkout = () => {
             <span className="hidden sm:block ml-3 font-medium">Carrito</span>
           </div>
           
-          <div className="flex-1 h-px bg-white/20 mx-4"></div>
+          <div className="flex-1 h-px bg-neutral-200 mx-4"></div>
           
-          <div className={`flex items-center ${step >= 2 ? 'text-primary' : 'text-neutral-500'}`}>
-            <div className={`w-10 h-10 rounded-full flex items-center justify-center border ${step >= 2 ? 'bg-primary/20 border-primary' : 'bg-surface-base border-gray-600'}`}>
+          <div className={`flex items-center ${step >= 2 ? 'text-brand-600' : 'text-neutral-400'}`}>
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center border ${step >= 2 ? 'bg-brand-50 border-brand-500' : 'bg-surface-base border-neutral-300'}`}>
               <Truck size={20} />
             </div>
             <span className="hidden sm:block ml-3 font-medium">Envío</span>
           </div>
           
-          <div className="flex-1 h-px bg-white/20 mx-4"></div>
+          <div className="flex-1 h-px bg-neutral-200 mx-4"></div>
           
-          <div className={`flex items-center ${step >= 3 ? 'text-accent' : 'text-neutral-500'}`}>
-            <div className={`w-10 h-10 rounded-full flex items-center justify-center border ${step >= 3 ? 'bg-accent/20 border-accent' : 'bg-surface-base border-gray-600'}`}>
+          <div className={`flex items-center ${step >= 3 ? 'text-green-600' : 'text-neutral-400'}`}>
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center border ${step >= 3 ? 'bg-green-50 border-green-500' : 'bg-surface-base border-neutral-300'}`}>
               <CreditCard size={20} />
             </div>
             <span className="hidden sm:block ml-3 font-medium">Pago Seguro</span>
@@ -110,9 +110,9 @@ const Checkout = () => {
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="glass-panel p-6 sm:p-8 rounded-3xl"
+            className="bg-white p-6 sm:p-8 rounded-3xl border border-neutral-200 shadow-sm"
           >
-            <h2 className="text-2xl font-bold mb-6">¿A dónde enviamos tu pedido?</h2>
+            <h2 className="text-2xl font-bold mb-6 text-neutral-900">¿A dónde enviamos tu pedido?</h2>
             
             <form id="checkout-form" onSubmit={handlePayment} className="space-y-5">
               <div>
@@ -173,9 +173,9 @@ const Checkout = () => {
           <motion.div 
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="glass-panel p-6 sm:p-8 rounded-3xl sticky top-24"
+            className="bg-surface-card p-6 sm:p-8 rounded-3xl border border-neutral-200 shadow-sm sticky top-24"
           >
-            <h2 className="text-xl font-bold mb-6 border-b border-neutral-200 pb-4">Resumen del Pedido</h2>
+            <h2 className="text-xl font-bold mb-6 border-b border-neutral-200 pb-4 text-neutral-900">Resumen del Pedido</h2>
             
             <div className="space-y-4 max-h-64 overflow-y-auto mb-6 pr-2 custom-scrollbar">
               {cartItems.map((item, index) => (
@@ -201,7 +201,7 @@ const Checkout = () => {
               </div>
               <div className="flex justify-between items-center text-neutral-700 text-sm">
                 <span>Envío estándar</span>
-                <span className="text-green-400 font-medium">Gratis</span>
+                <span className="text-green-600 font-bold">Gratis</span>
               </div>
             </div>
             

@@ -28,6 +28,7 @@ const Cart = () => {
 
       {/* Header */}
       <motion.div variants={fadeUp} initial="hidden" animate="visible" className="mb-10">
+        <p className="text-brand-600 text-sm font-semibold uppercase tracking-widest mb-2">Resumen</p>
         <h1 className="text-4xl font-extrabold text-neutral-900">
           Tu Carrito
           {totalItems > 0 && (
@@ -78,7 +79,7 @@ const Cart = () => {
 
             <Link
               to="/shop"
-              className="inline-flex items-center gap-2 text-sm text-neutral-400 hover:text-brand-300 transition-colors mt-2 self-start"
+              className="inline-flex items-center gap-2 text-sm text-neutral-500 hover:text-brand-600 transition-colors mt-4 self-start font-medium"
             >
               ← Continuar comprando
             </Link>
@@ -91,15 +92,15 @@ const Cart = () => {
             animate="visible"
             className="lg:col-span-1"
           >
-            <div className="glass-panel p-6 rounded-2xl sticky top-24 flex flex-col gap-5">
-              <h2 className="text-xl font-bold border-b border-neutral-200 pb-4">Resumen del Pedido</h2>
+            <div className="bg-surface-card p-6 rounded-2xl border border-neutral-200 shadow-sm sticky top-24 flex flex-col gap-5">
+              <h2 className="text-xl font-bold border-b border-neutral-200 pb-4 text-neutral-900">Resumen del Pedido</h2>
 
               {/* Line items */}
               <div className="flex flex-col gap-2 text-sm">
                 {cartItems.map((item) => (
-                  <div key={item.product} className="flex justify-between text-neutral-400">
+                  <div key={item.product} className="flex justify-between text-neutral-600">
                     <span className="truncate max-w-[160px]">{item.name} × {item.qty}</span>
-                    <span className="shrink-0 ml-2">{formatCOP(item.price * item.qty)}</span>
+                    <span className="shrink-0 ml-2 font-medium">{formatCOP(item.price * item.qty)}</span>
                   </div>
                 ))}
               </div>
@@ -107,13 +108,13 @@ const Cart = () => {
               <div className="divider my-0" />
 
               {/* Subtotal */}
-              <div className="flex justify-between text-sm text-neutral-300">
+              <div className="flex justify-between text-sm text-neutral-600">
                 <span>Subtotal ({totalItems} {totalItems === 1 ? 'ítem' : 'ítems'})</span>
-                <span>{formatCOP(totalPrice)}</span>
+                <span className="font-medium">{formatCOP(totalPrice)}</span>
               </div>
               <div className="flex justify-between text-sm text-neutral-500">
                 <span>Envío</span>
-                <span>Calculado en checkout</span>
+                <span className="text-green-600 font-medium">Calculado en checkout</span>
               </div>
 
               <div className="divider my-0" />
