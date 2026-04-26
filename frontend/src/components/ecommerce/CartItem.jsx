@@ -38,7 +38,7 @@ const CartItem = ({ item, onQtyChange, onRemove }) => {
 
       {/* Info */}
       <div className="flex-1 min-w-0 flex flex-col gap-2">
-        <p className="font-semibold text-white text-sm leading-tight line-clamp-2">{name}</p>
+        <p className="font-semibold text-neutral-900 text-sm leading-tight line-clamp-2">{name}</p>
 
         <PriceDisplay price={price} size="sm" />
 

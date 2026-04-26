@@ -64,7 +64,7 @@ const Shop = () => {
           <p className="text-brand-400 text-sm font-semibold uppercase tracking-widest mb-2">
             Catálogo
           </p>
-          <h1 className="text-4xl font-extrabold text-white leading-tight">
+          <h1 className="text-4xl font-extrabold text-neutral-900 leading-tight">
             Todos los Productos
           </h1>
           <p className="text-neutral-400 mt-2 max-w-xl">

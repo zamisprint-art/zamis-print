@@ -8,7 +8,7 @@ const Navbar = () => {
   return (
     <header className="sticky top-0 z-50 w-full flex flex-col">
       {/* Top Ribbon / Cinta de Contacto */}
-      <div className="bg-primary-dark/90 backdrop-blur-md text-white text-xs py-2 px-4 border-b border-white/10 hidden sm:block">
+      <div className="bg-primary-dark/90 backdrop-blur-md text-neutral-900 text-xs py-2 px-4 border-b border-neutral-200 hidden sm:block">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-6">
             <a href="mailto:contacto@zamisprint.com" className="flex items-center gap-2 hover:text-gray-200 transition-colors">
@@ -54,7 +54,7 @@ const Navbar = () => {
               <Link to="/cart" className="relative p-2 hover:text-primary transition-colors">
                 <ShoppingCart size={24} />
                 {cartItems.length > 0 && (
-                  <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-red-600 rounded-full">
+                  <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-neutral-900 transform translate-x-1/4 -translate-y-1/4 bg-red-600 rounded-full">
                     {cartItems.reduce((a, c) => a + c.qty, 0)}
                   </span>
                 )}

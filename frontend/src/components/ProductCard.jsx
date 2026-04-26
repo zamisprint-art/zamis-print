@@ -62,7 +62,7 @@ const ProductCard = ({ product }) => {
 
         {/* Name */}
         <Link to={`/product/${product._id}`}>
-          <h3 className="font-bold text-white leading-snug line-clamp-2 hover:text-brand-300 transition-colors">
+          <h3 className="font-bold text-neutral-900 leading-snug line-clamp-2 hover:text-brand-300 transition-colors">
             {product.name}
           </h3>
         </Link>
@@ -74,7 +74,7 @@ const ProductCard = ({ product }) => {
         <p className="text-neutral-500 text-sm line-clamp-2 flex-grow">{product.description}</p>
 
         {/* Price + CTA */}
-        <div className="flex items-center justify-between mt-auto pt-3 border-t border-white/5">
+        <div className="flex items-center justify-between mt-auto pt-3 border-t border-neutral-100">
           <PriceDisplay price={product.price} size="sm" />
           <Link
             to={`/product/${product._id}`}

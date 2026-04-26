@@ -44,13 +44,13 @@ const Home = () => {
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-4">Recién Salidos de la Impresora</h2>
           <div className="h-1 w-24 bg-gradient-to-r from-primary to-accent mx-auto rounded-full mb-6"></div>
-          <p className="text-gray-400 max-w-2xl mx-auto text-lg">Explora nuestras últimas creaciones. Cada pieza es única y puede ser adaptada a tus gustos exactos.</p>
+          <p className="text-neutral-500 max-w-2xl mx-auto text-lg">Explora nuestras últimas creaciones. Cada pieza es única y puede ser adaptada a tus gustos exactos.</p>
         </motion.div>
 
         {loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[...Array(3)].map((_, i) => (
-              <div key={i} className="card p-4 h-full flex flex-col gap-4 border border-white/5">
+              <div key={i} className="card p-4 h-full flex flex-col gap-4 border border-neutral-100">
                 <Skeleton className="w-full aspect-square rounded-2xl" />
                 <div className="space-y-3 mt-2">
                   <Skeleton className="h-6 w-3/4 rounded-md" />
@@ -105,7 +105,7 @@ const Home = () => {
       </section>
       
       {/* Value Proposition Section */}
-      <section className="py-24 bg-dark/50 border-t border-white/5 relative overflow-hidden">
+      <section className="py-24 bg-surface-card/50 border-t border-neutral-100 relative overflow-hidden">
         {/* Decorative background glow */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-primary/5 blur-[120px] rounded-full pointer-events-none"></div>
         
@@ -124,7 +124,7 @@ const Home = () => {
             >
               <div className="w-16 h-16 mx-auto bg-primary/10 text-primary rounded-2xl flex items-center justify-center mb-6 text-2xl group-hover:scale-110 group-hover:bg-primary/20 transition-transform">✨</div>
               <h3 className="text-2xl font-bold mb-4">Calidad Premium</h3>
-              <p className="text-gray-400">Usamos resina y PLA de la más alta calidad para asegurar detalles perfectos y durabilidad incomparable.</p>
+              <p className="text-neutral-500">Usamos resina y PLA de la más alta calidad para asegurar detalles perfectos y durabilidad incomparable.</p>
             </motion.div>
             
             <motion.div 
@@ -136,7 +136,7 @@ const Home = () => {
             >
               <div className="w-16 h-16 mx-auto bg-accent/10 text-accent rounded-2xl flex items-center justify-center mb-6 text-2xl group-hover:scale-110 group-hover:bg-accent/20 transition-transform">🎨</div>
               <h3 className="text-2xl font-bold mb-4">100% Personalizable</h3>
-              <p className="text-gray-400">Desde colores hasta grabados de texto o modelos a medida. Tu imaginación es nuestro único límite.</p>
+              <p className="text-neutral-500">Desde colores hasta grabados de texto o modelos a medida. Tu imaginación es nuestro único límite.</p>
             </motion.div>
             
             <motion.div 
@@ -148,7 +148,7 @@ const Home = () => {
             >
               <div className="w-16 h-16 mx-auto bg-green-500/10 text-green-400 rounded-2xl flex items-center justify-center mb-6 text-2xl group-hover:scale-110 group-hover:bg-green-500/20 transition-transform">🚀</div>
               <h3 className="text-2xl font-bold mb-4">Envíos Rápidos</h3>
-              <p className="text-gray-400">Producimos y enviamos en tiempo récord a toda Colombia para que tengas tu pieza cuanto antes.</p>
+              <p className="text-neutral-500">Producimos y enviamos en tiempo récord a toda Colombia para que tengas tu pieza cuanto antes.</p>
             </motion.div>
           </div>
 

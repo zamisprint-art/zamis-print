@@ -109,7 +109,7 @@ const ProductDetail = () => {
           variants={fadeLeft}
           initial="hidden"
           animate="visible"
-          className="h-[400px] sm:h-[500px] lg:h-[580px] rounded-2xl overflow-hidden border border-white/10 bg-surface-base shadow-2xl"
+          className="h-[400px] sm:h-[500px] lg:h-[580px] rounded-2xl overflow-hidden border border-neutral-200 bg-surface-base shadow-2xl"
         >
           {product.model3D ? (
             <Suspense fallback={
@@ -235,7 +235,7 @@ const ProductDetail = () => {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: '-60px' }}
-        className="border-t border-white/10 pt-16"
+        className="border-t border-neutral-200 pt-16"
       >
         <h2 className="text-3xl font-bold mb-8">Opiniones de Clientes</h2>
 
@@ -310,7 +310,7 @@ const ProductDetail = () => {
                 </Button>
               </form>
             ) : (
-              <div className="bg-surface-raised p-6 rounded-xl text-center border border-white/5">
+              <div className="bg-surface-raised p-6 rounded-xl text-center border border-neutral-100">
                 <p className="text-neutral-400 mb-4 text-sm">Debes iniciar sesión para escribir una reseña.</p>
                 <Button variant="outline" fullWidth onClick={() => navigate('/login')}>
                   Iniciar Sesión
@@ -322,7 +322,7 @@ const ProductDetail = () => {
       </motion.div>
 
       {/* Mobile Sticky CTA */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-surface-base/90 backdrop-blur-md border-t border-white/10 md:hidden z-50">
+      <div className="fixed bottom-0 left-0 right-0 p-4 bg-surface-base/90 backdrop-blur-md border-t border-neutral-200 md:hidden z-50">
         <Button
           variant="primary"
           size="lg"

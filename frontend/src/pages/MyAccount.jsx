@@ -50,7 +50,7 @@ const MyAccount = () => {
             <User size={32} className="text-primary" />
           </div>
           <h2 className="text-xl font-bold">{userInfo?.name}</h2>
-          <p className="text-sm text-gray-400 mb-6">{userInfo?.email}</p>
+          <p className="text-sm text-neutral-500 mb-6">{userInfo?.email}</p>
           
           <button 
             onClick={handleLogout}
@@ -74,20 +74,20 @@ const MyAccount = () => {
           </div>
         ) : orders.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-400 mb-4">Aún no has realizado ninguna compra con esta cuenta.</p>
+            <p className="text-neutral-500 mb-4">Aún no has realizado ninguna compra con esta cuenta.</p>
             <button onClick={() => navigate('/shop')} className="btn-primary">Explorar Tienda</button>
           </div>
         ) : (
           <div className="space-y-6">
             {orders.map((order) => (
-              <div key={order._id} className="border border-white/10 rounded-xl p-6 hover:bg-white/5 transition-colors">
-                <div className="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-4 border-b border-white/5 pb-4">
+              <div key={order._id} className="border border-neutral-200 rounded-xl p-6 hover:bg-white/5 transition-colors">
+                <div className="flex flex-col md:flex-row justify-between md:items-center gap-4 mb-4 border-b border-neutral-100 pb-4">
                   <div>
-                    <p className="text-sm text-gray-400">Pedido #{order._id.substring(0, 8)}</p>
+                    <p className="text-sm text-neutral-500">Pedido #{order._id.substring(0, 8)}</p>
                     <p className="text-sm font-bold mt-1">{new Date(order.createdAt).toLocaleDateString()}</p>
                   </div>
                   <div className="text-left md:text-right">
-                    <p className="text-sm text-gray-400">Total</p>
+                    <p className="text-sm text-neutral-500">Total</p>
                     <p className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
                       ${order.totalPrice}
                     </p>
@@ -106,12 +106,12 @@ const MyAccount = () => {
                 <div className="space-y-3">
                   {order.orderItems.map((item, index) => (
                     <div key={index} className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded bg-dark overflow-hidden shrink-0">
+                      <div className="w-12 h-12 rounded bg-surface-card overflow-hidden shrink-0">
                         <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                       </div>
                       <div className="flex-1">
                         <p className="font-bold text-sm">{item.name}</p>
-                        <p className="text-xs text-gray-400">Cant: {item.qty}</p>
+                        <p className="text-xs text-neutral-500">Cant: {item.qty}</p>
                       </div>
                     </div>
                   ))}

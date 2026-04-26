@@ -24,8 +24,8 @@ const Model = ({ url }) => {
 
 const Product3DViewer = ({ modelUrl }) => {
   return (
-    <div className="w-full h-full bg-darker/50 rounded-2xl overflow-hidden border border-white/10 relative cursor-move">
-      <div className="absolute top-4 left-4 z-10 bg-black/50 backdrop-blur-md text-xs px-3 py-1 rounded-full text-gray-300 pointer-events-none">
+    <div className="w-full h-full bg-surface-base/50 rounded-2xl overflow-hidden border border-neutral-200 relative cursor-move">
+      <div className="absolute top-4 left-4 z-10 bg-black/50 backdrop-blur-md text-xs px-3 py-1 rounded-full text-neutral-700 pointer-events-none">
         Arrastra para rotar • Scroll para zoom
       </div>
       <Canvas shadows camera={{ position: [0, 0, 5], fov: 50 }}>

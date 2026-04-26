@@ -92,7 +92,7 @@ const HeroSlider = () => {
   };
 
   return (
-    <section className="relative h-[85vh] sm:h-[90vh] w-full overflow-hidden bg-darker">
+    <section className="relative h-[85vh] sm:h-[90vh] w-full overflow-hidden bg-surface-base">
       <AnimatePresence initial={false} custom={direction}>
         <motion.div
           key={current}
@@ -130,10 +130,10 @@ const HeroSlider = () => {
               <h3 className="text-xl md:text-2xl font-medium text-accent mb-2 tracking-wider uppercase">
                 {slides[current].subtitle}
               </h3>
-              <h1 className="text-5xl md:text-7xl font-black text-white mb-6 leading-tight">
+              <h1 className="text-5xl md:text-7xl font-black text-neutral-900 mb-6 leading-tight">
                 {slides[current].title}
               </h1>
-              <p className="text-lg md:text-xl text-gray-300 mb-10 max-w-xl font-light leading-relaxed">
+              <p className="text-lg md:text-xl text-neutral-700 mb-10 max-w-xl font-light leading-relaxed">
                 {slides[current].description}
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
@@ -153,13 +153,13 @@ const HeroSlider = () => {
       <div className="absolute z-30 bottom-10 right-10 flex gap-4">
         <button 
           onClick={prevSlide}
-          className="w-12 h-12 rounded-full border border-white/20 bg-darker/50 backdrop-blur-md flex items-center justify-center text-white hover:bg-primary transition-colors hover:border-primary"
+          className="w-12 h-12 rounded-full border border-neutral-300 bg-surface-base/50 backdrop-blur-md flex items-center justify-center text-neutral-900 hover:bg-primary transition-colors hover:border-primary"
         >
           <ChevronLeft size={24} />
         </button>
         <button 
           onClick={nextSlide}
-          className="w-12 h-12 rounded-full border border-white/20 bg-darker/50 backdrop-blur-md flex items-center justify-center text-white hover:bg-primary transition-colors hover:border-primary"
+          className="w-12 h-12 rounded-full border border-neutral-300 bg-surface-base/50 backdrop-blur-md flex items-center justify-center text-neutral-900 hover:bg-primary transition-colors hover:border-primary"
         >
           <ChevronRight size={24} />
         </button>

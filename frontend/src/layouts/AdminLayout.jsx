@@ -21,16 +21,16 @@ const AdminLayout = () => {
   };
 
   return (
-    <div className="min-h-screen bg-darker text-light flex flex-col">
+    <div className="min-h-screen bg-surface-base text-light flex flex-col">
       {/* Admin Topbar (only visible if logged in) */}
       {userInfo && userInfo.isAdmin && (
-        <header className="bg-dark border-b border-white/10 px-6 py-4 flex justify-between items-center z-10 relative shadow-md">
+        <header className="bg-surface-card border-b border-neutral-200 px-6 py-4 flex justify-between items-center z-10 relative shadow-md">
           <div className="flex items-center gap-3">
             <Shield className="text-primary" size={24} />
             <h1 className="text-xl font-bold tracking-tight">ZAMIS Workspace</h1>
           </div>
           <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-400">Admin: {userInfo.name}</span>
+            <span className="text-sm text-neutral-500">Admin: {userInfo.name}</span>
             <button 
               onClick={handleLogout}
               className="flex items-center gap-2 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 px-3 py-1.5 rounded-lg transition-colors"

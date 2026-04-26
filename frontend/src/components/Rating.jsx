@@ -16,7 +16,7 @@ const Rating = ({ value, text, color = "#eab308" }) => {
           </span>
         ))}
       </div>
-      {text && <span className="text-xs text-gray-400">{text}</span>}
+      {text && <span className="text-xs text-neutral-500">{text}</span>}
     </div>
   );
 };

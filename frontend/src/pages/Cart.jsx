@@ -28,7 +28,7 @@ const Cart = () => {
 
       {/* Header */}
       <motion.div variants={fadeUp} initial="hidden" animate="visible" className="mb-10">
-        <h1 className="text-4xl font-extrabold text-white">
+        <h1 className="text-4xl font-extrabold text-neutral-900">
           Tu Carrito
           {totalItems > 0 && (
             <span className="ml-3 badge badge-info text-base normal-case tracking-normal">{totalItems} {totalItems === 1 ? 'ítem' : 'ítems'}</span>
@@ -92,7 +92,7 @@ const Cart = () => {
             className="lg:col-span-1"
           >
             <div className="glass-panel p-6 rounded-2xl sticky top-24 flex flex-col gap-5">
-              <h2 className="text-xl font-bold border-b border-white/10 pb-4">Resumen del Pedido</h2>
+              <h2 className="text-xl font-bold border-b border-neutral-200 pb-4">Resumen del Pedido</h2>
 
               {/* Line items */}
               <div className="flex flex-col gap-2 text-sm">
@@ -120,7 +120,7 @@ const Cart = () => {
 
               {/* Total */}
               <div className="flex justify-between items-center">
-                <span className="font-bold text-white">Total Estimado</span>
+                <span className="font-bold text-neutral-900">Total Estimado</span>
                 <span className="price-current text-xl">{formatCOP(totalPrice)}</span>
               </div>
 

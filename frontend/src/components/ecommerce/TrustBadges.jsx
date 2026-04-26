@@ -50,7 +50,7 @@ const TrustBadges = ({ variant = 'default', className = '' }) => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: i * 0.08, duration: 0.4 }}
-          className="flex flex-col items-center gap-2 p-3 rounded-xl bg-surface-card border border-white/5 text-center"
+          className="flex flex-col items-center gap-2 p-3 rounded-xl bg-surface-card border border-neutral-100 text-center"
         >
           <div className="w-8 h-8 rounded-lg bg-brand-500/10 flex items-center justify-center">
             <Icon className="w-4 h-4 text-brand-400" />

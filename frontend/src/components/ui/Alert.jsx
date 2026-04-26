@@ -90,7 +90,7 @@ export const EmptyState = ({ icon, title, description, cta, className = '' }) =>
         {icon}
       </div>
     )}
-    {title && <h3 className="text-xl font-bold text-white mb-2">{title}</h3>}
+    {title && <h3 className="text-xl font-bold text-neutral-900 mb-2">{title}</h3>}
     {description && <p className="text-neutral-400 max-w-sm mb-6">{description}</p>}
     {cta}
   </motion.div>

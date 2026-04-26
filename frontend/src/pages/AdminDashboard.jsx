@@ -125,19 +125,19 @@ const AdminDashboard = () => {
         
         <button 
           onClick={() => setActiveTab('orders')}
-          className={`flex items-center gap-3 p-4 rounded-xl transition-colors ${activeTab === 'orders' ? 'bg-primary text-white' : 'glass-panel hover:bg-white/5'}`}
+          className={`flex items-center gap-3 p-4 rounded-xl transition-colors ${activeTab === 'orders' ? 'bg-primary text-neutral-900' : 'glass-panel hover:bg-white/5'}`}
         >
           <ShoppingBag size={20} /> Órdenes
         </button>
         <button 
           onClick={() => setActiveTab('products')}
-          className={`flex items-center gap-3 p-4 rounded-xl transition-colors ${activeTab === 'products' ? 'bg-primary text-white' : 'glass-panel hover:bg-white/5'}`}
+          className={`flex items-center gap-3 p-4 rounded-xl transition-colors ${activeTab === 'products' ? 'bg-primary text-neutral-900' : 'glass-panel hover:bg-white/5'}`}
         >
           <Package size={20} /> Productos
         </button>
         <button 
           onClick={() => setActiveTab('settings')}
-          className={`flex items-center gap-3 p-4 rounded-xl transition-colors ${activeTab === 'settings' ? 'bg-primary text-white' : 'glass-panel hover:bg-white/5'}`}
+          className={`flex items-center gap-3 p-4 rounded-xl transition-colors ${activeTab === 'settings' ? 'bg-primary text-neutral-900' : 'glass-panel hover:bg-white/5'}`}
         >
           <Settings size={20} /> Configuración
         </button>
@@ -154,7 +154,7 @@ const AdminDashboard = () => {
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-white/10 text-gray-400">
+                  <tr className="border-b border-neutral-200 text-neutral-500">
                     <th className="py-4 px-4">ID Pedido</th>
                     <th className="py-4 px-4">Fecha</th>
                     <th className="py-4 px-4">Cliente</th>
@@ -165,7 +165,7 @@ const AdminDashboard = () => {
                 </thead>
                 <tbody>
                   {orders.map((order) => (
-                    <tr key={order._id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                    <tr key={order._id} className="border-b border-neutral-100 hover:bg-white/5 transition-colors">
                       <td className="py-4 px-4 font-mono text-sm">{order._id.substring(0, 8)}...</td>
                       <td className="py-4 px-4">{new Date(order.createdAt).toLocaleDateString()}</td>
                       <td className="py-4 px-4">{order.user?.name || 'Invitado'}</td>
@@ -181,7 +181,7 @@ const AdminDashboard = () => {
                       </td>
                       <td className="py-4 px-4">
                         <select 
-                          className="bg-dark border border-white/20 rounded p-1 text-sm focus:outline-none focus:border-primary"
+                          className="bg-surface-card border border-neutral-300 rounded p-1 text-sm focus:outline-none focus:border-primary"
                           value={order.orderStatus}
                           onChange={(e) => handleOrderStatusChange(order._id, e.target.value)}
                         >
@@ -210,7 +210,7 @@ const AdminDashboard = () => {
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-white/10 text-gray-400">
+                  <tr className="border-b border-neutral-200 text-neutral-500">
                     <th className="py-4 px-4">Nombre</th>
                     <th className="py-4 px-4">Categoría</th>
                     <th className="py-4 px-4">Precio</th>
@@ -220,16 +220,16 @@ const AdminDashboard = () => {
                 </thead>
                 <tbody>
                   {products.map((product) => (
-                    <tr key={product._id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                    <tr key={product._id} className="border-b border-neutral-100 hover:bg-white/5 transition-colors">
                       <td className="py-4 px-4 font-bold">{product.name}</td>
                       <td className="py-4 px-4">{product.category}</td>
                       <td className="py-4 px-4">${product.price}</td>
                       <td className="py-4 px-4">{product.countInStock}</td>
                       <td className="py-4 px-4 flex justify-end gap-2">
-                        <button onClick={() => handleOpenEditModal(product)} className="p-2 bg-blue-500/20 text-blue-400 rounded hover:bg-blue-500 hover:text-white transition-colors">
+                        <button onClick={() => handleOpenEditModal(product)} className="p-2 bg-blue-500/20 text-blue-400 rounded hover:bg-blue-500 hover:text-neutral-900 transition-colors">
                           <Edit size={16} />
                         </button>
-                        <button onClick={() => handleDeleteProduct(product._id)} className="p-2 bg-red-500/20 text-red-400 rounded hover:bg-red-500 hover:text-white transition-colors">
+                        <button onClick={() => handleDeleteProduct(product._id)} className="p-2 bg-red-500/20 text-red-400 rounded hover:bg-red-500 hover:text-neutral-900 transition-colors">
                           <Trash2 size={16} />
                         </button>
                       </td>
@@ -246,14 +246,14 @@ const AdminDashboard = () => {
             <h2 className="text-2xl font-bold mb-8">Configuración Integraciones</h2>
             <div className="space-y-6 max-w-2xl">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">MercadoPago Access Token</label>
+                <label className="block text-sm font-medium text-neutral-700 mb-2">MercadoPago Access Token</label>
                 <input type="password" value="TEST-****************" disabled className="input-field opacity-50" />
-                <p className="text-xs text-gray-400 mt-1">Configurado vía variables de entorno (.env)</p>
+                <p className="text-xs text-neutral-500 mt-1">Configurado vía variables de entorno (.env)</p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Resend API Key</label>
+                <label className="block text-sm font-medium text-neutral-700 mb-2">Resend API Key</label>
                 <input type="password" value="re_****************" disabled className="input-field opacity-50" />
-                <p className="text-xs text-gray-400 mt-1">Configurado vía variables de entorno (.env)</p>
+                <p className="text-xs text-neutral-500 mt-1">Configurado vía variables de entorno (.env)</p>
               </div>
             </div>
           </div>
@@ -262,11 +262,11 @@ const AdminDashboard = () => {
 
       {/* Product Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-darker/80 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-surface-base/80 backdrop-blur-sm">
           <div className="glass-panel w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl p-6 relative shadow-2xl">
             <button 
               onClick={() => setIsModalOpen(false)}
-              className="absolute top-4 right-4 p-2 text-gray-400 hover:text-white rounded-full hover:bg-white/10 transition-colors"
+              className="absolute top-4 right-4 p-2 text-neutral-500 hover:text-neutral-900 rounded-full hover:bg-white/10 transition-colors"
             >
               <X size={24} />
             </button>
@@ -275,42 +275,42 @@ const AdminDashboard = () => {
             <form onSubmit={handleSaveProduct} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">Nombre</label>
+                  <label className="block text-sm font-medium text-neutral-700 mb-1">Nombre</label>
                   <input type="text" required value={currentProduct.name} onChange={(e) => setCurrentProduct({...currentProduct, name: e.target.value})} className="input-field" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">Categoría</label>
+                  <label className="block text-sm font-medium text-neutral-700 mb-1">Categoría</label>
                   <input type="text" required value={currentProduct.category} onChange={(e) => setCurrentProduct({...currentProduct, category: e.target.value})} className="input-field" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">Precio ($)</label>
+                  <label className="block text-sm font-medium text-neutral-700 mb-1">Precio ($)</label>
                   <input type="number" required value={currentProduct.price} onChange={(e) => setCurrentProduct({...currentProduct, price: e.target.value})} className="input-field" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">Stock</label>
+                  <label className="block text-sm font-medium text-neutral-700 mb-1">Stock</label>
                   <input type="number" required value={currentProduct.countInStock} onChange={(e) => setCurrentProduct({...currentProduct, countInStock: e.target.value})} className="input-field" />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1">Descripción</label>
+                <label className="block text-sm font-medium text-neutral-700 mb-1">Descripción</label>
                 <textarea rows="3" required value={currentProduct.description} onChange={(e) => setCurrentProduct({...currentProduct, description: e.target.value})} className="input-field"></textarea>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border border-white/10 rounded-xl bg-black/20">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border border-neutral-200 rounded-xl bg-black/20">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2 flex items-center gap-2">
+                  <label className="block text-sm font-medium text-neutral-700 mb-2 flex items-center gap-2">
                     <Upload size={16} className="text-primary"/> Subir Imagen (JPG/PNG)
                   </label>
-                  <input type="file" onChange={(e) => uploadFileHandler(e, 'image')} className="text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/20 file:text-primary hover:file:bg-primary/30" />
+                  <input type="file" onChange={(e) => uploadFileHandler(e, 'image')} className="text-sm text-neutral-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/20 file:text-primary hover:file:bg-primary/30" />
                   {uploadingImage && <p className="text-xs text-blue-400 mt-1">Subiendo...</p>}
                   {currentProduct.image && <p className="text-xs text-green-400 mt-1 truncate">{currentProduct.image}</p>}
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2 flex items-center gap-2">
+                  <label className="block text-sm font-medium text-neutral-700 mb-2 flex items-center gap-2">
                     <Upload size={16} className="text-accent"/> Subir Modelo 3D (.GLB)
                   </label>
-                  <input type="file" onChange={(e) => uploadFileHandler(e, 'model')} className="text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-accent/20 file:text-accent hover:file:bg-accent/30" />
+                  <input type="file" onChange={(e) => uploadFileHandler(e, 'model')} className="text-sm text-neutral-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-accent/20 file:text-accent hover:file:bg-accent/30" />
                   {uploadingModel && <p className="text-xs text-blue-400 mt-1">Subiendo...</p>}
                   {currentProduct.model3D && <p className="text-xs text-green-400 mt-1 truncate">{currentProduct.model3D}</p>}
                 </div>

@@ -49,7 +49,7 @@ const Login = () => {
 
         <form onSubmit={submitHandler} className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-neutral-700 mb-2">
               Correo Electrónico
             </label>
             <input
@@ -63,7 +63,7 @@ const Login = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-neutral-700 mb-2">
               Contraseña
             </label>
             <input

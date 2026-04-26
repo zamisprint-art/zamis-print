@@ -86,8 +86,8 @@ const Checkout = () => {
           
           <div className="flex-1 h-px bg-white/20 mx-4"></div>
           
-          <div className={`flex items-center ${step >= 2 ? 'text-primary' : 'text-gray-500'}`}>
-            <div className={`w-10 h-10 rounded-full flex items-center justify-center border ${step >= 2 ? 'bg-primary/20 border-primary' : 'bg-darker border-gray-600'}`}>
+          <div className={`flex items-center ${step >= 2 ? 'text-primary' : 'text-neutral-500'}`}>
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center border ${step >= 2 ? 'bg-primary/20 border-primary' : 'bg-surface-base border-gray-600'}`}>
               <Truck size={20} />
             </div>
             <span className="hidden sm:block ml-3 font-medium">Envío</span>
@@ -95,8 +95,8 @@ const Checkout = () => {
           
           <div className="flex-1 h-px bg-white/20 mx-4"></div>
           
-          <div className={`flex items-center ${step >= 3 ? 'text-accent' : 'text-gray-500'}`}>
-            <div className={`w-10 h-10 rounded-full flex items-center justify-center border ${step >= 3 ? 'bg-accent/20 border-accent' : 'bg-darker border-gray-600'}`}>
+          <div className={`flex items-center ${step >= 3 ? 'text-accent' : 'text-neutral-500'}`}>
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center border ${step >= 3 ? 'bg-accent/20 border-accent' : 'bg-surface-base border-gray-600'}`}>
               <CreditCard size={20} />
             </div>
             <span className="hidden sm:block ml-3 font-medium">Pago Seguro</span>
@@ -116,7 +116,7 @@ const Checkout = () => {
             
             <form id="checkout-form" onSubmit={handlePayment} className="space-y-5">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1.5">Nombre de quien recibe</label>
+                <label className="block text-sm font-medium text-neutral-700 mb-1.5">Nombre de quien recibe</label>
                 <input 
                   type="text" name="fullName" required
                   value={shippingAddress.fullName} onChange={handleChange}
@@ -125,7 +125,7 @@ const Checkout = () => {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1.5">Dirección completa</label>
+                <label className="block text-sm font-medium text-neutral-700 mb-1.5">Dirección completa</label>
                 <input 
                   type="text" name="address" required
                   value={shippingAddress.address} onChange={handleChange}
@@ -135,7 +135,7 @@ const Checkout = () => {
               
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1.5">Ciudad</label>
+                  <label className="block text-sm font-medium text-neutral-700 mb-1.5">Ciudad</label>
                   <input 
                     type="text" name="city" required
                     value={shippingAddress.city} onChange={handleChange}
@@ -143,7 +143,7 @@ const Checkout = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1.5">Código Postal</label>
+                  <label className="block text-sm font-medium text-neutral-700 mb-1.5">Código Postal</label>
                   <input 
                     type="number" name="postalCode" required inputMode="numeric"
                     value={shippingAddress.postalCode} onChange={handleChange}
@@ -153,13 +153,13 @@ const Checkout = () => {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1.5">Teléfono (WhatsApp)</label>
+                <label className="block text-sm font-medium text-neutral-700 mb-1.5">Teléfono (WhatsApp)</label>
                 <input 
                   type="tel" name="phone" required inputMode="tel"
                   value={shippingAddress.phone} onChange={handleChange}
                   className="input-field py-3 text-lg" placeholder="55 1234 5678"
                 />
-                <p className="text-xs text-gray-400 mt-2 flex items-center gap-1">
+                <p className="text-xs text-neutral-500 mt-2 flex items-center gap-1">
                   <ShieldCheck size={14} className="text-green-400" />
                   Solo te contactaremos por actualizaciones de tu pedido.
                 </p>
@@ -175,17 +175,17 @@ const Checkout = () => {
             animate={{ opacity: 1, x: 0 }}
             className="glass-panel p-6 sm:p-8 rounded-3xl sticky top-24"
           >
-            <h2 className="text-xl font-bold mb-6 border-b border-white/10 pb-4">Resumen del Pedido</h2>
+            <h2 className="text-xl font-bold mb-6 border-b border-neutral-200 pb-4">Resumen del Pedido</h2>
             
             <div className="space-y-4 max-h-64 overflow-y-auto mb-6 pr-2 custom-scrollbar">
               {cartItems.map((item, index) => (
                 <div key={index} className="flex gap-4">
-                  <div className="w-16 h-16 rounded-xl overflow-hidden bg-dark shrink-0 border border-white/5">
+                  <div className="w-16 h-16 rounded-xl overflow-hidden bg-surface-card shrink-0 border border-neutral-100">
                     <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                   </div>
                   <div className="flex-1">
                     <h4 className="font-bold text-sm line-clamp-1">{item.name}</h4>
-                    <p className="text-xs text-gray-400 mt-1">Cant: {item.qty}</p>
+                    <p className="text-xs text-neutral-500 mt-1">Cant: {item.qty}</p>
                   </div>
                   <div className="font-bold text-right text-sm">
                     <PriceDisplay price={item.qty * item.price} currency="COP" showDiscount={false} />
@@ -194,18 +194,18 @@ const Checkout = () => {
               ))}
             </div>
             
-            <div className="border-t border-white/10 pt-4 space-y-3 mb-6">
-              <div className="flex justify-between items-center text-gray-300 text-sm">
+            <div className="border-t border-neutral-200 pt-4 space-y-3 mb-6">
+              <div className="flex justify-between items-center text-neutral-700 text-sm">
                 <span>Subtotal</span>
                 <PriceDisplay price={total} currency="COP" showDiscount={false} />
               </div>
-              <div className="flex justify-between items-center text-gray-300 text-sm">
+              <div className="flex justify-between items-center text-neutral-700 text-sm">
                 <span>Envío estándar</span>
                 <span className="text-green-400 font-medium">Gratis</span>
               </div>
             </div>
             
-            <div className="flex justify-between items-center border-t border-white/10 pt-4 mb-8">
+            <div className="flex justify-between items-center border-t border-neutral-200 pt-4 mb-8">
               <span className="text-2xl font-bold">Total</span>
               <PriceDisplay price={total} currency="COP" size="lg" showDiscount={false} />
             </div>
@@ -231,7 +231,7 @@ const Checkout = () => {
       </div>
 
       {/* Mobile Sticky CTA */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-darker/90 backdrop-blur-md border-t border-white/10 md:hidden z-50 shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
+      <div className="fixed bottom-0 left-0 right-0 p-4 bg-surface-base/90 backdrop-blur-md border-t border-neutral-200 md:hidden z-50 shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
         <Button 
           form="checkout-form"
           type="submit" 

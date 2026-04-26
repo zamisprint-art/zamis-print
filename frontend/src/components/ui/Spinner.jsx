@@ -14,7 +14,7 @@ const Spinner = ({ size = 'md', color = 'brand', className = '' }) => {
   const colorMap = {
     brand:   'border-brand-500/20 border-t-brand-500',
     accent:  'border-accent-500/20 border-t-accent-500',
-    white:   'border-white/20 border-t-white',
+    white:   'border-neutral-300 border-t-white',
     success: 'border-success/20 border-t-success',
     danger:  'border-danger/20 border-t-danger',
   };

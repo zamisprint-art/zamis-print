@@ -51,7 +51,7 @@ const CustomerLogin = () => {
         <h1 className="text-3xl font-bold mb-2 text-center">
           {isLogin ? 'Bienvenido a ZAMIS Print' : 'Crea tu Cuenta'}
         </h1>
-        <p className="text-gray-400 text-center mb-8">
+        <p className="text-neutral-500 text-center mb-8">
           {isLogin ? 'Ingresa para ver el estado de tus compras.' : 'Regístrate para guardar tu historial.'}
         </p>
 
@@ -64,7 +64,7 @@ const CustomerLogin = () => {
         <form onSubmit={submitHandler} className="space-y-6">
           {!isLogin && (
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Nombre Completo</label>
+              <label className="block text-sm font-medium text-neutral-700 mb-2">Nombre Completo</label>
               <input
                 type="text"
                 value={name}
@@ -77,7 +77,7 @@ const CustomerLogin = () => {
           )}
 
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">Correo Electrónico</label>
+            <label className="block text-sm font-medium text-neutral-700 mb-2">Correo Electrónico</label>
             <input
               type="email"
               value={email}
@@ -89,7 +89,7 @@ const CustomerLogin = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">Contraseña</label>
+            <label className="block text-sm font-medium text-neutral-700 mb-2">Contraseña</label>
             <input
               type="password"
               value={password}
@@ -113,7 +113,7 @@ const CustomerLogin = () => {
           </button>
         </form>
 
-        <div className="mt-6 text-center text-sm text-gray-400">
+        <div className="mt-6 text-center text-sm text-neutral-500">
           {isLogin ? '¿No tienes cuenta?' : '¿Ya tienes cuenta?'}
           <button 
             onClick={() => setIsLogin(!isLogin)}
