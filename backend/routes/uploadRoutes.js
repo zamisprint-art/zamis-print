@@ -21,17 +21,23 @@ const storage = new CloudinaryStorage({
 });
 
 function checkFileType(file, cb) {
-    const filetypes = /jpg|jpeg|png|webp|glb|gltf/;
-    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-    
-    // Some 3D files might not have a standard mimetype, so we mostly rely on extname for .glb/.gltf
-    const mimetype = /image\/jpeg|image\/png|image\/webp|model\/gltf-binary|model\/gltf\+json|application\/octet-stream/.test(file.mimetype);
+    const ext = path.extname(file.originalname).toLowerCase();
+    const is3DModel = /\.(glb|gltf)$/.test(ext);
+    const isImage   = /\.(jpg|jpeg|png|webp)$/.test(ext);
 
-    if (extname && mimetype) {
+    if (is3DModel) {
+        // For 3D models, trust the extension — browsers often send application/octet-stream
         return cb(null, true);
-    } else {
-        cb(new Error('Images and 3D Models only!'));
     }
+
+    if (isImage) {
+        const validMime = /image\/(jpeg|png|webp)/.test(file.mimetype);
+        return validMime
+            ? cb(null, true)
+            : cb(new Error('Tipo de imagen no soportado. Usa JPG, PNG o WEBP.'));
+    }
+
+    cb(new Error('Solo se permiten imágenes (JPG/PNG/WEBP) y modelos 3D (GLB/GLTF).'));
 }
 
 const upload = multer({
