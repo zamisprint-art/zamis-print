@@ -56,6 +56,30 @@ app.get('/api/ping', (req, res) => {
   res.status(200).send('Server is awake');
 });
 
+// Temporary setup route to create admin user in production (DELETE AFTER USE)
+app.get('/api/setup', async (req, res) => {
+  const { secret } = req.query;
+  if (secret !== 'zamis-setup-2026') {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+  try {
+    const User = (await import('./models/User.js')).default;
+    const existing = await User.findOne({ email: 'admin@zamisprint.com' });
+    if (existing) {
+      return res.json({ message: 'Admin already exists', email: 'admin@zamisprint.com' });
+    }
+    await User.create({
+      name: 'Admin ZAMIS',
+      email: 'admin@zamisprint.com',
+      password: 'ZamisAdmin2026!',
+      isAdmin: true
+    });
+    res.json({ message: '✅ Admin created!', email: 'admin@zamisprint.com', password: 'ZamisAdmin2026!' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/payments', paymentRoutes);
