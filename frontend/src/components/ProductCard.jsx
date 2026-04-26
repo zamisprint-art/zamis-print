@@ -31,6 +31,10 @@ const ProductCard = ({ product }) => {
               ? product.image
               : 'https://via.placeholder.com/400x300?text=ZAMIS+Print'
           }
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = 'https://via.placeholder.com/400x300?text=Imagen+No+Disponible';
+          }}
           alt={product.name}
           className={`w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105 ${isOutOfStock ? 'opacity-50 grayscale' : ''}`}
         />
