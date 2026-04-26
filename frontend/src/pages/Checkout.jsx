@@ -3,8 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useCartStore } from '../store/useCartStore';
 import { useAuthStore } from '../store/useAuthStore';
-import { CheckCircle2, Truck, CreditCard, ChevronRight } from 'lucide-react';
+import { CheckCircle2, Truck, CreditCard, ChevronRight, ShieldCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Button } from '../components/ui';
+import { TrustBadges, PriceDisplay } from '../components/ecommerce';
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -186,52 +188,43 @@ const Checkout = () => {
                     <p className="text-xs text-gray-400 mt-1">Cant: {item.qty}</p>
                   </div>
                   <div className="font-bold text-right text-sm">
-                    ${(item.qty * item.price).toFixed(2)}
+                    <PriceDisplay price={item.qty * item.price} currency="COP" showDiscount={false} />
                   </div>
                 </div>
               ))}
             </div>
             
             <div className="border-t border-white/10 pt-4 space-y-3 mb-6">
-              <div className="flex justify-between text-gray-300 text-sm">
+              <div className="flex justify-between items-center text-gray-300 text-sm">
                 <span>Subtotal</span>
-                <span>${total.toFixed(2)}</span>
+                <PriceDisplay price={total} currency="COP" showDiscount={false} />
               </div>
-              <div className="flex justify-between text-gray-300 text-sm">
+              <div className="flex justify-between items-center text-gray-300 text-sm">
                 <span>Envío estándar</span>
                 <span className="text-green-400 font-medium">Gratis</span>
               </div>
             </div>
             
-            <div className="flex justify-between items-end text-2xl font-bold border-t border-white/10 pt-4 mb-8">
-              <span>Total</span>
-              <span className="text-3xl text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
-                ${total.toFixed(2)}
-              </span>
+            <div className="flex justify-between items-center border-t border-white/10 pt-4 mb-8">
+              <span className="text-2xl font-bold">Total</span>
+              <PriceDisplay price={total} currency="COP" size="lg" showDiscount={false} />
             </div>
 
             {/* Desktop Submit */}
-            <button 
+            <Button 
               form="checkout-form"
               type="submit" 
               disabled={isProcessing}
-              className={`hidden md:flex w-full py-4 text-xl font-bold rounded-xl shadow-lg transition-all justify-center items-center gap-2 ${
-                isProcessing ? 'bg-gray-700 text-gray-400 cursor-not-allowed' : 'btn-primary shadow-primary/30'
-              }`}
+              size="xl"
+              isLoading={isProcessing}
+              loadingText="Procesando..."
+              className="hidden md:flex w-full justify-center items-center shadow-primary/30"
             >
-              {isProcessing ? (
-                <>
-                  <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>
-                  Procesando...
-                </>
-              ) : (
-                <>Continuar al Pago <ChevronRight size={20} /></>
-              )}
-            </button>
+              {!isProcessing && <>Continuar al Pago <ChevronRight size={20} className="ml-2" /></>}
+            </Button>
             
-            <div className="mt-6 flex flex-col items-center gap-3">
-              <p className="text-xs text-gray-500 text-center">Pago seguro procesado a través de MercadoPago</p>
-              <img src="https://logospng.org/download/mercado-pago/logo-mercado-pago-icone-1024.png" alt="Mercado Pago" className="h-6 opacity-50 grayscale" />
+            <div className="mt-8">
+              <TrustBadges variant="checkout" />
             </div>
           </motion.div>
         </div>
@@ -239,17 +232,22 @@ const Checkout = () => {
 
       {/* Mobile Sticky CTA */}
       <div className="fixed bottom-0 left-0 right-0 p-4 bg-darker/90 backdrop-blur-md border-t border-white/10 md:hidden z-50 shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
-        <button 
+        <Button 
           form="checkout-form"
           type="submit" 
           disabled={isProcessing}
-          className={`w-full py-4 text-lg font-bold flex justify-center items-center gap-2 rounded-xl transition-all ${
-            isProcessing ? 'bg-gray-700 text-gray-400 cursor-not-allowed' : 'btn-primary shadow-primary/30'
-          }`}
+          size="xl"
+          isLoading={isProcessing}
+          loadingText="Procesando..."
+          className="w-full flex justify-center items-center shadow-primary/30"
         >
-          {isProcessing ? 'Procesando...' : `Pagar $${total.toFixed(2)}`}
-          {!isProcessing && <ChevronRight size={20} />}
-        </button>
+          {!isProcessing && <>
+            Pagar <span className="mx-1 font-black bg-white/20 px-2 rounded-md">
+              {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(total)}
+            </span>
+            <ChevronRight size={20} />
+          </>}
+        </Button>
       </div>
     </div>
   );
