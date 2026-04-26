@@ -40,38 +40,37 @@ router.post('/', upload.single('file'), async (req, res) => {
             return res.status(400).json({ message: 'No se recibió ningún archivo.' });
         }
 
-        const ext      = path.extname(req.file.originalname).toLowerCase();
+        const ext       = path.extname(req.file.originalname).toLowerCase();
         const is3DModel = /\.(glb|gltf)$/.test(ext);
 
-        // Build upload options
+        // Convert buffer to base64 data URI
+        const mimeType  = is3DModel ? 'application/octet-stream' : req.file.mimetype;
+        const b64       = req.file.buffer.toString('base64');
+        const dataURI   = `data:${mimeType};base64,${b64}`;
+
         const uploadOptions = {
-            folder: 'zamis-print',
-            public_id: `${req.file.fieldname}-${Date.now()}`,
+            folder:        'zamis-print',
+            public_id:     `${req.file.fieldname}-${Date.now()}`,
             resource_type: is3DModel ? 'raw' : 'auto',
         };
 
-        // Upload buffer to Cloudinary using upload_stream
-        const result = await new Promise((resolve, reject) => {
-            const stream = cloudinary.uploader.upload_stream(
-                uploadOptions,
-                (error, result) => {
-                    if (error) return reject(error);
-                    resolve(result);
-                }
-            );
-            stream.end(req.file.buffer);
-        });
+        console.log(`Uploading ${req.file.originalname} — resource_type: ${uploadOptions.resource_type}`);
+
+        const result = await cloudinary.uploader.upload(dataURI, uploadOptions);
+
+        console.log('Cloudinary upload success:', result.secure_url);
 
         res.json({
-            message: 'Archivo subido exitosamente a Cloudinary',
+            message:  'Archivo subido exitosamente a Cloudinary',
             filePath: result.secure_url,
         });
 
     } catch (error) {
-        console.error('Cloudinary upload error:', error);
+        console.error('Cloudinary upload error:', JSON.stringify(error));
         res.status(500).json({
-            message: 'Error al subir el archivo',
-            error: error.message,
+            message: 'Error al subir el archivo a Cloudinary',
+            error:   error.message,
+            details: error.http_code || null,
         });
     }
 });
