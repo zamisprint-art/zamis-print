@@ -92,7 +92,7 @@ const HeroSlider = () => {
   };
 
   return (
-    <section className="relative h-[85vh] sm:h-[90vh] w-full overflow-hidden bg-surface-base">
+    <section className="relative h-[60vh] sm:h-[70vh] w-full overflow-hidden bg-surface-base">
       <AnimatePresence initial={false} custom={direction}>
         <motion.div
           key={current}

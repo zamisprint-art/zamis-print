@@ -112,94 +112,110 @@ const Shop = () => {
     <div className="container-xl py-12">
 
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
-        <div>
-          <p className="text-brand-600 text-sm font-semibold uppercase tracking-widest mb-2">
-            Catálogo
-          </p>
-          <h1 className="text-4xl font-extrabold text-neutral-900 leading-tight">
-            {querySearch ? `Resultados para "${querySearch}"` : 'Todos los Productos'}
-          </h1>
-          <p className="text-neutral-500 mt-2 max-w-xl">
-            Descubre nuestras creaciones de impresión 3D. Cada pieza puede ser adaptada a tus gustos.
-          </p>
-        </div>
-
-        {/* Search & Sort Controls */}
-        <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
-          <div className="relative flex-1 w-full md:w-64">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
-            <input
-              type="text"
-              value={search}
-              onChange={handleSearchChange}
-              placeholder="Buscar productos..."
-              className="input-field pl-10 bg-white"
-            />
-          </div>
-          <div className="relative w-full sm:w-auto">
-            <SlidersHorizontal className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 pointer-events-none" />
-            <select
-              value={sort}
-              onChange={handleSortChange}
-              className="input-field pl-10 pr-8 appearance-none w-full sm:w-56 cursor-pointer bg-white"
-            >
-              {SORT_OPTIONS.map((o) => (
-                <option key={o.value} value={o.value}>{o.label}</option>
-              ))}
-            </select>
-          </div>
-        </div>
+      <div className="mb-8 pb-8 border-b border-neutral-200">
+        <p className="text-brand-600 text-sm font-semibold uppercase tracking-widest mb-2">
+          Catálogo
+        </p>
+        <h1 className="text-4xl font-extrabold text-neutral-900 leading-tight">
+          {querySearch ? `Resultados para "${querySearch}"` : 'Todos los Productos'}
+        </h1>
+        <p className="text-neutral-500 mt-2 max-w-xl">
+          Descubre nuestras creaciones de impresión 3D. Cada pieza puede ser adaptada a tus gustos exactos.
+        </p>
       </div>
 
-      {/* Advanced Filters (Categories) */}
-      {!loading && categories.length > 1 && (
-        <div className="flex flex-wrap items-center gap-2 mb-8 pb-6 border-b border-neutral-200">
-          <span className="text-sm font-semibold text-neutral-600 mr-2">Filtrar por:</span>
-          {categories.map(cat => (
-            <button
-              key={cat}
-              onClick={() => handleCategoryChange(cat)}
-              className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
-                category === cat 
-                  ? 'bg-brand-500 text-white shadow-md' 
-                  : 'bg-white text-neutral-600 border border-neutral-200 hover:border-brand-300 hover:text-brand-600'
-              }`}
-            >
-              {cat === 'All' ? 'Todos' : cat}
-            </button>
-          ))}
+      <div className="flex flex-col lg:flex-row gap-8 items-start">
+        {/* Left Sidebar (Filters) */}
+        <div className="w-full lg:w-72 shrink-0">
+          <div className="sticky top-24 bg-surface-card p-6 rounded-2xl border border-neutral-200 shadow-sm flex flex-col gap-8">
+            
+            {/* Search Filter */}
+            <div>
+              <h3 className="text-sm font-bold text-neutral-900 uppercase tracking-wider mb-3">Buscar</h3>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
+                <input
+                  type="text"
+                  value={search}
+                  onChange={handleSearchChange}
+                  placeholder="Ej. Maceta Groot..."
+                  className="input-field pl-10 bg-surface-base"
+                />
+              </div>
+            </div>
+
+            {/* Categories Filter */}
+            {!loading && categories.length > 1 && (
+              <div>
+                <h3 className="text-sm font-bold text-neutral-900 uppercase tracking-wider mb-3">Categorías</h3>
+                <div className="flex flex-col gap-2">
+                  {categories.map(cat => (
+                    <button
+                      key={cat}
+                      onClick={() => handleCategoryChange(cat)}
+                      className={`text-left px-3 py-2 rounded-lg text-sm font-medium transition-all flex items-center justify-between ${
+                        category === cat 
+                          ? 'bg-brand-50 text-brand-700 font-bold' 
+                          : 'text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900'
+                      }`}
+                    >
+                      {cat === 'All' ? 'Todas las Categorías' : cat}
+                      {category === cat && <span className="w-2 h-2 rounded-full bg-brand-500"></span>}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
-      )}
 
-      {/* Result count */}
-      {!loading && (
-        <p className="text-sm text-neutral-500 mb-6">
-          {filtered.length} {filtered.length === 1 ? 'producto encontrado' : 'productos encontrados'}
-        </p>
-      )}
+        {/* Right Content */}
+        <div className="flex-1 w-full">
+          {/* Top Bar: Count & Sort */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+            {!loading && (
+              <p className="text-sm font-medium text-neutral-500">
+                Mostrando <span className="text-neutral-900 font-bold">{filtered.length}</span> {filtered.length === 1 ? 'producto' : 'productos'}
+              </p>
+            )}
+            
+            <div className="relative w-full sm:w-56 ml-auto">
+              <SlidersHorizontal className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 pointer-events-none" />
+              <select
+                value={sort}
+                onChange={handleSortChange}
+                className="input-field pl-10 pr-8 appearance-none w-full cursor-pointer bg-white text-sm"
+              >
+                {SORT_OPTIONS.map((o) => (
+                  <option key={o.value} value={o.value}>{o.label}</option>
+                ))}
+              </select>
+            </div>
+          </div>
 
-      {/* Grid */}
-      {loading ? (
-        <ProductGridSkeleton count={8} />
-      ) : filtered.length === 0 ? (
-        <EmptyState
-          icon={<Search className="w-8 h-8" />}
-          title="Sin resultados"
-          description={`No encontramos productos para "${search}". Intenta con otro término.`}
-        />
-      ) : (
-        <motion.div
-          variants={staggerContainer}
-          initial="hidden"
-          animate="visible"
-          className="grid-products"
-        >
-          {filtered.map((product) => (
-            <ProductCard key={product._id} product={product} />
-          ))}
-        </motion.div>
-      )}
+          {/* Grid */}
+          {loading ? (
+            <ProductGridSkeleton count={6} />
+          ) : filtered.length === 0 ? (
+            <EmptyState
+              icon={<Search className="w-8 h-8" />}
+              title="Sin resultados"
+              description={`No encontramos productos para tu búsqueda actual. Intenta con otros filtros.`}
+            />
+          ) : (
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              animate="visible"
+              className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6"
+            >
+              {filtered.map((product) => (
+                <ProductCard key={product._id} product={product} />
+              ))}
+            </motion.div>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
