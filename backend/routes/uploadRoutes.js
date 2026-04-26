@@ -1,4 +1,5 @@
 import path from 'path';
+import { Readable } from 'stream';
 import express from 'express';
 import multer from 'multer';
 import cloudinary from '../config/cloudinary.js';
@@ -43,34 +44,44 @@ router.post('/', upload.single('file'), async (req, res) => {
         const ext       = path.extname(req.file.originalname).toLowerCase();
         const is3DModel = /\.(glb|gltf)$/.test(ext);
 
-        // Convert buffer to base64 data URI
-        const mimeType  = is3DModel ? 'application/octet-stream' : req.file.mimetype;
-        const b64       = req.file.buffer.toString('base64');
-        const dataURI   = `data:${mimeType};base64,${b64}`;
-
         const uploadOptions = {
             folder:        'zamis-print',
             public_id:     `${req.file.fieldname}-${Date.now()}`,
             resource_type: is3DModel ? 'raw' : 'auto',
+            use_filename:  false,
         };
 
-        console.log(`Uploading ${req.file.originalname} — resource_type: ${uploadOptions.resource_type}`);
+        console.log(`[Upload] ${req.file.originalname} | size: ${req.file.size} bytes | resource_type: ${uploadOptions.resource_type}`);
 
-        const result = await cloudinary.uploader.upload(dataURI, uploadOptions);
+        // Stream the buffer directly to Cloudinary
+        const result = await new Promise((resolve, reject) => {
+            const uploadStream = cloudinary.uploader.upload_stream(
+                uploadOptions,
+                (error, result) => {
+                    if (error) {
+                        console.error('[Cloudinary Error]', JSON.stringify(error));
+                        return reject(error);
+                    }
+                    resolve(result);
+                }
+            );
+            // Pipe the buffer as a readable stream
+            Readable.from(req.file.buffer).pipe(uploadStream);
+        });
 
-        console.log('Cloudinary upload success:', result.secure_url);
+        console.log('[Upload] Success:', result.secure_url);
 
         res.json({
-            message:  'Archivo subido exitosamente a Cloudinary',
+            message:  'Archivo subido exitosamente',
             filePath: result.secure_url,
         });
 
     } catch (error) {
-        console.error('Cloudinary upload error:', JSON.stringify(error));
+        console.error('[Upload] Final error:', error.message, '| HTTP:', error.http_code);
         res.status(500).json({
-            message: 'Error al subir el archivo a Cloudinary',
+            message: 'Error al subir el archivo',
             error:   error.message,
-            details: error.http_code || null,
+            code:    error.http_code || 500,
         });
     }
 });
