@@ -93,16 +93,13 @@ const Home = () => {
 
         {!loading && products.length > 0 && (
           <div className="text-center mt-16">
-            <Button 
-              as={Link} 
-              to="/shop" 
-              variant="outline" 
-              size="lg"
-              className="group border-primary/50 hover:border-primary"
+            <Link
+              to="/shop"
+              className="inline-flex items-center gap-2 px-8 py-4 rounded-xl border-2 border-brand-500 text-brand-600 font-bold hover:bg-brand-500 hover:text-white transition-all duration-200 group"
             >
-              Ver Todos los Productos 
-              <span className="inline-block transform group-hover:translate-x-1 transition-transform ml-2">→</span>
-            </Button>
+              Ver Todos los Productos
+              <span className="inline-block transform group-hover:translate-x-1 transition-transform">→</span>
+            </Link>
           </div>
         )}
       </section>
