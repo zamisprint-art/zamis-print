@@ -9,6 +9,7 @@ import Checkout from './pages/Checkout';
 import AdminDashboard from './pages/AdminDashboard';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import OrderSuccess from './pages/OrderSuccess';
 import Login from './pages/Login';
 import { useAuthStore } from './store/useAuthStore';
 
@@ -33,6 +34,7 @@ function App() {
         <Route path="checkout" element={<Checkout />} />
         <Route path="about" element={<About />} />
         <Route path="contact" element={<Contact />} />
+        <Route path="order/:id" element={<OrderSuccess />} />
         <Route path="login" element={<CustomerLogin />} />
         <Route path="profile" element={<MyAccount />} />
       </Route>

@@ -14,7 +14,7 @@ const createPreference = async (req, res) => {
             title: item.name,
             unit_price: Number(item.price),
             quantity: Number(item.qty),
-            currency_id: 'MXN' // Change to relevant currency
+            currency_id: 'COP'
         }));
 
         const response = await preference.create({
@@ -26,6 +26,7 @@ const createPreference = async (req, res) => {
                     pending: `${process.env.FRONTEND_URL}/order/${orderId}?status=pending`
                 },
                 auto_return: "approved",
+                notification_url: `${process.env.BACKEND_URL}/api/payments/webhook`,
                 external_reference: orderId.toString()
             }
         });
