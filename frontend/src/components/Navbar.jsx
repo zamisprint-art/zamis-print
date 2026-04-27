@@ -59,7 +59,7 @@ const Navbar = () => {
 
             {/* Logo */}
             <Link to="/" className="text-2xl font-black tracking-tight">
-              <span className="text-neutral-900">ZAMIS</span><span className="text-brand-500">.</span><span className="text-neutral-700">Print</span>
+              <span className="text-neutral-900">ZAMIS</span> <span className="text-brand-500">Print</span>
             </Link>
 
             {/* Desktop Links */}
@@ -138,8 +138,8 @@ const Navbar = () => {
             >
               {/* Drawer Header */}
               <div className="flex items-center justify-between px-6 py-5 border-b border-neutral-100">
-                <span className="text-xl font-black text-neutral-900">
-                  ZAMIS<span className="text-brand-500">.</span>Print
+                <span className="text-xl font-black tracking-tight">
+                  <span className="text-neutral-900">ZAMIS</span> <span className="text-brand-500">Print</span>
                 </span>
                 <button
                   onClick={() => setIsOpen(false)}
