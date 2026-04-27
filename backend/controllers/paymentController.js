@@ -134,7 +134,7 @@ const createPreference = async (req, res) => {
 
         const response = await preference.create({
             body: {
-                items,
+                items: mpItems,
                 back_urls: {
                     success: `${process.env.FRONTEND_URL}/order/${orderId}?status=success`,
                     failure: `${process.env.FRONTEND_URL}/order/${orderId}?status=failure`,
