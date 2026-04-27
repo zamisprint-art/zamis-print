@@ -10,6 +10,9 @@ import AdminDashboard from './pages/AdminDashboard';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import OrderSuccess from './pages/OrderSuccess';
+import FAQ from './pages/FAQ';
+import Privacy from './pages/Privacy';
+import Terms from './pages/Terms';
 import Login from './pages/Login';
 import { useAuthStore } from './store/useAuthStore';
 
@@ -35,6 +38,9 @@ function App() {
         <Route path="about" element={<About />} />
         <Route path="contact" element={<Contact />} />
         <Route path="order/:id" element={<OrderSuccess />} />
+        <Route path="faq" element={<FAQ />} />
+        <Route path="privacy" element={<Privacy />} />
+        <Route path="terms" element={<Terms />} />
         <Route path="login" element={<CustomerLogin />} />
         <Route path="profile" element={<MyAccount />} />
       </Route>
