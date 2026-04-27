@@ -40,7 +40,8 @@ app.use(cookieParser());
 // Database connection
 const connectDB = async () => {
     try {
-        const conn = await mongoose.connect(process.env.MONGODB_URI);
+        const uri = process.env.MONGODB_URI || process.env.MONGO_URI;
+        const conn = await mongoose.connect(uri);
         console.log(`MongoDB Connected: ${conn.connection.host}`);
     } catch (error) {
         console.error(`Error: ${error.message}`);
