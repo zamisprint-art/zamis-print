@@ -59,9 +59,7 @@ const Navbar = () => {
 
             {/* Logo */}
             <Link to="/" className="text-2xl font-black tracking-tight">
-              <span className="text-neutral-900">ZAMIS</span>
-              <span className="text-brand-500">.</span>
-              <span className="text-neutral-500 text-lg font-semibold">Print</span>
+              <span className="text-neutral-900">ZAMIS</span><span className="text-brand-500">.</span><span className="text-neutral-700">Print</span>
             </Link>
 
             {/* Desktop Links */}

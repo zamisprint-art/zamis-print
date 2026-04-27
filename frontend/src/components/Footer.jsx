@@ -11,8 +11,8 @@ const Footer = () => {
           {/* Brand Column */}
           <div className="space-y-6">
             <Link to="/" className="inline-block">
-              <span className="text-3xl font-black tracking-tighter text-neutral-900">
-                ZAMIS<span className="text-primary">.</span>
+              <span className="text-3xl font-black tracking-tighter">
+                <span className="text-neutral-900">ZAMIS</span><span className="text-brand-500">.</span><span className="text-neutral-700">Print</span>
               </span>
             </Link>
             <p className="text-neutral-500 leading-relaxed text-sm">
