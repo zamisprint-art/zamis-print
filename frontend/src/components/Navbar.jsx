@@ -34,20 +34,20 @@ const Navbar = () => {
   return (
     <header className="sticky top-0 z-50 w-full flex flex-col">
       {/* Top Ribbon */}
-      <div className="bg-neutral-100 border-b border-neutral-200 text-neutral-600 text-xs py-2 px-4 hidden sm:block">
+      <div className="bg-brand-600 text-brand-50 text-xs py-2 px-4 hidden sm:block">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-6">
-            <a href="mailto:hola@zamisprint.com" className="flex items-center gap-2 hover:text-brand-600 transition-colors">
+            <a href="mailto:hola@zamisprint.com" className="flex items-center gap-2 hover:text-white transition-colors">
               <Mail size={13} /> hola@zamisprint.com
             </a>
-            <a href="tel:+573000000000" className="flex items-center gap-2 hover:text-brand-600 transition-colors">
-              <Phone size={13} /> +57 300 000 0000
+            <a href="tel:+573000000000" className="flex items-center gap-2 hover:text-white transition-colors">
+              <Phone size={13} /> +57 310 787 8192
             </a>
           </div>
           <div className="flex items-center gap-4">
-            <span className="text-neutral-400">Síguenos en:</span>
-            <a href="#" className="hover:text-brand-600 font-bold transition-colors">IG</a>
-            <a href="#" className="hover:text-brand-600 font-bold transition-colors">FB</a>
+            <span className="text-brand-200">Síguenos en:</span>
+            <a href="#" className="hover:text-white font-bold transition-colors">IG</a>
+            <a href="#" className="hover:text-white font-bold transition-colors">FB</a>
           </div>
         </div>
       </div>

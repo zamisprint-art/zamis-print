@@ -40,6 +40,9 @@ const productSchema = new mongoose.Schema({
         type: String, // Path or URL to .glb/.gltf file
         required: false,
     },
+    gallery: [{
+        type: String, // Array of additional image URLs
+    }],
     description: {
         type: String,
         required: true,

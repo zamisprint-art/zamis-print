@@ -20,6 +20,7 @@ const ProductDetail = () => {
   const { id }       = useParams();
   const navigate     = useNavigate();
   const [product, setProduct]                     = useState(null);
+  const [activeMedia, setActiveMedia]             = useState(null); // '3d' | 'main' | url
   const [loading, setLoading]                     = useState(true);
   const [qty, setQty]                             = useState(1);
   const [personalizationText, setPersonalizationText]   = useState('');
@@ -105,38 +106,80 @@ const ProductDetail = () => {
       <div className="grid-detail mb-16">
 
         {/* LEFT — Visual */}
-        <motion.div
-          variants={fadeLeft}
-          initial="hidden"
-          animate="visible"
-          className="h-[400px] sm:h-[500px] lg:h-[580px] rounded-2xl overflow-hidden border border-neutral-200 bg-surface-base shadow-2xl"
-        >
-          {/* Only show 3D viewer for valid remote URLs (Cloudinary). Local /uploads/ paths don't exist in production. */}
-          {product.model3D && product.model3D.startsWith('http') ? (
-            <Suspense fallback={
-              <div className="w-full h-full flex flex-col items-center justify-center gap-4">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-brand-500" />
-                <p className="text-neutral-400 animate-pulse text-sm">Cargando experiencia 3D...</p>
-              </div>
-            }>
-              <Product3DViewer modelUrl={product.model3D} />
-            </Suspense>
-          ) : (
-            <img
-              src={
-                product.image && product.image !== '/images/sample.jpg'
-                  ? product.image
-                  : 'https://via.placeholder.com/600x600?text=ZAMIS+Print'
-              }
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = 'https://via.placeholder.com/600x600?text=Imagen+No+Disponible';
-              }}
-              alt={product.name}
-              className="w-full h-full object-cover"
-            />
-          )}
-        </motion.div>
+        <div className="flex flex-col gap-4">
+          <motion.div
+            variants={fadeLeft}
+            initial="hidden"
+            animate="visible"
+            className="h-[400px] sm:h-[500px] lg:h-[580px] rounded-2xl overflow-hidden border border-neutral-200 bg-surface-base shadow-2xl relative"
+          >
+            {/* Show 3D if activeMedia is null and 3D exists, OR if activeMedia === '3d' */}
+            {(!activeMedia && product.model3D?.startsWith('http')) || activeMedia === '3d' ? (
+              <Suspense fallback={
+                <div className="w-full h-full flex flex-col items-center justify-center gap-4">
+                  <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-brand-500" />
+                  <p className="text-neutral-400 animate-pulse text-sm">Cargando experiencia 3D...</p>
+                </div>
+              }>
+                <Product3DViewer modelUrl={product.model3D} />
+              </Suspense>
+            ) : (
+              <img
+                src={
+                  activeMedia && activeMedia !== 'main' 
+                    ? activeMedia 
+                    : (product.image && product.image !== '/images/sample.jpg' ? product.image : 'https://via.placeholder.com/600x600?text=ZAMIS+Print')
+                }
+                onError={(e) => { e.target.onerror = null; e.target.src = 'https://via.placeholder.com/600x600?text=Imagen+No+Disponible'; }}
+                alt={product.name}
+                className="w-full h-full object-cover"
+              />
+            )}
+          </motion.div>
+
+          {/* Thumbnails Gallery */}
+          <motion.div variants={fadeLeft} className="flex gap-3 overflow-x-auto pb-2 snap-x hide-scrollbar">
+            {/* 3D Thumbnail */}
+            {product.model3D?.startsWith('http') && (
+              <button
+                onClick={() => setActiveMedia('3d')}
+                className={`w-20 h-20 shrink-0 rounded-xl overflow-hidden border-2 transition-all ${
+                  (!activeMedia || activeMedia === '3d') ? 'border-brand-500 shadow-md ring-2 ring-brand-500/20' : 'border-neutral-200 hover:border-brand-300 opacity-70 hover:opacity-100'
+                }`}
+              >
+                <div className="w-full h-full bg-neutral-100 flex flex-col items-center justify-center text-brand-500">
+                  <span className="font-bold text-lg leading-none">3D</span>
+                  <span className="text-[10px] font-semibold mt-1">Visor</span>
+                </div>
+              </button>
+            )}
+            
+            {/* Main Image Thumbnail */}
+            {product.image && product.image !== '/images/sample.jpg' && (
+              <button
+                onClick={() => setActiveMedia('main')}
+                className={`w-20 h-20 shrink-0 rounded-xl overflow-hidden border-2 transition-all ${
+                  (activeMedia === 'main' || (!activeMedia && !product.model3D?.startsWith('http'))) ? 'border-brand-500 shadow-md ring-2 ring-brand-500/20' : 'border-neutral-200 hover:border-brand-300 opacity-70 hover:opacity-100'
+                }`}
+              >
+                <img src={product.image} alt="Principal" className="w-full h-full object-cover" />
+              </button>
+            )}
+
+            {/* Extra Gallery Thumbnails */}
+            {product.gallery?.map((imgUrl, idx) => (
+              <button
+                key={idx}
+                onClick={() => setActiveMedia(imgUrl)}
+                className={`w-20 h-20 shrink-0 rounded-xl overflow-hidden border-2 transition-all ${
+                  activeMedia === imgUrl ? 'border-brand-500 shadow-md ring-2 ring-brand-500/20' : 'border-neutral-200 hover:border-brand-300 opacity-70 hover:opacity-100'
+                }`}
+              >
+                <img src={imgUrl} alt={`Galería ${idx}`} className="w-full h-full object-cover" />
+              </button>
+            ))}
+          </motion.div>
+        </div>
 
         {/* RIGHT — Details */}
         <motion.div

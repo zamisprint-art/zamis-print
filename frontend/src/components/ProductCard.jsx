@@ -37,6 +37,7 @@ const ProductCard = ({ product }) => {
           }}
           alt={product.name}
           className={`w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105 ${isOutOfStock ? 'opacity-50 grayscale' : ''}`}
+          loading="lazy"
         />
 
         {/* Overlay badges */}

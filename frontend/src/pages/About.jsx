@@ -45,7 +45,7 @@ const About = () => {
             <div>
               <h2 className="text-3xl font-bold mb-4">Nuestra Historia</h2>
               <p className="text-neutral-600 leading-relaxed text-lg">
-                Comenzamos como un pequeño taller con una sola impresora y un gran sueño: hacer que la personalización extrema fuera accesible para todos. Hoy, utilizamos tecnología de deposición fundida (FDM) y resina de altísima resolución para crear piezas que van desde decoración para el hogar hasta prototipos industriales.
+                ZAMIS Print nació con una visión clara: revolucionar la forma en que las personas interactúan con sus ideas. Lo que comenzó como una fascinación por la tecnología de impresión 3D se ha transformado en un estudio creativo donde la ingeniería y el arte convergen. Hoy, combinamos tecnología de deposición fundida (FDM) y resina de ultra alta resolución (SLA) para entregar piezas que superan los más altos estándares de calidad, desde coleccionables personalizados hasta soluciones funcionales.
               </p>
             </div>
             <div className="grid grid-cols-2 gap-6">

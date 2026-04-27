@@ -13,7 +13,7 @@ const AdminDashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [currentProduct, setCurrentProduct] = useState({
-    _id: '', name: '', price: 0, category: '', countInStock: 0, description: '', image: '', model3D: ''
+    _id: '', name: '', price: 0, category: '', countInStock: 0, description: '', image: '', model3D: '', gallery: []
   });
   const [uploadingImage, setUploadingImage] = useState(false);
   const [uploadingModel, setUploadingModel] = useState(false);
@@ -40,7 +40,7 @@ const AdminDashboard = () => {
   // --- PRODUCT CRUD HANDLERS ---
   const handleOpenCreateModal = () => {
     setIsEditing(false);
-    setCurrentProduct({ _id: '', name: '', price: 0, category: '', countInStock: 0, description: '', image: '', model3D: '' });
+    setCurrentProduct({ _id: '', name: '', price: 0, category: '', countInStock: 0, description: '', image: '', model3D: '', gallery: [] });
     setIsModalOpen(true);
   };
 
@@ -80,10 +80,12 @@ const AdminDashboard = () => {
 
   const uploadFileHandler = async (e, type) => {
     const file = e.target.files[0];
+    if (!file) return;
+
     const formData = new FormData();
     formData.append('file', file);
 
-    if (type === 'image') setUploadingImage(true);
+    if (type === 'image' || type === 'gallery') setUploadingImage(true);
     else setUploadingModel(true);
 
     try {
@@ -93,6 +95,10 @@ const AdminDashboard = () => {
       if (type === 'image') {
         setCurrentProduct({ ...currentProduct, image: data.filePath });
         setUploadingImage(false);
+      } else if (type === 'gallery') {
+        const newGallery = currentProduct.gallery ? [...currentProduct.gallery, data.filePath] : [data.filePath];
+        setCurrentProduct({ ...currentProduct, gallery: newGallery });
+        setUploadingImage(false);
       } else {
         setCurrentProduct({ ...currentProduct, model3D: data.filePath });
         setUploadingModel(false);
@@ -100,7 +106,7 @@ const AdminDashboard = () => {
     } catch (error) {
       console.error(error);
       alert('Error subiendo el archivo');
-      if (type === 'image') setUploadingImage(false);
+      if (type === 'image' || type === 'gallery') setUploadingImage(false);
       else setUploadingModel(false);
     }
   };
@@ -115,7 +121,7 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col md:flex-row gap-8">
+    <div className="w-full px-4 sm:px-6 lg:px-8 py-12 flex flex-col md:flex-row gap-8">
       {/* Sidebar */}
       <div className="w-full md:w-64 flex flex-col gap-2">
         <div className="glass-panel p-6 rounded-2xl mb-4">
@@ -168,7 +174,10 @@ const AdminDashboard = () => {
                     <tr key={order._id} className="border-b border-neutral-100 hover:bg-white/5 transition-colors">
                       <td className="py-4 px-4 font-mono text-sm">{order._id.substring(0, 8)}...</td>
                       <td className="py-4 px-4">{new Date(order.createdAt).toLocaleDateString()}</td>
-                      <td className="py-4 px-4">{order.user?.name || 'Invitado'}</td>
+                      <td className="py-4 px-4">
+                        <div className="font-medium text-neutral-900">{order.user?.name || order.shippingAddress?.fullName || 'Invitado'}</div>
+                        <div className="text-xs text-neutral-500">{order.shippingAddress?.phone || 'Sin teléfono'}</div>
+                      </td>
                       <td className="py-4 px-4 font-bold">${order.totalPrice}</td>
                       <td className="py-4 px-4">
                         <span className={`px-3 py-1 rounded-full text-xs font-bold ${
@@ -302,9 +311,23 @@ const AdminDashboard = () => {
                   <label className="block text-sm font-medium text-neutral-700 mb-2 flex items-center gap-2">
                     <Upload size={16} className="text-primary"/> Subir Imagen (JPG/PNG)
                   </label>
-                  <input type="file" onChange={(e) => uploadFileHandler(e, 'image')} className="text-sm text-neutral-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/20 file:text-primary hover:file:bg-primary/30" />
-                  {uploadingImage && <p className="text-xs text-blue-400 mt-1">Subiendo...</p>}
-                  {currentProduct.image && <p className="text-xs text-green-400 mt-1 truncate">{currentProduct.image}</p>}
+                  <div className="flex items-start gap-4">
+                    {currentProduct.image && (
+                      <div className="w-16 h-16 rounded-xl bg-neutral-100 overflow-hidden border border-neutral-200 shrink-0 shadow-sm relative">
+                        {uploadingImage ? (
+                          <div className="absolute inset-0 flex items-center justify-center bg-white/50 backdrop-blur-sm">
+                            <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+                          </div>
+                        ) : null}
+                        <img src={currentProduct.image} alt="Preview" className="w-full h-full object-cover" />
+                      </div>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <input type="file" onChange={(e) => uploadFileHandler(e, 'image')} className="w-full text-sm text-neutral-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer" />
+                      {uploadingImage && <p className="text-xs text-primary font-semibold mt-2 animate-pulse">Subiendo a Cloudinary...</p>}
+                      {currentProduct.image && !uploadingImage && <p className="text-xs text-neutral-400 mt-2 truncate" title={currentProduct.image}>✅ Imagen lista</p>}
+                    </div>
+                  </div>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-neutral-700 mb-2 flex items-center gap-2">
@@ -313,6 +336,48 @@ const AdminDashboard = () => {
                   <input type="file" onChange={(e) => uploadFileHandler(e, 'model')} className="text-sm text-neutral-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-accent/20 file:text-accent hover:file:bg-accent/30" />
                   {uploadingModel && <p className="text-xs text-blue-400 mt-1">Subiendo...</p>}
                   {currentProduct.model3D && <p className="text-xs text-green-400 mt-1 truncate">{currentProduct.model3D}</p>}
+                </div>
+              </div>
+              
+              {/* Gallery Section */}
+              <div className="p-4 border border-neutral-200 rounded-xl bg-black/20 mt-4">
+                <label className="block text-sm font-medium text-neutral-700 mb-2 flex items-center justify-between">
+                  <span className="flex items-center gap-2"><Upload size={16} className="text-brand-500"/> Galería de Imágenes (Opcional)</span>
+                  <span className="text-xs font-normal text-neutral-500">Máximo 4 fotos</span>
+                </label>
+                
+                <div className="flex flex-wrap gap-4 mb-4">
+                  {currentProduct.gallery?.map((imgUrl, idx) => (
+                    <div key={idx} className="w-16 h-16 rounded-xl bg-neutral-100 overflow-hidden border border-neutral-200 relative group">
+                      <img src={imgUrl} alt={`Gallery ${idx}`} className="w-full h-full object-cover" />
+                      <button 
+                        type="button"
+                        onClick={() => {
+                          const newGallery = currentProduct.gallery.filter((_, i) => i !== idx);
+                          setCurrentProduct({...currentProduct, gallery: newGallery});
+                        }}
+                        className="absolute inset-0 bg-red-500/80 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <X size={16} />
+                      </button>
+                    </div>
+                  ))}
+                  
+                  {(!currentProduct.gallery || currentProduct.gallery.length < 4) && (
+                    <div className="w-16 h-16 rounded-xl border-2 border-dashed border-neutral-300 flex items-center justify-center relative hover:border-brand-500 hover:bg-brand-50 transition-colors">
+                      {uploadingImage ? (
+                        <div className="w-5 h-5 border-2 border-brand-500 border-t-transparent rounded-full animate-spin"></div>
+                      ) : (
+                        <PlusCircle size={20} className="text-neutral-400" />
+                      )}
+                      <input 
+                        type="file" 
+                        onChange={(e) => uploadFileHandler(e, 'gallery')} 
+                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" 
+                        disabled={uploadingImage}
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
 
