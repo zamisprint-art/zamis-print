@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import WhatsAppButton from '../components/WhatsAppButton';
 
 const StoreLayout = () => {
   return (
@@ -11,6 +12,8 @@ const StoreLayout = () => {
       </main>
       {/* Public Store Footer */}
       <Footer />
+      {/* Floating WhatsApp CTA */}
+      <WhatsAppButton />
     </>
   );
 };
