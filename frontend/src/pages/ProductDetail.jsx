@@ -111,7 +111,8 @@ const ProductDetail = () => {
           animate="visible"
           className="h-[400px] sm:h-[500px] lg:h-[580px] rounded-2xl overflow-hidden border border-neutral-200 bg-surface-base shadow-2xl"
         >
-          {product.model3D ? (
+          {/* Only show 3D viewer for valid remote URLs (Cloudinary). Local /uploads/ paths don't exist in production. */}
+          {product.model3D && product.model3D.startsWith('http') ? (
             <Suspense fallback={
               <div className="w-full h-full flex flex-col items-center justify-center gap-4">
                 <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-brand-500" />
