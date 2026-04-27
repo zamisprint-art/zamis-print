@@ -40,26 +40,39 @@ const Checkout = () => {
     e.preventDefault();
     setStep(3);
     setIsProcessing(true);
-    
+
     try {
+      // Step 1: Create the order in DB
       const { data: orderData } = await axios.post('/api/orders', {
-        orderItems: cartItems,
+        orderItems: cartItems.map(item => ({
+          name:    item.name,
+          qty:     item.qty,
+          image:   item.image,
+          price:   item.price,
+          product: item.product,
+          personalizationText:  item.personalizationText  || '',
+          personalizationImage: item.personalizationImage || '',
+        })),
         shippingAddress,
         paymentMethod: 'MercadoPago',
-        itemsPrice: total,
+        itemsPrice:   total,
         shippingPrice: 0,
-        totalPrice: total,
+        totalPrice:   total,
       });
 
+      // Step 2: Create MP preference and redirect
       const { data: preferenceData } = await axios.post('/api/payments/create_preference', {
-        items: cartItems,
-        orderId: orderData._id
+        items:   cartItems,
+        orderId: orderData._id,
       });
 
+      // Redirect to MercadoPago checkout
       window.location.href = preferenceData.init_point;
+
     } catch (error) {
       console.error('Payment error:', error);
-      alert('Hubo un error al conectar con MercadoPago. Por favor intenta nuevamente.');
+      const msg = error.response?.data?.message || 'Error de conexión con el servidor.';
+      alert(`No pudimos procesar tu pago.\n\nDetalle: ${msg}\n\nPor favor intenta nuevamente.`);
       setIsProcessing(false);
       setStep(2);
     }

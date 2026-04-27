@@ -30,4 +30,18 @@ const admin = (req, res, next) => {
     }
 };
 
-export { protect, admin };
+// Optional auth - sets req.user if token present, but doesn't block guests
+const optionalAuth = async (req, res, next) => {
+    const token = req.cookies.jwt;
+    if (token) {
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            req.user = await User.findById(decoded.userId).select('-password');
+        } catch (_) {
+            // Invalid token — treat as guest, don't block
+        }
+    }
+    next();
+};
+
+export { protect, admin, optionalAuth };
