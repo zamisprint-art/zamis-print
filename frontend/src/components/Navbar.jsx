@@ -72,7 +72,7 @@ const Navbar = () => {
             {/* Logo */}
             <div className="flex-1 shrink-0 flex justify-start">
               <Link to="/" className="flex items-center">
-                <img src="/images/logo.png" alt="ZAMIS Print" className="h-10 sm:h-14 w-auto drop-shadow-sm scale-[1.3] origin-left" />
+                <img src="/images/logo.png" alt="ZAMIS Print" className="h-14 w-auto object-contain" />
               </Link>
             </div>
 
@@ -187,7 +187,7 @@ const Navbar = () => {
               {/* Drawer Header */}
               <div className="flex items-center justify-between px-6 py-5 border-b border-neutral-100">
                 <Link to="/" onClick={() => setIsOpen(false)} className="flex items-center">
-                  <img src="/images/logo.png" alt="ZAMIS Print" className="h-12 w-auto drop-shadow-sm scale-125 origin-left" />
+                  <img src="/images/logo.png" alt="ZAMIS Print" className="h-10 w-auto object-contain" />
                 </Link>
                 <button
                   onClick={() => setIsOpen(false)}
