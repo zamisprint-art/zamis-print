@@ -1,4 +1,4 @@
-import { useState, useEffect, lazy, Suspense } from 'react';
+import { useState, useEffect, lazy, Suspense, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import axios from 'axios';
@@ -51,6 +51,8 @@ const ProductDetail = () => {
 
   useEffect(() => { fetchProduct(); }, [id]);
 
+  const containerRef = useRef(null);
+
   // --- Pricing Logic ---
   const basePrice = product?.price || 0;
   const getCustomPriceAdditions = () => {
@@ -79,7 +81,7 @@ const ProductDetail = () => {
         `Tamaño: ${customSize}`,
         `Acabado: ${customFinish}`,
       ];
-      if (personalizationText) details.push(`Texto: "${personalizationText}"`);
+      if (personalizationText) details.push(`Texto: "${personalizationText}" (Ubicación libre)`);
       finalPersonalizationText = details.join(' | ');
     }
 
@@ -154,7 +156,7 @@ const ProductDetail = () => {
                 <Product3DViewer modelUrl={product.model3D} />
               </Suspense>
             ) : (
-              <div className="relative w-full h-full group">
+              <div ref={containerRef} className="relative w-full h-full group overflow-hidden touch-none">
                 <img
                   src={
                     activeMedia && activeMedia !== 'main' 
@@ -163,27 +165,33 @@ const ProductDetail = () => {
                   }
                   onError={(e) => { e.target.onerror = null; e.target.src = 'https://via.placeholder.com/600x600?text=Imagen+No+Disponible'; }}
                   alt={product.name}
-                  className={`w-full h-full object-cover transition-all duration-500 ${
+                  className={`w-full h-full object-cover pointer-events-none transition-all duration-500 ${
                     customMaterial === 'Especial' ? 'contrast-125 saturate-150 hue-rotate-15' : 
                     customMaterial === 'Premium' ? 'sepia-[.2] contrast-110' : ''
                   } ${customSize === '150%' ? 'scale-110' : 'scale-100'}`}
                 />
                 
-                {/* Live Text Engraving Overlay */}
+                {/* Live Text Engraving Overlay - Draggable */}
                 {product.isCustomizable && personalizationText && (
                   <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className="absolute inset-x-0 bottom-16 flex justify-center items-center pointer-events-none px-4"
+                    drag
+                    dragConstraints={containerRef}
+                    dragElastic={0.2}
+                    dragMomentum={false}
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center items-center cursor-move z-10"
                   >
-                    <div className="bg-black/40 backdrop-blur-sm px-6 py-3 rounded-xl border border-white/10 shadow-2xl">
+                    <div className="bg-black/40 backdrop-blur-sm px-6 py-3 rounded-xl border border-white/10 shadow-2xl hover:bg-black/60 transition-colors">
                       <span 
-                        className={`text-3xl md:text-5xl font-black uppercase tracking-[0.2em] ${customMaterial === 'Especial' ? 'text-green-300 drop-shadow-[0_0_15px_rgba(74,222,128,0.8)]' : 'text-white/90 drop-shadow-xl'}`}
+                        className={`text-3xl md:text-5xl font-black uppercase tracking-[0.2em] select-none ${customMaterial === 'Especial' ? 'text-green-300 drop-shadow-[0_0_15px_rgba(74,222,128,0.8)]' : 'text-white/90 drop-shadow-xl'}`}
                         style={{ textShadow: '2px 4px 10px rgba(0,0,0,0.5)' }}
                       >
                         {personalizationText}
                       </span>
-                      <p className="text-white/50 text-[10px] uppercase tracking-widest text-center mt-1">Previsualización del Grabado</p>
+                      <p className="text-white/70 text-[10px] uppercase tracking-widest text-center mt-2 flex items-center justify-center gap-1 select-none">
+                        <span className="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span> Arrastra para ubicar
+                      </p>
                     </div>
                   </motion.div>
                 )}
