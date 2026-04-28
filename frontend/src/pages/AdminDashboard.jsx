@@ -297,6 +297,10 @@ const AdminDashboard = () => {
                   <input type="text" required value={currentProduct.category} onChange={(e) => setCurrentProduct({...currentProduct, category: e.target.value})} className="input-field" />
                 </div>
                 <div>
+                  <label className="block text-sm font-medium text-neutral-700 mb-1">Subcategoría (Opcional)</label>
+                  <input type="text" value={currentProduct.subcategory || ''} onChange={(e) => setCurrentProduct({...currentProduct, subcategory: e.target.value})} className="input-field" placeholder="Ej: Macetas" />
+                </div>
+                <div>
                   <label className="block text-sm font-medium text-neutral-700 mb-1">Precio ($)</label>
                   <input type="number" required value={currentProduct.price} onChange={(e) => setCurrentProduct({...currentProduct, price: e.target.value})} className="input-field" />
                 </div>

@@ -45,7 +45,7 @@ const createProduct = async (req, res) => {
 // @route   PUT /api/products/:id
 // @access  Private/Admin
 const updateProduct = async (req, res) => {
-    const { name, price, description, image, gallery, model3D, category, countInStock, requiresTextPersonalization, requiresImagePersonalization, isCustomizable } = req.body;
+    const { name, price, description, image, gallery, model3D, category, subcategory, countInStock, requiresTextPersonalization, requiresImagePersonalization, isCustomizable } = req.body;
 
     const product = await Product.findById(req.params.id);
 
@@ -57,6 +57,7 @@ const updateProduct = async (req, res) => {
         product.gallery = gallery || product.gallery;
         product.model3D = model3D || product.model3D;
         product.category = category || product.category;
+        product.subcategory = subcategory !== undefined ? subcategory : product.subcategory;
         product.countInStock = countInStock || product.countInStock;
         product.requiresTextPersonalization = requiresTextPersonalization !== undefined ? requiresTextPersonalization : product.requiresTextPersonalization;
         product.requiresImagePersonalization = requiresImagePersonalization !== undefined ? requiresImagePersonalization : product.requiresImagePersonalization;

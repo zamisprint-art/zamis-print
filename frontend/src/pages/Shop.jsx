@@ -21,20 +21,22 @@ const Shop = () => {
   const [filtered, setFiltered]   = useState([]);
   const [loading, setLoading]     = useState(true);
   
-  // States derived from URL
   const querySearch = searchParams.get('q') || '';
   const queryCategory = searchParams.get('category') || 'All';
+  const querySubcategory = searchParams.get('subcategory') || '';
   const querySort = searchParams.get('sort') || 'newest';
 
   const [search, setSearch]       = useState(querySearch);
   const [category, setCategory]   = useState(queryCategory);
+  const [subcategory, setSubcategory] = useState(querySubcategory);
   const [sort, setSort]           = useState(querySort);
 
   // Sync state to URL without overriding immediately on load
-  const updateUrl = (q, c, s) => {
+  const updateUrl = (q, c, sub, s) => {
     const params = new URLSearchParams();
     if (q) params.set('q', q);
     if (c && c !== 'All') params.set('category', c);
+    if (sub) params.set('subcategory', sub);
     if (s && s !== 'newest') params.set('sort', s);
     setSearchParams(params);
   };
@@ -57,13 +59,24 @@ const Shop = () => {
   useEffect(() => {
     setSearch(querySearch);
     setCategory(queryCategory);
+    setSubcategory(querySubcategory);
     setSort(querySort);
-  }, [querySearch, queryCategory, querySort]);
+  }, [querySearch, queryCategory, querySubcategory, querySort]);
 
-  // Extract unique categories from products
-  const categories = useMemo(() => {
-    const cats = new Set(products.map(p => p.category));
-    return ['All', ...Array.from(cats)].filter(Boolean);
+  // Extract unique categories and subcategories from products
+  const categoryTree = useMemo(() => {
+    const tree = { All: [] };
+    products.forEach(p => {
+      if (!p.category) return;
+      if (!tree[p.category]) tree[p.category] = new Set();
+      if (p.subcategory) tree[p.category].add(p.subcategory);
+    });
+    // Convert sets to arrays
+    const formatted = Object.keys(tree).reduce((acc, cat) => {
+      acc[cat] = Array.from(tree[cat] || []);
+      return acc;
+    }, {});
+    return formatted;
   }, [products]);
 
   // Filter + Sort Logic
@@ -81,6 +94,10 @@ const Shop = () => {
     // Category filter
     if (category && category !== 'All') {
       result = result.filter(p => p.category === category);
+      // Subcategory filter
+      if (subcategory) {
+        result = result.filter(p => p.subcategory === subcategory);
+      }
     }
 
     // Sort
@@ -90,22 +107,29 @@ const Shop = () => {
     if (sort === 'newest')     result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
     setFiltered(result);
-  }, [search, category, sort, products]);
+  }, [search, category, subcategory, sort, products]);
 
   // Handlers to update state and URL together
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
-    updateUrl(e.target.value, category, sort);
+    updateUrl(e.target.value, category, subcategory, sort);
   };
 
   const handleCategoryChange = (c) => {
     setCategory(c);
-    updateUrl(search, c, sort);
+    setSubcategory('');
+    updateUrl(search, c, '', sort);
+  };
+
+  const handleSubcategoryChange = (sub) => {
+    const newSub = subcategory === sub ? '' : sub;
+    setSubcategory(newSub);
+    updateUrl(search, category, newSub, sort);
   };
 
   const handleSortChange = (e) => {
     setSort(e.target.value);
-    updateUrl(search, category, e.target.value);
+    updateUrl(search, category, subcategory, e.target.value);
   };
 
   return (
@@ -131,23 +155,47 @@ const Shop = () => {
             
 
             {/* Categories Filter */}
-            {!loading && categories.length > 1 && (
+            {!loading && Object.keys(categoryTree).length > 1 && (
               <div>
                 <h3 className="text-sm font-bold text-neutral-900 uppercase tracking-wider mb-3">Categorías</h3>
                 <div className="flex flex-col gap-2">
-                  {categories.map(cat => (
-                    <button
-                      key={cat}
-                      onClick={() => handleCategoryChange(cat)}
-                      className={`text-left px-3 py-2 rounded-lg text-sm font-medium transition-all flex items-center justify-between ${
-                        category === cat 
-                          ? 'bg-brand-50 text-brand-700 font-bold' 
-                          : 'text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900'
-                      }`}
-                    >
-                      {cat === 'All' ? 'Todas las Categorías' : cat}
-                      {category === cat && <span className="w-2 h-2 rounded-full bg-brand-500"></span>}
-                    </button>
+                  {Object.keys(categoryTree).map(cat => (
+                    <div key={cat} className="flex flex-col">
+                      <button
+                        onClick={() => handleCategoryChange(cat)}
+                        className={`text-left px-3 py-2 rounded-lg text-sm font-medium transition-all flex items-center justify-between ${
+                          category === cat 
+                            ? 'bg-brand-50 text-brand-700 font-bold' 
+                            : 'text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900'
+                        }`}
+                      >
+                        {cat === 'All' ? 'Todas las Categorías' : cat}
+                        {category === cat && <span className="w-2 h-2 rounded-full bg-brand-500"></span>}
+                      </button>
+                      
+                      {/* Subcategories */}
+                      {category === cat && categoryTree[cat].length > 0 && (
+                        <motion.div 
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          className="ml-4 mt-1 flex flex-col gap-1 border-l-2 border-brand-100 pl-2 overflow-hidden"
+                        >
+                          {categoryTree[cat].map(sub => (
+                            <button
+                              key={sub}
+                              onClick={() => handleSubcategoryChange(sub)}
+                              className={`text-left px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                                subcategory === sub 
+                                  ? 'bg-brand-100 text-brand-800 font-bold' 
+                                  : 'text-neutral-500 hover:bg-neutral-50 hover:text-neutral-800'
+                              }`}
+                            >
+                              {sub}
+                            </button>
+                          ))}
+                        </motion.div>
+                      )}
+                    </div>
                   ))}
                 </div>
               </div>
