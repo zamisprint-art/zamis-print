@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import { motion } from 'framer-motion';
-import { SlidersHorizontal } from 'lucide-react';
+import { SlidersHorizontal, Search } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
 import { ProductGridSkeleton } from '../components/ui/Skeleton';
 import { EmptyState } from '../components/ui/Alert';
