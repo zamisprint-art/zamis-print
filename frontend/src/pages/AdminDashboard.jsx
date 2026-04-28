@@ -386,6 +386,20 @@ const AdminDashboard = () => {
                 </div>
               </div>
 
+              {/* Personalization Flag */}
+              <div className="mt-4 p-4 border border-neutral-200 rounded-xl bg-brand-50/50 flex items-center gap-3">
+                <input 
+                  type="checkbox" 
+                  id="isCustomizable" 
+                  checked={currentProduct.isCustomizable || false}
+                  onChange={(e) => setCurrentProduct({...currentProduct, isCustomizable: e.target.checked})}
+                  className="w-5 h-5 text-brand-600 rounded focus:ring-brand-500 border-neutral-300"
+                />
+                <label htmlFor="isCustomizable" className="font-medium text-neutral-900 cursor-pointer">
+                  Habilitar Configurador Premium (Upsells y Personalización)
+                </label>
+              </div>
+
               <div className="flex justify-end gap-3 mt-8">
                 <button type="button" onClick={() => setIsModalOpen(false)} className="btn-outline" disabled={uploadingImage || uploadingModel}>Cancelar</button>
                 <button 
