@@ -144,7 +144,6 @@ const ProductDetail = () => {
             animate="visible"
             className="h-[400px] sm:h-[500px] lg:h-[580px] rounded-2xl overflow-hidden border border-neutral-200 bg-surface-base shadow-2xl relative"
           >
-            {/* Show 3D if activeMedia is null and 3D exists, OR if activeMedia === '3d' */}
             {(!activeMedia && product.model3D?.startsWith('http')) || activeMedia === '3d' ? (
               <Suspense fallback={
                 <div className="w-full h-full flex flex-col items-center justify-center gap-4">
@@ -155,16 +154,40 @@ const ProductDetail = () => {
                 <Product3DViewer modelUrl={product.model3D} />
               </Suspense>
             ) : (
-              <img
-                src={
-                  activeMedia && activeMedia !== 'main' 
-                    ? activeMedia 
-                    : (product.image && product.image !== '/images/sample.jpg' ? product.image : 'https://via.placeholder.com/600x600?text=ZAMIS+Print')
-                }
-                onError={(e) => { e.target.onerror = null; e.target.src = 'https://via.placeholder.com/600x600?text=Imagen+No+Disponible'; }}
-                alt={product.name}
-                className="w-full h-full object-cover"
-              />
+              <div className="relative w-full h-full group">
+                <img
+                  src={
+                    activeMedia && activeMedia !== 'main' 
+                      ? activeMedia 
+                      : (product.image && product.image !== '/images/sample.jpg' ? product.image : 'https://via.placeholder.com/600x600?text=ZAMIS+Print')
+                  }
+                  onError={(e) => { e.target.onerror = null; e.target.src = 'https://via.placeholder.com/600x600?text=Imagen+No+Disponible'; }}
+                  alt={product.name}
+                  className={`w-full h-full object-cover transition-all duration-500 ${
+                    customMaterial === 'Especial' ? 'contrast-125 saturate-150 hue-rotate-15' : 
+                    customMaterial === 'Premium' ? 'sepia-[.2] contrast-110' : ''
+                  } ${customSize === '150%' ? 'scale-110' : 'scale-100'}`}
+                />
+                
+                {/* Live Text Engraving Overlay */}
+                {product.isCustomizable && personalizationText && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="absolute inset-x-0 bottom-16 flex justify-center items-center pointer-events-none px-4"
+                  >
+                    <div className="bg-black/40 backdrop-blur-sm px-6 py-3 rounded-xl border border-white/10 shadow-2xl">
+                      <span 
+                        className={`text-3xl md:text-5xl font-black uppercase tracking-[0.2em] ${customMaterial === 'Especial' ? 'text-green-300 drop-shadow-[0_0_15px_rgba(74,222,128,0.8)]' : 'text-white/90 drop-shadow-xl'}`}
+                        style={{ textShadow: '2px 4px 10px rgba(0,0,0,0.5)' }}
+                      >
+                        {personalizationText}
+                      </span>
+                      <p className="text-white/50 text-[10px] uppercase tracking-widest text-center mt-1">Previsualización del Grabado</p>
+                    </div>
+                  </motion.div>
+                )}
+              </div>
             )}
           </motion.div>
 
