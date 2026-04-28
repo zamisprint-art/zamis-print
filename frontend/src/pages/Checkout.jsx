@@ -12,7 +12,7 @@ const Checkout = () => {
   const navigate = useNavigate();
   const { cartItems } = useCartStore();
   const { userInfo } = useAuthStore();
-  
+
   const [shippingAddress, setShippingAddress] = useState({
     fullName: '',
     address: '',
@@ -20,7 +20,7 @@ const Checkout = () => {
     postalCode: '',
     phone: ''
   });
-  
+
   const [isProcessing, setIsProcessing] = useState(false);
   const [processingStep, setProcessingStep] = useState(0);
   const [step, setStep] = useState(2); // 1: Cart, 2: Shipping, 3: Payment
@@ -29,7 +29,6 @@ const Checkout = () => {
     if (cartItems.length === 0) {
       navigate('/cart');
     }
-    // Pre-fill if we have user info
     if (userInfo && !shippingAddress.fullName) {
       setShippingAddress(prev => ({ ...prev, fullName: userInfo.name }));
     }
@@ -50,7 +49,6 @@ const Checkout = () => {
     setIsProcessing(true);
     setProcessingStep(0);
 
-    // Cycle through visual steps for UX
     const stepInterval = setInterval(() => {
       setProcessingStep(prev => {
         if (prev < PROCESSING_STEPS.length - 1) return prev + 1;
@@ -60,7 +58,6 @@ const Checkout = () => {
     }, 900);
 
     try {
-      // Step 1: Create the order in DB
       const { data: orderData } = await axios.post('/api/orders', {
         orderItems: cartItems.map(item => ({
           name:    item.name,
@@ -78,7 +75,6 @@ const Checkout = () => {
         totalPrice:   total,
       });
 
-      // Step 2: Create MP preference and redirect
       const { data: preferenceData } = await axios.post('/api/payments/create_preference', {
         items:   cartItems,
         orderId: orderData._id,
@@ -86,11 +82,7 @@ const Checkout = () => {
 
       clearInterval(stepInterval);
       setProcessingStep(PROCESSING_STEPS.length - 1);
-
-      // Brief pause so user sees the last step before redirect
       await new Promise(res => setTimeout(res, 600));
-
-      // Redirect to MercadoPago checkout
       window.location.href = preferenceData.init_point;
 
     } catch (error) {
@@ -112,7 +104,7 @@ const Checkout = () => {
 
   return (
     <>
-      {/* ======= SECURE PAYMENT OVERLAY ======= */}
+      {/* SECURE PAYMENT OVERLAY */}
       <AnimatePresence>
         {isProcessing && (
           <motion.div
@@ -128,30 +120,22 @@ const Checkout = () => {
               transition={{ type: 'spring', stiffness: 200, damping: 20 }}
               className="relative flex flex-col items-center gap-8 p-10 max-w-sm w-full text-center"
             >
-              {/* Glowing lock icon */}
               <div className="relative">
                 <div className="absolute inset-0 rounded-full bg-brand-500/30 blur-2xl scale-150 animate-pulse" />
                 <div className="relative w-24 h-24 rounded-full bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center shadow-2xl shadow-brand-500/40">
                   <Lock size={40} className="text-white" />
                 </div>
               </div>
-
-              {/* Title */}
               <div>
                 <h2 className="text-2xl font-extrabold text-white mb-2">Procesando tu pago</h2>
                 <p className="text-neutral-400 text-sm">Esto solo tomará unos segundos</p>
               </div>
-
-              {/* Steps */}
               <div className="w-full space-y-3">
                 {PROCESSING_STEPS.map((s, idx) => (
                   <motion.div
                     key={idx}
                     initial={{ opacity: 0, x: -10 }}
-                    animate={{
-                      opacity: idx <= processingStep ? 1 : 0.25,
-                      x: 0,
-                    }}
+                    animate={{ opacity: idx <= processingStep ? 1 : 0.25, x: 0 }}
                     transition={{ delay: idx * 0.15 }}
                     className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ${
                       idx === processingStep
@@ -173,8 +157,6 @@ const Checkout = () => {
                   </motion.div>
                 ))}
               </div>
-
-              {/* Security badge */}
               <div className="flex items-center gap-2 text-neutral-500 text-xs">
                 <ShieldCheck size={14} className="text-green-400" />
                 <span>Transacción cifrada SSL · MercadoPago</span>
@@ -184,184 +166,174 @@ const Checkout = () => {
         )}
       </AnimatePresence>
 
+      {/* CHECKOUT CONTENT */}
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 mb-20 md:mb-0">
 
-      
-      {/* Stepper */}
-      <div className="mb-12">
-        <div className="flex items-center justify-center max-w-2xl mx-auto">
-          <div className="flex items-center text-green-400">
-            <div className="w-10 h-10 rounded-full bg-green-400/20 flex items-center justify-center border border-green-400">
-              <CheckCircle2 size={20} />
+        {/* Stepper */}
+        <div className="mb-12">
+          <div className="flex items-center justify-center max-w-2xl mx-auto">
+            <div className="flex items-center text-green-400">
+              <div className="w-10 h-10 rounded-full bg-green-400/20 flex items-center justify-center border border-green-400">
+                <CheckCircle2 size={20} />
+              </div>
+              <span className="hidden sm:block ml-3 font-medium">Carrito</span>
             </div>
-            <span className="hidden sm:block ml-3 font-medium">Carrito</span>
-          </div>
-          
-          <div className="flex-1 h-px bg-neutral-200 mx-4"></div>
-          
-          <div className={`flex items-center ${step >= 2 ? 'text-brand-600' : 'text-neutral-400'}`}>
-            <div className={`w-10 h-10 rounded-full flex items-center justify-center border ${step >= 2 ? 'bg-brand-50 border-brand-500' : 'bg-surface-base border-neutral-300'}`}>
-              <Truck size={20} />
+            <div className="flex-1 h-px bg-neutral-200 mx-4"></div>
+            <div className={`flex items-center ${step >= 2 ? 'text-brand-600' : 'text-neutral-400'}`}>
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center border ${step >= 2 ? 'bg-brand-50 border-brand-500' : 'bg-surface-base border-neutral-300'}`}>
+                <Truck size={20} />
+              </div>
+              <span className="hidden sm:block ml-3 font-medium">Envío</span>
             </div>
-            <span className="hidden sm:block ml-3 font-medium">Envío</span>
-          </div>
-          
-          <div className="flex-1 h-px bg-neutral-200 mx-4"></div>
-          
-          <div className={`flex items-center ${step >= 3 ? 'text-green-600' : 'text-neutral-400'}`}>
-            <div className={`w-10 h-10 rounded-full flex items-center justify-center border ${step >= 3 ? 'bg-green-50 border-green-500' : 'bg-surface-base border-neutral-300'}`}>
-              <CreditCard size={20} />
+            <div className="flex-1 h-px bg-neutral-200 mx-4"></div>
+            <div className={`flex items-center ${step >= 3 ? 'text-green-600' : 'text-neutral-400'}`}>
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center border ${step >= 3 ? 'bg-green-50 border-green-500' : 'bg-surface-base border-neutral-300'}`}>
+                <CreditCard size={20} />
+              </div>
+              <span className="hidden sm:block ml-3 font-medium">Pago Seguro</span>
             </div>
-            <span className="hidden sm:block ml-3 font-medium">Pago Seguro</span>
           </div>
         </div>
-      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12">
-        {/* Left Col: Form */}
-        <div className="lg:col-span-3">
-          <motion.div 
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="bg-white p-6 sm:p-8 rounded-3xl border border-neutral-200 shadow-sm"
-          >
-            <h2 className="text-2xl font-bold mb-6 text-neutral-900">¿A dónde enviamos tu pedido?</h2>
-            
-            <form id="checkout-form" onSubmit={handlePayment} className="space-y-5">
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-1.5">Nombre de quien recibe</label>
-                <input 
-                  type="text" name="fullName" required
-                  value={shippingAddress.fullName} onChange={handleChange}
-                  className="input-field py-3 text-lg" placeholder="Ej. Juan Pérez"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-1.5">Dirección completa</label>
-                <input 
-                  type="text" name="address" required
-                  value={shippingAddress.address} onChange={handleChange}
-                  className="input-field py-3 text-lg" placeholder="Calle Falsa 123, Depto 4"
-                />
-              </div>
-              
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-1.5">Ciudad</label>
-                  <input 
-                    type="text" name="city" required
-                    value={shippingAddress.city} onChange={handleChange}
-                    className="input-field py-3 text-lg" placeholder="Ciudad"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-1.5">Código Postal</label>
-                  <input 
-                    type="number" name="postalCode" required inputMode="numeric"
-                    value={shippingAddress.postalCode} onChange={handleChange}
-                    className="input-field py-3 text-lg" placeholder="12345"
-                  />
-                </div>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-1.5">Teléfono (WhatsApp)</label>
-                <input 
-                  type="tel" name="phone" required inputMode="tel"
-                  value={shippingAddress.phone} onChange={handleChange}
-                  className="input-field py-3 text-lg" placeholder="55 1234 5678"
-                />
-                <p className="text-xs text-neutral-500 mt-2 flex items-center gap-1">
-                  <ShieldCheck size={14} className="text-green-400" />
-                  Solo te contactaremos por actualizaciones de tu pedido.
-                </p>
-              </div>
-            </form>
-          </motion.div>
-        </div>
-
-        {/* Right Col: Order Summary */}
-        <div className="lg:col-span-2">
-          <motion.div 
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="bg-surface-card p-6 sm:p-8 rounded-3xl border border-neutral-200 shadow-sm sticky top-24"
-          >
-            <h2 className="text-xl font-bold mb-6 border-b border-neutral-200 pb-4 text-neutral-900">Resumen del Pedido</h2>
-            
-            <div className="space-y-4 max-h-64 overflow-y-auto mb-6 pr-2 custom-scrollbar">
-              {cartItems.map((item, index) => (
-                <div key={index} className="flex gap-4">
-                  <div className="w-16 h-16 rounded-xl overflow-hidden bg-surface-card shrink-0 border border-neutral-100">
-                    <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="font-bold text-sm line-clamp-1">{item.name}</h4>
-                    <p className="text-xs text-neutral-500 mt-1">Cant: {item.qty}</p>
-                  </div>
-                  <div className="font-bold text-right text-sm">
-                    <PriceDisplay price={item.qty * item.price} currency="COP" showDiscount={false} />
-                  </div>
-                </div>
-              ))}
-            </div>
-            
-            <div className="border-t border-neutral-200 pt-4 space-y-3 mb-6">
-              <div className="flex justify-between items-center text-neutral-700 text-sm">
-                <span>Subtotal</span>
-                <PriceDisplay price={total} currency="COP" showDiscount={false} />
-              </div>
-              <div className="flex justify-between items-center text-neutral-700 text-sm">
-                <span>Envío estándar</span>
-                <span className="text-green-600 font-bold">Gratis</span>
-              </div>
-            </div>
-            
-            <div className="flex justify-between items-center border-t border-neutral-200 pt-4 mb-8">
-              <span className="text-2xl font-bold">Total</span>
-              <PriceDisplay price={total} currency="COP" size="lg" showDiscount={false} />
-            </div>
-
-            {/* Desktop Submit */}
-            <Button 
-              form="checkout-form"
-              type="submit" 
-              disabled={isProcessing}
-              size="xl"
-              isLoading={isProcessing}
-              loadingText="Procesando..."
-              className="hidden md:flex w-full justify-center items-center shadow-primary/30"
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12">
+          {/* Left Col: Form */}
+          <div className="lg:col-span-3">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="bg-white p-6 sm:p-8 rounded-3xl border border-neutral-200 shadow-sm"
             >
-              {!isProcessing && <>Continuar al Pago <ChevronRight size={20} className="ml-2" /></>}
-            </Button>
-            
-            <div className="mt-8">
-              <TrustBadges variant="checkout" />
-            </div>
-          </motion.div>
-        </div>
-      </div>
+              <h2 className="text-2xl font-bold mb-6 text-neutral-900">¿A dónde enviamos tu pedido?</h2>
+              <form id="checkout-form" onSubmit={handlePayment} className="space-y-5">
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 mb-1.5">Nombre de quien recibe</label>
+                  <input
+                    type="text" name="fullName" required
+                    value={shippingAddress.fullName} onChange={handleChange}
+                    className="input-field py-3 text-lg" placeholder="Ej. Juan Pérez"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 mb-1.5">Dirección completa</label>
+                  <input
+                    type="text" name="address" required
+                    value={shippingAddress.address} onChange={handleChange}
+                    className="input-field py-3 text-lg" placeholder="Calle Falsa 123, Depto 4"
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-1.5">Ciudad</label>
+                    <input
+                      type="text" name="city" required
+                      value={shippingAddress.city} onChange={handleChange}
+                      className="input-field py-3 text-lg" placeholder="Ciudad"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-1.5">Código Postal</label>
+                    <input
+                      type="number" name="postalCode" required inputMode="numeric"
+                      value={shippingAddress.postalCode} onChange={handleChange}
+                      className="input-field py-3 text-lg" placeholder="12345"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 mb-1.5">Teléfono (WhatsApp)</label>
+                  <input
+                    type="tel" name="phone" required inputMode="tel"
+                    value={shippingAddress.phone} onChange={handleChange}
+                    className="input-field py-3 text-lg" placeholder="55 1234 5678"
+                  />
+                  <p className="text-xs text-neutral-500 mt-2 flex items-center gap-1">
+                    <ShieldCheck size={14} className="text-green-400" />
+                    Solo te contactaremos por actualizaciones de tu pedido.
+                  </p>
+                </div>
+              </form>
+            </motion.div>
+          </div>
 
-      {/* Mobile Sticky CTA */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-surface-base/90 backdrop-blur-md border-t border-neutral-200 md:hidden z-50 shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
-        <Button 
-          form="checkout-form"
-          type="submit" 
-          disabled={isProcessing}
-          size="xl"
-          isLoading={isProcessing}
-          loadingText="Procesando..."
-          className="w-full flex justify-center items-center shadow-primary/30"
-        >
-          {!isProcessing && <>
-            Pagar <span className="mx-1 font-black bg-white/20 px-2 rounded-md">
-              {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(total)}
-            </span>
-            <ChevronRight size={20} />
-          </>}
-        </Button>
+          {/* Right Col: Order Summary */}
+          <div className="lg:col-span-2">
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="bg-surface-card p-6 sm:p-8 rounded-3xl border border-neutral-200 shadow-sm sticky top-24"
+            >
+              <h2 className="text-xl font-bold mb-6 border-b border-neutral-200 pb-4 text-neutral-900">Resumen del Pedido</h2>
+              <div className="space-y-4 max-h-64 overflow-y-auto mb-6 pr-2 custom-scrollbar">
+                {cartItems.map((item, index) => (
+                  <div key={index} className="flex gap-4">
+                    <div className="w-16 h-16 rounded-xl overflow-hidden bg-surface-card shrink-0 border border-neutral-100">
+                      <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-bold text-sm line-clamp-1">{item.name}</h4>
+                      <p className="text-xs text-neutral-500 mt-1">Cant: {item.qty}</p>
+                    </div>
+                    <div className="font-bold text-right text-sm">
+                      <PriceDisplay price={item.qty * item.price} currency="COP" showDiscount={false} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="border-t border-neutral-200 pt-4 space-y-3 mb-6">
+                <div className="flex justify-between items-center text-neutral-700 text-sm">
+                  <span>Subtotal</span>
+                  <PriceDisplay price={total} currency="COP" showDiscount={false} />
+                </div>
+                <div className="flex justify-between items-center text-neutral-700 text-sm">
+                  <span>Envío estándar</span>
+                  <span className="text-green-600 font-bold">Gratis</span>
+                </div>
+              </div>
+              <div className="flex justify-between items-center border-t border-neutral-200 pt-4 mb-8">
+                <span className="text-2xl font-bold">Total</span>
+                <PriceDisplay price={total} currency="COP" size="lg" showDiscount={false} />
+              </div>
+
+              {/* Desktop Submit */}
+              <Button
+                form="checkout-form"
+                type="submit"
+                disabled={isProcessing}
+                size="xl"
+                isLoading={isProcessing}
+                loadingText="Procesando..."
+                className="hidden md:flex w-full justify-center items-center shadow-primary/30"
+              >
+                {!isProcessing && <>Continuar al Pago <ChevronRight size={20} className="ml-2" /></>}
+              </Button>
+              <div className="mt-8">
+                <TrustBadges variant="checkout" />
+              </div>
+            </motion.div>
+          </div>
+        </div>
+
+        {/* Mobile Sticky CTA */}
+        <div className="fixed bottom-0 left-0 right-0 p-4 bg-surface-base/90 backdrop-blur-md border-t border-neutral-200 md:hidden z-50 shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
+          <Button
+            form="checkout-form"
+            type="submit"
+            disabled={isProcessing}
+            size="xl"
+            isLoading={isProcessing}
+            loadingText="Procesando..."
+            className="w-full flex justify-center items-center shadow-primary/30"
+          >
+            {!isProcessing && <>
+              Pagar <span className="mx-1 font-black bg-white/20 px-2 rounded-md">
+                {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(total)}
+              </span>
+              <ChevronRight size={20} />
+            </>}
+          </Button>
+        </div>
+
       </div>
-    </div>
     </>
   );
 };
