@@ -67,12 +67,12 @@ const Navbar = () => {
       {/* Main Nav — Logo | Search | Actions */}
       <nav className="bg-white border-b border-neutral-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 gap-4">
+          <div className="flex items-center justify-between h-24 gap-4">
 
             {/* Logo */}
             <div className="flex-1 shrink-0 flex justify-start">
               <Link to="/" className="flex items-center">
-                <img src="/images/logo.png" alt="ZAMIS Print" className="h-14 w-auto object-contain" />
+                <img src="/images/logo.png" alt="ZAMIS Print" className="h-16 sm:h-20 w-auto object-contain" />
               </Link>
             </div>
 
@@ -185,9 +185,9 @@ const Navbar = () => {
               className="fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-50 flex flex-col"
             >
               {/* Drawer Header */}
-              <div className="flex items-center justify-between px-6 py-5 border-b border-neutral-100">
+              <div className="flex items-center justify-between px-6 py-6 border-b border-neutral-100">
                 <Link to="/" onClick={() => setIsOpen(false)} className="flex items-center">
-                  <img src="/images/logo.png" alt="ZAMIS Print" className="h-10 w-auto object-contain" />
+                  <img src="/images/logo.png" alt="ZAMIS Print" className="h-16 w-auto object-contain" />
                 </Link>
                 <button
                   onClick={() => setIsOpen(false)}
