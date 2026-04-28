@@ -23,8 +23,12 @@ const ProductDetail = () => {
   const [activeMedia, setActiveMedia]             = useState(null); // '3d' | 'main' | url
   const [loading, setLoading]                     = useState(true);
   const [qty, setQty]                             = useState(1);
+  const [customMaterial, setCustomMaterial]         = useState('Estándar');
+  const [customSize, setCustomSize]                 = useState('100%');
+  const [customFinish, setCustomFinish]             = useState('Limpiado');
   const [personalizationText, setPersonalizationText]   = useState('');
   const [personalizationImage, setPersonalizationImage] = useState(null);
+  
   const [rating, setRating]                       = useState(0);
   const [comment, setComment]                     = useState('');
   const [reviewLoading, setReviewLoading]         = useState(false);
@@ -47,19 +51,46 @@ const ProductDetail = () => {
 
   useEffect(() => { fetchProduct(); }, [id]);
 
+  // --- Pricing Logic ---
+  const basePrice = product?.price || 0;
+  const getCustomPriceAdditions = () => {
+    if (!product?.isCustomizable) return 0;
+    let extra = 0;
+    if (customMaterial === 'Premium') extra += 15000;
+    if (customMaterial === 'Especial') extra += 20000;
+    if (customSize === '150%') extra += 35000;
+    if (customFinish === 'Pintado a mano') extra += 50000;
+    if (personalizationText.trim() !== '') extra += 10000;
+    return extra;
+  };
+  const finalPrice = basePrice + getCustomPriceAdditions();
+
   const handleAddToCart = () => {
-    if (product.requiresTextPersonalization && !personalizationText) {
+    if (product.requiresTextPersonalization && !product.isCustomizable && !personalizationText) {
       alert('Por favor ingresa el texto de personalización.');
       return;
     }
+    
+    // Format custom details if customizable
+    let finalPersonalizationText = personalizationText;
+    if (product.isCustomizable) {
+      const details = [
+        `Material: ${customMaterial}`,
+        `Tamaño: ${customSize}`,
+        `Acabado: ${customFinish}`,
+      ];
+      if (personalizationText) details.push(`Texto: "${personalizationText}"`);
+      finalPersonalizationText = details.join(' | ');
+    }
+
     addItem({
       product: product._id,
       name: product.name,
       image: product.image,
-      price: product.price,
+      price: finalPrice, // Use the computed price
       countInStock: product.countInStock,
       qty,
-      personalizationText,
+      personalizationText: finalPersonalizationText,
       personalizationImage: personalizationImage ? 'uploaded_file_path' : null,
     });
     navigate('/cart');
@@ -202,7 +233,7 @@ const ProductDetail = () => {
           <Rating value={product.rating} text={`${product.numReviews} reseñas verificadas`} />
 
           {/* Price */}
-          <PriceDisplay price={product.price} size="lg" />
+          <PriceDisplay price={finalPrice} size="lg" />
 
           {/* Description */}
           <p className="text-neutral-400 text-base leading-relaxed">{product.description}</p>
@@ -210,38 +241,119 @@ const ProductDetail = () => {
           <div className="divider" />
 
           {/* Personalization Options */}
-          <div className="flex flex-col gap-4">
-            {product.requiresTextPersonalization && (
-              <div>
-                <label className="label-base">Texto a incluir en el diseño</label>
-                <input
-                  type="text"
-                  value={personalizationText}
-                  onChange={(e) => setPersonalizationText(e.target.value)}
-                  className="input-field"
-                  placeholder="Ej: ZAMIS 2026"
-                />
-              </div>
-            )}
+          <div className="flex flex-col gap-6">
+            {product.isCustomizable ? (
+              <div className="bg-brand-50/50 border border-brand-100 rounded-2xl p-5 space-y-6">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="bg-brand-500 text-white text-xs font-bold px-2 py-1 rounded">PRO</span>
+                  <h3 className="font-bold text-neutral-900">Configurador Premium</h3>
+                </div>
 
-            {product.requiresImagePersonalization && (
-              <div>
-                <label className="label-base">Foto de referencia (para modelado)</label>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => setPersonalizationImage(e.target.files[0])}
-                  className="block w-full text-sm text-neutral-400
-                    file:mr-4 file:py-2.5 file:px-5 file:rounded-xl file:border-0
-                    file:text-sm file:font-semibold
-                    file:bg-brand-500/20 file:text-brand-300
-                    hover:file:bg-brand-500/30 transition-colors"
-                />
+                {/* Step 1: Material */}
+                <div>
+                  <label className="block text-sm font-semibold text-neutral-900 mb-2">1. Material y Color</label>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    {['Estándar', 'Premium', 'Especial'].map(opt => (
+                      <button
+                        key={opt}
+                        onClick={() => setCustomMaterial(opt)}
+                        className={`py-2 px-3 rounded-lg border text-sm font-medium transition-all ${customMaterial === opt ? 'bg-brand-500 text-white border-brand-500 shadow-md' : 'bg-white text-neutral-600 border-neutral-200 hover:border-brand-300'}`}
+                      >
+                        {opt}
+                        <span className="block text-[10px] opacity-80 font-normal">
+                          {opt === 'Estándar' ? 'Incluido' : opt === 'Premium' ? '+$15.000' : '+$20.000'}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Step 2: Size */}
+                <div>
+                  <label className="block text-sm font-semibold text-neutral-900 mb-2">2. Escala / Tamaño</label>
+                  <div className="grid grid-cols-2 gap-2">
+                    {['100%', '150%'].map(opt => (
+                      <button
+                        key={opt}
+                        onClick={() => setCustomSize(opt)}
+                        className={`py-2 px-3 rounded-lg border text-sm font-medium transition-all ${customSize === opt ? 'bg-brand-500 text-white border-brand-500 shadow-md' : 'bg-white text-neutral-600 border-neutral-200 hover:border-brand-300'}`}
+                      >
+                        {opt === '100%' ? 'Original (100%)' : 'Extra Grande (150%)'}
+                        <span className="block text-[10px] opacity-80 font-normal">
+                          {opt === '100%' ? 'Incluido' : '+$35.000'}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Step 3: Finish */}
+                <div>
+                  <label className="block text-sm font-semibold text-neutral-900 mb-2">3. Acabado</label>
+                  <div className="grid grid-cols-2 gap-2">
+                    {['Limpiado', 'Pintado a mano'].map(opt => (
+                      <button
+                        key={opt}
+                        onClick={() => setCustomFinish(opt)}
+                        className={`py-2 px-3 rounded-lg border text-sm font-medium transition-all ${customFinish === opt ? 'bg-brand-500 text-white border-brand-500 shadow-md' : 'bg-white text-neutral-600 border-neutral-200 hover:border-brand-300'}`}
+                      >
+                        {opt}
+                        <span className="block text-[10px] opacity-80 font-normal">
+                          {opt === 'Limpiado' ? 'Incluido' : '+$50.000'}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Step 4: Text */}
+                <div>
+                  <label className="block text-sm font-semibold text-neutral-900 mb-2">4. Grabado de Texto (+$10.000)</label>
+                  <input
+                    type="text"
+                    value={personalizationText}
+                    onChange={(e) => setPersonalizationText(e.target.value)}
+                    className="input-field bg-white"
+                    placeholder="Ej: Feliz Cumpleaños (Opcional)"
+                  />
+                </div>
+              </div>
+            ) : (
+              /* Legacy Personalization */
+              <div className="flex flex-col gap-4">
+                {product.requiresTextPersonalization && (
+                  <div>
+                    <label className="label-base">Texto a incluir en el diseño</label>
+                    <input
+                      type="text"
+                      value={personalizationText}
+                      onChange={(e) => setPersonalizationText(e.target.value)}
+                      className="input-field"
+                      placeholder="Ej: ZAMIS 2026"
+                    />
+                  </div>
+                )}
+
+                {product.requiresImagePersonalization && (
+                  <div>
+                    <label className="label-base">Foto de referencia (para modelado)</label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => setPersonalizationImage(e.target.files[0])}
+                      className="block w-full text-sm text-neutral-400
+                        file:mr-4 file:py-2.5 file:px-5 file:rounded-xl file:border-0
+                        file:text-sm file:font-semibold
+                        file:bg-brand-500/20 file:text-brand-300
+                        hover:file:bg-brand-500/30 transition-colors"
+                    />
+                  </div>
+                )}
               </div>
             )}
 
             {/* Quantity Selector */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 mt-2">
               <label className="label-base mb-0">Cantidad:</label>
               <QuantitySelector
                 value={qty}
@@ -268,7 +380,7 @@ const ProductDetail = () => {
           >
             {isOutOfStock
               ? 'Sin Stock'
-              : `Añadir al Carrito · ${new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(product.price * qty)}`
+              : `Añadir al Carrito · ${new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(finalPrice * qty)}`
             }
           </Button>
 
@@ -381,7 +493,7 @@ const ProductDetail = () => {
         >
           {isOutOfStock
             ? 'Sin Stock'
-            : `Añadir · ${new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(product.price * qty)}`
+            : `Añadir · ${new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(finalPrice * qty)}`
           }
         </Button>
       </div>
