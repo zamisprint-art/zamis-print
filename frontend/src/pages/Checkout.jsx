@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useCartStore } from '../store/useCartStore';
 import { useAuthStore } from '../store/useAuthStore';
-import { CheckCircle2, Truck, CreditCard, ChevronRight, ShieldCheck } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { CheckCircle2, Truck, CreditCard, ChevronRight, ShieldCheck, Lock } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '../components/ui';
 import { TrustBadges, PriceDisplay } from '../components/ecommerce';
 
@@ -22,6 +22,7 @@ const Checkout = () => {
   });
   
   const [isProcessing, setIsProcessing] = useState(false);
+  const [processingStep, setProcessingStep] = useState(0);
   const [step, setStep] = useState(2); // 1: Cart, 2: Shipping, 3: Payment
 
   useEffect(() => {
@@ -36,10 +37,27 @@ const Checkout = () => {
 
   const total = cartItems.reduce((acc, item) => acc + item.qty * item.price, 0);
 
+  const PROCESSING_STEPS = [
+    { label: 'Verificando tu información...', icon: '🔐' },
+    { label: 'Creando tu pedido...', icon: '📦' },
+    { label: 'Conectando con MercadoPago...', icon: '💳' },
+    { label: 'Redirigiendo al pago seguro...', icon: '🚀' },
+  ];
+
   const handlePayment = async (e) => {
     e.preventDefault();
     setStep(3);
     setIsProcessing(true);
+    setProcessingStep(0);
+
+    // Cycle through visual steps for UX
+    const stepInterval = setInterval(() => {
+      setProcessingStep(prev => {
+        if (prev < PROCESSING_STEPS.length - 1) return prev + 1;
+        clearInterval(stepInterval);
+        return prev;
+      });
+    }, 900);
 
     try {
       // Step 1: Create the order in DB
@@ -66,14 +84,22 @@ const Checkout = () => {
         orderId: orderData._id,
       });
 
+      clearInterval(stepInterval);
+      setProcessingStep(PROCESSING_STEPS.length - 1);
+
+      // Brief pause so user sees the last step before redirect
+      await new Promise(res => setTimeout(res, 600));
+
       // Redirect to MercadoPago checkout
       window.location.href = preferenceData.init_point;
 
     } catch (error) {
+      clearInterval(stepInterval);
       console.error('Payment error:', error);
       const msg = error.response?.data?.message || 'Error de conexión con el servidor.';
       alert(`No pudimos procesar tu pago.\n\nDetalle: ${msg}\n\nPor favor intenta nuevamente.`);
       setIsProcessing(false);
+      setProcessingStep(0);
       setStep(2);
     }
   };
@@ -85,7 +111,80 @@ const Checkout = () => {
   if (cartItems.length === 0) return null;
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 mb-20 md:mb-0">
+    <>
+      {/* ======= SECURE PAYMENT OVERLAY ======= */}
+      <AnimatePresence>
+        {isProcessing && (
+          <motion.div
+            key="payment-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-neutral-900/95 backdrop-blur-md"
+          >
+            <motion.div
+              initial={{ scale: 0.85, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+              className="relative flex flex-col items-center gap-8 p-10 max-w-sm w-full text-center"
+            >
+              {/* Glowing lock icon */}
+              <div className="relative">
+                <div className="absolute inset-0 rounded-full bg-brand-500/30 blur-2xl scale-150 animate-pulse" />
+                <div className="relative w-24 h-24 rounded-full bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center shadow-2xl shadow-brand-500/40">
+                  <Lock size={40} className="text-white" />
+                </div>
+              </div>
+
+              {/* Title */}
+              <div>
+                <h2 className="text-2xl font-extrabold text-white mb-2">Procesando tu pago</h2>
+                <p className="text-neutral-400 text-sm">Esto solo tomará unos segundos</p>
+              </div>
+
+              {/* Steps */}
+              <div className="w-full space-y-3">
+                {PROCESSING_STEPS.map((s, idx) => (
+                  <motion.div
+                    key={idx}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{
+                      opacity: idx <= processingStep ? 1 : 0.25,
+                      x: 0,
+                    }}
+                    transition={{ delay: idx * 0.15 }}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ${
+                      idx === processingStep
+                        ? 'bg-brand-500/20 border border-brand-500/40 text-white'
+                        : idx < processingStep
+                        ? 'text-green-400'
+                        : 'text-neutral-600'
+                    }`}
+                  >
+                    <span className="text-xl w-6 text-center">
+                      {idx < processingStep ? '✓' : s.icon}
+                    </span>
+                    <span className={`text-sm font-medium ${idx === processingStep ? 'font-bold' : ''}`}>
+                      {s.label}
+                    </span>
+                    {idx === processingStep && (
+                      <div className="ml-auto w-4 h-4 border-2 border-brand-400 border-t-transparent rounded-full animate-spin" />
+                    )}
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Security badge */}
+              <div className="flex items-center gap-2 text-neutral-500 text-xs">
+                <ShieldCheck size={14} className="text-green-400" />
+                <span>Transacción cifrada SSL · MercadoPago</span>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+
       
       {/* Stepper */}
       <div className="mb-12">
@@ -263,6 +362,7 @@ const Checkout = () => {
         </Button>
       </div>
     </div>
+    </>
   );
 };
 
