@@ -67,15 +67,17 @@ const Navbar = () => {
       {/* Main Nav — Logo | Search | Actions */}
       <nav className="bg-white border-b border-neutral-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-4 h-16">
+          <div className="flex items-center justify-between h-16 gap-4">
 
             {/* Logo */}
-            <Link to="/" className="text-2xl font-black tracking-tight shrink-0">
-              <span className="text-neutral-900">ZAMIS</span> <span className="text-brand-500">Print</span>
-            </Link>
+            <div className="flex-1 shrink-0 flex justify-start">
+              <Link to="/" className="text-2xl font-black tracking-tight">
+                <span className="text-neutral-900">ZAMIS</span> <span className="text-brand-500">Print</span>
+              </Link>
+            </div>
 
-            {/* Search Bar — max width so it doesn't stretch too far */}
-            <form onSubmit={handleSearch} className="flex-1 hidden sm:flex items-center max-w-md">
+            {/* Search Bar — centered */}
+            <form onSubmit={handleSearch} className="flex-1 hidden sm:flex items-center justify-center max-w-lg mx-auto">
               <div className="relative w-full">
                 <input
                   ref={searchRef}
@@ -96,7 +98,7 @@ const Navbar = () => {
             </form>
 
             {/* Right Actions */}
-            <div className="flex items-center gap-1 shrink-0">
+            <div className="flex-1 flex items-center justify-end gap-1 shrink-0">
               {/* Mobile: search icon goes to /shop */}
               <Link
                 to="/shop"

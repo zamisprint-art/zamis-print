@@ -6,7 +6,6 @@ import ProductCard from '../components/ProductCard';
 import HeroSlider from '../components/HeroSlider';
 import { Skeleton, Button, EmptyState } from '../components/ui';
 import { TrustBadges } from '../components/ecommerce';
-import GlobalSearchBar from '../components/GlobalSearchBar';
 
 const Home = () => {
   const [products, setProducts] = useState([]);
@@ -32,9 +31,6 @@ const Home = () => {
     <div className="flex flex-col min-h-screen">
       {/* Hero Section */}
       <HeroSlider />
-
-      {/* Floating Search Bar */}
-      <GlobalSearchBar />
 
       {/* Featured Products Section */}
       <section id="featured" className="py-24 px-4 max-w-7xl mx-auto w-full">
