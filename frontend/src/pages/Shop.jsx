@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import { motion } from 'framer-motion';
-import { SlidersHorizontal, Search } from 'lucide-react';
+import { SlidersHorizontal, Search, CornerDownRight } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
 import { ProductGridSkeleton } from '../components/ui/Skeleton';
 import { EmptyState } from '../components/ui/Alert';
@@ -184,12 +184,13 @@ const Shop = () => {
                             <button
                               key={sub}
                               onClick={() => handleSubcategoryChange(sub)}
-                              className={`text-left px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                              className={`text-left flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                                 subcategory === sub 
                                   ? 'bg-brand-100 text-brand-800 font-bold' 
                                   : 'text-neutral-500 hover:bg-neutral-50 hover:text-neutral-800'
                               }`}
                             >
+                              <CornerDownRight size={12} className={subcategory === sub ? 'text-brand-500' : 'text-neutral-400'} />
                               {sub}
                             </button>
                           ))}

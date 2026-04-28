@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 
-const WHATSAPP_NUMBER = '573000000000'; // Reemplazar con el número real
+const WHATSAPP_NUMBER = '573107878192';
 const WHATSAPP_MESSAGE = '¡Hola! Tengo una consulta sobre un producto de ZAMIS Print 🖨️';
 
 const WhatsAppButton = () => {
