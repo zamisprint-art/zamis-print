@@ -11,9 +11,7 @@ const Footer = () => {
           {/* Brand Column */}
           <div className="space-y-6">
             <Link to="/" className="inline-block">
-              <span className="text-3xl font-black tracking-tighter">
-                <span className="text-neutral-900">ZAMIS</span> <span className="text-brand-500">Print</span>
-              </span>
+              <img src="/images/logo.png" alt="ZAMIS Print" className="h-16 w-auto drop-shadow-sm scale-110 origin-left" />
             </Link>
             <p className="text-neutral-500 leading-relaxed text-sm">
               Transformamos ideas en realidad usando tecnología de impresión 3D de vanguardia. Modelos precisos, materiales premium y acabados perfectos.
