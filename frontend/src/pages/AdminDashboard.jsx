@@ -157,10 +157,10 @@ const AdminDashboard = () => {
               <h2 className="text-2xl font-bold">Gestión de Órdenes</h2>
             </div>
             
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
+            <div className="overflow-x-auto bg-white rounded-xl border border-neutral-200">
+              <table className="w-full text-left border-collapse min-w-[800px]">
                 <thead>
-                  <tr className="border-b border-neutral-200 text-neutral-500">
+                  <tr className="border-b border-neutral-200 text-neutral-600 bg-neutral-50/50">
                     <th className="py-4 px-4">ID Pedido</th>
                     <th className="py-4 px-4">Fecha</th>
                     <th className="py-4 px-4">Cliente</th>
@@ -181,9 +181,12 @@ const AdminDashboard = () => {
                       <td className="py-4 px-4 font-bold">${order.totalPrice}</td>
                       <td className="py-4 px-4">
                         <span className={`px-3 py-1 rounded-full text-xs font-bold ${
-                          order.orderStatus === 'Pendiente' ? 'bg-yellow-500/20 text-yellow-400' :
-                          order.orderStatus === 'En Producción' ? 'bg-blue-500/20 text-blue-400' :
-                          'bg-green-500/20 text-green-400'
+                          order.orderStatus === 'Pendiente' ? 'bg-yellow-500/20 text-yellow-600' :
+                          order.orderStatus === 'Pagado' ? 'bg-blue-500/20 text-blue-600' :
+                          order.orderStatus === 'En Producción' ? 'bg-purple-500/20 text-purple-600' :
+                          order.orderStatus === 'Enviado' ? 'bg-green-500/20 text-green-600' :
+                          order.orderStatus === 'Entregado' ? 'bg-teal-500/20 text-teal-600' :
+                          'bg-red-500/20 text-red-600'
                         }`}>
                           {order.orderStatus}
                         </span>
@@ -195,8 +198,10 @@ const AdminDashboard = () => {
                           onChange={(e) => handleOrderStatusChange(order._id, e.target.value)}
                         >
                           <option value="Pendiente">Pendiente</option>
+                          <option value="Pagado">Pagado</option>
                           <option value="En Producción">En Producción</option>
                           <option value="Enviado">Enviado</option>
+                          <option value="Entregado">Entregado</option>
                         </select>
                       </td>
                     </tr>
@@ -216,10 +221,10 @@ const AdminDashboard = () => {
               </button>
             </div>
             
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
+            <div className="overflow-x-auto bg-white rounded-xl border border-neutral-200">
+              <table className="w-full text-left border-collapse min-w-[800px]">
                 <thead>
-                  <tr className="border-b border-neutral-200 text-neutral-500">
+                  <tr className="border-b border-neutral-200 text-neutral-600 bg-neutral-50/50">
                     <th className="py-4 px-4">Nombre</th>
                     <th className="py-4 px-4">Categoría</th>
                     <th className="py-4 px-4">Precio</th>
