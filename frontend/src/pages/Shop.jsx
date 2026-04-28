@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import { motion } from 'framer-motion';
-import { Search, SlidersHorizontal } from 'lucide-react';
+import { SlidersHorizontal } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
 import { ProductGridSkeleton } from '../components/ui/Skeleton';
 import { EmptyState } from '../components/ui/Alert';
@@ -129,20 +129,6 @@ const Shop = () => {
         <div className="w-full lg:w-72 shrink-0">
           <div className="sticky top-24 bg-surface-card p-6 rounded-2xl border border-neutral-200 shadow-sm flex flex-col gap-8">
             
-            {/* Search Filter */}
-            <div>
-              <h3 className="text-sm font-bold text-neutral-900 uppercase tracking-wider mb-3">Buscar</h3>
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
-                <input
-                  type="text"
-                  value={search}
-                  onChange={handleSearchChange}
-                  placeholder="Ej. Maceta Groot..."
-                  className="input-field pl-10 bg-surface-base"
-                />
-              </div>
-            </div>
 
             {/* Categories Filter */}
             {!loading && categories.length > 1 && (

@@ -74,15 +74,15 @@ const Navbar = () => {
               <span className="text-neutral-900">ZAMIS</span> <span className="text-brand-500">Print</span>
             </Link>
 
-            {/* Search Bar — grows to fill center */}
-            <form onSubmit={handleSearch} className="flex-1 hidden sm:flex items-center">
+            {/* Search Bar — max width so it doesn't stretch too far */}
+            <form onSubmit={handleSearch} className="flex-1 hidden sm:flex items-center max-w-md">
               <div className="relative w-full">
                 <input
                   ref={searchRef}
                   type="search"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Buscar productos, figuras, funkos..."
+                  placeholder="Buscar productos..."
                   className="w-full h-10 pl-4 pr-12 rounded-xl border-2 border-neutral-200 bg-neutral-50 text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none focus:border-brand-500 focus:bg-white transition-all duration-200"
                 />
                 <button
