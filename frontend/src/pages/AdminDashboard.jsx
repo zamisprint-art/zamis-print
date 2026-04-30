@@ -390,27 +390,82 @@ const AdminDashboard = () => {
                 </div>
               </div>
 
-              {/* Personalization Flag */}
-              <div className="mt-4 p-4 border border-neutral-200 rounded-xl bg-brand-50/50 flex items-center gap-3">
-                <input 
-                  type="checkbox" 
-                  id="isCustomizable" 
-                  checked={currentProduct.isCustomizable || false}
-                  onChange={(e) => setCurrentProduct({...currentProduct, isCustomizable: e.target.checked})}
-                  className="w-5 h-5 text-brand-600 rounded focus:ring-brand-500 border-neutral-300"
-                />
-                <label htmlFor="isCustomizable" className="font-medium text-neutral-900 cursor-pointer">
-                  Habilitar Configurador Premium (Upsells y Personalización)
-                </label>
+              {/* Advanced Attributes */}
+              <div className="mt-4 p-4 border border-neutral-200 rounded-xl bg-neutral-50/50 space-y-4">
+                <h3 className="text-sm font-bold text-neutral-800 uppercase tracking-wide">Atributos del Producto</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">Material</label>
+                    <select value={currentProduct.material || ''} onChange={(e) => setCurrentProduct({...currentProduct, material: e.target.value})} className="input-field">
+                      <option value="">Sin especificar</option>
+                      <option value="PLA">PLA</option>
+                      <option value="PETG">PETG</option>
+                      <option value="ABS">ABS</option>
+                      <option value="Resina">Resina</option>
+                      <option value="Nylon">Nylon</option>
+                      <option value="Flexible (TPU)">Flexible (TPU)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">Tamaño</label>
+                    <select value={currentProduct.size || ''} onChange={(e) => setCurrentProduct({...currentProduct, size: e.target.value})} className="input-field">
+                      <option value="">Sin especificar</option>
+                      <option value="Pequeño">Pequeño</option>
+                      <option value="Mediano">Mediano</option>
+                      <option value="Grande">Grande</option>
+                      <option value="Extra Grande">Extra Grande</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">Color principal</label>
+                    <input type="text" value={currentProduct.color || ''} onChange={(e) => setCurrentProduct({...currentProduct, color: e.target.value})} className="input-field" placeholder="Ej: Negro, Blanco, Multicolor" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">Medidas (cm)</label>
+                    <input type="text" value={currentProduct.measurements || ''} onChange={(e) => setCurrentProduct({...currentProduct, measurements: e.target.value})} className="input-field" placeholder="Ej: 10 x 5 x 8 cm" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">Nivel de Personalización</label>
+                    <select value={currentProduct.personalizationLevel || 'Ninguna'} onChange={(e) => setCurrentProduct({...currentProduct, personalizationLevel: e.target.value})} className="input-field">
+                      <option value="Ninguna">Ninguna</option>
+                      <option value="Básica">Básica (texto/color)</option>
+                      <option value="Avanzada">Avanzada (imagen+texto)</option>
+                      <option value="Premium">Premium (diseño completo)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-1">Precio de Oferta ($)</label>
+                    <input type="number" value={currentProduct.salePrice || ''} onChange={(e) => setCurrentProduct({...currentProduct, salePrice: e.target.value})} className="input-field" placeholder="Dejar vacío si no hay oferta" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Merchandising Flags */}
+              <div className="mt-4 p-4 border border-neutral-200 rounded-xl bg-brand-50/50 space-y-3">
+                <h3 className="text-sm font-bold text-neutral-800 uppercase tracking-wide">Destacar Producto</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <label className="flex items-center gap-3 cursor-pointer">
+                    <input type="checkbox" id="isCustomizable" checked={currentProduct.isCustomizable || false} onChange={(e) => setCurrentProduct({...currentProduct, isCustomizable: e.target.checked})} className="w-5 h-5 text-brand-600 rounded focus:ring-brand-500 border-neutral-300" />
+                    <span className="text-sm font-medium text-neutral-900">⚡ Configurador Premium</span>
+                  </label>
+                  <label className="flex items-center gap-3 cursor-pointer">
+                    <input type="checkbox" checked={currentProduct.isFeatured || false} onChange={(e) => setCurrentProduct({...currentProduct, isFeatured: e.target.checked})} className="w-5 h-5 text-amber-500 rounded focus:ring-amber-400 border-neutral-300" />
+                    <span className="text-sm font-medium text-neutral-900">⭐ Producto Destacado</span>
+                  </label>
+                  <label className="flex items-center gap-3 cursor-pointer">
+                    <input type="checkbox" checked={currentProduct.isNewArrival || false} onChange={(e) => setCurrentProduct({...currentProduct, isNewArrival: e.target.checked})} className="w-5 h-5 text-green-600 rounded focus:ring-green-500 border-neutral-300" />
+                    <span className="text-sm font-medium text-neutral-900">🆕 Nueva llegada</span>
+                  </label>
+                  <label className="flex items-center gap-3 cursor-pointer">
+                    <input type="checkbox" checked={currentProduct.isOnSale || false} onChange={(e) => setCurrentProduct({...currentProduct, isOnSale: e.target.checked})} className="w-5 h-5 text-red-500 rounded focus:ring-red-400 border-neutral-300" />
+                    <span className="text-sm font-medium text-neutral-900">🏷️ En Oferta</span>
+                  </label>
+                </div>
               </div>
 
               <div className="flex justify-end gap-3 mt-8">
                 <button type="button" onClick={() => setIsModalOpen(false)} className="btn-outline" disabled={uploadingImage || uploadingModel}>Cancelar</button>
-                <button 
-                  type="submit" 
-                  className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed" 
-                  disabled={uploadingImage || uploadingModel}
-                >
+                <button type="submit" className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed" disabled={uploadingImage || uploadingModel}>
                   {uploadingImage || uploadingModel ? 'Subiendo archivos...' : 'Guardar Producto'}
                 </button>
               </div>
@@ -423,3 +478,4 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
+

@@ -7,98 +7,104 @@ import HeroSlider from '../components/HeroSlider';
 import { Skeleton, Button, EmptyState } from '../components/ui';
 import { TrustBadges } from '../components/ecommerce';
 
+const SectionSkeleton = () => (
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {[...Array(3)].map((_, i) => (
+      <div key={i} className="card p-4 h-full flex flex-col gap-4 border border-neutral-100">
+        <Skeleton className="w-full aspect-square rounded-2xl" />
+        <div className="space-y-3 mt-2">
+          <Skeleton className="h-6 w-3/4 rounded-md" />
+          <Skeleton className="h-4 w-full rounded-md" />
+        </div>
+      </div>
+    ))}
+  </div>
+);
+
 const Home = () => {
-  const [products, setProducts] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const { data } = await axios.get('/api/products');
-        // Get only the first 3 products for the featured section
-        setProducts(data.slice(0, 3));
+        setAllProducts(data);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching products:', error);
         setLoading(false);
       }
     };
-
     fetchProducts();
   }, []);
+
+  // Derived sections
+  const featured   = allProducts.filter(p => p.isFeatured).slice(0, 4);
+  const newArrivals = allProducts.filter(p => p.isNewArrival).slice(0, 4);
+  const onSale     = allProducts.filter(p => p.isOnSale && p.salePrice).slice(0, 4);
+  // Fallback: if admin hasn't configured flags yet, show most recent
+  const recentProducts = allProducts.slice(0, 4);
+
+  const ProductGrid = ({ items, fallback }) => {
+    const list = items.length > 0 ? items : fallback;
+    if (list.length === 0) return null;
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {list.map((product, index) => (
+          <motion.div key={product._id} initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }} transition={{ duration: 0.4, delay: index * 0.08 }} className="h-full">
+            <ProductCard product={product} />
+          </motion.div>
+        ))}
+      </div>
+    );
+  };
+
+  const SectionHeader = ({ emoji, label, title, desc, linkTo, linkLabel }) => (
+    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+      className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4">
+      <div>
+        <span className="text-brand-600 text-sm font-bold uppercase tracking-widest">{emoji} {label}</span>
+        <h2 className="text-3xl md:text-4xl font-extrabold mt-1">{title}</h2>
+        {desc && <p className="text-neutral-500 mt-2 max-w-lg">{desc}</p>}
+      </div>
+      <Link to={linkTo} className="shrink-0 inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-brand-500 text-brand-600 font-bold hover:bg-brand-500 hover:text-white transition-all duration-200 text-sm group">
+        {linkLabel} <span className="group-hover:translate-x-1 transition-transform">→</span>
+      </Link>
+    </motion.div>
+  );
 
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero Section */}
       <HeroSlider />
 
-      {/* Featured Products Section */}
-      <section id="featured" className="py-24 px-4 max-w-7xl mx-auto w-full">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">Recién Salidos de la Impresora</h2>
-          <div className="h-1 w-24 bg-gradient-to-r from-primary to-accent mx-auto rounded-full mb-6"></div>
-          <p className="text-neutral-500 max-w-2xl mx-auto text-lg">Explora nuestras últimas creaciones. Cada pieza es única y puede ser adaptada a tus gustos exactos.</p>
-        </motion.div>
-
-        {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[...Array(3)].map((_, i) => (
-              <div key={i} className="card p-4 h-full flex flex-col gap-4 border border-neutral-100">
-                <Skeleton className="w-full aspect-square rounded-2xl" />
-                <div className="space-y-3 mt-2">
-                  <Skeleton className="h-6 w-3/4 rounded-md" />
-                  <Skeleton className="h-4 w-full rounded-md" />
-                </div>
-                <div className="mt-auto flex justify-between items-center pt-4">
-                  <Skeleton className="h-8 w-24 rounded-lg" />
-                  <Skeleton className="h-10 w-10 rounded-full" />
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {products.map((product, index) => (
-              <motion.div
-                key={product._id}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="h-full"
-              >
-                <ProductCard product={product} />
-              </motion.div>
-            ))}
-          </div>
-        )}
-        
-        {!loading && products.length === 0 && (
-          <EmptyState 
-            title="Sin productos disponibles"
-            description="Actualmente no hay productos destacados, pero vuelve pronto para ver novedades."
-            icon="📦"
-          />
-        )}
-
-        {!loading && products.length > 0 && (
-          <div className="text-center mt-16">
-            <Link
-              to="/shop"
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-xl border-2 border-brand-500 text-brand-600 font-bold hover:bg-brand-500 hover:text-white transition-all duration-200 group"
-            >
-              Ver Todos los Productos
-              <span className="inline-block transform group-hover:translate-x-1 transition-transform">→</span>
-            </Link>
-          </div>
-        )}
+      {/* ⭐ Productos Destacados */}
+      <section id="featured" className="py-20 px-4 max-w-7xl mx-auto w-full">
+        <SectionHeader emoji="⭐" label="Lo Mejor de ZAMIS" title="Productos Destacados"
+          desc="Seleccionados a mano por su calidad, originalidad y popularidad."
+          linkTo="/shop?sort=best-selling" linkLabel="Ver Más Vendidos" />
+        {loading ? <SectionSkeleton /> : <ProductGrid items={featured} fallback={recentProducts} />}
       </section>
+
+      {/* 🆕 Nuevas Llegadas */}
+      <section className="py-20 px-4 max-w-7xl mx-auto w-full border-t border-neutral-100">
+        <SectionHeader emoji="🆕" label="Recién Llegados" title="Novedades"
+          desc="Las últimas creaciones salidas de nuestra impresora."
+          linkTo="/shop?sort=newest" linkLabel="Ver Todo lo Nuevo" />
+        {loading ? <SectionSkeleton /> : <ProductGrid items={newArrivals} fallback={recentProducts} />}
+      </section>
+
+      {/* 🏷️ Ofertas — solo si hay productos en oferta */}
+      {(loading || onSale.length > 0) && (
+        <section className="py-20 px-4 max-w-7xl mx-auto w-full border-t border-neutral-100">
+          <SectionHeader emoji="🏷️" label="Precios Especiales" title="Ofertas de Temporada"
+            desc="Piezas premium a precios que no duran mucho."
+            linkTo="/shop" linkLabel="Ver Todas las Ofertas" />
+          {loading ? <SectionSkeleton /> : <ProductGrid items={onSale} fallback={[]} />}
+        </section>
+      )}
       
       {/* Value Proposition Section */}
       <section className="py-24 bg-surface-card/50 border-t border-neutral-100 relative overflow-hidden">

@@ -87,7 +87,49 @@ const productSchema = new mongoose.Schema({
     isCustomizable: {
         type: Boolean,
         default: false,
-    }
+    },
+    // --- Featured / Merchandising ---
+    isFeatured: {
+        type: Boolean,
+        default: false,
+    },
+    isNewArrival: {
+        type: Boolean,
+        default: false,
+    },
+    isOnSale: {
+        type: Boolean,
+        default: false,
+    },
+    salePrice: {
+        type: Number,
+        required: false,
+    },
+    totalSold: {
+        type: Number,
+        default: 0,
+    },
+    // --- Advanced Filters ---
+    material: {
+        type: String,
+        required: false,
+    },
+    color: {
+        type: String,
+        required: false,
+    },
+    size: {
+        type: String, // e.g. 'Pequeño', 'Mediano', 'Grande', 'Extra Grande'
+        required: false,
+    },
+    measurements: {
+        type: String, // e.g. '10cm x 5cm x 8cm'
+        required: false,
+    },
+    personalizationLevel: {
+        type: String, // 'Ninguna', 'Básica', 'Avanzada', 'Premium'
+        default: 'Ninguna',
+    },
 }, {
     timestamps: true,
 });

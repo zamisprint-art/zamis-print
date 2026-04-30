@@ -45,7 +45,13 @@ const createProduct = async (req, res) => {
 // @route   PUT /api/products/:id
 // @access  Private/Admin
 const updateProduct = async (req, res) => {
-    const { name, price, description, image, gallery, model3D, category, subcategory, countInStock, requiresTextPersonalization, requiresImagePersonalization, isCustomizable } = req.body;
+    const {
+        name, price, description, image, gallery, model3D,
+        category, subcategory, countInStock,
+        requiresTextPersonalization, requiresImagePersonalization, isCustomizable,
+        isFeatured, isNewArrival, isOnSale, salePrice,
+        material, color, size, measurements, personalizationLevel,
+    } = req.body;
 
     const product = await Product.findById(req.params.id);
 
@@ -58,10 +64,21 @@ const updateProduct = async (req, res) => {
         product.model3D = model3D || product.model3D;
         product.category = category || product.category;
         product.subcategory = subcategory !== undefined ? subcategory : product.subcategory;
-        product.countInStock = countInStock || product.countInStock;
+        product.countInStock = countInStock !== undefined ? countInStock : product.countInStock;
         product.requiresTextPersonalization = requiresTextPersonalization !== undefined ? requiresTextPersonalization : product.requiresTextPersonalization;
         product.requiresImagePersonalization = requiresImagePersonalization !== undefined ? requiresImagePersonalization : product.requiresImagePersonalization;
         product.isCustomizable = isCustomizable !== undefined ? isCustomizable : product.isCustomizable;
+        // Merchandising
+        product.isFeatured = isFeatured !== undefined ? isFeatured : product.isFeatured;
+        product.isNewArrival = isNewArrival !== undefined ? isNewArrival : product.isNewArrival;
+        product.isOnSale = isOnSale !== undefined ? isOnSale : product.isOnSale;
+        product.salePrice = salePrice !== undefined ? salePrice : product.salePrice;
+        // Advanced filters
+        product.material = material !== undefined ? material : product.material;
+        product.color = color !== undefined ? color : product.color;
+        product.size = size !== undefined ? size : product.size;
+        product.measurements = measurements !== undefined ? measurements : product.measurements;
+        product.personalizationLevel = personalizationLevel !== undefined ? personalizationLevel : product.personalizationLevel;
 
         const updatedProduct = await product.save();
         res.json(updatedProduct);
