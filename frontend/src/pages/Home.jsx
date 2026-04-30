@@ -80,7 +80,7 @@ const Home = () => {
       {/* Hero Section */}
       <HeroSlider />
 
-      {/* ⭐ Productos Destacados */}
+      {/* ⭐ Productos Destacados — El ancla de precio */}
       <section id="featured" className="py-20 px-4 max-w-7xl mx-auto w-full">
         <SectionHeader emoji="⭐" label="Lo Mejor de ZAMIS" title="Productos Destacados"
           desc="Seleccionados a mano por su calidad, originalidad y popularidad."
@@ -88,23 +88,23 @@ const Home = () => {
         {loading ? <SectionSkeleton /> : <ProductGrid items={featured} fallback={recentProducts} />}
       </section>
 
-      {/* 🆕 Nuevas Llegadas */}
-      <section className="py-20 px-4 max-w-7xl mx-auto w-full border-t border-neutral-100">
-        <SectionHeader emoji="🆕" label="Recién Llegados" title="Novedades"
-          desc="Las últimas creaciones salidas de nuestra impresora."
-          linkTo="/shop?sort=newest" linkLabel="Ver Todo lo Nuevo" />
-        {loading ? <SectionSkeleton /> : <ProductGrid items={newArrivals} fallback={recentProducts} />}
-      </section>
-
-      {/* 🏷️ Ofertas — solo si hay productos en oferta */}
+      {/* 🏷️ Ofertas — El gancho emocional (2do para máxima conversión) */}
       {(loading || onSale.length > 0) && (
-        <section className="py-20 px-4 max-w-7xl mx-auto w-full border-t border-neutral-100">
-          <SectionHeader emoji="🏷️" label="Precios Especiales" title="Ofertas de Temporada"
-            desc="Piezas premium a precios que no duran mucho."
+        <section className="py-20 px-4 max-w-7xl mx-auto w-full border-t border-red-100 bg-gradient-to-b from-red-50/40 to-transparent">
+          <SectionHeader emoji="🏷️" label="Precios Especiales · Tiempo Limitado" title="Ofertas de Temporada"
+            desc="Piezas premium a precios que no duran mucho. ¡No te quedes sin la tuya!"
             linkTo="/shop" linkLabel="Ver Todas las Ofertas" />
           {loading ? <SectionSkeleton /> : <ProductGrid items={onSale} fallback={[]} />}
         </section>
       )}
+
+      {/* 🆕 Nuevas Llegadas — El FOMO al final */}
+      <section className="py-20 px-4 max-w-7xl mx-auto w-full border-t border-neutral-100">
+        <SectionHeader emoji="🆕" label="Recién Llegados" title="Novedades"
+          desc="Las últimas creaciones salidas de nuestra impresora. ¡Sé de los primeros en tenerlas!"
+          linkTo="/shop?sort=newest" linkLabel="Ver Todo lo Nuevo" />
+        {loading ? <SectionSkeleton /> : <ProductGrid items={newArrivals} fallback={recentProducts} />}
+      </section>
       
       {/* Value Proposition Section */}
       <section className="py-24 bg-surface-card/50 border-t border-neutral-100 relative overflow-hidden">
