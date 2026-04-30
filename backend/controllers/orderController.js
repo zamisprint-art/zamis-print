@@ -1,5 +1,20 @@
 import Order from '../models/Order.js';
 import { Resend } from 'resend';
+import { orderConfirmationEmail, newOrderAdminEmail, orderShippedEmail } from '../utils/emailTemplates.js';
+
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'hola@zamisprint.com';
+const FROM_EMAIL  = 'ZAMIS Print <onboarding@resend.dev>';
+
+// Helper: send email without crashing the main flow
+const sendEmail = async ({ to, subject, html }) => {
+    try {
+        const resend = new Resend(process.env.RESEND_API_KEY);
+        await resend.emails.send({ from: FROM_EMAIL, to, subject, html });
+        console.log(`✅ Email sent to ${to}: ${subject}`);
+    } catch (err) {
+        console.error(`⚠️  Email failed (non-critical): ${err.message}`);
+    }
+};
 
 // @desc    Create new order
 // @route   POST /api/orders
@@ -38,6 +53,25 @@ const addOrderItems = async (req, res) => {
 
     const createdOrder = await order.save();
     res.status(201).json(createdOrder);
+
+    // --- Send emails (non-blocking) ---
+    const customerEmail = req.user?.email || shippingAddress?.email;
+
+    // 1. Confirmation to customer
+    if (customerEmail) {
+        sendEmail({
+            to: customerEmail,
+            subject: `✅ Pedido confirmado — ZAMIS Print (#${String(createdOrder._id).slice(-8).toUpperCase()})`,
+            html: orderConfirmationEmail(createdOrder),
+        });
+    }
+
+    // 2. New order alert to admin
+    sendEmail({
+        to: ADMIN_EMAIL,
+        subject: `🚀 Nueva orden recibida — $${totalPrice?.toLocaleString('es-CO')} COP`,
+        html: newOrderAdminEmail({ ...createdOrder.toObject(), shippingAddress }),
+    });
 };
 
 // @desc    Get order by ID
@@ -45,7 +79,6 @@ const addOrderItems = async (req, res) => {
 // @access  Private
 const getOrderById = async (req, res) => {
     const order = await Order.findById(req.params.id).populate('user', 'name email');
-
     if (order) {
         res.json(order);
     } else {
@@ -57,7 +90,7 @@ const getOrderById = async (req, res) => {
 // @route   GET /api/orders
 // @access  Private/Admin
 const getOrders = async (req, res) => {
-    const orders = await Order.find({}).populate('user', 'id name');
+    const orders = await Order.find({}).populate('user', 'id name email');
     res.json(orders);
 };
 
@@ -65,31 +98,24 @@ const getOrders = async (req, res) => {
 // @route   PUT /api/orders/:id/status
 // @access  Private/Admin
 const updateOrderStatus = async (req, res) => {
-    const order = await Order.findById(req.params.id);
+    const order = await Order.findById(req.params.id).populate('user', 'name email');
 
     if (order) {
         order.orderStatus = req.body.status;
         const updatedOrder = await order.save();
+        res.json(updatedOrder);
+
+        // Send "Enviado" notification to customer
         if (req.body.status === 'Enviado') {
-            try {
-                const resend = new Resend(process.env.RESEND_API_KEY);
-                await resend.emails.send({
-                    from: 'ZAMIS Print <onboarding@resend.dev>', // Use verified domain in production
-                    to: order.user?.email || 'admin@zamisprint.com',
-                    subject: `Tu pedido de ZAMIS Print ha sido enviado (Orden ${order._id})`,
-                    html: `
-                        <h1>¡Buenas noticias!</h1>
-                        <p>Tu pedido con ID <strong>${order._id}</strong> ya está en camino.</p>
-                        <p>Gracias por confiar en ZAMIS Print para tus impresiones 3D personalizadas.</p>
-                    `
+            const customerEmail = order.user?.email;
+            if (customerEmail) {
+                sendEmail({
+                    to: customerEmail,
+                    subject: `📦 Tu pedido ZAMIS Print va en camino (#${String(order._id).slice(-8).toUpperCase()})`,
+                    html: orderShippedEmail(order),
                 });
-                console.log('Email sent successfully');
-            } catch (emailError) {
-                console.error('Error sending email:', emailError);
             }
         }
-        
-        res.json(updatedOrder);
     } else {
         res.status(404).json({ message: 'Order not found' });
     }
@@ -104,3 +130,5 @@ const getMyOrders = async (req, res) => {
 };
 
 export { addOrderItems, getOrderById, getOrders, updateOrderStatus, getMyOrders };
+
+
