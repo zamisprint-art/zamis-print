@@ -149,7 +149,19 @@ const createPreference = async (req, res) => {
         res.json({ id: response.id, init_point: response.init_point });
     } catch (error) {
         console.error('[MP] createPreference error:', error);
-        res.status(500).json({ message: 'Error creating payment preference', detail: error.message });
+        
+        // Extract exact error from MercadoPago if available
+        let detailMsg = error.message;
+        if (error.cause && error.cause.length > 0) {
+            detailMsg = error.cause.map(c => `${c.description || c.code} (${c.data})`).join('; ');
+        } else if (error.response && error.response.data) {
+            detailMsg = JSON.stringify(error.response.data);
+        }
+
+        res.status(500).json({ 
+            message: 'Error creando la preferencia en MercadoPago', 
+            detail: detailMsg 
+        });
     }
 };
 
