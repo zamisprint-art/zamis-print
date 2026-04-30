@@ -94,7 +94,8 @@ const Checkout = () => {
       clearInterval(stepInterval);
       console.error('Payment error:', error);
       const msg = error.response?.data?.message || 'Error de conexión con el servidor.';
-      alert(`No pudimos procesar tu pago.\n\nDetalle: ${msg}\n\nPor favor intenta nuevamente.`);
+      const detail = error.response?.data?.detail ? `\nDetalle técnico: ${error.response.data.detail}` : '';
+      alert(`No pudimos procesar tu pago.\n\n${msg}${detail}\n\nPor favor intenta nuevamente.`);
       setIsProcessing(false);
       setProcessingStep(0);
       setStep(2);
