@@ -15,6 +15,7 @@ const Checkout = () => {
 
   const [shippingAddress, setShippingAddress] = useState({
     fullName: '',
+    email: '',
     address: '',
     city: '',
     postalCode: '',
@@ -30,7 +31,11 @@ const Checkout = () => {
       navigate('/cart');
     }
     if (userInfo && !shippingAddress.fullName) {
-      setShippingAddress(prev => ({ ...prev, fullName: userInfo.name }));
+      setShippingAddress(prev => ({ 
+        ...prev, 
+        fullName: userInfo.name,
+        email: userInfo.email 
+      }));
     }
   }, [cartItems, navigate, userInfo]);
 
@@ -205,13 +210,23 @@ const Checkout = () => {
             >
               <h2 className="text-2xl font-bold mb-6 text-neutral-900">¿A dónde enviamos tu pedido?</h2>
               <form id="checkout-form" onSubmit={handlePayment} className="space-y-5">
-                <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-1.5">Nombre de quien recibe</label>
-                  <input
-                    type="text" name="fullName" required
-                    value={shippingAddress.fullName} onChange={handleChange}
-                    className="input-field py-3 text-lg" placeholder="Ej. Juan Pérez"
-                  />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-1.5">Nombre de quien recibe</label>
+                    <input
+                      type="text" name="fullName" required
+                      value={shippingAddress.fullName} onChange={handleChange}
+                      className="input-field py-3 text-lg" placeholder="Ej. Juan Pérez"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-1.5">Correo electrónico</label>
+                    <input
+                      type="email" name="email" required
+                      value={shippingAddress.email} onChange={handleChange}
+                      className="input-field py-3 text-lg" placeholder="tu@correo.com"
+                    />
+                  </div>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-neutral-700 mb-1.5">Dirección completa</label>
