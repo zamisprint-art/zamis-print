@@ -9,6 +9,7 @@ import productRoutes from './routes/productRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
+import inventoryRoutes from './routes/inventoryRoutes.js';
 
 // Load environment variables
 dotenv.config();
@@ -62,6 +63,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/inventory', inventoryRoutes);
 
 // Make uploads folder static
 const __dirname = path.resolve();
