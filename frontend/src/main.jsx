@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom'
 import axios from 'axios'
 import './index.css'
 import App from './App.jsx'
+import ScrollToTop from './components/ScrollToTop.jsx'
 
 // Configure Axios to send cookies automatically
 axios.defaults.withCredentials = true;
@@ -14,6 +15,7 @@ axios.defaults.baseURL = import.meta.env.VITE_API_URL || '';
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
+      <ScrollToTop />
       <App />
     </BrowserRouter>
   </StrictMode>,
