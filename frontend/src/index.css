@@ -98,6 +98,27 @@
     @apply text-neutral-900;
   }
 
+  /* ── Tipografía Estándar ZAMIS Print ──
+     Escala consistente en todo el sitio.
+     Excepción permitida: HeroSlider (componente de impacto visual).
+  */
+  h1 {
+    /* Título principal de cada página */
+    @apply text-3xl sm:text-4xl font-extrabold;
+  }
+  h2 {
+    /* Títulos de sección (Productos Destacados, Novedades, etc.) */
+    @apply text-2xl sm:text-3xl font-bold;
+  }
+  h3 {
+    /* Subtítulos de tarjetas y paneles */
+    @apply text-lg sm:text-xl font-semibold;
+  }
+  h4 {
+    /* Etiquetas y encabezados de grupo */
+    @apply text-base sm:text-lg font-semibold;
+  }
+
   :focus-visible {
     outline: 2px solid var(--color-brand-500);
     outline-offset: 2px;
