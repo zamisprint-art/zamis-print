@@ -93,7 +93,7 @@ const HeroSlider = () => {
   };
 
   return (
-    <section className="relative h-[60vh] sm:h-[70vh] w-full overflow-hidden bg-surface-base">
+    <section className="relative h-[280px] sm:h-[340px] lg:h-[380px] w-full overflow-hidden bg-surface-base">
       <AnimatePresence initial={false} custom={direction}>
         <motion.div
           key={current}
@@ -121,54 +121,52 @@ const HeroSlider = () => {
           </div>
           
           {/* Content */}
-          <div className="relative z-20 h-full flex flex-col justify-center pb-24 px-6 sm:px-12 lg:px-24 max-w-7xl mx-auto">
+          <div className="relative z-20 h-full flex flex-col justify-center px-6 sm:px-10 lg:px-20 max-w-7xl mx-auto pb-10">
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.8 }}
-              className="max-w-2xl"
+              transition={{ delay: 0.2, duration: 0.6 }}
+              className="max-w-xl"
             >
-              <h3 className="text-xl md:text-2xl font-medium text-accent mb-2 tracking-wider uppercase">
+              <h3 className="text-xs sm:text-sm font-semibold text-accent mb-1 tracking-widest uppercase">
                 {slides[current].subtitle}
               </h3>
-              <h1 className="text-5xl md:text-7xl font-black text-neutral-900 mb-6 leading-tight">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-neutral-900 mb-3 leading-tight">
                 {slides[current].title}
               </h1>
-              <p className="text-lg md:text-xl text-neutral-700 mb-10 max-w-xl font-light leading-relaxed">
+              <p className="text-sm sm:text-base text-neutral-700 mb-5 max-w-md font-light leading-relaxed hidden sm:block">
                 {slides[current].description}
               </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link 
-                  to={slides[current].ctaLink} 
-                  className="btn-primary text-lg px-8 py-4 text-center"
-                >
-                  {slides[current].ctaText}
-                </Link>
-              </div>
+              <Link 
+                to={slides[current].ctaLink} 
+                className="btn-primary text-sm px-5 py-2.5 inline-block text-center"
+              >
+                {slides[current].ctaText}
+              </Link>
             </motion.div>
           </div>
         </motion.div>
       </AnimatePresence>
 
-      {/* Bottom Controls: Progress Indicators + Navigation Buttons */}
-      <div className="absolute bottom-6 right-6 sm:right-10 flex flex-col items-end gap-3" style={{ zIndex: 40 }}>
+      {/* Bottom Controls */}
+      <div className="absolute bottom-3 right-4 sm:right-6 flex flex-col items-end gap-2" style={{ zIndex: 40 }}>
         {/* Navigation Buttons */}
-        <div className="flex gap-3">
+        <div className="flex gap-2">
           <button 
             onClick={prevSlide}
-            className="w-11 h-11 rounded-full border border-neutral-300 bg-surface-base/50 backdrop-blur-md flex items-center justify-center text-neutral-900 hover:bg-primary transition-colors hover:border-primary"
+            className="w-8 h-8 rounded-full border border-neutral-300 bg-surface-base/50 backdrop-blur-md flex items-center justify-center text-neutral-900 hover:bg-primary transition-colors hover:border-primary"
           >
-            <ChevronLeft size={22} />
+            <ChevronLeft size={16} />
           </button>
           <button 
             onClick={nextSlide}
-            className="w-11 h-11 rounded-full border border-neutral-300 bg-surface-base/50 backdrop-blur-md flex items-center justify-center text-neutral-900 hover:bg-primary transition-colors hover:border-primary"
+            className="w-8 h-8 rounded-full border border-neutral-300 bg-surface-base/50 backdrop-blur-md flex items-center justify-center text-neutral-900 hover:bg-primary transition-colors hover:border-primary"
           >
-            <ChevronRight size={22} />
+            <ChevronRight size={16} />
           </button>
         </div>
         {/* Progress Indicators */}
-        <div className="flex gap-2">
+        <div className="flex gap-1.5">
           {slides.map((_, index) => (
             <button 
               key={index}
@@ -176,8 +174,8 @@ const HeroSlider = () => {
                 setDirection(index > current ? 1 : -1);
                 setCurrent(index);
               }}
-              className={`h-1.5 transition-all duration-300 rounded-full ${
-                index === current ? 'w-10 bg-primary' : 'w-4 bg-white/30 hover:bg-white/50'
+              className={`h-1 transition-all duration-300 rounded-full ${
+                index === current ? 'w-8 bg-primary' : 'w-3 bg-white/30 hover:bg-white/50'
               }`}
             />
           ))}
