@@ -38,6 +38,35 @@ const BillingTab = ({ orders, refreshData }) => {
   const totalPendiente = orders.filter(o => o.estadoCobro !== 'pagado').reduce((acc, o) => acc + o.totalPrice, 0);
   const totalCobrado = orders.filter(o => o.estadoCobro === 'pagado').reduce((acc, o) => acc + o.totalPrice, 0);
 
+  const exportToCSV = () => {
+    const headers = ['ID Pedido', 'Cliente', 'Telefono', 'Fecha', 'Total', 'Estado Cobro', 'Metodo Pago', 'Nota Interna'];
+    const csvRows = [
+      headers.join(','),
+      ...orders.map(o => {
+        return [
+          o._id,
+          `"${o.user?.name || o.shippingAddress?.fullName || 'Invitado'}"`,
+          `"${o.shippingAddress?.phone || ''}"`,
+          new Date(o.createdAt).toLocaleDateString(),
+          o.totalPrice,
+          o.estadoCobro || 'pendiente',
+          o.metodoPagoCobro || o.paymentMethod || '',
+          `"${(o.notaCobroInterna || '').replace(/"/g, '""')}"`
+        ].join(',');
+      })
+    ].join('\n');
+
+    const blob = new Blob([csvRows], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `reporte_cobros_${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex justify-between items-center mb-2">
@@ -56,7 +85,10 @@ const BillingTab = ({ orders, refreshData }) => {
           <span className="text-neutral-500 font-semibold text-sm uppercase tracking-wider">Por Cobrar</span>
           <span className="text-3xl font-black text-yellow-600">${totalPendiente.toLocaleString('es-CO')}</span>
         </div>
-        <div className="bg-brand-50 p-5 rounded-2xl border border-brand-200 flex flex-col justify-center items-center cursor-pointer hover:bg-brand-100 transition-colors">
+        <div 
+          onClick={exportToCSV}
+          className="bg-brand-50 p-5 rounded-2xl border border-brand-200 flex flex-col justify-center items-center cursor-pointer hover:bg-brand-100 transition-colors"
+        >
           <FileText size={28} className="text-brand-600 mb-2" />
           <span className="font-bold text-brand-800">Exportar Reporte</span>
         </div>

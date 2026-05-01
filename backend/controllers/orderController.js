@@ -1,4 +1,5 @@
 import Order from '../models/Order.js';
+import Product from '../models/Product.js';
 import { Resend } from 'resend';
 import { orderConfirmationEmail, newOrderAdminEmail, orderShippedEmail } from '../utils/emailTemplates.js';
 
@@ -141,10 +142,25 @@ const updateBillingStatus = async (req, res) => {
         if (req.body.notaCobroInterna !== undefined) order.notaCobroInterna = req.body.notaCobroInterna;
         if (req.body.fechaCobro) order.fechaCobro = req.body.fechaCobro;
         
-        // Si se marca como pagado
-        if (req.body.estadoCobro === 'pagado') {
+        // Si se marca como pagado y no estaba pagado antes
+        if (req.body.estadoCobro === 'pagado' && !order.isPaid) {
             order.isPaid = true;
             order.paidAt = req.body.fechaCobro || Date.now();
+
+            // Reducir stock automáticamente
+            for (const item of order.orderItems) {
+                const product = await Product.findById(item.product);
+                if (product) {
+                    product.countInStock = Math.max(0, product.countInStock - item.qty);
+                    product.stockMovimientos.push({
+                        tipo: 'salida',
+                        cantidad: item.qty,
+                        motivo: `Venta automática - Pedido #${String(order._id).slice(-8).toUpperCase()}`,
+                        usuario: req.user ? req.user.email : 'sistema'
+                    });
+                    await product.save();
+                }
+            }
         }
 
         const updatedOrder = await order.save();
