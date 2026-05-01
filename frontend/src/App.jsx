@@ -18,6 +18,7 @@ import { useAuthStore } from './store/useAuthStore';
 
 import CustomerLogin from './pages/CustomerLogin';
 import MyAccount from './pages/MyAccount';
+import Maintenance from './pages/Maintenance';
 
 // Private Route Wrapper for Admin
 const AdminRoute = ({ children }) => {
@@ -26,26 +27,32 @@ const AdminRoute = ({ children }) => {
 };
 
 function App() {
+  const isMaintenance = import.meta.env.VITE_MAINTENANCE_MODE === 'true';
+
   return (
     <Routes>
       {/* Public Store Layout */}
-      <Route path="/" element={<StoreLayout />}>
-        <Route index element={<Home />} />
-        <Route path="shop" element={<Shop />} />
-        <Route path="product/:id" element={<ProductDetail />} />
-        <Route path="cart" element={<Cart />} />
-        <Route path="checkout" element={<Checkout />} />
-        <Route path="about" element={<About />} />
-        <Route path="contact" element={<Contact />} />
-        <Route path="order/:id" element={<OrderSuccess />} />
-        <Route path="faq" element={<FAQ />} />
-        <Route path="privacy" element={<Privacy />} />
-        <Route path="terms" element={<Terms />} />
-        <Route path="login" element={<CustomerLogin />} />
-        <Route path="profile" element={<MyAccount />} />
+      <Route path="/" element={isMaintenance ? <Maintenance /> : <StoreLayout />}>
+        {!isMaintenance && (
+          <>
+            <Route index element={<Home />} />
+            <Route path="shop" element={<Shop />} />
+            <Route path="product/:id" element={<ProductDetail />} />
+            <Route path="cart" element={<Cart />} />
+            <Route path="checkout" element={<Checkout />} />
+            <Route path="about" element={<About />} />
+            <Route path="contact" element={<Contact />} />
+            <Route path="order/:id" element={<OrderSuccess />} />
+            <Route path="faq" element={<FAQ />} />
+            <Route path="privacy" element={<Privacy />} />
+            <Route path="terms" element={<Terms />} />
+            <Route path="login" element={<CustomerLogin />} />
+            <Route path="profile" element={<MyAccount />} />
+          </>
+        )}
       </Route>
 
-      {/* Admin Module Layout */}
+      {/* Admin Module Layout - Always accessible even in maintenance */}
       <Route path="/admin" element={<AdminLayout />}>
         <Route path="login" element={<Login />} />
         <Route index element={
@@ -54,8 +61,10 @@ function App() {
           </AdminRoute>
         } />
       </Route>
+      
+      {/* Catch-all during maintenance */}
+      {isMaintenance && <Route path="*" element={<Navigate to="/" replace />} />}
     </Routes>
   );
 }
-
 export default App;
