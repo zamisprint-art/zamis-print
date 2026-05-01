@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { Button } from '../components/ui';
+import SEOHead from '../components/SEOHead';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -20,6 +21,10 @@ const Contact = () => {
 
   return (
     <div className="min-h-screen bg-surface-base py-20 px-4">
+      <SEOHead
+        title="Contacto | ZAMIS Print — Cotiza tu Diseño 3D"
+        description="¿Tienes una idea? Contáctanos para cotizar tu figura 3D personalizada. WhatsApp, email o formulario. Respondemos en menos de 24 horas."
+      />
       <div className="max-w-7xl mx-auto">
         
         {/* Header */}
@@ -68,7 +73,7 @@ const Contact = () => {
               <div>
                 <h3 className="text-lg font-bold text-neutral-900 mb-1">WhatsApp</h3>
                 <p className="text-neutral-500 mb-2">Lunes a Sábado, 9am - 6pm</p>
-                <a href="https://wa.me/573000000000" className="text-green-600 font-semibold hover:underline">+57 300 000 0000</a>
+                <a href="https://wa.me/573107878192" className="text-green-600 font-semibold hover:underline">+57 310 787 8192</a>
               </div>
             </div>
 

@@ -7,6 +7,7 @@ import ProductCard from '../components/ProductCard';
 import { ProductGridSkeleton } from '../components/ui/Skeleton';
 import { EmptyState } from '../components/ui/Alert';
 import { staggerContainer } from '../design-system/tokens';
+import SEOHead from '../components/SEOHead';
 
 const SORT_OPTIONS = [
   { value: 'newest',       label: 'Más Recientes' },
@@ -132,6 +133,10 @@ const Shop = () => {
 
   return (
     <div className="container-xl py-12">
+      <SEOHead
+        title="Tienda de Impresión 3D | ZAMIS Print"
+        description="Explora todo nuestro catálogo: Funkos personalizados, llaveros, bustos, esculturas y más. Filtra por precio, material y personalización."
+      />
 
       {/* Header */}
       <div className="mb-8 pb-8 border-b border-neutral-200">

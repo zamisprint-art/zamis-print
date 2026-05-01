@@ -6,6 +6,7 @@ import ProductCard from '../components/ProductCard';
 import HeroSlider from '../components/HeroSlider';
 import { Skeleton, Button, EmptyState } from '../components/ui';
 import { TrustBadges } from '../components/ecommerce';
+import SEOHead from '../components/SEOHead';
 
 const SectionSkeleton = () => (
   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -24,6 +25,7 @@ const SectionSkeleton = () => (
 const Home = () => {
   const [allProducts, setAllProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -77,6 +79,10 @@ const Home = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
+      <SEOHead
+        title="ZAMIS Print | Impresión 3D Personalizada en Colombia"
+        description="Funkos, llaveros, esculturas y figuras 3D 100% personalizadas. Envíos a todo Colombia. Diseña tu regalo perfecto hoy."
+      />
       {/* Hero Section */}
       <HeroSlider />
 

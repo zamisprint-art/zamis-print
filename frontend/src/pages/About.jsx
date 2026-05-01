@@ -1,9 +1,14 @@
 import { motion } from 'framer-motion';
 import { Printer, Palette, Truck, Zap } from 'lucide-react';
+import SEOHead from '../components/SEOHead';
 
 const About = () => {
   return (
     <div className="flex flex-col min-h-screen pb-20">
+      <SEOHead
+        title="Nosotros | ZAMIS Print — Impresión 3D Colombia"
+        description="Conoce el equipo de ZAMIS Print. Apasionados por la impresión 3D y el diseño personalizado. Tecnología de punta para dar vida a tus ideas."
+      />
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 px-4 overflow-hidden bg-surface-base">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-brand-500/10 blur-[120px] rounded-full pointer-events-none"></div>
