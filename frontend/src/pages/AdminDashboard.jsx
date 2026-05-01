@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Package, ShoppingBag, PlusCircle, Settings, Edit, Trash2, X, Upload } from 'lucide-react';
+import { Package, ShoppingBag, PlusCircle, Settings, Edit, Trash2, X, Upload, ClipboardList } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
+import InventoryTab from '../components/admin/InventoryTab';
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('orders');
@@ -142,6 +143,12 @@ const AdminDashboard = () => {
           <Package size={20} /> Productos
         </button>
         <button 
+          onClick={() => setActiveTab('inventario')}
+          className={`flex items-center gap-3 p-4 rounded-xl transition-colors ${activeTab === 'inventario' ? 'bg-primary text-neutral-900' : 'glass-panel hover:bg-white/5'}`}
+        >
+          <ClipboardList size={20} /> Inventario
+        </button>
+        <button 
           onClick={() => setActiveTab('settings')}
           className={`flex items-center gap-3 p-4 rounded-xl transition-colors ${activeTab === 'settings' ? 'bg-primary text-neutral-900' : 'glass-panel hover:bg-white/5'}`}
         >
@@ -210,6 +217,10 @@ const AdminDashboard = () => {
               </table>
             </div>
           </div>
+        )}
+
+        {activeTab === 'inventario' && (
+          <InventoryTab />
         )}
 
         {activeTab === 'products' && (
