@@ -77,12 +77,13 @@ const HeroSlider = () => {
       x: direction > 0 ? 1000 : -1000,
       opacity: 0,
       scale: 1.1,
+      zIndex: 1,
     }),
     center: {
-      zIndex: 1,
       x: 0,
       opacity: 1,
       scale: 1,
+      zIndex: 1,
     },
     exit: (direction) => ({
       zIndex: 0,
@@ -120,7 +121,7 @@ const HeroSlider = () => {
           </div>
           
           {/* Content */}
-          <div className="relative z-20 h-full flex flex-col justify-center px-6 sm:px-12 lg:px-24 max-w-7xl mx-auto">
+          <div className="relative z-20 h-full flex flex-col justify-center pb-24 px-6 sm:px-12 lg:px-24 max-w-7xl mx-auto">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -149,36 +150,38 @@ const HeroSlider = () => {
         </motion.div>
       </AnimatePresence>
 
-      {/* Navigation Buttons */}
-      <div className="absolute z-30 bottom-10 right-10 flex gap-4">
-        <button 
-          onClick={prevSlide}
-          className="w-12 h-12 rounded-full border border-neutral-300 bg-surface-base/50 backdrop-blur-md flex items-center justify-center text-neutral-900 hover:bg-primary transition-colors hover:border-primary"
-        >
-          <ChevronLeft size={24} />
-        </button>
-        <button 
-          onClick={nextSlide}
-          className="w-12 h-12 rounded-full border border-neutral-300 bg-surface-base/50 backdrop-blur-md flex items-center justify-center text-neutral-900 hover:bg-primary transition-colors hover:border-primary"
-        >
-          <ChevronRight size={24} />
-        </button>
-      </div>
-
-      {/* Progress Indicators */}
-      <div className="absolute z-30 bottom-10 left-6 sm:left-12 lg:left-24 flex gap-2">
-        {slides.map((_, index) => (
+      {/* Bottom Controls: Progress Indicators + Navigation Buttons */}
+      <div className="absolute bottom-6 right-6 sm:right-10 flex flex-col items-end gap-3" style={{ zIndex: 40 }}>
+        {/* Navigation Buttons */}
+        <div className="flex gap-3">
           <button 
-            key={index}
-            onClick={() => {
-              setDirection(index > current ? 1 : -1);
-              setCurrent(index);
-            }}
-            className={`h-1.5 transition-all duration-300 rounded-full ${
-              index === current ? 'w-10 bg-primary' : 'w-4 bg-white/30 hover:bg-white/50'
-            }`}
-          />
-        ))}
+            onClick={prevSlide}
+            className="w-11 h-11 rounded-full border border-neutral-300 bg-surface-base/50 backdrop-blur-md flex items-center justify-center text-neutral-900 hover:bg-primary transition-colors hover:border-primary"
+          >
+            <ChevronLeft size={22} />
+          </button>
+          <button 
+            onClick={nextSlide}
+            className="w-11 h-11 rounded-full border border-neutral-300 bg-surface-base/50 backdrop-blur-md flex items-center justify-center text-neutral-900 hover:bg-primary transition-colors hover:border-primary"
+          >
+            <ChevronRight size={22} />
+          </button>
+        </div>
+        {/* Progress Indicators */}
+        <div className="flex gap-2">
+          {slides.map((_, index) => (
+            <button 
+              key={index}
+              onClick={() => {
+                setDirection(index > current ? 1 : -1);
+                setCurrent(index);
+              }}
+              className={`h-1.5 transition-all duration-300 rounded-full ${
+                index === current ? 'w-10 bg-primary' : 'w-4 bg-white/30 hover:bg-white/50'
+              }`}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );
