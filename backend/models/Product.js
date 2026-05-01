@@ -76,6 +76,24 @@ const productSchema = new mongoose.Schema({
         required: true,
         default: 0,
     },
+    // --- Advanced Inventory Tracking ---
+    stockMinimo: {
+        type: Number,
+        default: 5,
+    },
+    stockMovimientos: [{
+        tipo: { 
+            type: String, 
+            enum: ['entrada', 'salida', 'ajuste', 'devolucion'] 
+        },
+        cantidad: Number,
+        motivo: String, // e.g. "Venta #1023", "Ajuste físico"
+        fecha: { 
+            type: Date, 
+            default: Date.now 
+        },
+        usuario: String // Email or ID of the admin who made the change
+    }],
     requiresTextPersonalization: {
         type: Boolean,
         default: false,
