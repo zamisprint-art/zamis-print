@@ -139,7 +139,7 @@ const Navbar = () => {
         {/* Secondary Nav — Category Links (Desktop only) */}
         <div className="hidden md:block border-t border-neutral-100 bg-neutral-50/60">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center gap-1 h-10">
+            <div className="flex items-center justify-center gap-1 h-10">
               {NAV_LINKS.map(({ to, label }) => {
                 const isActive = location.pathname === to;
                 return (
