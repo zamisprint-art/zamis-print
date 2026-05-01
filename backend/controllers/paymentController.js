@@ -1,6 +1,7 @@
 import { MercadoPagoConfig, Preference, Payment } from 'mercadopago';
 import { Resend } from 'resend';
 import Order from '../models/Order.js';
+import Product from '../models/Product.js';
 
 const formatCOP = (v) =>
     new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(v);
@@ -205,6 +206,17 @@ const paymentWebhook = async (req, res) => {
             };
             await order.save();
             console.log(`[MP Webhook] ✅ Order ${external_reference} marked as PAID`);
+
+            // 📈 Increment totalSold for each product
+            for (const item of order.orderItems) {
+                try {
+                    await Product.findByIdAndUpdate(item.product, {
+                        $inc: { totalSold: item.qty }
+                    });
+                } catch (err) {
+                    console.error(`Failed to update totalSold for product ${item.product}:`, err);
+                }
+            }
 
             // 📧 Send confirmation email to customer
             const customerEmail = payer?.email || order.user?.email;

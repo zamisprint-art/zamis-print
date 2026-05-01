@@ -12,6 +12,7 @@ import { ProductDetailSkeleton } from '../components/ui/Skeleton';
 import PriceDisplay from '../components/ecommerce/PriceDisplay';
 import QuantitySelector from '../components/ecommerce/QuantitySelector';
 import TrustBadges from '../components/ecommerce/TrustBadges';
+import ProductCard from '../components/ProductCard';
 import { fadeUp, fadeLeft, fadeRight } from '../design-system/tokens';
 
 const Product3DViewer = lazy(() => import('../components/Product3DViewer'));
@@ -20,6 +21,7 @@ const ProductDetail = () => {
   const { id }       = useParams();
   const navigate     = useNavigate();
   const [product, setProduct]                     = useState(null);
+  const [relatedProducts, setRelatedProducts]     = useState([]);
   const [activeMedia, setActiveMedia]             = useState(null); // '3d' | 'main' | url
   const [loading, setLoading]                     = useState(true);
   const [qty, setQty]                             = useState(1);
@@ -40,8 +42,16 @@ const ProductDetail = () => {
 
   const fetchProduct = async () => {
     try {
+      setLoading(true);
       const { data } = await axios.get(`/api/products/${id}`);
       setProduct(data);
+      
+      // Fetch related products (same category)
+      const { data: allProducts } = await axios.get('/api/products');
+      const related = allProducts.filter(p => p.category === data.category && p._id !== data._id).slice(0, 3);
+      setRelatedProducts(related);
+      
+      window.scrollTo(0, 0); // Scroll to top when changing product
     } catch (err) {
       console.error(err);
     } finally {
@@ -511,6 +521,31 @@ const ProductDetail = () => {
           </div>
         </div>
       </motion.div>
+
+      {/* Recommendations Section */}
+      {relatedProducts.length > 0 && (
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={fadeUp}
+          className="mt-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+        >
+          <div className="flex items-end justify-between mb-8">
+            <div>
+              <h2 className="text-3xl font-extrabold text-neutral-900 tracking-tight">
+                También te podría gustar
+              </h2>
+              <p className="text-neutral-500 mt-2">Productos relacionados que otros clientes compraron</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            {relatedProducts.map((prod) => (
+              <ProductCard key={prod._id} product={prod} />
+            ))}
+          </div>
+        </motion.div>
+      )}
 
       {/* Mobile Sticky CTA */}
       <div className="fixed bottom-0 left-0 right-0 p-4 bg-surface-base/90 backdrop-blur-md border-t border-neutral-200 md:hidden z-50">
