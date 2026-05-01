@@ -4,7 +4,7 @@ import { Settings, Clock, Mail, Wrench } from 'lucide-react';
 const Maintenance = () => {
   return (
     <div className="min-h-screen bg-neutral-900 flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
-      
+
       {/* Background Decor */}
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-brand-600/20 rounded-full blur-[120px] mix-blend-screen pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-[120px] mix-blend-screen pointer-events-none" />
@@ -29,13 +29,13 @@ const Maintenance = () => {
         </div>
 
         <h1 className="text-4xl font-black text-white tracking-tight mb-4 uppercase">
-          ZAMIS<span className="text-brand-500">.</span>Print
+          ZAMIS<span className="text-brand-500"></span>Print
         </h1>
-        
+
         <h2 className="text-xl sm:text-2xl font-bold text-neutral-200 mb-4">
           Estamos mejorando nuestra plataforma
         </h2>
-        
+
         <p className="text-neutral-400 text-base sm:text-lg mb-8 leading-relaxed">
           Actualmente estamos realizando mantenimiento programado para ofrecerte una mejor experiencia. Volveremos a estar en línea muy pronto.
         </p>
@@ -45,8 +45,8 @@ const Maintenance = () => {
             <Clock className="w-5 h-5 text-brand-400" />
             <span className="text-neutral-300 font-medium">De regreso pronto</span>
           </div>
-          <a 
-            href="mailto:hola@zamisprint.com" 
+          <a
+            href="mailto:hola@zamisprint.com"
             className="bg-brand-500/10 hover:bg-brand-500/20 transition-colors rounded-xl p-4 border border-brand-500/30 flex items-center justify-center gap-3 group cursor-pointer"
           >
             <Mail className="w-5 h-5 text-brand-400 group-hover:scale-110 transition-transform" />
