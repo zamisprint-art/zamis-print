@@ -129,6 +129,31 @@ const getMyOrders = async (req, res) => {
     res.json(orders);
 };
 
-export { addOrderItems, getOrderById, getOrders, updateOrderStatus, getMyOrders };
+// @desc    Update billing status (Cobros)
+// @route   PUT /api/orders/:id/billing
+// @access  Private/Admin
+const updateBillingStatus = async (req, res) => {
+    const order = await Order.findById(req.params.id);
+
+    if (order) {
+        if (req.body.estadoCobro) order.estadoCobro = req.body.estadoCobro;
+        if (req.body.metodoPagoCobro) order.metodoPagoCobro = req.body.metodoPagoCobro;
+        if (req.body.notaCobroInterna !== undefined) order.notaCobroInterna = req.body.notaCobroInterna;
+        if (req.body.fechaCobro) order.fechaCobro = req.body.fechaCobro;
+        
+        // Si se marca como pagado
+        if (req.body.estadoCobro === 'pagado') {
+            order.isPaid = true;
+            order.paidAt = req.body.fechaCobro || Date.now();
+        }
+
+        const updatedOrder = await order.save();
+        res.json(updatedOrder);
+    } else {
+        res.status(404).json({ message: 'Order not found' });
+    }
+};
+
+export { addOrderItems, getOrderById, getOrders, updateOrderStatus, getMyOrders, updateBillingStatus };
 
 

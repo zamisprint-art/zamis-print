@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Package, ShoppingBag, PlusCircle, Settings, Edit, Trash2, X, Upload, ClipboardList } from 'lucide-react';
+import { Package, ShoppingBag, PlusCircle, Settings, Edit, Trash2, X, Upload, ClipboardList, DollarSign } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
 import InventoryTab from '../components/admin/InventoryTab';
+import BillingTab from '../components/admin/BillingTab';
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('orders');
@@ -149,6 +150,12 @@ const AdminDashboard = () => {
           <ClipboardList size={20} /> Inventario
         </button>
         <button 
+          onClick={() => setActiveTab('cobros')}
+          className={`flex items-center gap-3 p-4 rounded-xl transition-colors ${activeTab === 'cobros' ? 'bg-primary text-neutral-900' : 'glass-panel hover:bg-white/5'}`}
+        >
+          <DollarSign size={20} /> Cobros
+        </button>
+        <button 
           onClick={() => setActiveTab('settings')}
           className={`flex items-center gap-3 p-4 rounded-xl transition-colors ${activeTab === 'settings' ? 'bg-primary text-neutral-900' : 'glass-panel hover:bg-white/5'}`}
         >
@@ -221,6 +228,10 @@ const AdminDashboard = () => {
 
         {activeTab === 'inventario' && (
           <InventoryTab />
+        )}
+
+        {activeTab === 'cobros' && (
+          <BillingTab orders={orders} refreshData={fetchData} />
         )}
 
         {activeTab === 'products' && (

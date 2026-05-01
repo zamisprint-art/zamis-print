@@ -70,6 +70,29 @@ const orderSchema = new mongoose.Schema({
     deliveredAt: {
         type: Date,
     },
+    // --- COBROS Y FINANZAS ---
+    estadoCobro: {
+        type: String,
+        enum: ['pendiente', 'pagado', 'vencido'],
+        default: 'pendiente'
+    },
+    metodoPagoCobro: {
+        type: String, // 'mercadopago', 'efectivo', 'transferencia', 'otro'
+    },
+    notaCobroInterna: String,
+    fechaCobro: Date,
+    // --- PREPARACIÓN PARA CRÉDITO FUTURO ---
+    esCredito: {
+        type: Boolean,
+        default: false
+    },
+    fechaVencimiento: Date,
+    abonos: [{
+        monto: Number,
+        fecha: { type: Date, default: Date.now },
+        metodo: String,
+        nota: String
+    }],
 }, {
     timestamps: true,
 });
