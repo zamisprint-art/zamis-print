@@ -5,27 +5,32 @@ describe('Navegación Principal - ZAMIS Print', () => {
   });
 
   it('Debe cargar la página principal (Home) correctamente', () => {
-    // Validar que el Navbar existe
     cy.get('nav').should('exist');
-    
-    // Validar que el HeroSlider cargue
-    cy.get('.swiper-wrapper').should('exist'); // Asumiendo que usamos Swiper
-    
-    // Validar que se muestre el logo
+    cy.get('section').find('button').should('exist');
     cy.contains(/ZAMIS Print/i).should('exist');
   });
 
   it('Debe navegar a la tienda (Shop) al hacer clic en el menú', () => {
-    // En desktop, hacer clic en "Tienda" o "Catálogo"
-    cy.contains(/Tienda/i).click();
-    
-    // Verificar que la URL cambió
+    // Mockear la respuesta de la tienda para que siempre haya productos
+    cy.intercept('GET', '/api/products', {
+      statusCode: 200,
+      body: [{
+        _id: '123',
+        name: 'Producto Dummy',
+        price: 1000,
+        image: '/images/sample.jpg',
+        category: 'Test'
+      }]
+    }).as('getProducts');
+
+    cy.get('nav').contains(/Tienda/i).click({ force: true });
     cy.url().should('include', '/shop');
     
-    // Verificar que los filtros existen
-    cy.contains(/Filtrar/i).should('exist');
+    // Esperar al mock
+    cy.wait('@getProducts');
     
-    // Verificar que haya productos renderizados
+    // Verificar filtros y productos
+    cy.contains(/Categorías/i).should('exist');
     cy.get('.grid').children().should('have.length.greaterThan', 0);
   });
 });

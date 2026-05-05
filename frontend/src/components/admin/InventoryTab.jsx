@@ -3,36 +3,72 @@ import axios from 'axios';
 import { Package, AlertTriangle, ArrowUpCircle, ArrowDownCircle, PlusCircle, Edit } from 'lucide-react';
 
 const InventoryTab = () => {
-  const [products, setProducts] = useState([]);
-  const [materials, setMaterials] = useState([]);
+  const [productsData, setProductsData] = useState({ products: [], page: 1, pages: 1, total: 0 });
+  const [materialsData, setMaterialsData] = useState({ materials: [], page: 1, pages: 1, total: 0 });
   const [loading, setLoading] = useState(true);
   const [activeSubTab, setActiveSubTab] = useState('products'); // 'products' or 'materials'
   
+  // Pagination & Filters
+  const [prodPage, setProdPage] = useState(1);
+  const [prodSearch, setProdSearch] = useState('');
+  const [matPage, setMatPage] = useState(1);
+  const [matSearch, setMatSearch] = useState('');
+
   // Modal states
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState(''); // 'adjust_product', 'edit_material', 'create_material'
   const [selectedItem, setSelectedItem] = useState(null);
   const [formData, setFormData] = useState({});
 
-  const fetchData = async () => {
-    setLoading(true);
+  const fetchProducts = async () => {
     try {
-      const [prodRes, matRes] = await Promise.all([
-        axios.get('/api/inventory/products', { withCredentials: true }),
-        axios.get('/api/inventory/materials', { withCredentials: true })
-      ]);
-      setProducts(prodRes.data);
-      setMaterials(matRes.data);
-    } catch (error) {
-      console.error('Error fetching inventory:', error);
-    } finally {
-      setLoading(false);
+      const res = await axios.get(`/api/inventory/products?page=${prodPage}&limit=20&search=${prodSearch}`, { withCredentials: true });
+      setProductsData(res.data);
+    } catch (e) {
+      console.error('Error fetching inventory products:', e);
     }
   };
 
+  const fetchMaterials = async () => {
+    try {
+      const res = await axios.get(`/api/inventory/materials?page=${matPage}&limit=20&search=${matSearch}`, { withCredentials: true });
+      setMaterialsData(res.data);
+    } catch (e) {
+      console.error('Error fetching inventory materials:', e);
+    }
+  };
+
+  // Carga inicial: trae ambos y apaga el spinner
   useEffect(() => {
-    fetchData();
+    const initialLoad = async () => {
+      setLoading(true);
+      await Promise.all([fetchProducts(), fetchMaterials()]);
+      setLoading(false);
+    };
+    initialLoad();
   }, []);
+
+  // Re-fetch cuando cambia la página de productos
+  useEffect(() => {
+    fetchProducts();
+  }, [prodPage]);
+
+  // Re-fetch cuando cambia la página de materiales
+  useEffect(() => {
+    fetchMaterials();
+  }, [matPage]);
+
+  const handleProdSearch = (e) => {
+    e.preventDefault();
+    setProdPage(1);
+    fetchProducts();
+  };
+
+  const handleMatSearch = (e) => {
+    e.preventDefault();
+    setMatPage(1);
+    fetchMaterials();
+  };
 
   const openAdjustModal = (product) => {
     setSelectedItem(product);
@@ -68,8 +104,8 @@ const InventoryTab = () => {
 
   if (loading) return <div className="p-8 text-center text-neutral-500">Cargando inventario...</div>;
 
-  const lowStockProducts = products.filter(p => p.countInStock <= (p.stockMinimo || 5));
-  const lowStockMaterials = materials.filter(m => m.stockActual <= (m.stockMinimo || 1));
+  const lowStockProducts = productsData.products.filter(p => p.countInStock <= (p.stockMinimo || 5));
+  const lowStockMaterials = materialsData.materials.filter(m => m.stockActual <= (m.stockMinimo || 1));
 
   return (
     <div className="flex flex-col gap-6">
@@ -84,7 +120,7 @@ const InventoryTab = () => {
           <div>
             <h4 className="font-bold">Alertas de Stock</h4>
             <p className="text-sm">
-              Tienes {lowStockProducts.length} producto(s) y {lowStockMaterials.length} materia(s) prima(s) con stock crítico.
+              Tienes {lowStockProducts.length} producto(s) y {lowStockMaterials.length} materia(s) prima(s) con stock crítico en la vista actual.
             </p>
           </div>
         </div>
@@ -108,54 +144,88 @@ const InventoryTab = () => {
 
       {/* Content: Products */}
       {activeSubTab === 'products' && (
-        <div className="overflow-x-auto bg-white rounded-xl border border-neutral-200">
-          <table className="w-full text-left border-collapse min-w-[800px]">
-            <thead>
-              <tr className="border-b border-neutral-200 text-neutral-600 bg-neutral-50/50">
-                <th className="py-4 px-4">Producto</th>
-                <th className="py-4 px-4 text-center">Stock Actual</th>
-                <th className="py-4 px-4 text-center">Mínimo</th>
-                <th className="py-4 px-4">Estado</th>
-                <th className="py-4 px-4 text-right">Acción</th>
-              </tr>
-            </thead>
-            <tbody>
-              {products.map(product => {
-                const min = product.stockMinimo || 5;
-                const isLow = product.countInStock <= min;
-                return (
-                  <tr key={product._id} className={`border-b border-neutral-100 hover:bg-neutral-50 ${isLow ? 'bg-red-50/30' : ''}`}>
-                    <td className="py-4 px-4 font-medium flex items-center gap-3">
-                      <img src={product.image} alt={product.name} className="w-10 h-10 rounded-lg object-cover" />
-                      {product.name}
-                    </td>
-                    <td className="py-4 px-4 text-center font-mono font-bold text-lg">{product.countInStock}</td>
-                    <td className="py-4 px-4 text-center text-neutral-500">{min}</td>
-                    <td className="py-4 px-4">
-                      {isLow ? (
-                        <span className="px-2 py-1 bg-red-100 text-red-700 text-xs font-bold rounded-full">Bajo Stock</span>
-                      ) : (
-                        <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full">Ok</span>
-                      )}
-                    </td>
-                    <td className="py-4 px-4 text-right">
-                      <button onClick={() => openAdjustModal(product)} className="text-brand-600 hover:text-brand-800 font-semibold text-sm">
-                        Ajustar
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+        <div>
+          <form onSubmit={handleProdSearch} className="flex gap-3 mb-4 w-full sm:w-80">
+            <input 
+              type="text" 
+              placeholder="Buscar producto..." 
+              value={prodSearch}
+              onChange={(e) => setProdSearch(e.target.value)}
+              className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:ring-2 focus:ring-brand-500"
+            />
+            <button type="submit" className="bg-brand-500 text-white px-4 py-2 rounded-xl font-bold">Buscar</button>
+          </form>
+
+          <div className="overflow-x-auto bg-white rounded-xl border border-neutral-200">
+            <table className="w-full text-left border-collapse min-w-[800px]">
+              <thead>
+                <tr className="border-b border-neutral-200 text-neutral-600 bg-neutral-50/50">
+                  <th className="py-4 px-4">Producto</th>
+                  <th className="py-4 px-4 text-center">Stock Actual</th>
+                  <th className="py-4 px-4 text-center">Mínimo</th>
+                  <th className="py-4 px-4">Estado</th>
+                  <th className="py-4 px-4 text-right">Acción</th>
+                </tr>
+              </thead>
+              <tbody>
+                {productsData.products.map(product => {
+                  const min = product.stockMinimo || 5;
+                  const isLow = product.countInStock <= min;
+                  return (
+                    <tr key={product._id} className={`border-b border-neutral-100 hover:bg-neutral-50 ${isLow ? 'bg-red-50/30' : ''}`}>
+                      <td className="py-4 px-4 font-medium flex items-center gap-3">
+                        <img src={product.image} alt={product.name} className="w-10 h-10 rounded-lg object-cover" />
+                        {product.name}
+                      </td>
+                      <td className="py-4 px-4 text-center font-mono font-bold text-lg">{product.countInStock}</td>
+                      <td className="py-4 px-4 text-center text-neutral-500">{min}</td>
+                      <td className="py-4 px-4">
+                        {isLow ? (
+                          <span className="px-2 py-1 bg-red-100 text-red-700 text-xs font-bold rounded-full">Bajo Stock</span>
+                        ) : (
+                          <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full">Ok</span>
+                        )}
+                      </td>
+                      <td className="py-4 px-4 text-right">
+                        <button onClick={() => openAdjustModal(product)} className="text-brand-600 hover:text-brand-800 font-semibold text-sm">
+                          Ajustar
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          
+          {/* Pagination */}
+          {productsData.pages > 1 && (
+            <div className="flex justify-between items-center mt-4">
+              <span className="text-sm text-neutral-500">Página {productsData.page} de {productsData.pages} ({productsData.total} items)</span>
+              <div className="flex gap-2">
+                <button disabled={productsData.page === 1} onClick={() => setProdPage(p => p - 1)} className="px-3 py-1 border rounded disabled:opacity-50">Anterior</button>
+                <button disabled={productsData.page === productsData.pages} onClick={() => setProdPage(p => p + 1)} className="px-3 py-1 border rounded disabled:opacity-50">Siguiente</button>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
       {/* Content: Materials */}
       {activeSubTab === 'materials' && (
         <div>
-          <div className="flex justify-end mb-4">
-            <button onClick={() => openMaterialModal()} className="btn-primary flex items-center gap-2 py-2 px-4 text-sm rounded-lg">
+          <div className="flex flex-col sm:flex-row justify-between mb-4 gap-4">
+            <form onSubmit={handleMatSearch} className="flex gap-3 w-full sm:w-80">
+              <input 
+                type="text" 
+                placeholder="Buscar materia prima..." 
+                value={matSearch}
+                onChange={(e) => setMatSearch(e.target.value)}
+                className="w-full px-4 py-2 border border-neutral-300 rounded-xl focus:ring-2 focus:ring-brand-500"
+              />
+              <button type="submit" className="bg-brand-500 text-white px-4 py-2 rounded-xl font-bold">Buscar</button>
+            </form>
+            <button onClick={() => openMaterialModal()} className="btn-primary flex items-center justify-center gap-2 py-2 px-4 text-sm rounded-lg whitespace-nowrap">
               <PlusCircle size={18} /> Nueva Materia Prima
             </button>
           </div>
@@ -171,7 +241,7 @@ const InventoryTab = () => {
                 </tr>
               </thead>
               <tbody>
-                {materials.map(mat => {
+                {materialsData.materials.map(mat => {
                   const isLow = mat.stockActual <= mat.stockMinimo;
                   return (
                     <tr key={mat._id} className={`border-b border-neutral-100 hover:bg-neutral-50 ${isLow ? 'bg-red-50/30' : ''}`}>
@@ -187,7 +257,7 @@ const InventoryTab = () => {
                     </tr>
                   );
                 })}
-                {materials.length === 0 && (
+                {materialsData.materials.length === 0 && (
                   <tr>
                     <td colSpan="5" className="text-center py-8 text-neutral-500">No hay materias primas registradas.</td>
                   </tr>
@@ -195,6 +265,17 @@ const InventoryTab = () => {
               </tbody>
             </table>
           </div>
+
+          {/* Pagination */}
+          {materialsData.pages > 1 && (
+            <div className="flex justify-between items-center mt-4">
+              <span className="text-sm text-neutral-500">Página {materialsData.page} de {materialsData.pages} ({materialsData.total} items)</span>
+              <div className="flex gap-2">
+                <button disabled={materialsData.page === 1} onClick={() => setMatPage(p => p - 1)} className="px-3 py-1 border rounded disabled:opacity-50">Anterior</button>
+                <button disabled={materialsData.page === materialsData.pages} onClick={() => setMatPage(p => p + 1)} className="px-3 py-1 border rounded disabled:opacity-50">Siguiente</button>
+              </div>
+            </div>
+          )}
         </div>
       )}
 

@@ -87,12 +87,77 @@ const getOrderById = async (req, res) => {
     }
 };
 
-// @desc    Get all orders
+// @desc    Get all orders with pagination & filtering
 // @route   GET /api/orders
 // @access  Private/Admin
 const getOrders = async (req, res) => {
-    const orders = await Order.find({}).populate('user', 'id name email');
-    res.json(orders);
+    const pageSize = Number(req.query.limit) || 20;
+    const page = Number(req.query.page) || 1;
+
+    const query = {};
+
+    // Filtros por estado
+    if (req.query.orderStatus && req.query.orderStatus !== 'all') {
+        query.orderStatus = req.query.orderStatus;
+    }
+
+    if (req.query.estadoCobro && req.query.estadoCobro !== 'all') {
+        query.estadoCobro = req.query.estadoCobro;
+    }
+
+    // Búsqueda general
+    if (req.query.search) {
+        const searchRegex = new RegExp(req.query.search, 'i');
+        query.$or = [
+            { 'shippingAddress.fullName': searchRegex },
+            { 'shippingAddress.email': searchRegex },
+            { 'shippingAddress.phone': searchRegex }
+        ];
+
+        // Validar si es un ObjectId de Mongoose para buscar por ID de pedido
+        if (req.query.search.match(/^[0-9a-fA-F]{24}$/)) {
+            query.$or.push({ _id: req.query.search });
+        }
+    }
+
+    const count = await Order.countDocuments({ ...query });
+    
+    const orders = await Order.find({ ...query })
+        .populate('user', 'id name email')
+        .sort({ createdAt: -1 })
+        .limit(pageSize)
+        .skip(pageSize * (page - 1));
+
+    // Obtener estadísticas financieras basándonos en los mismos filtros (o sin paginación)
+    // Para no afectar el rendimiento en BD gigantes, agregamos esto:
+    const statsResult = await Order.aggregate([
+        { $match: query },
+        {
+            $group: {
+                _id: null,
+                totalCobrado: {
+                    $sum: {
+                        $cond: [{ $eq: ["$estadoCobro", "pagado"] }, "$totalPrice", 0]
+                    }
+                },
+                totalPendiente: {
+                    $sum: {
+                        $cond: [{ $ne: ["$estadoCobro", "pagado"] }, "$totalPrice", 0]
+                    }
+                }
+            }
+        }
+    ]);
+
+    const stats = statsResult.length > 0 ? statsResult[0] : { totalCobrado: 0, totalPendiente: 0 };
+
+    res.json({ 
+        orders, 
+        page, 
+        pages: Math.ceil(count / pageSize), 
+        total: count,
+        stats
+    });
 };
 
 // @desc    Update order status
@@ -170,6 +235,52 @@ const updateBillingStatus = async (req, res) => {
     }
 };
 
-export { addOrderItems, getOrderById, getOrders, updateOrderStatus, getMyOrders, updateBillingStatus };
+// @desc    Add external manual order
+// @route   POST /api/orders/external
+// @access  Private/Admin
+const addExternalOrder = async (req, res) => {
+    const {
+        description,
+        totalPrice,
+        canalVenta,
+        metodoPagoCobro,
+        fechaCobro,
+        notaCobroInterna
+    } = req.body;
+
+    const order = new Order({
+        orderItems: [
+            {
+                name: description || 'Venta Externa',
+                qty: 1,
+                image: '/images/sample.jpg',
+                price: totalPrice,
+            }
+        ],
+        shippingAddress: {
+            address: 'Venta Externa',
+            city: 'N/A',
+            postalCode: '00000',
+            country: 'N/A',
+        },
+        paymentMethod: metodoPagoCobro || 'Otro',
+        itemsPrice: totalPrice,
+        shippingPrice: 0,
+        totalPrice: totalPrice,
+        isPaid: true,
+        paidAt: fechaCobro || Date.now(),
+        orderStatus: 'Entregado',
+        estadoCobro: 'pagado',
+        metodoPagoCobro,
+        notaCobroInterna,
+        fechaCobro: fechaCobro || Date.now(),
+        canalVenta: canalVenta || 'Otro'
+    });
+
+    const createdOrder = await order.save();
+    res.status(201).json(createdOrder);
+};
+
+export { addOrderItems, getOrderById, getOrders, updateOrderStatus, getMyOrders, updateBillingStatus, addExternalOrder };
 
 

@@ -30,8 +30,8 @@ const Home = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const { data } = await axios.get('/api/products');
-        setAllProducts(data);
+        const { data } = await axios.get('/api/products?limit=20'); // Solo necesitamos unos pocos para el home
+        setAllProducts(data.products || []);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching products:', error);

@@ -6,12 +6,27 @@ import MateriaPrima from '../models/MateriaPrima.js';
 // @access  Private/Admin
 export const getProductsInventory = async (req, res) => {
     try {
-        // Find all products and select inventory related fields
-        const products = await Product.find({})
+        const pageSize = Number(req.query.limit) || 20;
+        const page = Number(req.query.page) || 1;
+        const search = req.query.search || '';
+        
+        const query = search ? { name: { $regex: search, $options: 'i' } } : {};
+        
+        const count = await Product.countDocuments(query);
+
+        // Find products and select inventory related fields
+        const products = await Product.find(query)
             .select('name image category price countInStock stockMinimo stockMovimientos')
-            .sort({ countInStock: 1 }); // Sort by lowest stock first
+            .sort({ countInStock: 1 }) // Sort by lowest stock first
+            .limit(pageSize)
+            .skip(pageSize * (page - 1));
             
-        res.json(products);
+        res.json({
+            products,
+            page,
+            pages: Math.ceil(count / pageSize),
+            total: count
+        });
     } catch (error) {
         res.status(500).json({ message: 'Error fetching products inventory', error: error.message });
     }
@@ -64,8 +79,24 @@ export const updateProductStock = async (req, res) => {
 // @access  Private/Admin
 export const getMaterials = async (req, res) => {
     try {
-        const materials = await MateriaPrima.find({}).sort({ stockActual: 1 });
-        res.json(materials);
+        const pageSize = Number(req.query.limit) || 20;
+        const page = Number(req.query.page) || 1;
+        const search = req.query.search || '';
+        
+        const query = search ? { nombre: { $regex: search, $options: 'i' } } : {};
+        
+        const count = await MateriaPrima.countDocuments(query);
+        const materials = await MateriaPrima.find(query)
+            .sort({ stockActual: 1 })
+            .limit(pageSize)
+            .skip(pageSize * (page - 1));
+            
+        res.json({
+            materials,
+            page,
+            pages: Math.ceil(count / pageSize),
+            total: count
+        });
     } catch (error) {
         res.status(500).json({ message: 'Error fetching materials', error: error.message });
     }

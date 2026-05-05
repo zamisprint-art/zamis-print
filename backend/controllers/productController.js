@@ -1,11 +1,42 @@
 import Product from '../models/Product.js';
 
-// @desc    Fetch all products
+// @desc    Fetch all products with pagination & filtering
 // @route   GET /api/products
 // @access  Public
 const getProducts = async (req, res) => {
-    const products = await Product.find({});
-    res.json(products);
+    // Si mandan limit=0 o all=true, podríamos devolver todos, pero por seguridad siempre paginamos o permitimos un límite alto
+    const pageSize = req.query.limit === 'all' ? 0 : (Number(req.query.limit) || 20);
+    const page = Number(req.query.page) || 1;
+
+    const query = {};
+
+    if (req.query.search) {
+        query.name = {
+            $regex: req.query.search,
+            $options: 'i',
+        };
+    }
+
+    if (req.query.category && req.query.category !== 'all') {
+        query.category = req.query.category;
+    }
+
+    const count = await Product.countDocuments({ ...query });
+    
+    let productsQuery = Product.find({ ...query });
+    
+    if (pageSize > 0) {
+        productsQuery = productsQuery.limit(pageSize).skip(pageSize * (page - 1));
+    }
+    
+    const products = await productsQuery;
+
+    res.json({ 
+        products, 
+        page, 
+        pages: pageSize > 0 ? Math.ceil(count / pageSize) : 1, 
+        total: count 
+    });
 };
 
 // @desc    Fetch single product

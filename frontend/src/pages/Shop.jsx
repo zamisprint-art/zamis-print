@@ -46,8 +46,8 @@ const Shop = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const { data } = await axios.get('/api/products');
-        setProducts(data);
+        const { data } = await axios.get('/api/products?limit=1000');
+        setProducts(data.products || []);
       } catch (error) {
         console.error('Error fetching products:', error);
       } finally {

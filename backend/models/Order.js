@@ -14,7 +14,7 @@ const orderSchema = new mongoose.Schema({
             price: { type: Number, required: true },
             product: {
                 type: mongoose.Schema.Types.ObjectId,
-                required: true,
+                required: false,
                 ref: 'Product',
             },
             personalizationText: { type: String },
@@ -81,6 +81,10 @@ const orderSchema = new mongoose.Schema({
     },
     notaCobroInterna: String,
     fechaCobro: Date,
+    canalVenta: {
+        type: String,
+        default: 'Web', // 'Web', 'WhatsApp', 'Instagram', 'Feria', 'Local', etc.
+    },
     // --- PREPARACIÓN PARA CRÉDITO FUTURO ---
     esCredito: {
         type: Boolean,

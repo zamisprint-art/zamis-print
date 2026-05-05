@@ -1,40 +1,48 @@
 describe('Búsqueda y Detalle de Producto', () => {
   beforeEach(() => {
+    // 1. Inyectar productos falsos para estabilizar las pruebas
+    const mockProduct = {
+      _id: '123',
+      name: 'Funko Personalizado Test',
+      price: 50000,
+      image: '/images/sample.jpg',
+      category: 'Figuras',
+      countInStock: 10,
+      reviews: [],
+      isCustomizable: false,
+      requiresTextPersonalization: false
+    };
+
+    cy.intercept('GET', '/api/products', [mockProduct]).as('getProducts');
+    cy.intercept('GET', '/api/products/123', mockProduct).as('getProduct');
+
     cy.visit('/');
   });
 
   it('Debe permitir buscar un producto desde el buscador', () => {
-    // Buscar el input del GlobalSearchBar
-    cy.get('input[placeholder*="Buscar"]').first().type('Funko{enter}');
+    // Buscar el input del buscador (puede estar en versión móvil o desktop)
+    cy.get('input[type="search"]').first().type('Funko{enter}');
     
-    // Debería llevar a la página de Shop con la query
-    cy.url().should('include', 'keyword=Funko');
+    cy.url().should('include', 'q=Funko');
+    cy.wait('@getProducts');
     
-    // Verificar que los resultados contienen productos
-    // O un mensaje de que no se encontraron si la DB está vacía
-    cy.get('body').then(($body) => {
-      if ($body.find('.grid > div').length > 0) {
-        cy.get('.grid > div').should('exist');
-      } else {
-        cy.contains(/No se encontraron/i).should('exist');
-      }
-    });
+    // Verificar que los resultados contienen el producto mockeado
+    cy.get('.grid').children().should('have.length.greaterThan', 0);
   });
 
   it('Debe abrir el detalle de un producto correctamente', () => {
     cy.visit('/shop');
+    cy.wait('@getProducts');
     
-    // Esperar a que carguen los productos
     cy.get('.grid').should('exist');
-    
-    // Obtener el primer producto y hacer clic en su enlace
     cy.get('.grid a').first().click();
     
     // Verificar que estamos en la página del producto
     cy.url().should('include', '/product/');
+    cy.wait('@getProduct');
     
     // Verificar información clave
-    cy.get('h1').should('exist'); // Título del producto
-    cy.contains(/Agregar al Carrito/i).should('exist'); // Botón de carrito
+    cy.get('h1').should('exist'); // Título
+    cy.contains(/Añadir/i).should('exist'); // Botón de carrito
   });
 });

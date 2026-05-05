@@ -47,7 +47,8 @@ const ProductDetail = () => {
       setProduct(data);
       
       // Fetch related products (same category)
-      const { data: allProducts } = await axios.get('/api/products');
+      const { data: allProductsData } = await axios.get('/api/products?limit=20');
+      const allProducts = allProductsData.products || [];
       const related = allProducts.filter(p => p.category === data.category && p._id !== data._id).slice(0, 3);
       setRelatedProducts(related);
       
