@@ -19,7 +19,6 @@ const app = express();
 // Middleware
 const allowedOrigins = [
   'https://zamisprint.vercel.app',
-  'https://zamis-print.vercel.app', // URL anterior (mantener durante transición)
   'http://localhost:5173',
   'http://localhost:3000',
 ];
