@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ShoppingCart, Menu, X, User, Phone, Mail, Search } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import axios from 'axios';
 import { useCartStore } from '../store/useCartStore';
 import { useAuthStore } from '../store/useAuthStore';
 
@@ -13,7 +14,7 @@ const NAV_LINKS = [
 ];
 
 const Navbar = () => {
-  const { cartItems } = useCartStore();
+  const { cartItems, addItem, toggleDrawer } = useCartStore();
   const { userInfo } = useAuthStore();
   const location = useLocation();
   const navigate = useNavigate();
@@ -21,6 +22,49 @@ const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [scrolled, setScrolled] = useState(false);
   const searchRef = useRef(null);
+  
+  // Autocomplete state
+  const [allProducts, setAllProducts] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        // Obtenemos todos los productos para el autocompletado rápido local
+        const { data } = await axios.get('/api/products?limit=all');
+        setAllProducts(data.products || []);
+      } catch (err) {
+        console.error('Error fetching search products:', err);
+      }
+    };
+    fetchProducts();
+  }, []);
+
+  useEffect(() => {
+    if (searchQuery.trim().length >= 2) {
+      const q = searchQuery.toLowerCase();
+      const results = allProducts.filter(p => 
+        p.name.toLowerCase().includes(q) || 
+        (p.category && p.category.toLowerCase().includes(q))
+      ).slice(0, 5);
+      setSearchResults(results);
+      setShowDropdown(true);
+    } else {
+      setSearchResults([]);
+      setShowDropdown(false);
+    }
+  }, [searchQuery, allProducts]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   // Close menu on route change
   useEffect(() => {
@@ -54,35 +98,24 @@ const Navbar = () => {
   return (
     <header className="sticky top-0 z-50 w-full flex flex-col">
 
-      {/* ── Top Ribbon (se oculta al hacer scroll) ── */}
-      <AnimatePresence initial={false}>
-        {!scrolled && (
-          <motion.div
-            key="ribbon"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.25 }}
-            className="bg-brand-600 text-brand-50 text-xs overflow-hidden hidden sm:block"
-          >
-            <div className="max-w-7xl mx-auto px-4 py-2 flex justify-between items-center">
-              <div className="flex items-center gap-6">
-                <a href="mailto:hola@zamisprint.com" className="flex items-center gap-2 hover:text-white transition-colors">
-                  <Mail size={13} /> hola@zamisprint.com
-                </a>
-                <a href="tel:+573107878192" className="flex items-center gap-2 hover:text-white transition-colors">
-                  <Phone size={13} /> +57 310 787 8192
-                </a>
-              </div>
-              <div className="flex items-center gap-4">
-                <span className="text-brand-200">Síguenos en:</span>
-                <a href="#" className="hover:text-white font-bold transition-colors">IG</a>
-                <a href="#" className="hover:text-white font-bold transition-colors">FB</a>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* ── Top Ribbon (Fija) ── */}
+      <div className="bg-brand-600 text-brand-50 text-xs overflow-hidden hidden sm:block">
+        <div className="max-w-7xl mx-auto px-4 py-2 flex justify-between items-center">
+          <div className="flex items-center gap-6">
+            <a href="mailto:hola@zamisprint.com" className="flex items-center gap-2 hover:text-white transition-colors">
+              <Mail size={13} /> hola@zamisprint.com
+            </a>
+            <a href="tel:+573107878192" className="flex items-center gap-2 hover:text-white transition-colors">
+              <Phone size={13} /> +57 310 787 8192
+            </a>
+          </div>
+          <div className="flex items-center gap-4">
+            <span className="text-brand-200">Síguenos en:</span>
+            <a href="#" className="hover:text-white font-bold transition-colors">IG</a>
+            <a href="#" className="hover:text-white font-bold transition-colors">FB</a>
+          </div>
+        </div>
+      </div>
 
       {/* ── Main Nav ── */}
       <nav className={`bg-white border-b border-neutral-200 transition-shadow duration-300 ${scrolled ? 'shadow-md' : 'shadow-sm'}`}>
@@ -100,15 +133,35 @@ const Navbar = () => {
               </Link>
             </div>
 
-            {/* Barra de búsqueda (siempre visible en desktop) */}
-            <form onSubmit={handleSearch} className="flex-1 hidden sm:flex items-center justify-center max-w-lg mx-auto">
-              <div className="relative w-full">
+            {/* Menú Desktop */}
+            <div className="hidden lg:flex items-center gap-1 shrink-0">
+              {NAV_LINKS.map(({ to, label }) => {
+                const isActive = location.pathname === to;
+                return (
+                  <Link
+                    key={to}
+                    to={to}
+                    className={`px-4 py-2 rounded-xl text-sm font-bold transition-colors ${
+                      isActive
+                        ? 'text-brand-700 bg-brand-50'
+                        : 'text-neutral-600 hover:text-brand-600 hover:bg-neutral-50'
+                    }`}
+                  >
+                    {label}
+                  </Link>
+                );
+              })}
+            </div>
+
+            {/* Barra de búsqueda (siempre visible en desktop) con Autocompletado */}
+            <div ref={searchRef} className="flex-1 hidden md:flex flex-col justify-center max-w-md ml-auto mr-4 relative">
+              <form onSubmit={handleSearch} className="w-full relative z-[60]">
                 <input
-                  ref={searchRef}
                   type="search"
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Buscar productos..."
+                  onChange={(e) => { setSearchQuery(e.target.value); setShowDropdown(true); }}
+                  onFocus={() => { if(searchQuery.length >= 2) setShowDropdown(true); }}
+                  placeholder="Buscar..."
                   className="w-full h-10 pl-4 pr-12 rounded-xl border-2 border-neutral-200 bg-neutral-50 text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none focus:border-brand-500 focus:bg-white transition-all duration-200"
                 />
                 <button
@@ -118,8 +171,81 @@ const Navbar = () => {
                 >
                   <Search size={18} />
                 </button>
-              </div>
-            </form>
+              </form>
+
+              {/* Autocomplete Dropdown */}
+              <AnimatePresence>
+                {showDropdown && searchQuery.length >= 2 && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    className="absolute top-12 left-0 w-full bg-white border border-neutral-200 rounded-xl shadow-2xl overflow-hidden z-[70]"
+                  >
+                    {searchResults.length > 0 ? (
+                      <div className="flex flex-col">
+                        {searchResults.map(product => (
+                          <div 
+                            key={product._id}
+                            className="flex items-center gap-3 p-3 hover:bg-neutral-50 border-b border-neutral-100 last:border-0 transition-colors cursor-pointer group"
+                            onClick={() => {
+                              navigate(`/product/${product._id}`);
+                              setShowDropdown(false);
+                              setSearchQuery('');
+                            }}
+                          >
+                            <div className="w-10 h-10 rounded-lg overflow-hidden bg-neutral-100 shrink-0">
+                              <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h4 className="text-xs font-bold text-neutral-900 truncate group-hover:text-brand-600 transition-colors">{product.name}</h4>
+                              <p className="text-[10px] text-brand-500 font-semibold mt-0.5">
+                                {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(product.price)}
+                              </p>
+                            </div>
+                            
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                e.preventDefault();
+                                if (product.isCustomizable || product.requiresTextPersonalization) {
+                                  navigate(`/product/${product._id}`);
+                                } else {
+                                  addItem({
+                                    product: product._id,
+                                    name: product.name,
+                                    image: product.image,
+                                    price: product.price,
+                                    countInStock: product.countInStock,
+                                    qty: 1,
+                                  });
+                                }
+                                setShowDropdown(false);
+                                setSearchQuery('');
+                              }}
+                              className="p-1.5 rounded-lg bg-neutral-100 text-neutral-600 hover:bg-brand-500 hover:text-white transition-colors shrink-0"
+                              title={product.isCustomizable ? 'Ver detalles' : 'Añadir al carrito'}
+                            >
+                              <ShoppingCart size={14} />
+                            </button>
+                          </div>
+                        ))}
+                        <button 
+                          onClick={handleSearch}
+                          className="w-full py-3 bg-neutral-50 text-[11px] font-bold text-brand-600 hover:bg-brand-50 transition-colors text-center"
+                        >
+                          Ver todos los resultados para "{searchQuery}"
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="p-4 text-center text-xs text-neutral-500">
+                        No encontramos resultados para "{searchQuery}"
+                      </div>
+                    )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
 
             {/* Acciones derechas */}
             <div className="flex items-center justify-end gap-1 shrink-0">
@@ -130,14 +256,18 @@ const Navbar = () => {
               </Link>
 
               {/* Carrito */}
-              <Link to="/cart" className="relative p-2 rounded-lg text-neutral-600 hover:text-brand-600 hover:bg-neutral-50 transition-colors">
+              <button 
+                onClick={() => toggleDrawer(true)} 
+                className="relative p-2 rounded-lg text-neutral-600 hover:text-brand-600 hover:bg-neutral-50 transition-colors"
+                aria-label="Abrir carrito"
+              >
                 <ShoppingCart size={22} />
                 {cartCount > 0 && (
                   <span className="absolute -top-0.5 -right-0.5 w-5 h-5 flex items-center justify-center text-xs font-bold text-white bg-brand-500 rounded-full">
                     {cartCount}
                   </span>
                 )}
-              </Link>
+              </button>
 
               {/* Mi Cuenta — visible solo cuando NO se ha scrolleado (desktop) */}
               <AnimatePresence initial={false}>
@@ -188,40 +318,7 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* ── Barra Secundaria de Navegación (solo en desktop, se oculta al scrollear) ── */}
-        <AnimatePresence initial={false}>
-          {!scrolled && (
-            <motion.div
-              key="secondary-nav"
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.25 }}
-              className="hidden md:block border-t border-neutral-100 bg-neutral-50/60 overflow-hidden"
-            >
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex items-center justify-center gap-1 h-10">
-                  {NAV_LINKS.map(({ to, label }) => {
-                    const isActive = location.pathname === to;
-                    return (
-                      <Link
-                        key={to}
-                        to={to}
-                        className={`px-4 py-1 rounded-lg text-sm font-semibold transition-colors ${
-                          isActive
-                            ? 'text-brand-700 bg-brand-50'
-                            : 'text-neutral-500 hover:text-brand-600 hover:bg-neutral-100'
-                        }`}
-                      >
-                        {label}
-                      </Link>
-                    );
-                  })}
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+
       </nav>
 
       {/* ── Drawer (móvil + hamburger compacto de scroll) ── */}
@@ -286,10 +383,13 @@ const Navbar = () => {
                 })}
                 <div className="h-px bg-neutral-100 my-4" />
                 <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.28 }}>
-                  <Link to="/cart" className="flex items-center justify-between px-4 py-3 rounded-xl text-neutral-700 hover:bg-neutral-50 hover:text-brand-600 font-semibold transition-colors">
+                  <button 
+                    onClick={() => { setIsOpen(false); toggleDrawer(true); }}
+                    className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-neutral-700 hover:bg-neutral-50 hover:text-brand-600 font-semibold transition-colors"
+                  >
                     <span>Carrito</span>
                     {cartCount > 0 && <span className="w-6 h-6 flex items-center justify-center text-xs font-bold text-white bg-brand-500 rounded-full">{cartCount}</span>}
-                  </Link>
+                  </button>
                 </motion.div>
                 <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.34 }}>
                   <Link to="/profile" className="flex items-center px-4 py-3 rounded-xl text-neutral-700 hover:bg-neutral-50 hover:text-brand-600 font-semibold transition-colors">

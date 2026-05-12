@@ -106,7 +106,7 @@ const ProductDetail = () => {
       personalizationText: finalPersonalizationText,
       personalizationImage: personalizationImage ? 'uploaded_file_path' : null,
     });
-    navigate('/cart');
+    // navigate('/cart'); // Removido para que se abra el CartDrawer en su lugar
   };
 
   const submitReview = async (e) => {

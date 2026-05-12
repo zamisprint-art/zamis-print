@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Package, ShoppingBag, PlusCircle, Settings, Edit, Trash2, X, Upload, ClipboardList, DollarSign } from 'lucide-react';
+import { Package, ShoppingBag, PlusCircle, Settings, Edit, Trash2, X, Upload, ClipboardList, DollarSign, BarChart2 } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
 import InventoryTab from '../components/admin/InventoryTab';
 import BillingTab from '../components/admin/BillingTab';
 import OrdersTab from '../components/admin/OrdersTab';
 import ProductsTab from '../components/admin/ProductsTab';
+import DashboardTab from '../components/admin/DashboardTab';
 
 const AdminDashboard = () => {
-  const [activeTab, setActiveTab] = useState('orders');
+  const [activeTab, setActiveTab] = useState('dashboard');
   const { userInfo } = useAuthStore();
 
   return (
@@ -20,6 +21,12 @@ const AdminDashboard = () => {
           <p className="text-sm text-primary">ZAMIS Print</p>
         </div>
         
+        <button 
+          onClick={() => setActiveTab('dashboard')}
+          className={`flex items-center gap-3 p-4 rounded-xl transition-colors ${activeTab === 'dashboard' ? 'bg-primary text-neutral-900' : 'glass-panel hover:bg-white/5'}`}
+        >
+          <BarChart2 size={20} /> Dashboard
+        </button>
         <button 
           onClick={() => setActiveTab('orders')}
           className={`flex items-center gap-3 p-4 rounded-xl transition-colors ${activeTab === 'orders' ? 'bg-primary text-neutral-900' : 'glass-panel hover:bg-white/5'}`}
@@ -54,6 +61,10 @@ const AdminDashboard = () => {
 
       {/* Main Content */}
       <div className="flex-1 glass-panel rounded-2xl p-6 md:p-8 min-h-[600px] relative">
+        {activeTab === 'dashboard' && (
+          <DashboardTab />
+        )}
+
         {activeTab === 'orders' && (
           <OrdersTab />
         )}
