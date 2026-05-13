@@ -2,10 +2,11 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import axios from 'axios';
 
-const slides = [
+const FALLBACK_SLIDES = [
   {
-    id: 1,
+    _id: 'f1',
     image: 'https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?q=80&w=2000&auto=format&fit=crop',
     title: 'Figuras y Coleccionables',
     subtitle: 'Detalle Milimétrico',
@@ -14,7 +15,7 @@ const slides = [
     ctaLink: '/shop?category=Figuras',
   },
   {
-    id: 2,
+    _id: 'f2',
     image: 'https://images.unsplash.com/photo-1631556097152-c3bfdd8a3eb5?q=80&w=2000&auto=format&fit=crop',
     title: 'Impresión 3D Personalizada',
     subtitle: 'El límite es tu imaginación',
@@ -23,7 +24,7 @@ const slides = [
     ctaLink: '/shop',
   },
   {
-    id: 3,
+    _id: 'f3',
     image: 'https://images.unsplash.com/photo-1558981420-c532902e58b4?q=80&w=2000&auto=format&fit=crop',
     title: 'Decoración para el Hogar',
     subtitle: 'Dale un toque moderno a tus espacios',
@@ -31,29 +32,24 @@ const slides = [
     ctaText: 'Ver Decoración',
     ctaLink: '/shop?category=Decoracion',
   },
-  {
-    id: 4,
-    image: 'https://images.unsplash.com/photo-1615829627725-b4bf0bcf7723?q=80&w=2000&auto=format&fit=crop',
-    title: 'Regalos Inolvidables',
-    subtitle: 'Sorprende a los que amas',
-    description: 'Litofanías (fotos en 3D), nombres en relieve y detalles personalizados que perduran para siempre.',
-    ctaText: 'Ideas para Regalar',
-    ctaLink: '/shop',
-  },
-  {
-    id: 5,
-    image: 'https://images.unsplash.com/photo-1610450947171-791dbec91f6e?q=80&w=2000&auto=format&fit=crop',
-    title: 'Prototipado Industrial',
-    subtitle: 'De la idea al objeto en horas',
-    description: 'Fabricación de piezas técnicas, engranajes y maquetas para empresas e ingenieros con filamentos resistentes.',
-    ctaText: 'Cotizar Proyecto',
-    ctaLink: '/about',
-  }
 ];
 
 const HeroSlider = () => {
+  const [slides, setSlides] = useState(FALLBACK_SLIDES);
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(1);
+
+  useEffect(() => {
+    const fetchSlides = async () => {
+      try {
+        const { data } = await axios.get('/api/slides');
+        if (data && data.length > 0) setSlides(data);
+      } catch {
+        // Silently fall back to hardcoded slides
+      }
+    };
+    fetchSlides();
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {

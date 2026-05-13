@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Package, ShoppingBag, PlusCircle, Settings, Edit, Trash2, X, Upload, ClipboardList, DollarSign, BarChart2 } from 'lucide-react';
+import { Package, ShoppingBag, PlusCircle, Settings, Edit, Trash2, X, Upload, ClipboardList, DollarSign, BarChart2, Layers } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
 import InventoryTab from '../components/admin/InventoryTab';
 import BillingTab from '../components/admin/BillingTab';
 import OrdersTab from '../components/admin/OrdersTab';
 import ProductsTab from '../components/admin/ProductsTab';
 import DashboardTab from '../components/admin/DashboardTab';
+import SliderTab from '../components/admin/SliderTab';
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -57,6 +58,12 @@ const AdminDashboard = () => {
         >
           <Settings size={20} /> Configuración
         </button>
+        <button 
+          onClick={() => setActiveTab('slider')}
+          className={`flex items-center gap-3 p-4 rounded-xl transition-colors ${activeTab === 'slider' ? 'bg-primary text-neutral-900' : 'glass-panel hover:bg-white/5'}`}
+        >
+          <Layers size={20} /> Slider Home
+        </button>
       </div>
 
       {/* Main Content */}
@@ -97,6 +104,10 @@ const AdminDashboard = () => {
               </div>
             </div>
           </div>
+        )}
+
+        {activeTab === 'slider' && (
+          <SliderTab />
         )}
       </div>
     </div>
