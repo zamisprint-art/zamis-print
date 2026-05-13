@@ -43,7 +43,10 @@ const HeroSlider = () => {
     const fetchSlides = async () => {
       try {
         const { data } = await axios.get('/api/slides');
-        if (data && data.length > 0) setSlides(data);
+        if (data && data.length > 0) {
+          setSlides(data);
+          setCurrent(0); // ← resetear índice al cargar nuevos slides
+        }
       } catch {
         // Silently fall back to hardcoded slides
       }
@@ -60,13 +63,17 @@ const HeroSlider = () => {
 
   const nextSlide = () => {
     setDirection(1);
-    setCurrent(current === slides.length - 1 ? 0 : current + 1);
+    setCurrent(prev => (prev >= slides.length - 1 ? 0 : prev + 1));
   };
 
   const prevSlide = () => {
     setDirection(-1);
-    setCurrent(current === 0 ? slides.length - 1 : current - 1);
+    setCurrent(prev => (prev <= 0 ? slides.length - 1 : prev - 1));
   };
+
+  // Safety guard — evita crash si el índice queda fuera del array
+  const safeIndex = Math.min(current, slides.length - 1);
+  const slide = slides[safeIndex];
 
   const variants = {
     enter: (direction) => ({
@@ -87,6 +94,8 @@ const HeroSlider = () => {
       opacity: 0,
     })
   };
+
+  if (!slide) return null;
 
   return (
     <section className="relative h-[280px] sm:h-[340px] lg:h-[380px] w-full overflow-hidden bg-surface-base">
@@ -110,8 +119,8 @@ const HeroSlider = () => {
             <div className="absolute inset-0 bg-gradient-to-r from-darker via-darker/80 to-transparent z-10"></div>
             <div className="absolute inset-0 bg-gradient-to-t from-darker via-transparent to-transparent z-10"></div>
             <img 
-              src={slides[current].image} 
-              alt={slides[current].title} 
+              src={slide.image} 
+              alt={slide.title} 
               className="w-full h-full object-cover object-center opacity-60"
             />
           </div>
@@ -125,19 +134,19 @@ const HeroSlider = () => {
               className="max-w-xl"
             >
               <h3 className="text-xs sm:text-sm font-semibold text-accent mb-1 tracking-widest uppercase">
-                {slides[current].subtitle}
+                {slide.subtitle}
               </h3>
               <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-neutral-900 mb-3 leading-tight">
-                {slides[current].title}
+                {slide.title}
               </h1>
               <p className="text-sm sm:text-base text-neutral-700 mb-5 max-w-md font-light leading-relaxed hidden sm:block">
-                {slides[current].description}
+                {slide.description}
               </p>
               <Link 
-                to={slides[current].ctaLink} 
+                to={slide.ctaLink} 
                 className="btn-primary text-sm px-5 py-2.5 inline-block text-center"
               >
-                {slides[current].ctaText}
+                {slide.ctaText}
               </Link>
             </motion.div>
           </div>
