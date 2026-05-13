@@ -121,12 +121,14 @@ const HeroSlider = () => {
         >
           {/* Background Image with Overlay */}
           <div className="absolute inset-0 z-0">
-            <div className="absolute inset-0 bg-gradient-to-r from-darker via-darker/80 to-transparent z-10" />
-            <div className="absolute inset-0 bg-gradient-to-t from-darker via-transparent to-transparent z-10" />
+            {/* Overlay sutil solo para legibilidad del texto — izquierda */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent z-10" />
+            {/* Overlay inferior sutil */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent z-10" />
             <img
               src={slide.image}
               alt={slide.title}
-              className="w-full h-full object-cover object-top opacity-70"
+              className="w-full h-full object-cover object-top"
             />
           </div>
 
@@ -139,15 +141,15 @@ const HeroSlider = () => {
               className="max-w-xl"
             >
               {slide.subtitle && (
-                <h3 className="text-xs sm:text-sm font-semibold text-accent mb-1 tracking-widest uppercase">
+                <h3 className="text-xs sm:text-sm font-semibold text-white/80 mb-1 tracking-widest uppercase drop-shadow">
                   {slide.subtitle}
                 </h3>
               )}
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-neutral-900 mb-3 leading-tight">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white mb-3 leading-tight drop-shadow-lg">
                 {slide.title}
               </h1>
               {slide.description && (
-                <p className="text-sm sm:text-base text-neutral-700 mb-5 max-w-md font-light leading-relaxed hidden sm:block">
+                <p className="text-sm sm:text-base text-white/80 mb-5 max-w-md font-light leading-relaxed hidden sm:block drop-shadow">
                   {slide.description}
                 </p>
               )}
