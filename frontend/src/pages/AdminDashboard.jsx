@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Package, ShoppingBag, PlusCircle, Settings, Edit, Trash2, X, Upload, ClipboardList, DollarSign, BarChart2, Layers } from 'lucide-react';
+import { Package, ShoppingBag, PlusCircle, Settings, Edit, Trash2, X, Upload, ClipboardList, DollarSign, BarChart2, Layers, Users } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
 import InventoryTab from '../components/admin/InventoryTab';
 import BillingTab from '../components/admin/BillingTab';
@@ -8,6 +8,7 @@ import OrdersTab from '../components/admin/OrdersTab';
 import ProductsTab from '../components/admin/ProductsTab';
 import DashboardTab from '../components/admin/DashboardTab';
 import SliderTab from '../components/admin/SliderTab';
+import CustomersTab from '../components/admin/CustomersTab';
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -64,6 +65,12 @@ const AdminDashboard = () => {
         >
           <Layers size={20} /> Slider Home
         </button>
+        <button 
+          onClick={() => setActiveTab('customers')}
+          className={`flex items-center gap-3 p-4 rounded-xl transition-colors ${activeTab === 'customers' ? 'bg-primary text-neutral-900' : 'glass-panel hover:bg-white/5'}`}
+        >
+          <Users size={20} /> Clientes
+        </button>
       </div>
 
       {/* Main Content */}
@@ -108,6 +115,10 @@ const AdminDashboard = () => {
 
         {activeTab === 'slider' && (
           <SliderTab />
+        )}
+
+        {activeTab === 'customers' && (
+          <CustomersTab />
         )}
       </div>
     </div>
