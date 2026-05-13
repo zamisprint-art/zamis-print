@@ -19,6 +19,8 @@ import { useAuthStore } from './store/useAuthStore';
 import CustomerLogin from './pages/CustomerLogin';
 import MyAccount from './pages/MyAccount';
 import Maintenance from './pages/Maintenance';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 
 // Private Route Wrapper for Admin
 const AdminRoute = ({ children }) => {
@@ -48,6 +50,8 @@ function App() {
             <Route path="terms" element={<Terms />} />
             <Route path="login" element={<CustomerLogin />} />
             <Route path="profile" element={<MyAccount />} />
+            <Route path="forgot-password" element={<ForgotPassword />} />
+            <Route path="reset-password/:token" element={<ResetPassword />} />
           </>
         )}
       </Route>

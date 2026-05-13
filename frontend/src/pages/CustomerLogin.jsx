@@ -98,7 +98,16 @@ const CustomerLogin = () => {
               placeholder="••••••••"
               required
             />
+            {isLogin && (
+              <Link
+                to="/forgot-password"
+                className="text-xs text-primary hover:text-primary-dark font-medium transition-colors mt-2 inline-block"
+              >
+                ¿Olvidaste tu contraseña?
+              </Link>
+            )}
           </div>
+
 
           <button
             type="submit"

@@ -185,6 +185,74 @@ export const newOrderAdminEmail = (order) => {
 /**
  * Email de notificación de ENVÍO para el cliente (ya existía, mejorado).
  */
+/**
+ * Email para restablecer contraseña.
+ */
+export const resetPasswordEmail = (name, resetUrl) => `
+<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Restablecer contraseña</title></head>
+<body style="margin:0;padding:0;font-family:'Segoe UI',Arial,sans-serif;background:#f4f4f8;color:#1a1a2e;">
+
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f8;padding:32px 0;">
+    <tr><td align="center">
+      <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+
+        <!-- Header -->
+        <tr>
+          <td style="background:linear-gradient(135deg,#7c3aed,#4f46e5);padding:40px 40px 32px;text-align:center;">
+            <h1 style="margin:0;color:#ffffff;font-size:28px;letter-spacing:-0.5px;">ZAMIS Print</h1>
+            <p style="margin:8px 0 0;color:#c4b5fd;font-size:14px;">Impresión 3D Personalizada</p>
+          </td>
+        </tr>
+
+        <!-- Banner -->
+        <tr>
+          <td style="background:#faf5ff;border-left:4px solid #7c3aed;padding:20px 40px;text-align:center;">
+            <p style="margin:0;font-size:18px;font-weight:700;color:#6d28d9;">🔐 Restablece tu contraseña</p>
+          </td>
+        </tr>
+
+        <!-- Body -->
+        <tr>
+          <td style="padding:32px 40px;">
+            <p style="font-size:16px;margin:0 0 16px;">Hola <strong>${name}</strong>,</p>
+            <p style="font-size:15px;color:#4b5563;line-height:1.7;margin:0 0 28px;">
+              Recibimos una solicitud para restablecer la contraseña de tu cuenta en ZAMIS Print.
+              Haz clic en el botón de abajo para crear una nueva contraseña. Este enlace expira en <strong>1 hora</strong>.
+            </p>
+
+            <div style="text-align:center;margin-bottom:28px;">
+              <a href="${resetUrl}"
+                 style="display:inline-block;background:linear-gradient(135deg,#7c3aed,#4f46e5);color:#ffffff;padding:16px 40px;border-radius:12px;text-decoration:none;font-weight:700;font-size:16px;letter-spacing:0.3px;">
+                Restablecer contraseña →
+              </a>
+            </div>
+
+            <p style="font-size:13px;color:#9ca3af;line-height:1.6;margin:0;">
+              Si no solicitaste este cambio, puedes ignorar este correo. Tu contraseña no cambiará.<br/><br/>
+              Por seguridad, este enlace solo funciona <strong>una vez</strong> y expira en 1 hora.
+            </p>
+          </td>
+        </tr>
+
+        <!-- Footer -->
+        <tr>
+          <td style="background:#f4f4f8;padding:24px 40px;text-align:center;border-top:1px solid #e5e7eb;">
+            <p style="margin:0;font-size:12px;color:#9ca3af;">© 2026 ZAMIS Print · Impresión 3D Personalizada · Colombia</p>
+            <p style="margin:6px 0 0;font-size:12px;color:#9ca3af;">
+              <a href="https://zamisprint.vercel.app" style="color:#7c3aed;text-decoration:none;">zamisprint.vercel.app</a>
+            </p>
+          </td>
+        </tr>
+
+      </table>
+    </td></tr>
+  </table>
+
+</body>
+</html>`;
+
 export const orderShippedEmail = (order) => `
 <!DOCTYPE html>
 <html lang="es">
