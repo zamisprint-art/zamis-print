@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { Plus, Trash2, Edit2, Eye, EyeOff, GripVertical, Save, X, Image, ExternalLink } from 'lucide-react';
+import { Plus, Trash2, Edit2, Eye, EyeOff, GripVertical, Save, X, Image, ExternalLink, UploadCloud, Link2 } from 'lucide-react';
 
 const EMPTY_FORM = { title: '', subtitle: '', description: '', image: '', ctaText: 'Ver más', ctaLink: '/shop', isActive: true, order: 0 };
 
@@ -12,6 +12,30 @@ const SliderTab = () => {
   const [form, setForm] = useState(EMPTY_FORM);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  const [uploading, setUploading] = useState(false);
+  const [imageMode, setImageMode] = useState('url'); // 'url' | 'upload'
+  const fileInputRef = useRef(null);
+
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setUploading(true);
+    setError('');
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const { data } = await axios.post('/api/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      setForm(f => ({ ...f, image: data.filePath }));
+    } catch (err) {
+      setError(err.response?.data?.message || 'Error subiendo imagen. Intenta con una URL.');
+    } finally {
+      setUploading(false);
+      // Reset file input
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
 
   const fetchSlides = async () => {
     try {
@@ -32,6 +56,7 @@ const SliderTab = () => {
     setForm({ ...EMPTY_FORM, order: slides.length });
     setShowForm(true);
     setError('');
+    setImageMode('url');
   };
 
   const openEdit = (slide) => {
@@ -39,6 +64,7 @@ const SliderTab = () => {
     setForm({ ...slide });
     setShowForm(true);
     setError('');
+    setImageMode('url');
   };
 
   const closeForm = () => { setShowForm(false); setEditingSlide(null); setForm(EMPTY_FORM); };
@@ -201,16 +227,74 @@ const SliderTab = () => {
                 </div>
               )}
 
+              {/* Image field — dual mode URL / Upload */}
               <div>
-                <label className="block text-sm font-semibold text-neutral-700 mb-1.5">URL de Imagen *</label>
-                <input
-                  type="url"
-                  value={form.image}
-                  onChange={e => setForm(f => ({ ...f, image: e.target.value }))}
-                  placeholder="https://... (Unsplash, Cloudinary, etc.)"
-                  className="w-full px-4 py-2.5 border border-neutral-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
-                />
-                <p className="text-xs text-neutral-400 mt-1">Usa Cloudinary o una URL pública de imagen.</p>
+                <label className="block text-sm font-semibold text-neutral-700 mb-1.5">Imagen *</label>
+
+                {/* Mode toggle */}
+                <div className="flex rounded-xl overflow-hidden border border-neutral-200 mb-3">
+                  <button
+                    type="button"
+                    onClick={() => setImageMode('url')}
+                    className={`flex-1 flex items-center justify-center gap-2 py-2 text-sm font-semibold transition-colors ${
+                      imageMode === 'url' ? 'bg-brand-500 text-white' : 'bg-white text-neutral-500 hover:bg-neutral-50'
+                    }`}
+                  >
+                    <Link2 size={15} /> Pegar URL
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setImageMode('upload')}
+                    className={`flex-1 flex items-center justify-center gap-2 py-2 text-sm font-semibold transition-colors ${
+                      imageMode === 'upload' ? 'bg-brand-500 text-white' : 'bg-white text-neutral-500 hover:bg-neutral-50'
+                    }`}
+                  >
+                    <UploadCloud size={15} /> Subir desde PC
+                  </button>
+                </div>
+
+                {imageMode === 'url' ? (
+                  <input
+                    type="url"
+                    value={form.image}
+                    onChange={e => setForm(f => ({ ...f, image: e.target.value }))}
+                    placeholder="https://... (Unsplash, Cloudinary, etc.)"
+                    className="w-full px-4 py-2.5 border border-neutral-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+                  />
+                ) : (
+                  <div
+                    onClick={() => !uploading && fileInputRef.current?.click()}
+                    className={`w-full border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-colors ${
+                      uploading ? 'border-brand-300 bg-brand-50' : 'border-neutral-300 hover:border-brand-400 hover:bg-brand-50/40'
+                    }`}
+                  >
+                    {uploading ? (
+                      <div className="flex flex-col items-center gap-2">
+                        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-brand-500" />
+                        <p className="text-sm font-semibold text-brand-600">Subiendo a Cloudinary...</p>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center gap-2 text-neutral-500">
+                        <UploadCloud size={28} className="text-brand-400" />
+                        <p className="text-sm font-semibold">Clic para seleccionar imagen</p>
+                        <p className="text-xs text-neutral-400">JPG, PNG o WEBP · Máx 10 MB</p>
+                      </div>
+                    )}
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp"
+                      className="hidden"
+                      onChange={handleFileUpload}
+                    />
+                  </div>
+                )}
+
+                {form.image && (
+                  <p className="text-xs text-green-600 font-semibold mt-1.5 flex items-center gap-1">
+                    ✓ Imagen lista
+                  </p>
+                )}
               </div>
 
               <div className="grid grid-cols-2 gap-3">
