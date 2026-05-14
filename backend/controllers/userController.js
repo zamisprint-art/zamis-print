@@ -3,6 +3,9 @@ import User from '../models/User.js';
 import generateToken from '../utils/generateToken.js';
 import { Resend } from 'resend';
 import { resetPasswordEmail } from '../utils/emailTemplates.js';
+import { OAuth2Client } from 'google-auth-library';
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // @desc    Auth user & get token
 // @route   POST /api/users/login
@@ -172,5 +175,50 @@ const resetPassword = async (req, res) => {
     }
 };
 
-export { authUser, registerUser, logoutUser, getUserProfile, forgotPassword, resetPassword };
+// @desc    Login/Register user with Google
+// @route   POST /api/users/google
+// @access  Public
+const googleLogin = async (req, res) => {
+    try {
+        const { credential } = req.body;
+
+        // Verify the Google token
+        const ticket = await client.verifyIdToken({
+            idToken: credential,
+            audience: process.env.GOOGLE_CLIENT_ID,
+        });
+
+        const { email, name, picture } = ticket.getPayload();
+
+        // Check if user already exists in our database
+        let user = await User.findOne({ email });
+
+        if (!user) {
+            // User doesn't exist, create a new one with a random strong password
+            const randomPassword = crypto.randomBytes(16).toString('hex');
+            user = await User.create({
+                name,
+                email,
+                password: randomPassword,
+                // Optional: you could save the picture if your model supported it
+            });
+        }
+
+        // Generate JWT and set it in the cookie
+        generateToken(res, user._id);
+
+        res.status(200).json({
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            isAdmin: user.isAdmin,
+        });
+    } catch (err) {
+        console.error('googleLogin error:', err);
+        res.status(401).json({ message: 'Autenticación con Google fallida.' });
+    }
+};
+
+export { authUser, registerUser, logoutUser, getUserProfile, forgotPassword, resetPassword, googleLogin };
+
 

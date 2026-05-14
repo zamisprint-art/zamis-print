@@ -5,6 +5,7 @@ import axios from 'axios'
 import './index.css'
 import App from './App.jsx'
 import ScrollToTop from './components/ScrollToTop.jsx'
+import { GoogleOAuthProvider } from '@react-oauth/google'
 
 // Configure Axios to send cookies automatically
 axios.defaults.withCredentials = true;
@@ -14,9 +15,11 @@ axios.defaults.baseURL = import.meta.env.VITE_API_URL || '';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter>
-      <ScrollToTop />
-      <App />
-    </BrowserRouter>
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+      <BrowserRouter>
+        <ScrollToTop />
+        <App />
+      </BrowserRouter>
+    </GoogleOAuthProvider>
   </StrictMode>,
 )

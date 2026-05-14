@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import axios from 'axios';
 import { useAuthStore } from '../store/useAuthStore';
+import { GoogleLogin } from '@react-oauth/google';
 
 const CustomerLogin = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -23,6 +24,24 @@ const CustomerLogin = () => {
       navigate(redirect);
     }
   }, [navigate, userInfo, redirect]);
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    setLoading(true);
+    setError('');
+    try {
+      const { data } = await axios.post('/api/users/google', { credential: credentialResponse.credential });
+      setCredentials(data);
+      navigate(redirect);
+    } catch (err) {
+      setError(err.response?.data?.message || 'Error al iniciar sesión con Google.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleError = () => {
+    setError('El inicio de sesión con Google ha fallado o fue cancelado.');
+  };
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -60,6 +79,22 @@ const CustomerLogin = () => {
             {error}
           </div>
         )}
+
+        <div className="mb-6 flex justify-center">
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={handleGoogleError}
+            theme="filled_black"
+            shape="pill"
+            text={isLogin ? 'signin_with' : 'signup_with'}
+          />
+        </div>
+
+        <div className="relative flex py-5 items-center mb-6">
+            <div className="flex-grow border-t border-neutral-300"></div>
+            <span className="flex-shrink-0 mx-4 text-neutral-400 text-sm font-medium">o ingresa con tu correo</span>
+            <div className="flex-grow border-t border-neutral-300"></div>
+        </div>
 
         <form onSubmit={submitHandler} className="space-y-6">
           {!isLogin && (
