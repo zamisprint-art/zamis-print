@@ -118,6 +118,34 @@ const sendConfirmationEmail = async (order, payerEmail) => {
     }
 };
 
+const sendLowStockAlertEmail = async (product) => {
+    try {
+        const resend = new Resend(process.env.RESEND_API_KEY);
+        const adminEmail = process.env.ADMIN_EMAIL || 'admin@zamisprint.com';
+        
+        await resend.emails.send({
+            from: 'ZAMIS Print Alerts <onboarding@resend.dev>',
+            to: adminEmail,
+            subject: `⚠️ Alerta de Stock Bajo: ${product.name} — ZAMIS Print`,
+            html: `
+            <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
+                <h2 style="color: #ef4444;">⚠️ Alerta de Stock Bajo</h2>
+                <p>El siguiente producto ha llegado a su nivel crítico de inventario tras la última venta:</p>
+                <div style="background: #fef2f2; border-left: 4px solid #ef4444; padding: 15px; margin: 20px 0;">
+                    <strong>Producto:</strong> ${product.name}<br/>
+                    <strong>Stock Actual:</strong> ${product.countInStock}<br/>
+                    <strong>Stock Mínimo Configurado:</strong> ${product.stockMinimo || 5}
+                </div>
+                <p>Por favor, revisa el panel de administrador y coordina la producción de más unidades.</p>
+                <a href="${process.env.FRONTEND_URL}/admin" style="background: #ef4444; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; display: inline-block;">Ir al Panel de Administrador</a>
+            </div>`
+        });
+        console.log(`[Email] ⚠️ Low stock alert sent for ${product.name}`);
+    } catch (err) {
+        console.error('[Email] ❌ Failed to send low stock alert:', err.message);
+    }
+};
+
 // ─── Create MercadoPago Preference ───────────────────────────────────────────
 // @route POST /api/payments/create_preference  @access optionalAuth
 const createPreference = async (req, res) => {
@@ -207,14 +235,28 @@ const paymentWebhook = async (req, res) => {
             await order.save();
             console.log(`[MP Webhook] ✅ Order ${external_reference} marked as PAID`);
 
-            // 📈 Increment totalSold for each product
+            // 📈 Increment totalSold and reduce countInStock for each product
             for (const item of order.orderItems) {
                 try {
-                    await Product.findByIdAndUpdate(item.product, {
-                        $inc: { totalSold: item.qty }
-                    });
+                    const product = await Product.findById(item.product);
+                    if (product) {
+                        product.totalSold += item.qty;
+                        product.countInStock = Math.max(0, product.countInStock - item.qty);
+                        product.stockMovimientos.push({
+                            tipo: 'salida',
+                            cantidad: item.qty,
+                            motivo: `Venta Online MercadoPago - Pedido #${String(order._id).slice(-8).toUpperCase()}`,
+                            usuario: 'sistema'
+                        });
+                        await product.save();
+
+                        // ⚠️ Trigger low stock email alert if needed
+                        if (product.countInStock <= (product.stockMinimo || 5)) {
+                            await sendLowStockAlertEmail(product);
+                        }
+                    }
                 } catch (err) {
-                    console.error(`Failed to update totalSold for product ${item.product}:`, err);
+                    console.error(`Failed to update stock and totalSold for product ${item.product}:`, err);
                 }
             }
 

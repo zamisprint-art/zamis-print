@@ -35,6 +35,19 @@ const addOrderItems = async (req, res) => {
         return;
     }
 
+    // --- Stock Validation (Prevent Overselling) ---
+    for (const item of orderItems) {
+        const productInDb = await Product.findById(item.product);
+        if (!productInDb) {
+            return res.status(404).json({ message: `Producto no encontrado: ${item.name}` });
+        }
+        if (productInDb.countInStock < item.qty) {
+            return res.status(400).json({ 
+                message: `Lo sentimos, "${item.name}" no tiene suficiente stock. (Disponible: ${productInDb.countInStock})` 
+            });
+        }
+    }
+
     const order = new Order({
         orderItems,
         user:            req.user?._id,
