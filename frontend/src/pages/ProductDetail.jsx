@@ -28,7 +28,7 @@ const ProductDetail = () => {
   const [customMaterial, setCustomMaterial]         = useState('Estándar');
   const [customSize, setCustomSize]                 = useState('100%');
   const [customFinish, setCustomFinish]             = useState('Limpiado');
-  const [customFont, setCustomFont]                 = useState('Moderna');
+  const [customFont, setCustomFont]                 = useState('Clásica');
   const [customTextColor, setCustomTextColor]       = useState('Blanco');
   const [personalizationText, setPersonalizationText]   = useState('');
   const [personalizationImage, setPersonalizationImage] = useState(null);
@@ -211,11 +211,22 @@ const ProductDetail = () => {
                         <span 
                           className="block"
                           style={{ 
-                            color: customTextColor === 'Dorado' ? '#b45309' : customTextColor === 'Negro' ? '#0a0a0a' : '#94a3b8',
+                            color: customTextColor === 'Dorado' ? '#b45309' 
+                                 : customTextColor === 'Negro' ? '#0a0a0a' 
+                                 : customTextColor === 'Rojo' ? '#991b1b' 
+                                 : customTextColor === 'Azul' ? '#1e3a8a' 
+                                 : customTextColor === 'Verde' ? '#14532d' 
+                                 : '#94a3b8',
                             textShadow: customTextColor === 'Dorado' 
                               ? '0px 1px 0px #d97706, 0px 2px 0px #b45309, 0px 3px 0px #92400e, 0px 4px 0px #78350f, 0px 12px 20px rgba(0,0,0,0.7)'
                               : customTextColor === 'Negro'
                               ? '0px 1px 0px #171717, 0px 2px 0px #0a0a0a, 0px 3px 0px #000000, 0px 12px 20px rgba(0,0,0,0.9)'
+                              : customTextColor === 'Rojo'
+                              ? '0px 1px 0px #dc2626, 0px 2px 0px #b91c1c, 0px 3px 0px #991b1b, 0px 4px 0px #7f1d1d, 0px 12px 20px rgba(0,0,0,0.7)'
+                              : customTextColor === 'Azul'
+                              ? '0px 1px 0px #2563eb, 0px 2px 0px #1d4ed8, 0px 3px 0px #1e40af, 0px 4px 0px #1e3a8a, 0px 12px 20px rgba(0,0,0,0.7)'
+                              : customTextColor === 'Verde'
+                              ? '0px 1px 0px #16a34a, 0px 2px 0px #15803d, 0px 3px 0px #166534, 0px 4px 0px #14532d, 0px 12px 20px rgba(0,0,0,0.7)'
                               : '0px 1px 0px #cbd5e1, 0px 2px 0px #94a3b8, 0px 3px 0px #64748b, 0px 4px 0px #475569, 0px 12px 20px rgba(0,0,0,0.6)',
                           }}
                         >
@@ -230,6 +241,12 @@ const ProductDetail = () => {
                               ? 'linear-gradient(180deg, #fef08a 0%, #eab308 30%, #b45309 80%, #451a03 100%)'
                               : customTextColor === 'Negro'
                               ? 'linear-gradient(180deg, #737373 0%, #262626 40%, #000000 80%, #000000 100%)'
+                              : customTextColor === 'Rojo'
+                              ? 'linear-gradient(180deg, #fca5a5 0%, #ef4444 30%, #b91c1c 80%, #7f1d1d 100%)'
+                              : customTextColor === 'Azul'
+                              ? 'linear-gradient(180deg, #93c5fd 0%, #3b82f6 30%, #1d4ed8 80%, #1e3a8a 100%)'
+                              : customTextColor === 'Verde'
+                              ? 'linear-gradient(180deg, #86efac 0%, #22c55e 30%, #15803d 80%, #14532d 100%)'
                               : 'linear-gradient(180deg, #ffffff 0%, #f1f5f9 30%, #94a3b8 80%, #475569 100%)',
                             WebkitBackgroundClip: 'text',
                             WebkitTextFillColor: 'transparent',
@@ -405,19 +422,20 @@ const ProductDetail = () => {
                     <div>
                       <label className="block text-sm font-semibold text-neutral-900 mb-2">Estilo de Letra</label>
                       <select value={customFont} onChange={(e) => setCustomFont(e.target.value)} className="w-full border border-neutral-200 rounded-lg p-2.5 bg-white text-sm focus:ring-2 focus:ring-brand-500 outline-none">
-                        <option value="Moderna">Moderna (Gruesa)</option>
                         <option value="Clásica">Clásica (Elegante)</option>
                         <option value="Divertida">Divertida (Estilo Cómic)</option>
-                        <option value="Cursiva">Cursiva (Delicada)</option>
                       </select>
                     </div>
                     <div>
                       <label className="block text-sm font-semibold text-neutral-900 mb-2">Color del Relieve</label>
-                      <div className="flex gap-3 mt-1">
+                      <div className="flex flex-wrap gap-2 mt-1">
                         {[
                           { name: 'Blanco', bg: 'bg-white', border: 'border-neutral-300' },
                           { name: 'Negro', bg: 'bg-neutral-900', border: 'border-neutral-900' },
                           { name: 'Dorado', bg: 'bg-amber-400', border: 'border-amber-400' },
+                          { name: 'Rojo', bg: 'bg-red-500', border: 'border-red-600' },
+                          { name: 'Azul', bg: 'bg-blue-500', border: 'border-blue-600' },
+                          { name: 'Verde', bg: 'bg-green-500', border: 'border-green-600' },
                         ].map(c => (
                           <button
                             key={c.name}
