@@ -196,26 +196,49 @@ const ProductDetail = () => {
                     className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center items-center cursor-move z-10 group"
                   >
                     <div className="px-6 py-4 rounded-xl border-2 border-transparent group-hover:border-white/30 group-hover:bg-black/10 transition-all flex flex-col items-center">
-                      <span 
-                        className={`text-5xl md:text-7xl select-none leading-none ${
+                      <div 
+                        className={`relative text-5xl md:text-7xl select-none leading-none ${
                           customFont === 'Clásica' ? 'font-serif font-bold tracking-wider' : 
                           customFont === 'Divertida' ? 'font-black tracking-normal' : 
                           customFont === 'Cursiva' ? 'italic font-semibold tracking-normal' : 'font-black uppercase tracking-[0.2em]'
                         }`}
-                        style={{ 
-                          color: customTextColor === 'Dorado' ? '#fbbf24' : customTextColor === 'Negro' ? '#262626' : '#f8fafc',
-                          textShadow: customTextColor === 'Dorado' 
-                            ? '0px 1px 0px #d97706, 0px 2px 0px #b45309, 0px 3px 0px #92400e, 0px 4px 0px #78350f, 0px 10px 15px rgba(0,0,0,0.6), -1px -1px 2px rgba(255,255,255,0.4)'
-                            : customTextColor === 'Negro'
-                            ? '0px 1px 0px #171717, 0px 2px 0px #0a0a0a, 0px 3px 0px #000000, 0px 10px 15px rgba(0,0,0,0.8), -1px -1px 1px rgba(255,255,255,0.1)'
-                            : '0px 1px 0px #cbd5e1, 0px 2px 0px #94a3b8, 0px 3px 0px #64748b, 0px 4px 0px #475569, 0px 10px 15px rgba(0,0,0,0.5), -1px -1px 2px rgba(255,255,255,0.9)',
+                        style={{
                           transform: 'perspective(500px) rotateX(15deg) rotateZ(-2deg)',
-                          display: 'inline-block',
                           fontFamily: customFont === 'Divertida' ? '"Comic Sans MS", "Marker Felt", sans-serif' : customFont === 'Cursiva' ? '"Brush Script MT", "Lucida Handwriting", cursive' : undefined
                         }}
                       >
-                        {personalizationText}
-                      </span>
+                        {/* BASE LAYER: 3D Extrusion and Drop Shadow */}
+                        <span 
+                          className="block"
+                          style={{ 
+                            color: customTextColor === 'Dorado' ? '#b45309' : customTextColor === 'Negro' ? '#0a0a0a' : '#94a3b8',
+                            textShadow: customTextColor === 'Dorado' 
+                              ? '0px 1px 0px #d97706, 0px 2px 0px #b45309, 0px 3px 0px #92400e, 0px 4px 0px #78350f, 0px 12px 20px rgba(0,0,0,0.7)'
+                              : customTextColor === 'Negro'
+                              ? '0px 1px 0px #171717, 0px 2px 0px #0a0a0a, 0px 3px 0px #000000, 0px 12px 20px rgba(0,0,0,0.9)'
+                              : '0px 1px 0px #cbd5e1, 0px 2px 0px #94a3b8, 0px 3px 0px #64748b, 0px 4px 0px #475569, 0px 12px 20px rgba(0,0,0,0.6)',
+                          }}
+                        >
+                          {personalizationText}
+                        </span>
+                        
+                        {/* TOP LAYER: Metallic/Glossy Gradient Material */}
+                        <span 
+                          className="absolute inset-0 top-0 left-0 w-full h-full pointer-events-none"
+                          style={{
+                            backgroundImage: customTextColor === 'Dorado'
+                              ? 'linear-gradient(180deg, #fef08a 0%, #eab308 30%, #b45309 80%, #451a03 100%)'
+                              : customTextColor === 'Negro'
+                              ? 'linear-gradient(180deg, #737373 0%, #262626 40%, #000000 80%, #000000 100%)'
+                              : 'linear-gradient(180deg, #ffffff 0%, #f1f5f9 30%, #94a3b8 80%, #475569 100%)',
+                            WebkitBackgroundClip: 'text',
+                            WebkitTextFillColor: 'transparent',
+                            color: 'transparent',
+                          }}
+                        >
+                          {personalizationText}
+                        </span>
+                      </div>
                       <p className="opacity-0 group-hover:opacity-100 text-white/90 text-[10px] uppercase tracking-widest text-center mt-3 flex items-center justify-center gap-1 select-none transition-opacity bg-black/50 px-2 py-1 rounded-full">
                         <span className="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span> Arrastra para ubicar
                       </p>
