@@ -191,26 +191,32 @@ const ProductDetail = () => {
                     animate={{ opacity: 1, scale: 1 }}
                     drag
                     dragConstraints={containerRef}
-                    dragElastic={0.2}
+                    dragElastic={0.1}
                     dragMomentum={false}
-                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center items-center cursor-move z-10"
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center items-center cursor-move z-10 group"
                   >
-                    <div className="bg-black/40 backdrop-blur-sm px-6 py-3 rounded-xl border border-white/10 shadow-2xl hover:bg-black/60 transition-colors">
+                    <div className="px-6 py-4 rounded-xl border-2 border-transparent group-hover:border-white/30 group-hover:bg-black/10 transition-all flex flex-col items-center">
                       <span 
-                        className={`text-3xl md:text-5xl select-none ${
+                        className={`text-5xl md:text-7xl select-none leading-none ${
                           customFont === 'Clásica' ? 'font-serif font-bold tracking-wider' : 
                           customFont === 'Divertida' ? 'font-black tracking-normal' : 
                           customFont === 'Cursiva' ? 'italic font-semibold tracking-normal' : 'font-black uppercase tracking-[0.2em]'
                         }`}
                         style={{ 
-                          color: customTextColor === 'Dorado' ? '#fbbf24' : customTextColor === 'Negro' ? '#171717' : '#ffffff',
-                          textShadow: customTextColor === 'Negro' ? '1px 2px 4px rgba(255,255,255,0.4)' : '2px 4px 10px rgba(0,0,0,0.6)',
+                          color: customTextColor === 'Dorado' ? '#fbbf24' : customTextColor === 'Negro' ? '#262626' : '#f8fafc',
+                          textShadow: customTextColor === 'Dorado' 
+                            ? '0px 1px 0px #d97706, 0px 2px 0px #b45309, 0px 3px 0px #92400e, 0px 4px 0px #78350f, 0px 10px 15px rgba(0,0,0,0.6), -1px -1px 2px rgba(255,255,255,0.4)'
+                            : customTextColor === 'Negro'
+                            ? '0px 1px 0px #171717, 0px 2px 0px #0a0a0a, 0px 3px 0px #000000, 0px 10px 15px rgba(0,0,0,0.8), -1px -1px 1px rgba(255,255,255,0.1)'
+                            : '0px 1px 0px #cbd5e1, 0px 2px 0px #94a3b8, 0px 3px 0px #64748b, 0px 4px 0px #475569, 0px 10px 15px rgba(0,0,0,0.5), -1px -1px 2px rgba(255,255,255,0.9)',
+                          transform: 'perspective(500px) rotateX(15deg) rotateZ(-2deg)',
+                          display: 'inline-block',
                           fontFamily: customFont === 'Divertida' ? '"Comic Sans MS", "Marker Felt", sans-serif' : customFont === 'Cursiva' ? '"Brush Script MT", "Lucida Handwriting", cursive' : undefined
                         }}
                       >
                         {personalizationText}
                       </span>
-                      <p className="text-white/70 text-[10px] uppercase tracking-widest text-center mt-2 flex items-center justify-center gap-1 select-none">
+                      <p className="opacity-0 group-hover:opacity-100 text-white/90 text-[10px] uppercase tracking-widest text-center mt-3 flex items-center justify-center gap-1 select-none transition-opacity bg-black/50 px-2 py-1 rounded-full">
                         <span className="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span> Arrastra para ubicar
                       </p>
                     </div>
