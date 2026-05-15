@@ -7,9 +7,9 @@ import { useCartStore } from '../store/useCartStore';
 import { useAuthStore } from '../store/useAuthStore';
 
 const NAV_LINKS = [
-  { to: '/',        label: 'Inicio' },
-  { to: '/shop',    label: 'Tienda' },
-  { to: '/about',   label: 'Nosotros' },
+  { to: '/', label: 'Inicio' },
+  { to: '/shop', label: 'Categorías' },
+  { to: '/about', label: 'Nosotros' },
   { to: '/contact', label: 'Contacto' },
 ];
 
@@ -22,7 +22,7 @@ const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [scrolled, setScrolled] = useState(false);
   const searchRef = useRef(null);
-  
+
   // Autocomplete state
   const [allProducts, setAllProducts] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
@@ -44,8 +44,8 @@ const Navbar = () => {
   useEffect(() => {
     if (searchQuery.trim().length >= 2) {
       const q = searchQuery.toLowerCase();
-      const results = allProducts.filter(p => 
-        p.name.toLowerCase().includes(q) || 
+      const results = allProducts.filter(p =>
+        p.name.toLowerCase().includes(q) ||
         (p.category && p.category.toLowerCase().includes(q))
       ).slice(0, 5);
       setSearchResults(results);
@@ -141,11 +141,10 @@ const Navbar = () => {
                   <Link
                     key={to}
                     to={to}
-                    className={`px-4 py-2 rounded-xl text-sm font-bold transition-colors ${
-                      isActive
+                    className={`px-4 py-2 rounded-xl text-sm font-bold transition-colors ${isActive
                         ? 'text-brand-700 bg-brand-50'
                         : 'text-neutral-600 hover:text-brand-600 hover:bg-neutral-50'
-                    }`}
+                      }`}
                   >
                     {label}
                   </Link>
@@ -160,7 +159,7 @@ const Navbar = () => {
                   type="search"
                   value={searchQuery}
                   onChange={(e) => { setSearchQuery(e.target.value); setShowDropdown(true); }}
-                  onFocus={() => { if(searchQuery.length >= 2) setShowDropdown(true); }}
+                  onFocus={() => { if (searchQuery.length >= 2) setShowDropdown(true); }}
                   placeholder="Buscar..."
                   className="w-full h-10 pl-4 pr-12 rounded-xl border-2 border-neutral-200 bg-neutral-50 text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none focus:border-brand-500 focus:bg-white transition-all duration-200"
                 />
@@ -185,7 +184,7 @@ const Navbar = () => {
                     {searchResults.length > 0 ? (
                       <div className="flex flex-col">
                         {searchResults.map(product => (
-                          <div 
+                          <div
                             key={product._id}
                             className="flex items-center gap-3 p-3 hover:bg-neutral-50 border-b border-neutral-100 last:border-0 transition-colors cursor-pointer group"
                             onClick={() => {
@@ -203,7 +202,7 @@ const Navbar = () => {
                                 {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(product.price)}
                               </p>
                             </div>
-                            
+
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
@@ -230,7 +229,7 @@ const Navbar = () => {
                             </button>
                           </div>
                         ))}
-                        <button 
+                        <button
                           onClick={handleSearch}
                           className="w-full py-3 bg-neutral-50 text-[11px] font-bold text-brand-600 hover:bg-brand-50 transition-colors text-center"
                         >
@@ -256,8 +255,8 @@ const Navbar = () => {
               </Link>
 
               {/* Carrito */}
-              <button 
-                onClick={() => toggleDrawer(true)} 
+              <button
+                onClick={() => toggleDrawer(true)}
                 className="relative p-2 rounded-lg text-neutral-600 hover:text-brand-600 hover:bg-neutral-50 transition-colors"
                 aria-label="Abrir carrito"
               >
@@ -372,9 +371,8 @@ const Navbar = () => {
                     <motion.div key={to} initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.06 }}>
                       <Link
                         to={to}
-                        className={`flex items-center px-4 py-3 rounded-xl font-semibold text-base transition-colors ${
-                          isActive ? 'bg-brand-50 text-brand-700' : 'text-neutral-700 hover:bg-neutral-50 hover:text-brand-600'
-                        }`}
+                        className={`flex items-center px-4 py-3 rounded-xl font-semibold text-base transition-colors ${isActive ? 'bg-brand-50 text-brand-700' : 'text-neutral-700 hover:bg-neutral-50 hover:text-brand-600'
+                          }`}
                       >
                         {label}
                       </Link>
@@ -383,7 +381,7 @@ const Navbar = () => {
                 })}
                 <div className="h-px bg-neutral-100 my-4" />
                 <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.28 }}>
-                  <button 
+                  <button
                     onClick={() => { setIsOpen(false); toggleDrawer(true); }}
                     className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-neutral-700 hover:bg-neutral-50 hover:text-brand-600 font-semibold transition-colors"
                   >
