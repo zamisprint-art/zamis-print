@@ -28,6 +28,8 @@ const ProductDetail = () => {
   const [customMaterial, setCustomMaterial]         = useState('Estándar');
   const [customSize, setCustomSize]                 = useState('100%');
   const [customFinish, setCustomFinish]             = useState('Limpiado');
+  const [customFont, setCustomFont]                 = useState('Moderna');
+  const [customTextColor, setCustomTextColor]       = useState('Blanco');
   const [personalizationText, setPersonalizationText]   = useState('');
   const [personalizationImage, setPersonalizationImage] = useState(null);
   
@@ -92,7 +94,7 @@ const ProductDetail = () => {
         `Tamaño: ${customSize}`,
         `Acabado: ${customFinish}`,
       ];
-      if (personalizationText) details.push(`Texto: "${personalizationText}" (Ubicación libre)`);
+      if (personalizationText) details.push(`Texto: "${personalizationText}" | Fuente: ${customFont} | Color: ${customTextColor} (Ubicación según arrastre)`);
       finalPersonalizationText = details.join(' | ');
     }
 
@@ -195,8 +197,16 @@ const ProductDetail = () => {
                   >
                     <div className="bg-black/40 backdrop-blur-sm px-6 py-3 rounded-xl border border-white/10 shadow-2xl hover:bg-black/60 transition-colors">
                       <span 
-                        className={`text-3xl md:text-5xl font-black uppercase tracking-[0.2em] select-none ${customMaterial === 'Especial' ? 'text-green-300 drop-shadow-[0_0_15px_rgba(74,222,128,0.8)]' : 'text-white/90 drop-shadow-xl'}`}
-                        style={{ textShadow: '2px 4px 10px rgba(0,0,0,0.5)' }}
+                        className={`text-3xl md:text-5xl select-none ${
+                          customFont === 'Clásica' ? 'font-serif font-bold tracking-wider' : 
+                          customFont === 'Divertida' ? 'font-black tracking-normal' : 
+                          customFont === 'Cursiva' ? 'italic font-semibold tracking-normal' : 'font-black uppercase tracking-[0.2em]'
+                        }`}
+                        style={{ 
+                          color: customTextColor === 'Dorado' ? '#fbbf24' : customTextColor === 'Negro' ? '#171717' : '#ffffff',
+                          textShadow: customTextColor === 'Negro' ? '1px 2px 4px rgba(255,255,255,0.4)' : '2px 4px 10px rgba(0,0,0,0.6)',
+                          fontFamily: customFont === 'Divertida' ? '"Comic Sans MS", "Marker Felt", sans-serif' : customFont === 'Cursiva' ? '"Brush Script MT", "Lucida Handwriting", cursive' : undefined
+                        }}
                       >
                         {personalizationText}
                       </span>
@@ -350,15 +360,48 @@ const ProductDetail = () => {
 
                 {/* Step 4: Text */}
                 <div>
-                  <label className="block text-sm font-semibold text-neutral-900 mb-2">4. Grabado de Texto (+$10.000)</label>
+                  <label className="block text-sm font-semibold text-neutral-900 mb-2">4. Nombre de la Mascota (+$10.000)</label>
                   <input
                     type="text"
                     value={personalizationText}
-                    onChange={(e) => setPersonalizationText(e.target.value)}
+                    onChange={(e) => setPersonalizationText(e.target.value.substring(0, 15))}
                     className="input-field bg-white"
-                    placeholder="Ej: Feliz Cumpleaños (Opcional)"
+                    placeholder="Ej: MAX (Máximo 15 letras)"
                   />
                 </div>
+
+                {/* Step 5: Typography & Color (Conditional based on text) */}
+                {personalizationText && (
+                  <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-brand-200/50 pt-5 mt-2">
+                    <div>
+                      <label className="block text-sm font-semibold text-neutral-900 mb-2">Estilo de Letra</label>
+                      <select value={customFont} onChange={(e) => setCustomFont(e.target.value)} className="w-full border border-neutral-200 rounded-lg p-2.5 bg-white text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+                        <option value="Moderna">Moderna (Gruesa)</option>
+                        <option value="Clásica">Clásica (Elegante)</option>
+                        <option value="Divertida">Divertida (Estilo Cómic)</option>
+                        <option value="Cursiva">Cursiva (Delicada)</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-neutral-900 mb-2">Color del Relieve</label>
+                      <div className="flex gap-3 mt-1">
+                        {[
+                          { name: 'Blanco', bg: 'bg-white', border: 'border-neutral-300' },
+                          { name: 'Negro', bg: 'bg-neutral-900', border: 'border-neutral-900' },
+                          { name: 'Dorado', bg: 'bg-amber-400', border: 'border-amber-400' },
+                        ].map(c => (
+                          <button
+                            key={c.name}
+                            type="button"
+                            onClick={() => setCustomTextColor(c.name)}
+                            title={c.name}
+                            className={`w-8 h-8 rounded-full border shadow-sm transition-all ${c.bg} ${c.border} ${customTextColor === c.name ? 'scale-125 ring-2 ring-brand-500 ring-offset-2' : 'hover:scale-110 opacity-80 hover:opacity-100'}`}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
               </div>
             ) : (
               /* Legacy Personalization */
