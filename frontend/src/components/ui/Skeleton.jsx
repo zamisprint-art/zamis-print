@@ -30,21 +30,20 @@ const Skeleton = ({ type = 'text', lines = 1, className = '' }) => {
 /* ---- Product Card Skeleton ---- */
 export const ProductCardSkeleton = () => (
   <div className="card-base p-0 overflow-hidden">
-    <div className="skeleton-image rounded-none h-56" />
+    <div className="skeleton-image rounded-none aspect-[4/5] bg-neutral-100" />
     <div className="p-4 flex flex-col gap-3">
       <div className="skeleton-title" />
       <div className="skeleton-text w-1/2" />
       <div className="flex items-center justify-between mt-2">
         <div className="skeleton h-6 w-20 rounded-lg" />
-        <div className="skeleton h-8 w-24 rounded-xl" />
+        <div className="skeleton h-8 w-8 rounded-full" />
       </div>
     </div>
   </div>
 );
 
-/* ---- Product Grid Skeleton ---- */
 export const ProductGridSkeleton = ({ count = 8 }) => (
-  <div className="grid-products">
+  <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
     {Array.from({ length: count }).map((_, i) => (
       <ProductCardSkeleton key={i} />
     ))}

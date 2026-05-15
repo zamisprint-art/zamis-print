@@ -9,13 +9,13 @@ import { TrustBadges } from '../components/ecommerce';
 import SEOHead from '../components/SEOHead';
 
 const SectionSkeleton = () => (
-  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-    {[...Array(3)].map((_, i) => (
+  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+    {[...Array(4)].map((_, i) => (
       <div key={i} className="card p-4 h-full flex flex-col gap-4 border border-neutral-100">
-        <Skeleton className="w-full aspect-square rounded-2xl" />
+        <Skeleton className="w-full aspect-[4/5] rounded-2xl" />
         <div className="space-y-3 mt-2">
-          <Skeleton className="h-6 w-3/4 rounded-md" />
-          <Skeleton className="h-4 w-full rounded-md" />
+          <Skeleton className="h-4 w-3/4 rounded-md" />
+          <Skeleton className="h-3 w-full rounded-md" />
         </div>
       </div>
     ))}
@@ -52,7 +52,7 @@ const Home = () => {
     const list = items.length > 0 ? items : fallback;
     if (list.length === 0) return null;
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
         {list.map((product, index) => (
           <motion.div key={product._id} initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }} transition={{ duration: 0.4, delay: index * 0.08 }} className="h-full">
