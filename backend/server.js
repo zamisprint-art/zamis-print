@@ -11,6 +11,7 @@ import paymentRoutes from './routes/paymentRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
 import inventoryRoutes from './routes/inventoryRoutes.js';
 import slideRoutes from './routes/slideRoutes.js';
+import homeSectionRoutes from './routes/homeSectionRoutes.js';
 
 // Load environment variables
 dotenv.config();
@@ -66,6 +67,7 @@ app.use('/api/payments', paymentRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/inventory', inventoryRoutes);
 app.use('/api/slides', slideRoutes);
+app.use('/api/homesections', homeSectionRoutes);
 
 // Make uploads folder static
 const __dirname = path.resolve();

@@ -24,21 +24,25 @@ const SectionSkeleton = () => (
 
 const Home = () => {
   const [allProducts, setAllProducts] = useState([]);
+  const [homeSections, setHomeSections] = useState([]);
   const [loading, setLoading] = useState(true);
 
-
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchData = async () => {
       try {
-        const { data } = await axios.get('/api/products?limit=20'); // Solo necesitamos unos pocos para el home
-        setAllProducts(data.products || []);
-        setLoading(false);
+        const [prodRes, secRes] = await Promise.all([
+          axios.get('/api/products?limit=100'), // Necesitamos suficientes para llenar las categorías dinámicas
+          axios.get('/api/homesections')
+        ]);
+        setAllProducts(prodRes.data.products || []);
+        setHomeSections(secRes.data || []);
       } catch (error) {
-        console.error('Error fetching products:', error);
+        console.error('Error fetching data for Home:', error);
+      } finally {
         setLoading(false);
       }
     };
-    fetchProducts();
+    fetchData();
   }, []);
 
   // Derived sections
@@ -86,31 +90,70 @@ const Home = () => {
       {/* Hero Section */}
       <HeroSlider />
 
-      {/* ⭐ Productos Destacados — El ancla de precio */}
-      <section id="featured" className="py-20 px-4 max-w-7xl mx-auto w-full">
-        <SectionHeader emoji="⭐" label="Lo Mejor de ZAMIS" title="Productos Destacados"
-          desc="Seleccionados a mano por su calidad, originalidad y popularidad."
-          linkTo="/shop?sort=best-selling" linkLabel="Ver Más Vendidos" />
-        {loading ? <SectionSkeleton /> : <ProductGrid items={featured} fallback={recentProducts} />}
-      </section>
+      {/* Secciones Dinámicas */}
+      {homeSections.map((section, index) => {
+        let items = [];
+        if (section.type === 'featured') {
+          items = allProducts.filter(p => p.isFeatured);
+        } else if (section.type === 'sale') {
+          items = allProducts.filter(p => p.isOnSale && p.salePrice);
+        } else if (section.type === 'newest') {
+          items = [...allProducts].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        } else if (section.type === 'category' && section.categoryFilter) {
+          items = allProducts.filter(p => p.category?.toLowerCase() === section.categoryFilter.toLowerCase());
+        }
 
-      {/* 🏷️ Ofertas — El gancho emocional (2do para máxima conversión) */}
-      {(loading || onSale.length > 0) && (
-        <section className="py-20 px-4 max-w-7xl mx-auto w-full border-t border-red-100 bg-gradient-to-b from-red-50/40 to-transparent">
-          <SectionHeader emoji="🏷️" label="Precios Especiales · Tiempo Limitado" title="Ofertas de Temporada"
-            desc="Piezas premium a precios que no duran mucho. ¡No te quedes sin la tuya!"
-            linkTo="/shop" linkLabel="Ver Todas las Ofertas" />
-          {loading ? <SectionSkeleton /> : <ProductGrid items={onSale} fallback={[]} />}
-        </section>
+        // Limitar a 4 o a un slider (por ahora grid de 4)
+        items = items.slice(0, 4);
+
+        // Si no hay productos para esta sección y no está cargando, la ocultamos (para evitar secciones vacías)
+        if (!loading && items.length === 0 && section.type !== 'newest') return null;
+
+        return (
+          <section 
+            key={section._id} 
+            className={`py-20 px-4 max-w-7xl mx-auto w-full ${index > 0 ? 'border-t border-neutral-100' : ''} ${section.type === 'sale' ? 'bg-gradient-to-b from-red-50/40 to-transparent border-red-100' : ''}`}
+          >
+            <SectionHeader 
+              emoji={section.emoji} 
+              label={section.label} 
+              title={section.title}
+              desc={section.description}
+              linkTo={section.linkTo} 
+              linkLabel={section.linkLabel} 
+            />
+            {loading ? <SectionSkeleton /> : <ProductGrid items={items} fallback={recentProducts} />}
+          </section>
+        );
+      })}
+
+      {/* Fallback si el admin no ha creado ninguna sección dinámica aún */}
+      {!loading && homeSections.length === 0 && (
+        <>
+          <section id="featured" className="py-20 px-4 max-w-7xl mx-auto w-full">
+            <SectionHeader emoji="⭐" label="Lo Mejor de ZAMIS" title="Productos Destacados"
+              desc="Seleccionados a mano por su calidad, originalidad y popularidad."
+              linkTo="/shop?sort=best-selling" linkLabel="Ver Más Vendidos" />
+            <ProductGrid items={featured} fallback={recentProducts} />
+          </section>
+
+          {onSale.length > 0 && (
+            <section className="py-20 px-4 max-w-7xl mx-auto w-full border-t border-red-100 bg-gradient-to-b from-red-50/40 to-transparent">
+              <SectionHeader emoji="🏷️" label="Precios Especiales · Tiempo Limitado" title="Ofertas de Temporada"
+                desc="Piezas premium a precios que no duran mucho. ¡No te quedes sin la tuya!"
+                linkTo="/shop" linkLabel="Ver Todas las Ofertas" />
+              <ProductGrid items={onSale} fallback={[]} />
+            </section>
+          )}
+
+          <section className="py-20 px-4 max-w-7xl mx-auto w-full border-t border-neutral-100">
+            <SectionHeader emoji="🆕" label="Recién Llegados" title="Novedades"
+              desc="Las últimas creaciones salidas de nuestra impresora. ¡Sé de los primeros en tenerlas!"
+              linkTo="/shop?sort=newest" linkLabel="Ver Todo lo Nuevo" />
+            <ProductGrid items={newArrivals} fallback={recentProducts} />
+          </section>
+        </>
       )}
-
-      {/* 🆕 Nuevas Llegadas — El FOMO al final */}
-      <section className="py-20 px-4 max-w-7xl mx-auto w-full border-t border-neutral-100">
-        <SectionHeader emoji="🆕" label="Recién Llegados" title="Novedades"
-          desc="Las últimas creaciones salidas de nuestra impresora. ¡Sé de los primeros en tenerlas!"
-          linkTo="/shop?sort=newest" linkLabel="Ver Todo lo Nuevo" />
-        {loading ? <SectionSkeleton /> : <ProductGrid items={newArrivals} fallback={recentProducts} />}
-      </section>
       
       {/* Value Proposition Section */}
       <section className="py-24 bg-surface-card/50 border-t border-neutral-100 relative overflow-hidden">
