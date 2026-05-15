@@ -2,6 +2,17 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Package, PlusCircle, Edit, Trash2, X, Upload, Search, ChevronLeft, ChevronRight } from 'lucide-react';
 
+export const CATEGORY_STRUCTURE = {
+  "Figuras y Coleccionables": ["Personalizados", "Fan-Art", "Esculturas/Bustos", "Articulados", "Otros"],
+  "Accesorios y Llaveros": ["Llaveros Articulados", "Identificadores (Tags)", "Soportes para Celular", "Otros"],
+  "Hogar y Decoración": ["Macetas", "Organizadores", "Lámparas/Letreros", "Otros"],
+  "Mascotas": ["Placas de Identificación", "Memoriales", "Articulados", "Otros"],
+  "Geek & Setup": ["Soportes para Audífonos", "Soportes para Controles", "Accesorios para Consolas", "Otros"],
+  "Otros": ["General"]
+};
+
+export const CATEGORIES = Object.keys(CATEGORY_STRUCTURE);
+
 const ProductsTab = () => {
   const [data, setData] = useState({ products: [], page: 1, pages: 1, total: 0 });
   const [loading, setLoading] = useState(true);
@@ -142,12 +153,9 @@ const ProductsTab = () => {
           className="px-4 py-2 border border-neutral-300 rounded-xl focus:ring-2 focus:ring-brand-500 bg-white"
         >
           <option value="all">Todas las Categorías</option>
-          {/* Opciones extraídas dinámicamente o quemadas si ya se conocen */}
-          <option value="Figuras">Figuras</option>
-          <option value="Llaveros">Llaveros</option>
-          <option value="Accesorios">Accesorios</option>
-          <option value="Decoración">Decoración</option>
-          <option value="Test">Test (Oculto)</option>
+          {CATEGORIES.map(cat => (
+            <option key={cat} value={cat}>{cat}</option>
+          ))}
         </select>
         <button type="submit" className="bg-brand-500 hover:bg-brand-600 text-white px-4 py-2 rounded-xl font-bold transition-colors">
           Buscar
@@ -253,11 +261,25 @@ const ProductsTab = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-neutral-700 mb-1">Categoría</label>
-                  <input type="text" required value={currentProduct.category} onChange={(e) => setCurrentProduct({...currentProduct, category: e.target.value})} className="w-full border rounded-lg p-2" />
+                  <select required value={currentProduct.category} onChange={(e) => setCurrentProduct({...currentProduct, category: e.target.value, subcategory: ''})} className="w-full border rounded-lg p-2 bg-white">
+                    <option value="" disabled>Seleccione una categoría</option>
+                    {CATEGORIES.map(cat => (
+                      <option key={cat} value={cat}>{cat}</option>
+                    ))}
+                    {/* Fallback option in case an old product has a deprecated category */}
+                    {!CATEGORIES.includes(currentProduct.category) && currentProduct.category && (
+                      <option value={currentProduct.category}>{currentProduct.category} (Antigua)</option>
+                    )}
+                  </select>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-neutral-700 mb-1">Subcategoría (Opcional)</label>
-                  <input type="text" value={currentProduct.subcategory || ''} onChange={(e) => setCurrentProduct({...currentProduct, subcategory: e.target.value})} className="w-full border rounded-lg p-2" placeholder="Ej: Macetas" />
+                  <select value={currentProduct.subcategory || ''} onChange={(e) => setCurrentProduct({...currentProduct, subcategory: e.target.value})} className="w-full border rounded-lg p-2 bg-white" disabled={!currentProduct.category}>
+                    <option value="">Ninguna / Otra</option>
+                    {currentProduct.category && CATEGORY_STRUCTURE[currentProduct.category]?.map(sub => (
+                      <option key={sub} value={sub}>{sub}</option>
+                    ))}
+                  </select>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-neutral-700 mb-1">Precio ($)</label>

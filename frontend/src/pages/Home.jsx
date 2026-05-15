@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { motion } from 'framer-motion';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
 import HeroSlider from '../components/HeroSlider';
 import { Skeleton, Button, EmptyState } from '../components/ui';
@@ -46,23 +47,47 @@ const Home = () => {
   }, []);
 
   // Derived sections
-  const featured   = allProducts.filter(p => p.isFeatured).slice(0, 4);
-  const newArrivals = allProducts.filter(p => p.isNewArrival).slice(0, 4);
-  const onSale     = allProducts.filter(p => p.isOnSale && p.salePrice).slice(0, 4);
+  const featured   = allProducts.filter(p => p.isFeatured).slice(0, 12);
+  const newArrivals = allProducts.filter(p => p.isNewArrival).slice(0, 12);
+  const onSale     = allProducts.filter(p => p.isOnSale && p.salePrice).slice(0, 12);
   // Fallback: if admin hasn't configured flags yet, show most recent
-  const recentProducts = allProducts.slice(0, 4);
+  const recentProducts = allProducts.slice(0, 12);
 
-  const ProductGrid = ({ items, fallback }) => {
+  const ProductCarousel = ({ items, fallback }) => {
     const list = items.length > 0 ? items : fallback;
     if (list.length === 0) return null;
+
+    const scrollLeft = (e) => {
+      e.currentTarget.parentElement.querySelector('.carousel-container').scrollBy({ left: -320, behavior: 'smooth' });
+    };
+    
+    const scrollRight = (e) => {
+      e.currentTarget.parentElement.querySelector('.carousel-container').scrollBy({ left: 320, behavior: 'smooth' });
+    };
+
     return (
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-        {list.map((product, index) => (
-          <motion.div key={product._id} initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }} transition={{ duration: 0.4, delay: index * 0.08 }} className="h-full">
-            <ProductCard product={product} />
-          </motion.div>
-        ))}
+      <div className="relative group">
+        {list.length > 4 && (
+          <button onClick={scrollLeft} className="absolute left-0 top-1/2 -translate-y-1/2 -ml-4 md:-ml-6 z-10 bg-white shadow-[0_4px_12px_rgba(0,0,0,0.1)] p-2 md:p-3 rounded-full opacity-0 md:opacity-0 group-hover:opacity-100 transition-all text-neutral-600 hover:text-brand-600 hover:scale-110 disabled:opacity-0 border border-neutral-100 hidden sm:block">
+            <ChevronLeft size={24} />
+          </button>
+        )}
+        
+        <div className="carousel-container flex gap-4 sm:gap-6 overflow-x-auto snap-x snap-mandatory pb-8 pt-4 px-4 sm:px-2 -mx-4 sm:-mx-2 hide-scrollbar scroll-smooth relative">
+          {list.map((product, index) => (
+            <motion.div key={product._id} initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }} transition={{ duration: 0.4, delay: index * 0.08 }} 
+              className="w-[85vw] sm:w-[280px] lg:w-[300px] shrink-0 snap-start h-full">
+              <ProductCard product={product} />
+            </motion.div>
+          ))}
+        </div>
+
+        {list.length > 4 && (
+          <button onClick={scrollRight} className="absolute right-0 top-1/2 -translate-y-1/2 -mr-4 md:-mr-6 z-10 bg-white shadow-[0_4px_12px_rgba(0,0,0,0.1)] p-2 md:p-3 rounded-full opacity-0 md:opacity-0 group-hover:opacity-100 transition-all text-neutral-600 hover:text-brand-600 hover:scale-110 disabled:opacity-0 border border-neutral-100 hidden sm:block">
+            <ChevronRight size={24} />
+          </button>
+        )}
       </div>
     );
   };
@@ -103,8 +128,8 @@ const Home = () => {
           items = allProducts.filter(p => p.category?.toLowerCase() === section.categoryFilter.toLowerCase());
         }
 
-        // Limitar a 4 o a un slider (por ahora grid de 4)
-        items = items.slice(0, 4);
+        // Aumentamos el límite para aprovechar el carrusel
+        items = items.slice(0, 12);
 
         // Si no hay productos para esta sección y no está cargando, la ocultamos (para evitar secciones vacías)
         if (!loading && items.length === 0 && section.type !== 'newest') return null;
@@ -122,7 +147,7 @@ const Home = () => {
               linkTo={section.linkTo} 
               linkLabel={section.linkLabel} 
             />
-            {loading ? <SectionSkeleton /> : <ProductGrid items={items} fallback={recentProducts} />}
+            {loading ? <SectionSkeleton /> : <ProductCarousel items={items} fallback={recentProducts} />}
           </section>
         );
       })}
@@ -134,7 +159,7 @@ const Home = () => {
             <SectionHeader emoji="⭐" label="Lo Mejor de ZAMIS" title="Productos Destacados"
               desc="Seleccionados a mano por su calidad, originalidad y popularidad."
               linkTo="/shop?sort=best-selling" linkLabel="Ver Más Vendidos" />
-            <ProductGrid items={featured} fallback={recentProducts} />
+            <ProductCarousel items={featured} fallback={recentProducts} />
           </section>
 
           {onSale.length > 0 && (
@@ -142,7 +167,7 @@ const Home = () => {
               <SectionHeader emoji="🏷️" label="Precios Especiales · Tiempo Limitado" title="Ofertas de Temporada"
                 desc="Piezas premium a precios que no duran mucho. ¡No te quedes sin la tuya!"
                 linkTo="/shop" linkLabel="Ver Todas las Ofertas" />
-              <ProductGrid items={onSale} fallback={[]} />
+              <ProductCarousel items={onSale} fallback={[]} />
             </section>
           )}
 
@@ -150,7 +175,7 @@ const Home = () => {
             <SectionHeader emoji="🆕" label="Recién Llegados" title="Novedades"
               desc="Las últimas creaciones salidas de nuestra impresora. ¡Sé de los primeros en tenerlas!"
               linkTo="/shop?sort=newest" linkLabel="Ver Todo lo Nuevo" />
-            <ProductGrid items={newArrivals} fallback={recentProducts} />
+            <ProductCarousel items={newArrivals} fallback={recentProducts} />
           </section>
         </>
       )}
