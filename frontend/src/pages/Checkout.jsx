@@ -288,6 +288,11 @@ const Checkout = () => {
                     <div className="flex-1">
                       <h4 className="font-bold text-sm line-clamp-1">{item.name}</h4>
                       <p className="text-xs text-neutral-500 mt-1">Cant: {item.qty}</p>
+                      {item.personalizationText && (
+                        <p className="text-[10px] text-brand-600 mt-1 line-clamp-2 bg-brand-50 inline-block px-2 py-0.5 rounded-md border border-brand-100">
+                          ✏️ {item.personalizationText}
+                        </p>
+                      )}
                     </div>
                     <div className="font-bold text-right text-sm">
                       <PriceDisplay price={item.qty * item.price} currency="COP" showDiscount={false} />
