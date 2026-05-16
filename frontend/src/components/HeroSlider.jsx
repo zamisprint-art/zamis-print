@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import axios from 'axios';
+import { optimizeImage } from '../utils/cloudinary';
 
 const FALLBACK_SLIDES = [
   {
@@ -126,7 +127,7 @@ const HeroSlider = () => {
             {/* Overlay inferior sutil */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent z-10" />
             <img
-              src={slide.image}
+              src={optimizeImage(slide.image, 1600)}
               alt={slide.title}
               className="w-full h-full object-cover object-top"
             />

@@ -14,6 +14,7 @@ import QuantitySelector from '../components/ecommerce/QuantitySelector';
 import TrustBadges from '../components/ecommerce/TrustBadges';
 import ProductCard from '../components/ProductCard';
 import { fadeUp, fadeLeft, fadeRight } from '../design-system/tokens';
+import { optimizeImage } from '../utils/cloudinary';
 
 const Product3DViewer = lazy(() => import('../components/Product3DViewer'));
 
@@ -173,8 +174,8 @@ const ProductDetail = () => {
                 <img
                   src={
                     activeMedia && activeMedia !== 'main' 
-                      ? activeMedia 
-                      : (product.image && product.image !== '/images/sample.jpg' ? product.image : 'https://via.placeholder.com/600x600?text=ZAMIS+Print')
+                      ? optimizeImage(activeMedia, 800) 
+                      : (product.image && product.image !== '/images/sample.jpg' ? optimizeImage(product.image, 800) : 'https://via.placeholder.com/600x600?text=ZAMIS+Print')
                   }
                   onError={(e) => { e.target.onerror = null; e.target.src = 'https://via.placeholder.com/600x600?text=Imagen+No+Disponible'; }}
                   alt={product.name}
@@ -291,7 +292,7 @@ const ProductDetail = () => {
                   (activeMedia === 'main' || (!activeMedia && !product.model3D?.startsWith('http'))) ? 'border-brand-500 shadow-md ring-2 ring-brand-500/20' : 'border-neutral-200 hover:border-brand-300 opacity-70 hover:opacity-100'
                 }`}
               >
-                <img src={product.image} alt="Principal" className="w-full h-full object-cover" />
+                <img src={optimizeImage(product.image, 150)} alt="Principal" className="w-full h-full object-cover" />
               </button>
             )}
 
@@ -304,7 +305,7 @@ const ProductDetail = () => {
                   activeMedia === imgUrl ? 'border-brand-500 shadow-md ring-2 ring-brand-500/20' : 'border-neutral-200 hover:border-brand-300 opacity-70 hover:opacity-100'
                 }`}
               >
-                <img src={imgUrl} alt={`Galería ${idx}`} className="w-full h-full object-cover" />
+                <img src={optimizeImage(imgUrl, 150)} alt={`Galería ${idx}`} className="w-full h-full object-cover" />
               </button>
             ))}
           </motion.div>

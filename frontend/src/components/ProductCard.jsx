@@ -5,6 +5,7 @@ import Rating from './Rating';
 import { Badge } from './ui';
 import PriceDisplay from './ecommerce/PriceDisplay';
 import { staggerItem, hoverLift, tapScale } from '../design-system/tokens';
+import { optimizeImage } from '../utils/cloudinary';
 
 const ProductCard = ({ product }) => {
   const isNew = product.isNewArrival || (product.createdAt
@@ -32,7 +33,7 @@ const ProductCard = ({ product }) => {
         <img
           src={
             product.image && product.image !== '/images/sample.jpg'
-              ? product.image
+              ? optimizeImage(product.image, 500)
               : 'https://via.placeholder.com/400x300?text=ZAMIS+Print'
           }
           onError={(e) => {

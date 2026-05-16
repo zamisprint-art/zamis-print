@@ -69,11 +69,17 @@ router.post('/', upload.single('file'), async (req, res) => {
             Readable.from(req.file.buffer).pipe(uploadStream);
         });
 
-        console.log('[Upload] Success:', result.secure_url);
+        let finalUrl = result.secure_url;
+        // Inject delivery optimizations for images natively
+        if (!is3DModel && finalUrl.includes('/upload/')) {
+            finalUrl = finalUrl.replace('/upload/', '/upload/f_auto,q_auto,w_1600,c_limit/');
+        }
+
+        console.log('[Upload] Success:', finalUrl);
 
         res.json({
             message:  'Archivo subido exitosamente',
-            filePath: result.secure_url,
+            filePath: finalUrl,
         });
 
     } catch (error) {
