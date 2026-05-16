@@ -96,7 +96,7 @@ const Navbar = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full flex flex-col">
+    <header className="fixed top-0 left-0 z-50 w-full flex flex-col shadow-sm">
 
       {/* ── Top Ribbon (Fija) ── */}
       <div className="bg-brand-900 text-brand-50 text-xs overflow-hidden border-b border-brand-800">

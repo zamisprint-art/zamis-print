@@ -9,7 +9,7 @@ const StoreLayout = () => {
     <>
       <Navbar />
       <CartDrawer />
-      <main className="min-h-[calc(100vh-64px)]">
+      <main className="min-h-[calc(100vh-64px)] pt-[136px]">
         <Outlet />
       </main>
       {/* Public Store Footer */}
