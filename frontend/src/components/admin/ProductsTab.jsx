@@ -120,7 +120,7 @@ const ProductsTab = () => {
       }
     } catch (error) {
       console.error(error);
-      alert('Error subiendo el archivo');
+      alert(error.response?.data?.error || error.response?.data?.message || 'Error subiendo el archivo');
       if (type === 'image' || type === 'gallery') setUploadingImage(false);
       else setUploadingModel(false);
     }
