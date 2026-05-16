@@ -23,7 +23,7 @@ const getProducts = async (req, res) => {
 
     const count = await Product.countDocuments({ ...query });
     
-    let productsQuery = Product.find({ ...query });
+    let productsQuery = Product.find({ ...query }).sort({ createdAt: -1 });
     
     if (pageSize > 0) {
         productsQuery = productsQuery.limit(pageSize).skip(pageSize * (page - 1));
