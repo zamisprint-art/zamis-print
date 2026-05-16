@@ -99,10 +99,10 @@ const Navbar = () => {
     <header className="sticky top-0 z-50 w-full flex flex-col">
 
       {/* ── Top Ribbon (Fija) ── */}
-      <div className="bg-brand-900 text-brand-50 text-xs overflow-hidden hidden sm:block border-b border-brand-800">
+      <div className="bg-brand-900 text-brand-50 text-xs overflow-hidden border-b border-brand-800">
         <div className="max-w-7xl mx-auto px-4 py-2 flex justify-between items-center h-10">
           {/* Contacto Izquierda */}
-          <div className="flex items-center gap-5 shrink-0 z-10 bg-brand-900 pr-4">
+          <div className="hidden sm:flex items-center gap-5 shrink-0 z-10 bg-brand-900 pr-4">
             <a href="mailto:hola@zamisprint.com" className="flex items-center gap-1.5 hover:text-white transition-colors">
               <Mail size={12} /> hola@zamisprint.com
             </a>
@@ -112,21 +112,21 @@ const Navbar = () => {
           </div>
 
           {/* Marquee Centrado */}
-          <div className="flex-1 overflow-hidden flex items-center group relative h-full [mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
+          <div className="flex-1 overflow-hidden flex items-center group relative h-full [mask-image:linear-gradient(to_right,transparent,black_5%,black_95%,transparent)] sm:[mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
             <div className="flex whitespace-nowrap animate-marquee group-hover:[animation-play-state:paused]">
               <div className="flex items-center justify-around w-max">
-                <span className="font-semibold tracking-wide px-16 text-brand-200">✨ ¡Bienvenido a ZAMIS Print! • Transformando la imaginación en realidad 3D • Calidad premium en cada detalle ✨</span>
-                <span className="font-semibold tracking-wide px-16 text-brand-200">✨ ¡Bienvenido a ZAMIS Print! • Transformando la imaginación en realidad 3D • Calidad premium en cada detalle ✨</span>
+                <span className="font-semibold tracking-wide px-8 sm:px-16 text-brand-200">✨ ¡Bienvenido a ZAMIS Print! • Transformando la imaginación en realidad 3D • Calidad premium en cada detalle ✨</span>
+                <span className="font-semibold tracking-wide px-8 sm:px-16 text-brand-200">✨ ¡Bienvenido a ZAMIS Print! • Transformando la imaginación en realidad 3D • Calidad premium en cada detalle ✨</span>
               </div>
               <div className="flex items-center justify-around w-max">
-                <span className="font-semibold tracking-wide px-16 text-brand-200">✨ ¡Bienvenido a ZAMIS Print! • Transformando la imaginación en realidad 3D • Calidad premium en cada detalle ✨</span>
-                <span className="font-semibold tracking-wide px-16 text-brand-200">✨ ¡Bienvenido a ZAMIS Print! • Transformando la imaginación en realidad 3D • Calidad premium en cada detalle ✨</span>
+                <span className="font-semibold tracking-wide px-8 sm:px-16 text-brand-200">✨ ¡Bienvenido a ZAMIS Print! • Transformando la imaginación en realidad 3D • Calidad premium en cada detalle ✨</span>
+                <span className="font-semibold tracking-wide px-8 sm:px-16 text-brand-200">✨ ¡Bienvenido a ZAMIS Print! • Transformando la imaginación en realidad 3D • Calidad premium en cada detalle ✨</span>
               </div>
             </div>
           </div>
 
           {/* Redes Derecha */}
-          <div className="flex items-center gap-3 shrink-0 z-10 bg-brand-900 pl-4">
+          <div className="hidden sm:flex items-center gap-3 shrink-0 z-10 bg-brand-900 pl-4">
             <span className="text-brand-300">Síguenos:</span>
             <a href="#" className="hover:text-white font-bold transition-colors">IG</a>
             <a href="#" className="hover:text-white font-bold transition-colors">FB</a>
