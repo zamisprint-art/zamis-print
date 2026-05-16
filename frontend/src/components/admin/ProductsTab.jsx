@@ -47,6 +47,8 @@ const ProductsTab = () => {
     fetchProducts();
   }, [page, category]);
 
+  const [uploadError, setUploadError] = useState('');
+
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     setPage(1);
@@ -57,12 +59,14 @@ const ProductsTab = () => {
   const handleOpenCreateModal = () => {
     setIsEditing(false);
     setCurrentProduct({ _id: '', name: '', price: 0, category: '', countInStock: 0, description: '', image: '', model3D: '', gallery: [] });
+    setUploadError('');
     setIsModalOpen(true);
   };
 
   const handleOpenEditModal = (product) => {
     setIsEditing(true);
     setCurrentProduct({ ...product });
+    setUploadError('');
     setIsModalOpen(true);
   };
 
@@ -97,6 +101,8 @@ const ProductsTab = () => {
     const file = e.target.files[0];
     if (!file) return;
 
+    setUploadError('');
+
     const formData = new FormData();
     formData.append('file', file);
 
@@ -120,7 +126,7 @@ const ProductsTab = () => {
       }
     } catch (error) {
       console.error(error);
-      alert(error.response?.data?.error || error.response?.data?.message || 'Error subiendo el archivo');
+      setUploadError(error.response?.data?.error || error.response?.data?.message || 'Error al subir el archivo. Verifica el peso (Máx 10MB) y formato.');
       if (type === 'image' || type === 'gallery') setUploadingImage(false);
       else setUploadingModel(false);
     }
@@ -296,11 +302,22 @@ const ProductsTab = () => {
                 <textarea rows="3" required value={currentProduct.description} onChange={(e) => setCurrentProduct({...currentProduct, description: e.target.value})} className="w-full border rounded-lg p-2"></textarea>
               </div>
 
+              {/* Upload Error Banner */}
+              {uploadError && (
+                <div className="p-3 bg-red-50 border border-red-200 text-red-600 rounded-xl text-sm font-medium flex items-start gap-2">
+                  <span className="mt-0.5">⚠️</span>
+                  <div>
+                    <strong>Validación:</strong> {uploadError}
+                  </div>
+                </div>
+              )}
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border border-neutral-200 rounded-xl bg-neutral-50">
                 <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-2 flex items-center gap-2">
-                    <Upload size={16} className="text-brand-500"/> Subir Imagen (JPG/PNG)
+                  <label className="block text-sm font-medium text-neutral-700 mb-1 flex items-center gap-2">
+                    <Upload size={16} className="text-brand-500"/> Subir Imagen Principal
                   </label>
+                  <p className="text-xs text-neutral-500 mb-3">Formatos: JPG, PNG, WEBP. Max: 10MB.</p>
                   <div className="flex items-start gap-4">
                     {currentProduct.image && (
                       <div className="w-16 h-16 rounded-xl bg-neutral-100 overflow-hidden border border-neutral-200 shrink-0 shadow-sm relative">
@@ -320,12 +337,13 @@ const ProductsTab = () => {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-2 flex items-center gap-2">
-                    <Upload size={16} className="text-neutral-500"/> Subir Modelo 3D (.GLB)
+                  <label className="block text-sm font-medium text-neutral-700 mb-1 flex items-center gap-2">
+                    <Upload size={16} className="text-neutral-500"/> Subir Modelo 3D
                   </label>
-                  <input type="file" onChange={(e) => uploadFileHandler(e, 'model')} className="text-sm text-neutral-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-neutral-100 file:text-neutral-600 hover:file:bg-neutral-200" />
-                  {uploadingModel && <p className="text-xs text-blue-400 mt-1">Subiendo...</p>}
-                  {currentProduct.model3D && <p className="text-xs text-green-600 mt-1 truncate">{currentProduct.model3D}</p>}
+                  <p className="text-xs text-neutral-500 mb-3">Formatos: .GLB, .GLTF. Max: 10MB.</p>
+                  <input type="file" onChange={(e) => uploadFileHandler(e, 'model')} className="w-full text-sm text-neutral-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-neutral-100 file:text-neutral-600 hover:file:bg-neutral-200 cursor-pointer" />
+                  {uploadingModel && <p className="text-xs text-blue-400 font-semibold mt-2 animate-pulse">Subiendo...</p>}
+                  {currentProduct.model3D && !uploadingModel && <p className="text-xs text-green-600 mt-2 truncate" title={currentProduct.model3D}>✅ {currentProduct.model3D.split('/').pop()}</p>}
                 </div>
               </div>
               
