@@ -99,8 +99,8 @@ const Navbar = () => {
     <header className="sticky top-0 z-50 w-full flex flex-col">
 
       {/* ── Top Ribbon (Fija) ── */}
-      <div className="bg-brand-900 text-brand-50 text-[11px] overflow-hidden hidden sm:block border-b border-brand-800">
-        <div className="max-w-7xl mx-auto px-4 py-1.5 flex justify-between items-center h-8">
+      <div className="bg-brand-900 text-brand-50 text-xs overflow-hidden hidden sm:block border-b border-brand-800">
+        <div className="max-w-7xl mx-auto px-4 py-2 flex justify-between items-center h-10">
           {/* Contacto Izquierda */}
           <div className="flex items-center gap-5 shrink-0 z-10 bg-brand-900 pr-4">
             <a href="mailto:hola@zamisprint.com" className="flex items-center gap-1.5 hover:text-white transition-colors">
