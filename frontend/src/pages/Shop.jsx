@@ -22,6 +22,7 @@ const Shop = () => {
   const [products, setProducts]   = useState([]);
   const [filtered, setFiltered]   = useState([]);
   const [loading, setLoading]     = useState(true);
+  const [showFiltersMobile, setShowFiltersMobile] = useState(false);
   
   const querySearch = searchParams.get('q') || '';
   const queryCategory = searchParams.get('category') || 'All';
@@ -151,10 +152,29 @@ const Shop = () => {
         </p>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-8 items-start">
+      <div className="flex flex-col lg:flex-row gap-8 items-start relative">
+        
+        {/* Mobile Backdrop */}
+        {showFiltersMobile && (
+          <div 
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[60] lg:hidden"
+            onClick={() => setShowFiltersMobile(false)}
+          />
+        )}
+
         {/* Left Sidebar (Filters) */}
-        <div className="w-full lg:w-72 shrink-0">
-          <div className="sticky top-28 bg-surface-card p-6 rounded-2xl border border-neutral-200 shadow-sm flex flex-col gap-6">
+        <div className={`
+          fixed top-0 left-0 h-full w-[85%] max-w-sm bg-white shadow-2xl z-[61] overflow-y-auto flex flex-col
+          transform transition-transform duration-300 ease-in-out
+          lg:static lg:h-auto lg:w-72 lg:max-w-none lg:bg-transparent lg:shadow-none lg:z-auto lg:overflow-visible lg:transform-none shrink-0
+          ${showFiltersMobile ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+        `}>
+          <div className="lg:sticky lg:top-28 bg-surface-card p-6 lg:rounded-2xl lg:border lg:border-neutral-200 lg:shadow-sm flex flex-col gap-6">
+            
+            <div className="flex justify-between items-center lg:hidden mb-2">
+              <h2 className="text-xl font-bold text-neutral-900">Filtros</h2>
+              <button onClick={() => setShowFiltersMobile(false)} className="p-2 bg-neutral-100 rounded-full text-neutral-600">✕</button>
+            </div>
 
             {/* Offer toggle */}
             <label className="flex items-center gap-3 cursor-pointer bg-red-50 border border-red-100 rounded-xl px-4 py-3">
@@ -268,17 +288,43 @@ const Shop = () => {
               </button>
             )}
           </div>
+
+          {/* Mobile Sticky Footer */}
+          <div className="sticky bottom-0 left-0 w-full p-4 bg-white border-t border-neutral-200 lg:hidden z-10 mt-auto shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.05)]">
+            <button 
+              onClick={() => setShowFiltersMobile(false)} 
+              className="w-full py-3 bg-brand-500 hover:bg-brand-600 text-white rounded-xl font-bold transition-colors"
+            >
+              Ver {filtered.length} Resultados
+            </button>
+          </div>
         </div>
 
         {/* Right Content */}
         <div className="flex-1 w-full">
           {/* Top Bar: Count & Sort */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-            {!loading && (
-              <p className="text-sm font-medium text-neutral-500">
-                Mostrando <span className="text-neutral-900 font-bold">{filtered.length}</span> {filtered.length === 1 ? 'producto' : 'productos'}
-              </p>
-            )}
+            
+            <div className="flex items-center justify-between w-full sm:w-auto">
+              {!loading && (
+                <p className="text-sm font-medium text-neutral-500">
+                  Mostrando <span className="text-neutral-900 font-bold">{filtered.length}</span> {filtered.length === 1 ? 'producto' : 'productos'}
+                </p>
+              )}
+              
+              <button 
+                onClick={() => setShowFiltersMobile(true)}
+                className="lg:hidden flex items-center gap-2 px-3 py-1.5 bg-neutral-100 hover:bg-neutral-200 rounded-lg text-sm font-bold text-neutral-700 transition-colors"
+              >
+                <SlidersHorizontal size={16} />
+                Filtros
+                {activeFiltersCount > 0 && (
+                  <span className="bg-brand-500 text-white w-5 h-5 flex items-center justify-center rounded-full text-[10px] ml-1">
+                    {activeFiltersCount}
+                  </span>
+                )}
+              </button>
+            </div>
             
             <div className="relative w-full sm:w-56 ml-auto">
               <SlidersHorizontal className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 pointer-events-none" />
