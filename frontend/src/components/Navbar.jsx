@@ -141,7 +141,7 @@ const Navbar = () => {
 
             {/* Logo — se reduce al hacer scroll */}
             <div className="shrink-0">
-              <Link to="/" className="flex items-center bg-white rounded-xl px-2 py-1">
+              <Link to="/" className="flex items-center">
                 <img
                   src="/images/logo.png"
                   alt="ZAMIS Print"
@@ -358,7 +358,7 @@ const Navbar = () => {
               className="fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-50 flex flex-col"
             >
               <div className="flex items-center justify-between px-6 py-6 border-b border-neutral-100">
-                <Link to="/" onClick={() => setIsOpen(false)} className="flex items-center bg-white rounded-xl px-2 py-1">
+                <Link to="/" onClick={() => setIsOpen(false)} className="flex items-center">
                   <img src="/images/logo.png" alt="ZAMIS Print" className="h-16 w-auto object-contain" />
                 </Link>
                 <button onClick={() => setIsOpen(false)} className="p-2 rounded-full hover:bg-neutral-100 text-neutral-500 transition-colors">
