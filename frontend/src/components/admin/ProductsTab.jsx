@@ -126,7 +126,8 @@ const ProductsTab = () => {
       }
     } catch (error) {
       console.error(error);
-      setUploadError(error.response?.data?.error || error.response?.data?.message || 'Error al subir el archivo. Verifica el peso (Máx 10MB) y formato.');
+      // For security, we don't expose raw Cloudinary errors
+      setUploadError('El archivo ha superado el peso máximo permitido de 10MB o no es un formato válido.');
       if (type === 'image' || type === 'gallery') setUploadingImage(false);
       else setUploadingModel(false);
     }
@@ -302,16 +303,6 @@ const ProductsTab = () => {
                 <textarea rows="3" required value={currentProduct.description} onChange={(e) => setCurrentProduct({...currentProduct, description: e.target.value})} className="w-full border rounded-lg p-2"></textarea>
               </div>
 
-              {/* Upload Error Banner */}
-              {uploadError && (
-                <div className="p-3 bg-red-50 border border-red-200 text-red-600 rounded-xl text-sm font-medium flex items-start gap-2">
-                  <span className="mt-0.5">⚠️</span>
-                  <div>
-                    <strong>Validación:</strong> {uploadError}
-                  </div>
-                </div>
-              )}
-
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border border-neutral-200 rounded-xl bg-neutral-50">
                 <div>
                   <label className="block text-sm font-medium text-neutral-700 mb-1 flex items-center gap-2">
@@ -388,6 +379,16 @@ const ProductsTab = () => {
                   )}
                 </div>
               </div>
+
+              {/* Upload Error Banner */}
+              {uploadError && (
+                <div className="p-3 bg-red-50 border border-red-200 text-red-600 rounded-xl text-sm font-medium flex items-start gap-2">
+                  <span className="mt-0.5">⚠️</span>
+                  <div>
+                    <strong>Validación de Archivo:</strong> {uploadError}
+                  </div>
+                </div>
+              )}
 
               {/* Advanced Attributes */}
               <div className="mt-4 p-4 border border-neutral-200 rounded-xl bg-neutral-50/50 space-y-4">
