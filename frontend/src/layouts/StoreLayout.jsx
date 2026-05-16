@@ -3,10 +3,12 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import WhatsAppButton from '../components/WhatsAppButton';
 import CartDrawer from '../components/CartDrawer';
+import AnnouncementBar from '../components/AnnouncementBar';
 
 const StoreLayout = () => {
   return (
     <>
+      <AnnouncementBar />
       <Navbar />
       <CartDrawer />
       <main className="min-h-[calc(100vh-64px)]">
