@@ -141,11 +141,11 @@ const Navbar = () => {
 
             {/* Logo — se reduce al hacer scroll */}
             <div className="shrink-0">
-              <Link to="/" className="flex items-center">
+              <Link to="/" className="flex items-center bg-white/95 shadow-[0_0_20px_rgba(255,255,255,0.7)] backdrop-blur-md rounded-2xl px-2 py-1 transition-all duration-300 hover:shadow-[0_0_25px_rgba(255,255,255,0.9)]">
                 <img
                   src="/images/logo.png"
                   alt="ZAMIS Print"
-                  className={`w-auto object-contain mix-blend-multiply transition-all duration-300 ${scrolled ? 'h-8 sm:h-10' : 'h-16 sm:h-20'}`}
+                  className={`w-auto object-contain transition-all duration-300 ${scrolled ? 'h-8 sm:h-10' : 'h-16 sm:h-20'}`}
                 />
               </Link>
             </div>
@@ -358,8 +358,8 @@ const Navbar = () => {
               className="fixed top-0 right-0 h-full w-72 bg-white shadow-2xl z-50 flex flex-col"
             >
               <div className="flex items-center justify-between px-6 py-6 border-b border-neutral-100">
-                <Link to="/" onClick={() => setIsOpen(false)} className="flex items-center">
-                  <img src="/images/logo.png" alt="ZAMIS Print" className="h-16 w-auto object-contain mix-blend-multiply" />
+                <Link to="/" onClick={() => setIsOpen(false)} className="flex items-center bg-white/95 shadow-[0_0_20px_rgba(255,255,255,0.7)] backdrop-blur-md rounded-2xl px-2 py-1">
+                  <img src="/images/logo.png" alt="ZAMIS Print" className="h-16 w-auto object-contain" />
                 </Link>
                 <button onClick={() => setIsOpen(false)} className="p-2 rounded-full hover:bg-neutral-100 text-neutral-500 transition-colors">
                   <X size={20} />
