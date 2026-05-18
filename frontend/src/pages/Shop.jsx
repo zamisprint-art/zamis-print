@@ -139,46 +139,22 @@ const Shop = () => {
         description="Explora todo nuestro catálogo: Funkos personalizados, llaveros, bustos, esculturas y más. Filtra por precio, material y personalización."
       />
 
-      {/* Ultra-Premium Hero Banner for Shop */}
-      <div className="relative mb-12 rounded-[2rem] overflow-hidden bg-neutral-950 shadow-2xl border border-neutral-800">
-        {/* Animated Mesh Gradient Background */}
-        <div className="absolute inset-0 opacity-60">
-          <div className="absolute top-0 -left-1/4 w-96 h-96 bg-brand-600 rounded-full mix-blend-screen filter blur-[120px] opacity-40"></div>
-          <div className="absolute bottom-0 -right-1/4 w-96 h-96 bg-blue-600 rounded-full mix-blend-screen filter blur-[120px] opacity-30"></div>
-        </div>
-
-        {/* Subtle Overlay Pattern */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:24px_24px] opacity-50"></div>
-
-        {/* Content */}
-        <div className="relative z-10 px-6 py-10 sm:px-12 sm:py-14 flex flex-col md:flex-row md:items-center justify-between gap-8">
-          <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-5 shadow-inner">
-              <span className="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span>
-              <span className="text-white/90 text-xs font-bold tracking-[0.15em] uppercase">Catálogo Premium</span>
-            </div>
-            
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.1] mb-5 drop-shadow-lg">
-              {querySearch ? (
-                <>Resultados para <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-300 to-blue-200">"{querySearch}"</span></>
-              ) : (
-                <>Descubre Nuestro <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-blue-300">Universo 3D</span></>
-              )}
-            </h1>
-            
-            <p className="text-neutral-300 text-sm sm:text-base font-medium leading-relaxed max-w-lg">
-              Explora creaciones únicas con acabados milimétricos. Filtra por material, nivel de personalización y encuentra la pieza exacta que imaginas.
-            </p>
+      {/* Header Minimalista y Limpio */}
+      <div className="mb-8 pb-6 border-b border-neutral-100 flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div>
+          <div className="flex items-center gap-3 mb-2.5">
+            <span className="w-8 h-1 bg-brand-500 rounded-full"></span>
+            <span className="text-brand-600 text-xs font-bold uppercase tracking-[0.2em]">Catálogo</span>
           </div>
-          
-          {/* Decorative Abstract Glass Element */}
-          <div className="hidden md:flex items-center justify-center relative w-48 h-48 lg:mr-8 shrink-0">
-            <div className="absolute inset-0 bg-gradient-to-tr from-brand-500/20 to-white/5 rounded-3xl border border-white/10 backdrop-blur-sm transform rotate-6 scale-105 transition-transform duration-700 hover:rotate-12"></div>
-            <div className="absolute inset-0 bg-gradient-to-tr from-brand-400/30 to-white/10 rounded-3xl border border-white/20 backdrop-blur-md transform -rotate-3 flex items-center justify-center shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)] transition-transform duration-700 hover:-rotate-6 hover:scale-105">
-              <SlidersHorizontal size={48} className="text-white/90 drop-shadow-md" strokeWidth={1.5} />
-            </div>
-          </div>
+          <h1 className="text-3xl sm:text-4xl font-black text-neutral-900 tracking-tight">
+            {querySearch ? (
+              <>Resultados para <span className="text-brand-500">"{querySearch}"</span></>
+            ) : 'Todos los Productos'}
+          </h1>
         </div>
+        <p className="text-sm text-neutral-500 max-w-sm md:text-right font-medium leading-relaxed">
+          Explora nuestras creaciones en impresión 3D. Piezas detalladas y adaptables a tus gustos exactos.
+        </p>
       </div>
 
       <div className="flex flex-col lg:flex-row gap-8 items-start relative">
