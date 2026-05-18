@@ -318,48 +318,67 @@ const ProductDetail = () => {
           animate="visible"
           className="flex flex-col gap-6"
         >
-          {/* Category */}
+          {/* Breadcrumb Category */}
           {product.category && (
-            <span className="text-brand-400 text-sm font-semibold uppercase tracking-widest">
-              {product.category}
-            </span>
+            <div className="flex items-center gap-2 text-sm font-semibold text-neutral-400 mb-1">
+              <span className="hover:text-neutral-900 cursor-pointer transition-colors">Catálogo</span>
+              <span>/</span>
+              <span className="text-brand-600">{product.category}</span>
+            </div>
           )}
 
           {/* Title */}
-          <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight">{product.name}</h1>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-neutral-900 leading-[1.1] tracking-tight">{product.name}</h1>
 
           {/* Rating */}
           <Rating value={product.rating} text={`${product.numReviews} reseñas verificadas`} />
 
           {/* Price */}
-          <PriceDisplay price={finalPrice} size="lg" />
+          <div className="mt-2">
+            <PriceDisplay price={finalPrice} size="xl" />
+            <p className="text-sm text-neutral-500 font-medium mt-1">IVA Incluido. Envío calculado en el checkout.</p>
+          </div>
 
           {/* Description */}
-          <p className="text-neutral-400 text-base leading-relaxed">{product.description}</p>
+          <p className="text-neutral-600 text-base leading-relaxed max-w-xl">{product.description}</p>
 
-          <div className="divider" />
+          <div className="w-full h-px bg-neutral-200/60 my-2" />
 
           {/* Personalization Options */}
           <div className="flex flex-col gap-6">
             {product.isCustomizable ? (
-              <div className="bg-brand-50/50 border border-brand-100 rounded-2xl p-5 space-y-6">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="bg-brand-500 text-white text-xs font-bold px-2 py-1 rounded">PRO</span>
-                  <h3 className="font-bold text-neutral-900">Configurador Premium</h3>
+              <div className="bg-white border-2 border-brand-100 rounded-[2rem] p-6 sm:p-8 shadow-sm space-y-8 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-brand-50 rounded-full blur-[80px] -mr-20 -mt-20 pointer-events-none" />
+                
+                <div className="flex items-center gap-3 mb-2 relative z-10">
+                  <span className="bg-brand-500 text-white text-[10px] font-black px-2.5 py-1 rounded-md tracking-widest uppercase">PRO</span>
+                  <h3 className="text-lg font-bold text-neutral-900">Configurador Premium</h3>
                 </div>
 
                 {/* Step 1: Material */}
-                <div>
-                  <label className="block text-sm font-semibold text-neutral-900 mb-2">1. Material y Color</label>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                <div className="relative z-10">
+                  <label className="flex items-center gap-2 text-sm font-bold text-neutral-900 mb-3">
+                    <span className="w-5 h-5 rounded-full bg-neutral-100 flex items-center justify-center text-xs text-neutral-500">1</span>
+                    Material y Color
+                  </label>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     {['Estándar', 'Premium', 'Especial'].map(opt => (
                       <button
                         key={opt}
                         onClick={() => setCustomMaterial(opt)}
-                        className={`py-2 px-3 rounded-lg border text-sm font-medium transition-all ${customMaterial === opt ? 'bg-brand-500 text-white border-brand-500 shadow-md' : 'bg-white text-neutral-600 border-neutral-200 hover:border-brand-300'}`}
+                        className={`relative py-3 px-4 rounded-xl border-2 text-sm font-semibold transition-all flex flex-col items-start gap-1 overflow-hidden ${
+                          customMaterial === opt 
+                            ? 'bg-brand-50 border-brand-500 text-brand-900 shadow-md ring-1 ring-brand-500/20' 
+                            : 'bg-white border-neutral-200 text-neutral-600 hover:border-brand-300 hover:bg-neutral-50'
+                        }`}
                       >
-                        {opt}
-                        <span className="block text-[10px] opacity-80 font-normal">
+                        {customMaterial === opt && (
+                          <div className="absolute top-0 right-0 w-0 h-0 border-t-[28px] border-l-[28px] border-t-brand-500 border-l-transparent">
+                            <span className="absolute -top-[24px] -left-[14px] text-white text-[10px] font-bold">✓</span>
+                          </div>
+                        )}
+                        <span>{opt}</span>
+                        <span className={`text-[11px] font-medium ${customMaterial === opt ? 'text-brand-600' : 'text-neutral-400'}`}>
                           {opt === 'Estándar' ? 'Incluido' : opt === 'Premium' ? '+$15.000' : '+$20.000'}
                         </span>
                       </button>
@@ -368,17 +387,29 @@ const ProductDetail = () => {
                 </div>
 
                 {/* Step 2: Size */}
-                <div>
-                  <label className="block text-sm font-semibold text-neutral-900 mb-2">2. Escala / Tamaño</label>
-                  <div className="grid grid-cols-2 gap-2">
+                <div className="relative z-10">
+                  <label className="flex items-center gap-2 text-sm font-bold text-neutral-900 mb-3">
+                    <span className="w-5 h-5 rounded-full bg-neutral-100 flex items-center justify-center text-xs text-neutral-500">2</span>
+                    Escala / Tamaño
+                  </label>
+                  <div className="grid grid-cols-2 gap-3">
                     {['100%', '150%'].map(opt => (
                       <button
                         key={opt}
                         onClick={() => setCustomSize(opt)}
-                        className={`py-2 px-3 rounded-lg border text-sm font-medium transition-all ${customSize === opt ? 'bg-brand-500 text-white border-brand-500 shadow-md' : 'bg-white text-neutral-600 border-neutral-200 hover:border-brand-300'}`}
+                        className={`relative py-3 px-4 rounded-xl border-2 text-sm font-semibold transition-all flex flex-col items-start gap-1 overflow-hidden ${
+                          customSize === opt 
+                            ? 'bg-brand-50 border-brand-500 text-brand-900 shadow-md ring-1 ring-brand-500/20' 
+                            : 'bg-white border-neutral-200 text-neutral-600 hover:border-brand-300 hover:bg-neutral-50'
+                        }`}
                       >
-                        {opt === '100%' ? 'Original (100%)' : 'Extra Grande (150%)'}
-                        <span className="block text-[10px] opacity-80 font-normal">
+                        {customSize === opt && (
+                          <div className="absolute top-0 right-0 w-0 h-0 border-t-[28px] border-l-[28px] border-t-brand-500 border-l-transparent">
+                            <span className="absolute -top-[24px] -left-[14px] text-white text-[10px] font-bold">✓</span>
+                          </div>
+                        )}
+                        <span>{opt === '100%' ? 'Original (100%)' : 'Extra Grande (150%)'}</span>
+                        <span className={`text-[11px] font-medium ${customSize === opt ? 'text-brand-600' : 'text-neutral-400'}`}>
                           {opt === '100%' ? 'Incluido' : '+$35.000'}
                         </span>
                       </button>
@@ -387,17 +418,29 @@ const ProductDetail = () => {
                 </div>
 
                 {/* Step 3: Finish */}
-                <div>
-                  <label className="block text-sm font-semibold text-neutral-900 mb-2">3. Acabado</label>
-                  <div className="grid grid-cols-2 gap-2">
+                <div className="relative z-10">
+                  <label className="flex items-center gap-2 text-sm font-bold text-neutral-900 mb-3">
+                    <span className="w-5 h-5 rounded-full bg-neutral-100 flex items-center justify-center text-xs text-neutral-500">3</span>
+                    Acabado
+                  </label>
+                  <div className="grid grid-cols-2 gap-3">
                     {['Limpiado', 'Pintado a mano'].map(opt => (
                       <button
                         key={opt}
                         onClick={() => setCustomFinish(opt)}
-                        className={`py-2 px-3 rounded-lg border text-sm font-medium transition-all ${customFinish === opt ? 'bg-brand-500 text-white border-brand-500 shadow-md' : 'bg-white text-neutral-600 border-neutral-200 hover:border-brand-300'}`}
+                        className={`relative py-3 px-4 rounded-xl border-2 text-sm font-semibold transition-all flex flex-col items-start gap-1 overflow-hidden ${
+                          customFinish === opt 
+                            ? 'bg-brand-50 border-brand-500 text-brand-900 shadow-md ring-1 ring-brand-500/20' 
+                            : 'bg-white border-neutral-200 text-neutral-600 hover:border-brand-300 hover:bg-neutral-50'
+                        }`}
                       >
-                        {opt}
-                        <span className="block text-[10px] opacity-80 font-normal">
+                        {customFinish === opt && (
+                          <div className="absolute top-0 right-0 w-0 h-0 border-t-[28px] border-l-[28px] border-t-brand-500 border-l-transparent">
+                            <span className="absolute -top-[24px] -left-[14px] text-white text-[10px] font-bold">✓</span>
+                          </div>
+                        )}
+                        <span>{opt}</span>
+                        <span className={`text-[11px] font-medium ${customFinish === opt ? 'text-brand-600' : 'text-neutral-400'}`}>
                           {opt === 'Limpiado' ? 'Incluido' : '+$50.000'}
                         </span>
                       </button>
@@ -406,32 +449,35 @@ const ProductDetail = () => {
                 </div>
 
                 {/* Step 4: Text */}
-                <div>
-                  <label className="block text-sm font-semibold text-neutral-900 mb-2">4. Nombre de la Mascota (+$10.000)</label>
+                <div className="relative z-10">
+                  <label className="flex items-center gap-2 text-sm font-bold text-neutral-900 mb-3">
+                    <span className="w-5 h-5 rounded-full bg-neutral-100 flex items-center justify-center text-xs text-neutral-500">4</span>
+                    Grabado Personalizado (+$10.000)
+                  </label>
                   <input
                     type="text"
                     value={personalizationText}
                     onChange={(e) => setPersonalizationText(e.target.value.substring(0, 15))}
-                    className="input-field bg-white"
+                    className="w-full px-4 py-3 rounded-xl border-2 border-neutral-200 bg-neutral-50 focus:bg-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all font-medium text-neutral-900 placeholder-neutral-400 outline-none"
                     placeholder="Ej: MAX (Máximo 15 letras)"
                   />
                 </div>
 
                 {/* Step 5: Typography & Color (Conditional based on text) */}
                 {personalizationText && (
-                  <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-brand-200/50 pt-5 mt-2">
+                  <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="relative z-10 grid grid-cols-1 sm:grid-cols-2 gap-6 border-t border-brand-200 pt-6 mt-2">
                     <div>
-                      <label className="block text-sm font-semibold text-neutral-900 mb-2">Estilo de Letra</label>
-                      <select value={customFont} onChange={(e) => setCustomFont(e.target.value)} className="w-full border border-neutral-200 rounded-lg p-2.5 bg-white text-sm focus:ring-2 focus:ring-brand-500 outline-none">
+                      <label className="block text-sm font-bold text-neutral-900 mb-3">Estilo de Letra</label>
+                      <select value={customFont} onChange={(e) => setCustomFont(e.target.value)} className="w-full border-2 border-neutral-200 rounded-xl px-4 py-2.5 bg-white text-sm font-semibold text-neutral-700 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 outline-none cursor-pointer transition-all">
                         <option value="Clásica">Clásica (Elegante)</option>
                         <option value="Divertida">Divertida (Estilo Cómic)</option>
                       </select>
                     </div>
                     <div>
-                      <label className="block text-sm font-semibold text-neutral-900 mb-2">Color del Relieve</label>
+                      <label className="block text-sm font-bold text-neutral-900 mb-3">Color del Relieve</label>
                       <div className="flex flex-wrap gap-2 mt-1">
                         {[
-                          { name: 'Blanco', bg: 'bg-white', border: 'border-neutral-300' },
+                          { name: 'Blanco', bg: 'bg-white', border: 'border-neutral-200' },
                           { name: 'Negro', bg: 'bg-neutral-900', border: 'border-neutral-900' },
                           { name: 'Dorado', bg: 'bg-amber-400', border: 'border-amber-400' },
                           { name: 'Rojo', bg: 'bg-red-500', border: 'border-red-600' },
@@ -443,7 +489,7 @@ const ProductDetail = () => {
                             type="button"
                             onClick={() => setCustomTextColor(c.name)}
                             title={c.name}
-                            className={`w-8 h-8 rounded-full border shadow-sm transition-all ${c.bg} ${c.border} ${customTextColor === c.name ? 'scale-125 ring-2 ring-brand-500 ring-offset-2' : 'hover:scale-110 opacity-80 hover:opacity-100'}`}
+                            className={`w-9 h-9 rounded-full shadow-sm transition-all relative ${c.bg} ${c.border} ${customTextColor === c.name ? 'scale-110 ring-4 ring-brand-100 border-2 border-brand-500 z-10' : 'hover:scale-105 border opacity-80 hover:opacity-100'}`}
                           />
                         ))}
                       </div>
@@ -536,26 +582,26 @@ const ProductDetail = () => {
           {/* Reviews List */}
           <div className="space-y-4">
             {product.reviews.length === 0 ? (
-              <div className="glass-panel p-6 rounded-xl text-neutral-400 text-sm">
-                Todavía no hay opiniones. ¡Sé el primero en calificar!
+              <div className="bg-neutral-50 border border-neutral-100 p-8 rounded-2xl text-neutral-500 text-sm text-center">
+                Todavía no hay opiniones. ¡Sé el primero en calificar este producto!
               </div>
             ) : (
               product.reviews.map((review) => (
-                <div key={review._id} className="glass-panel p-6 rounded-xl">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="font-bold">{review.name}</span>
+                <div key={review._id} className="bg-white border border-neutral-200 p-6 rounded-2xl shadow-sm">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="font-bold text-neutral-900">{review.name}</span>
                     <Rating value={review.rating} />
                   </div>
-                  <p className="text-neutral-300 text-sm leading-relaxed mt-3">{review.comment}</p>
-                  <p className="text-xs text-neutral-600 mt-3">{review.createdAt?.substring(0, 10)}</p>
+                  <p className="text-neutral-600 text-sm leading-relaxed">{review.comment}</p>
+                  <p className="text-xs font-semibold text-neutral-400 mt-4 uppercase tracking-wider">{review.createdAt?.substring(0, 10)}</p>
                 </div>
               ))
             )}
           </div>
 
           {/* Write Review */}
-          <div className="glass-panel p-8 rounded-2xl h-fit">
-            <h3 className="text-2xl font-bold mb-6">Escribe tu opinión</h3>
+          <div className="bg-neutral-50 border border-neutral-100 p-8 rounded-[2rem] h-fit">
+            <h3 className="text-2xl font-bold mb-6 text-neutral-900">Escribe tu opinión</h3>
 
             {reviewSuccess && (
               <Alert type="success" title="¡Reseña enviada!" message="Gracias por tu opinión." dismissible className="mb-4" />
