@@ -10,9 +10,7 @@ const homeSectionSchema = new mongoose.Schema({
     type: String, // Solo se usa si type es 'category'
   },
   emoji: { type: String, default: '✨' },
-  label: { type: String, required: true },
   title: { type: String, required: true },
-  description: { type: String },
   linkTo: { type: String, default: '/shop' },
   linkLabel: { type: String, default: 'Ver todo' },
   isActive: { type: Boolean, default: true },

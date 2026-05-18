@@ -5,27 +5,19 @@ import { Plus, Trash2, Edit2, Eye, EyeOff, GripVertical, Save, X } from 'lucide-
 const TYPE_TEMPLATES = {
   'newest': {
     emoji: '✨',
-    label: 'Novedades Exclusivas',
-    title: 'Recién Salidos de la Impresora',
-    description: 'Descubre nuestras últimas creaciones en 3D. Diseños frescos, detallados y recién agregados a nuestro catálogo.'
+    title: 'Recién Salidos de la Impresora'
   },
   'featured': {
     emoji: '⭐',
-    label: 'Destacados',
-    title: 'Favoritos de la Comunidad',
-    description: 'Ve a la segura con los clásicos. Estas son las piezas más populares y mejor valoradas por nuestros clientes.'
+    title: 'Favoritos de la Comunidad'
   },
   'category': {
     emoji: '🎁',
-    label: 'El Regalo Perfecto',
-    title: 'Colección Temática',
-    description: 'El detalle ideal para esa persona especial. Sorprende con nuestras figuras temáticas personalizadas con acabados premium.'
+    title: 'Colección Temática'
   },
   'sale': {
     emoji: '🔥',
-    label: 'Ofertas por Tiempo Limitado',
-    title: 'Aprovecha Antes Que Vuelen',
-    description: 'Precios únicos y descuentos especiales en nuestras piezas seleccionadas. ¡No te quedes sin la tuya!'
+    title: 'Aprovecha Antes Que Vuelen'
   }
 };
 
@@ -33,9 +25,7 @@ const EMPTY_FORM = {
   type: 'newest',
   categoryFilter: '',
   emoji: TYPE_TEMPLATES['newest'].emoji,
-  label: TYPE_TEMPLATES['newest'].label,
   title: TYPE_TEMPLATES['newest'].title,
-  description: TYPE_TEMPLATES['newest'].description,
   linkTo: '/shop',
   linkLabel: 'Ver todo',
   isActive: true,
@@ -215,7 +205,6 @@ const SectionsTab = () => {
                       )}
                     </div>
                     <h3 className="font-bold text-neutral-900">{section.title}</h3>
-                    <p className="text-sm text-neutral-500 line-clamp-1">{section.description}</p>
                   </div>
 
                   <div className="flex items-center gap-2">
@@ -301,28 +290,18 @@ const SectionsTab = () => {
                 )}
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+              <div className="grid grid-cols-[80px_1fr] gap-6 mb-8">
                 <div>
-                  <label className="block text-sm font-semibold text-neutral-700 mb-1.5">Emoji y Label Superior *</label>
-                  <div className="flex gap-3">
-                    <input
-                      type="text"
-                      value={form.emoji}
-                      onChange={e => setForm({ ...form, emoji: e.target.value })}
-                      placeholder="✨"
-                      className="w-16 text-center px-2 py-2.5 border border-neutral-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
-                      required
-                      maxLength="2"
-                    />
-                    <input
-                      type="text"
-                      value={form.label}
-                      onChange={e => setForm({ ...form, label: e.target.value })}
-                      placeholder="Ej: Lo mejor de ZAMIS"
-                      className="flex-1 px-4 py-2.5 border border-neutral-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
-                      required
-                    />
-                  </div>
+                  <label className="block text-sm font-semibold text-neutral-700 mb-1.5">Emoji *</label>
+                  <input
+                    type="text"
+                    value={form.emoji}
+                    onChange={e => setForm({ ...form, emoji: e.target.value })}
+                    placeholder="✨"
+                    className="w-full text-center px-2 py-2.5 border border-neutral-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+                    required
+                    maxLength="2"
+                  />
                 </div>
 
                 <div>
@@ -335,16 +314,6 @@ const SectionsTab = () => {
                     required
                   />
                 </div>
-              </div>
-
-              <div className="mb-6">
-                <label className="block text-sm font-semibold text-neutral-700 mb-1.5">Descripción</label>
-                <textarea
-                  value={form.description}
-                  onChange={e => setForm({ ...form, description: e.target.value })}
-                  rows="2"
-                  className="w-full px-4 py-2.5 border border-neutral-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
-                ></textarea>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
