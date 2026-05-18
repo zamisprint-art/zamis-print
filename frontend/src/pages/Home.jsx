@@ -73,7 +73,7 @@ const Home = () => {
           </button>
         )}
         
-        <div className="carousel-container flex gap-4 sm:gap-6 overflow-x-auto snap-x snap-mandatory pb-8 pt-4 px-4 sm:px-2 -mx-4 sm:-mx-2 hide-scrollbar scroll-smooth relative">
+        <div className="carousel-container flex gap-4 sm:gap-6 overflow-x-auto snap-x snap-mandatory pb-4 pt-2 px-4 sm:px-2 -mx-4 sm:-mx-2 hide-scrollbar scroll-smooth relative">
           {list.map((product, index) => (
             <motion.div key={product._id} initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }} transition={{ duration: 0.4, delay: index * 0.08 }} 
@@ -94,7 +94,7 @@ const Home = () => {
 
   const SectionHeader = ({ emoji, label, title, desc, linkTo, linkLabel }) => (
     <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-      className="flex flex-col sm:flex-row sm:items-end justify-between mb-4 gap-4">
+      className="flex flex-col sm:flex-row sm:items-end justify-between mb-2 gap-4">
       <div>
         <span className="text-brand-600 text-sm font-bold uppercase tracking-widest">{emoji} {label}</span>
         <h2 className="text-3xl md:text-4xl font-extrabold mt-1">{title}</h2>
@@ -135,10 +135,8 @@ const Home = () => {
         if (!loading && items.length === 0 && section.type !== 'newest') return null;
 
         return (
-          <section 
-            key={section._id} 
-            className={`my-6 md:my-10 p-6 md:p-10 max-w-7xl mx-4 xl:mx-auto bg-white rounded-[2rem] shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-neutral-100 ${section.type === 'sale' ? 'bg-gradient-to-br from-red-50/50 to-white border-red-200' : ''}`}
-          >
+          <div key={section._id} className="w-full border-b border-neutral-200/60 shadow-[0_4px_16px_rgba(0,0,0,0.02)] relative z-10">
+            <section className={`py-8 md:py-10 px-4 max-w-7xl mx-auto w-full ${section.type === 'sale' ? 'bg-gradient-to-b from-red-50/40 to-transparent' : ''}`}>
             <SectionHeader 
               emoji={section.emoji} 
               label={section.label} 
@@ -148,34 +146,41 @@ const Home = () => {
               linkLabel={section.linkLabel} 
             />
             {loading ? <SectionSkeleton /> : <ProductCarousel items={items} fallback={recentProducts} />}
-          </section>
+            </section>
+          </div>
         );
       })}
 
       {/* Fallback si el admin no ha creado ninguna sección dinámica aún */}
       {!loading && homeSections.length === 0 && (
-        <div className="py-4">
-          <section id="newest" className="my-6 md:my-10 p-6 md:p-10 max-w-7xl mx-4 xl:mx-auto bg-white rounded-[2rem] shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-neutral-100">
-            <SectionHeader emoji="✨" label="Novedades Exclusivas" title="Recién Salidos de la Impresora"
-              desc="Descubre nuestras últimas creaciones en 3D. Diseños frescos, detallados y recién agregados a nuestro catálogo."
-              linkTo="/shop?sort=newest" linkLabel="Ver Todo lo Nuevo" />
-            <ProductCarousel items={newArrivals} fallback={recentProducts} />
-          </section>
+        <div className="w-full">
+          <div className="w-full border-b border-neutral-200/60 shadow-[0_4px_16px_rgba(0,0,0,0.02)] relative z-10">
+            <section id="newest" className="py-8 md:py-10 px-4 max-w-7xl mx-auto w-full">
+              <SectionHeader emoji="✨" label="Novedades Exclusivas" title="Recién Salidos de la Impresora"
+                desc="Descubre nuestras últimas creaciones en 3D. Diseños frescos, detallados y recién agregados a nuestro catálogo."
+                linkTo="/shop?sort=newest" linkLabel="Ver Todo lo Nuevo" />
+              <ProductCarousel items={newArrivals} fallback={recentProducts} />
+            </section>
+          </div>
 
-          <section id="featured" className="my-6 md:my-10 p-6 md:p-10 max-w-7xl mx-4 xl:mx-auto bg-white rounded-[2rem] shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-neutral-100">
-            <SectionHeader emoji="⭐" label="Destacados" title="Favoritos de la Comunidad"
-              desc="Ve a la segura con los clásicos. Estas son las piezas más populares y mejor valoradas por nuestros clientes."
-              linkTo="/shop?sort=best-selling" linkLabel="Ver Más Vendidos" />
-            <ProductCarousel items={featured} fallback={recentProducts} />
-          </section>
+          <div className="w-full border-b border-neutral-200/60 shadow-[0_4px_16px_rgba(0,0,0,0.02)] relative z-10">
+            <section id="featured" className="py-8 md:py-10 px-4 max-w-7xl mx-auto w-full">
+              <SectionHeader emoji="⭐" label="Destacados" title="Favoritos de la Comunidad"
+                desc="Ve a la segura con los clásicos. Estas son las piezas más populares y mejor valoradas por nuestros clientes."
+                linkTo="/shop?sort=best-selling" linkLabel="Ver Más Vendidos" />
+              <ProductCarousel items={featured} fallback={recentProducts} />
+            </section>
+          </div>
 
           {onSale.length > 0 && (
-            <section className="my-6 md:my-10 p-6 md:p-10 max-w-7xl mx-4 xl:mx-auto bg-white rounded-[2rem] shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-red-200 bg-gradient-to-br from-red-50/50 to-white">
-              <SectionHeader emoji="🔥" label="Ofertas por Tiempo Limitado" title="Aprovecha Antes Que Vuelen"
-                desc="Precios únicos y descuentos especiales en nuestras piezas seleccionadas. ¡No te quedes sin la tuya!"
-                linkTo="/shop" linkLabel="Ver Todas las Ofertas" />
-              <ProductCarousel items={onSale} fallback={[]} />
-            </section>
+            <div className="w-full border-b border-neutral-200/60 shadow-[0_4px_16px_rgba(0,0,0,0.02)] relative z-10">
+              <section className="py-8 md:py-10 px-4 max-w-7xl mx-auto w-full bg-gradient-to-b from-red-50/40 to-transparent">
+                <SectionHeader emoji="🔥" label="Ofertas por Tiempo Limitado" title="Aprovecha Antes Que Vuelen"
+                  desc="Precios únicos y descuentos especiales en nuestras piezas seleccionadas. ¡No te quedes sin la tuya!"
+                  linkTo="/shop" linkLabel="Ver Todas las Ofertas" />
+                <ProductCarousel items={onSale} fallback={[]} />
+              </section>
+            </div>
           )}
         </div>
       )}
