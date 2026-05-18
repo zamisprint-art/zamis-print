@@ -93,15 +93,15 @@ const Footer = () => {
             &copy; {new Date().getFullYear()} ZAMIS Print. Todos los derechos reservados.
           </p>
           
-          <div className="flex items-center gap-4 text-sm font-semibold text-neutral-400">
-            <span className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10">
-              <span className="w-8 text-center text-[10px] tracking-wider text-white bg-[#009ee3] rounded px-1 py-0.5">MERCADO PAGO</span>
+          <div className="flex flex-wrap justify-center items-center gap-3 md:gap-4 text-sm font-semibold text-neutral-400">
+            <span className="flex items-center px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 shadow-sm">
+              <span className="text-[10px] tracking-wider text-white font-bold bg-[#009ee3] rounded px-2 py-0.5 whitespace-nowrap">MERCADO PAGO</span>
             </span>
-            <span className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10">
-              <span className="font-bold text-white tracking-wider text-xs italic">Nequi</span>
+            <span className="flex items-center px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 shadow-sm">
+              <span className="font-bold text-white tracking-wider text-xs italic whitespace-nowrap">Nequi</span>
             </span>
-            <span className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10">
-              <span className="font-bold text-white tracking-wider text-xs">Bancolombia</span>
+            <span className="flex items-center px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 shadow-sm">
+              <span className="font-bold text-white tracking-wider text-xs whitespace-nowrap">Bancolombia</span>
             </span>
           </div>
 
