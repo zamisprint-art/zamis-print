@@ -155,28 +155,28 @@ const Home = () => {
       {/* Fallback si el admin no ha creado ninguna sección dinámica aún */}
       {!loading && homeSections.length === 0 && (
         <>
-          <section id="featured" className="py-20 px-4 max-w-7xl mx-auto w-full">
-            <SectionHeader emoji="⭐" label="Lo Mejor de ZAMIS" title="Productos Destacados"
-              desc="Seleccionados a mano por su calidad, originalidad y popularidad."
+          <section id="newest" className="py-20 px-4 max-w-7xl mx-auto w-full">
+            <SectionHeader emoji="✨" label="Novedades Exclusivas" title="Recién Salidos de la Impresora"
+              desc="Descubre nuestras últimas creaciones en 3D. Diseños frescos, detallados y recién agregados a nuestro catálogo."
+              linkTo="/shop?sort=newest" linkLabel="Ver Todo lo Nuevo" />
+            <ProductCarousel items={newArrivals} fallback={recentProducts} />
+          </section>
+
+          <section id="featured" className="py-20 px-4 max-w-7xl mx-auto w-full border-t border-neutral-100">
+            <SectionHeader emoji="⭐" label="Destacados" title="Favoritos de la Comunidad"
+              desc="Ve a la segura con los clásicos. Estas son las piezas más populares y mejor valoradas por nuestros clientes."
               linkTo="/shop?sort=best-selling" linkLabel="Ver Más Vendidos" />
             <ProductCarousel items={featured} fallback={recentProducts} />
           </section>
 
           {onSale.length > 0 && (
             <section className="py-20 px-4 max-w-7xl mx-auto w-full border-t border-red-100 bg-gradient-to-b from-red-50/40 to-transparent">
-              <SectionHeader emoji="🏷️" label="Precios Especiales · Tiempo Limitado" title="Ofertas de Temporada"
-                desc="Piezas premium a precios que no duran mucho. ¡No te quedes sin la tuya!"
+              <SectionHeader emoji="🔥" label="Ofertas por Tiempo Limitado" title="Aprovecha Antes Que Vuelen"
+                desc="Precios únicos y descuentos especiales en nuestras piezas seleccionadas. ¡No te quedes sin la tuya!"
                 linkTo="/shop" linkLabel="Ver Todas las Ofertas" />
               <ProductCarousel items={onSale} fallback={[]} />
             </section>
           )}
-
-          <section className="py-20 px-4 max-w-7xl mx-auto w-full border-t border-neutral-100">
-            <SectionHeader emoji="🆕" label="Recién Llegados" title="Novedades"
-              desc="Las últimas creaciones salidas de nuestra impresora. ¡Sé de los primeros en tenerlas!"
-              linkTo="/shop?sort=newest" linkLabel="Ver Todo lo Nuevo" />
-            <ProductCarousel items={newArrivals} fallback={recentProducts} />
-          </section>
         </>
       )}
       
