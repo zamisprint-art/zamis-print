@@ -265,7 +265,7 @@ const SectionsTab = () => {
                   </select>
                 </div>
 
-                {form.type === 'category' ? (
+                {form.type === 'category' && (
                   <div>
                     <label className="block text-sm font-semibold text-neutral-700 mb-1.5">Categoría a Mostrar *</label>
                     <select
@@ -283,43 +283,31 @@ const SectionsTab = () => {
                       <option value="Otros">Otros</option>
                     </select>
                   </div>
-                ) : (
-                  <div>
-                    <label className="block text-sm font-semibold text-neutral-700 mb-1.5">Emoji *</label>
+                )}
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <label className="block text-sm font-semibold text-neutral-700 mb-1.5">Emoji y Label Superior *</label>
+                  <div className="flex gap-3">
                     <input
                       type="text"
                       value={form.emoji}
                       onChange={e => setForm({ ...form, emoji: e.target.value })}
-                      className="w-full px-4 py-2.5 border border-neutral-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+                      placeholder="✨"
+                      className="w-16 text-center px-2 py-2.5 border border-neutral-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+                      required
+                      maxLength="2"
+                    />
+                    <input
+                      type="text"
+                      value={form.label}
+                      onChange={e => setForm({ ...form, label: e.target.value })}
+                      placeholder="Ej: Lo mejor de ZAMIS"
+                      className="flex-1 px-4 py-2.5 border border-neutral-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
                       required
                     />
                   </div>
-                )}
-              </div>
-
-              {form.type === 'category' && (
-                <div className="mb-6">
-                  <label className="block text-sm font-semibold text-neutral-700 mb-1.5">Emoji *</label>
-                  <input
-                    type="text"
-                    value={form.emoji}
-                    onChange={e => setForm({ ...form, emoji: e.target.value })}
-                    className="w-full px-4 py-2.5 border border-neutral-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
-                    required
-                  />
-                </div>
-              )}
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
-                <div>
-                  <label className="block text-sm font-semibold text-neutral-700 mb-1.5">Label superior (Ej: Lo mejor) *</label>
-                  <input
-                    type="text"
-                    value={form.label}
-                    onChange={e => setForm({ ...form, label: e.target.value })}
-                    className="w-full px-4 py-2.5 border border-neutral-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
-                    required
-                  />
                 </div>
 
                 <div>
