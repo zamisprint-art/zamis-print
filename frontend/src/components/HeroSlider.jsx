@@ -18,7 +18,7 @@ const FALLBACK_SLIDES = [
   {
     _id: 'f2',
     image: 'https://images.unsplash.com/photo-1631556097152-c3bfdd8a3eb5?q=80&w=2000&auto=format&fit=crop',
-    title: 'De Idea a Objeto Real en 72 Horas',
+    title: 'De Tu Imaginación a Tus Manos',
     subtitle: 'El Regalo que Nadie Olvidará',
     description: 'Cumpleaños, graduaciones, amor o simplemente porque sí. Creamos piezas únicas que cuentan tu historia.',
     ctaText: 'Ver Regalos Únicos',
