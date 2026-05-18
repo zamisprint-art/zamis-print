@@ -137,7 +137,7 @@ const Home = () => {
 
         return (
           <div key={section._id} className="w-full border-b border-neutral-200/60 shadow-[0_4px_16px_rgba(0,0,0,0.02)] relative z-10">
-            <section className={`pt-4 pb-2 md:pt-6 md:pb-4 px-4 max-w-7xl mx-auto w-full ${section.type === 'sale' ? 'bg-gradient-to-b from-red-50/40 to-transparent' : ''}`}>
+            <section className={`pt-4 pb-0 md:pt-6 md:pb-0 px-4 max-w-7xl mx-auto w-full ${section.type === 'sale' ? 'bg-gradient-to-b from-red-50/40 to-transparent' : ''}`}>
             <SectionHeader 
               emoji={section.emoji} 
               title={section.title}
@@ -154,7 +154,7 @@ const Home = () => {
       {!loading && homeSections.length === 0 && (
         <div className="w-full">
           <div className="w-full border-b border-neutral-200/60 shadow-[0_4px_16px_rgba(0,0,0,0.02)] relative z-10">
-            <section id="newest" className="pt-4 pb-2 md:pt-6 md:pb-4 px-4 max-w-7xl mx-auto w-full">
+            <section id="newest" className="pt-4 pb-0 md:pt-6 md:pb-0 px-4 max-w-7xl mx-auto w-full">
               <SectionHeader emoji="✨" title="Recién Salidos de la Impresora"
                 linkTo="/shop?sort=newest" linkLabel="Ver Todo lo Nuevo" />
               <ProductCarousel items={newArrivals} fallback={recentProducts} />
@@ -162,7 +162,7 @@ const Home = () => {
           </div>
 
           <div className="w-full border-b border-neutral-200/60 shadow-[0_4px_16px_rgba(0,0,0,0.02)] relative z-10">
-            <section id="featured" className="pt-4 pb-2 md:pt-6 md:pb-4 px-4 max-w-7xl mx-auto w-full">
+            <section id="featured" className="pt-4 pb-0 md:pt-6 md:pb-0 px-4 max-w-7xl mx-auto w-full">
               <SectionHeader emoji="⭐" title="Favoritos de la Comunidad"
                 linkTo="/shop?sort=best-selling" linkLabel="Ver Más Vendidos" />
               <ProductCarousel items={featured} fallback={recentProducts} />
@@ -171,7 +171,7 @@ const Home = () => {
 
           {onSale.length > 0 && (
             <div className="w-full border-b border-neutral-200/60 shadow-[0_4px_16px_rgba(0,0,0,0.02)] relative z-10">
-              <section className="pt-4 pb-2 md:pt-6 md:pb-4 px-4 max-w-7xl mx-auto w-full bg-gradient-to-b from-red-50/40 to-transparent">
+              <section className="pt-4 pb-0 md:pt-6 md:pb-0 px-4 max-w-7xl mx-auto w-full bg-gradient-to-b from-red-50/40 to-transparent">
                 <SectionHeader emoji="🔥" title="Aprovecha Antes Que Vuelen"
                   linkTo="/shop" linkLabel="Ver Todas las Ofertas" />
                 <ProductCarousel items={onSale} fallback={[]} />
