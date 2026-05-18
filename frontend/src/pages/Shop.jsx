@@ -152,8 +152,8 @@ const Shop = () => {
             ) : 'Todos los Productos'}
           </h1>
         </div>
-        <p className="text-sm text-neutral-500 max-w-sm md:text-right font-medium leading-relaxed">
-          Explora nuestras creaciones en impresión 3D. Piezas detalladas y adaptables a tus gustos exactos.
+        <p className="text-sm text-neutral-500 md:text-right font-medium mt-2 md:mt-0">
+          Piezas 3D personalizables con acabados milimétricos.
         </p>
       </div>
 
