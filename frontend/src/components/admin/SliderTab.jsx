@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { Plus, Trash2, Edit2, Eye, EyeOff, GripVertical, Save, X, Image, ExternalLink, UploadCloud, Link2 } from 'lucide-react';
+import { Plus, Trash2, Edit2, Eye, EyeOff, GripVertical, Save, X, Image, ExternalLink, UploadCloud, Link2, AlertTriangle } from 'lucide-react';
 
 const EMPTY_FORM = { title: '', subtitle: '', description: '', image: '', ctaText: 'Ver más', ctaLink: '/shop', isActive: true, order: 0 };
 
@@ -13,8 +13,12 @@ const SliderTab = () => {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [uploading, setUploading] = useState(false);
-  const [imageMode, setImageMode] = useState('url'); // 'url' | 'upload'
+  const [imageMode, setImageMode] = useState('url');
   const fileInputRef = useRef(null);
+  // Delete modal
+  const [slideToDelete, setSlideToDelete] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState('');
 
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
@@ -88,13 +92,23 @@ const SliderTab = () => {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm('¿Eliminar este slide?')) return;
+  const confirmDelete = (slide) => {
+    setSlideToDelete(slide);
+    setDeleteError('');
+  };
+
+  const executeDelete = async () => {
+    if (!slideToDelete) return;
+    setIsDeleting(true);
+    setDeleteError('');
     try {
-      await axios.delete(`/api/slides/${id}`);
-      setSlides(prev => prev.filter(s => s._id !== id));
+      await axios.delete(`/api/slides/${slideToDelete._id}`);
+      setSlides(prev => prev.filter(s => s._id !== slideToDelete._id));
+      setSlideToDelete(null);
     } catch {
-      alert('Error eliminando slide');
+      setDeleteError('Error al eliminar el slide. Intenta nuevamente.');
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -103,7 +117,7 @@ const SliderTab = () => {
       await axios.put(`/api/slides/${slide._id}`, { ...slide, isActive: !slide.isActive });
       setSlides(prev => prev.map(s => s._id === slide._id ? { ...s, isActive: !s.isActive } : s));
     } catch {
-      alert('Error actualizando slide');
+      setError('Error actualizando slide');
     }
   };
 
@@ -186,7 +200,7 @@ const SliderTab = () => {
                   <Edit2 size={17} />
                 </button>
                 <button
-                  onClick={() => handleDelete(slide._id)}
+                  onClick={() => confirmDelete(slide)}
                   className="p-2 rounded-lg hover:bg-red-50 text-neutral-500 hover:text-red-600 transition-colors"
                   title="Eliminar"
                 >
@@ -324,23 +338,15 @@ const SliderTab = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-sm font-semibold text-neutral-700 mb-1.5">Orden</label>
-                  <input type="number" min={0} value={form.order} onChange={e => setForm(f => ({ ...f, order: Number(e.target.value) }))} className="w-full px-4 py-2.5 border border-neutral-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500" />
+              <label className="flex items-center gap-3 cursor-pointer pt-1">
+                <div
+                  onClick={() => setForm(f => ({ ...f, isActive: !f.isActive }))}
+                  className={`w-11 h-6 rounded-full transition-colors relative ${form.isActive ? 'bg-brand-500' : 'bg-neutral-300'}`}
+                >
+                  <div className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-all ${form.isActive ? 'left-6' : 'left-1'}`} />
                 </div>
-                <div className="flex flex-col justify-end pb-1">
-                  <label className="flex items-center gap-3 cursor-pointer">
-                    <div
-                      onClick={() => setForm(f => ({ ...f, isActive: !f.isActive }))}
-                      className={`w-11 h-6 rounded-full transition-colors relative ${form.isActive ? 'bg-brand-500' : 'bg-neutral-300'}`}
-                    >
-                      <div className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-all ${form.isActive ? 'left-6' : 'left-1'}`} />
-                    </div>
-                    <span className="text-sm font-semibold text-neutral-700">{form.isActive ? 'Activo' : 'Oculto'}</span>
-                  </label>
-                </div>
-              </div>
+                <span className="text-sm font-semibold text-neutral-700">{form.isActive ? 'Slide Activo' : 'Slide Oculto'}</span>
+              </label>
             </div>
 
             <div className="flex gap-3 p-6 border-t border-neutral-100">
@@ -353,6 +359,45 @@ const SliderTab = () => {
                 className="flex-1 py-2.5 bg-brand-500 hover:bg-brand-600 text-white rounded-xl font-bold transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {saving ? 'Guardando...' : <><Save size={16} /> Guardar</>}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+
+      {/* Delete Confirmation Modal */}
+      {slideToDelete && (
+        <div className="fixed inset-0 bg-neutral-900/60 backdrop-blur-sm z-[200] flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl w-full max-w-md p-6 shadow-xl text-center">
+            <div className="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Trash2 size={24} strokeWidth={2.5} />
+            </div>
+            <h3 className="text-xl font-bold text-neutral-900 mb-2">¿Eliminar este slide?</h3>
+            <p className="text-neutral-500 mb-6 text-sm">
+              Esta acción quitará el slide del carrusel Hero de inmediato y no se puede deshacer.
+            </p>
+            {deleteError && (
+              <div className="mb-4 p-3 bg-red-50 text-red-600 text-sm font-medium rounded-xl border border-red-100">
+                {deleteError}
+              </div>
+            )}
+            <div className="flex gap-3 justify-center">
+              <button
+                onClick={() => setSlideToDelete(null)}
+                className="flex-1 px-4 py-2.5 rounded-xl text-neutral-600 font-bold bg-neutral-100 hover:bg-neutral-200 transition-colors disabled:opacity-50"
+                disabled={isDeleting}
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={executeDelete}
+                className="flex-1 px-4 py-2.5 rounded-xl bg-red-600 text-white font-bold hover:bg-red-700 transition-colors disabled:opacity-70 flex items-center justify-center gap-2"
+                disabled={isDeleting}
+              >
+                {isDeleting ? (
+                  <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div> Eliminando</>
+                ) : 'Sí, eliminar'}
               </button>
             </div>
           </div>
