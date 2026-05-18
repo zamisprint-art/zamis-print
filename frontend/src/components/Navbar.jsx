@@ -135,7 +135,7 @@ const Navbar = () => {
       </div>
 
       {/* ── Main Nav ── */}
-      <nav className={`bg-white border-b border-neutral-200 transition-shadow duration-300 ${scrolled ? 'shadow-md' : 'shadow-sm'}`}>
+      <nav className={`border-b transition-all duration-300 ${scrolled ? 'bg-white/85 backdrop-blur-md border-neutral-200/50 shadow-sm' : 'bg-white border-neutral-200 shadow-sm'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className={`flex items-center justify-between gap-4 transition-all duration-300 ${scrolled ? 'h-14' : 'h-24'}`}>
 

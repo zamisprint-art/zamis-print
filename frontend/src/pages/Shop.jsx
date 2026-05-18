@@ -139,17 +139,23 @@ const Shop = () => {
         description="Explora todo nuestro catálogo: Funkos personalizados, llaveros, bustos, esculturas y más. Filtra por precio, material y personalización."
       />
 
-      {/* Header */}
-      <div className="mb-8 pb-8 border-b border-neutral-200">
-        <p className="text-brand-600 text-sm font-semibold uppercase tracking-widest mb-2">
-          Catálogo
-        </p>
-        <h1 className="text-4xl font-extrabold text-neutral-900 leading-tight">
-          {querySearch ? `Resultados para "${querySearch}"` : 'Todos los Productos'}
-        </h1>
-        <p className="text-neutral-500 mt-2 max-w-xl">
-          Descubre nuestras creaciones de impresión 3D. Cada pieza puede ser adaptada a tus gustos exactos.
-        </p>
+      {/* Premium Header Banner */}
+      <div className="relative mb-10 p-8 sm:p-12 rounded-3xl overflow-hidden bg-brand-900 text-white shadow-xl">
+        {/* Subtle background decoration */}
+        <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/3 w-[500px] h-[500px] bg-brand-500/30 rounded-full blur-[80px] pointer-events-none" />
+        <div className="absolute bottom-0 left-0 translate-y-1/3 -translate-x-1/4 w-[300px] h-[300px] bg-brand-400/20 rounded-full blur-[60px] pointer-events-none" />
+        
+        <div className="relative z-10">
+          <p className="text-brand-300 text-sm font-semibold uppercase tracking-widest mb-2">
+            Catálogo
+          </p>
+          <h1 className="text-4xl sm:text-5xl font-black text-white leading-tight drop-shadow-sm mb-4">
+            {querySearch ? `Resultados para "${querySearch}"` : 'Todos los Productos'}
+          </h1>
+          <p className="text-brand-100 text-base sm:text-lg max-w-2xl font-light leading-relaxed">
+            Descubre nuestras creaciones de impresión 3D. Cada pieza puede ser adaptada a tus gustos exactos con detalles milimétricos y acabados premium.
+          </p>
+        </div>
       </div>
 
       <div className="flex flex-col lg:flex-row gap-8 items-start relative">

@@ -4,26 +4,26 @@ import { TrustBadges } from './ecommerce';
 
 const Footer = () => {
   return (
-    <footer className="bg-surface-base pt-16 pb-8 border-t border-neutral-200 mt-auto">
+    <footer className="bg-neutral-950 pt-16 pb-8 border-t border-neutral-900 mt-auto text-neutral-400">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
           
           {/* Brand Column */}
           <div className="space-y-6">
-            <Link to="/" className="inline-block bg-white rounded-2xl p-1.5 shadow-sm">
-              <img src="/images/logo.png" alt="ZAMIS Print" className="h-12 sm:h-16 w-auto object-contain rounded-xl" />
+            <Link to="/" className="inline-block bg-white/5 backdrop-blur-md rounded-2xl p-2 border border-white/10 hover:bg-white/10 transition-colors">
+              <img src="/images/logo.png" alt="ZAMIS Print" className="h-12 sm:h-14 w-auto object-contain drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] brightness-0 invert" />
             </Link>
-            <p className="text-neutral-500 leading-relaxed text-sm">
-              Transformamos ideas en realidad usando tecnología de impresión 3D de vanguardia. Modelos precisos, materiales premium y acabados perfectos.
+            <p className="text-neutral-400 leading-relaxed text-sm">
+              Transformamos ideas en realidad usando tecnología de impresión 3D de vanguardia. Modelos precisos, materiales premium y acabados perfectos en Colombia.
             </p>
-            <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-neutral-500 hover:bg-primary hover:text-neutral-900 transition-colors font-bold text-sm">
+            <div className="flex gap-3">
+              <a href="#" className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-neutral-300 hover:bg-brand-500 hover:text-white transition-colors text-sm font-bold border border-white/10 hover:border-brand-500">
                 IG
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-neutral-500 hover:bg-primary hover:text-neutral-900 transition-colors font-bold text-sm">
+              <a href="#" className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-neutral-300 hover:bg-brand-500 hover:text-white transition-colors text-sm font-bold border border-white/10 hover:border-brand-500">
                 FB
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-neutral-500 hover:bg-primary hover:text-neutral-900 transition-colors font-bold text-sm">
+              <a href="#" className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-neutral-300 hover:bg-brand-500 hover:text-white transition-colors text-sm font-bold border border-white/10 hover:border-brand-500">
                 X
               </a>
             </div>
@@ -31,56 +31,56 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-neutral-900 font-bold text-lg mb-6">Enlaces Rápidos</h4>
-            <ul className="space-y-4 text-sm text-neutral-500">
+            <h4 className="text-white font-bold text-lg mb-6">Enlaces Rápidos</h4>
+            <ul className="space-y-4 text-sm">
               <li>
-                <Link to="/shop" className="hover:text-primary transition-colors">Catálogo de Productos</Link>
+                <Link to="/shop" className="hover:text-brand-400 transition-colors">Catálogo de Productos</Link>
               </li>
               <li>
-                <Link to="/shop?category=Figuras" className="hover:text-primary transition-colors">Figuras Coleccionables</Link>
+                <Link to="/shop?category=Figuras y Coleccionables" className="hover:text-brand-400 transition-colors">Figuras Coleccionables</Link>
               </li>
               <li>
-                <Link to="/shop?category=Decoracion" className="hover:text-primary transition-colors">Decoración Hogar</Link>
+                <Link to="/shop?category=Hogar y Decoración" className="hover:text-brand-400 transition-colors">Decoración Hogar</Link>
               </li>
               <li>
-                <Link to="/about" className="hover:text-primary transition-colors">Prototipos e Industria</Link>
+                <Link to="/about" className="hover:text-brand-400 transition-colors">Prototipos e Industria</Link>
               </li>
             </ul>
           </div>
 
           {/* Support */}
           <div>
-            <h4 className="text-neutral-900 font-bold text-lg mb-6">Soporte</h4>
-            <ul className="space-y-4 text-sm text-neutral-500">
+            <h4 className="text-white font-bold text-lg mb-6">Soporte</h4>
+            <ul className="space-y-4 text-sm">
               <li>
-                <Link to="/faq" className="hover:text-primary transition-colors">Preguntas Frecuentes</Link>
+                <Link to="/faq" className="hover:text-brand-400 transition-colors">Preguntas Frecuentes</Link>
               </li>
               <li>
-                <Link to="/shipping" className="hover:text-primary transition-colors">Políticas de Envío</Link>
+                <Link to="/shipping" className="hover:text-brand-400 transition-colors">Políticas de Envío</Link>
               </li>
               <li>
-                <Link to="/returns" className="hover:text-primary transition-colors">Garantías y Devoluciones</Link>
+                <Link to="/returns" className="hover:text-brand-400 transition-colors">Garantías y Devoluciones</Link>
               </li>
               <li>
-                <Link to="/contact" className="hover:text-primary transition-colors">Contacto</Link>
+                <Link to="/contact" className="hover:text-brand-400 transition-colors">Contacto</Link>
               </li>
             </ul>
           </div>
 
           {/* Contact & Newsletter */}
           <div>
-            <h4 className="text-neutral-900 font-bold text-lg mb-6">Contáctanos</h4>
-            <ul className="space-y-4 text-sm text-neutral-500 mb-6">
+            <h4 className="text-white font-bold text-lg mb-6">Contáctanos</h4>
+            <ul className="space-y-4 text-sm mb-6">
               <li className="flex items-start gap-3">
-                <MapPin size={18} className="text-primary shrink-0 mt-0.5" />
+                <MapPin size={18} className="text-brand-500 shrink-0 mt-0.5" />
                 <span>Bogotá, Colombia<br/>Envíos a todo el país</span>
               </li>
               <li className="flex items-center gap-3">
-                <Phone size={18} className="text-primary shrink-0" />
-                <span>+57 300 123 4567</span>
+                <Phone size={18} className="text-brand-500 shrink-0" />
+                <span>+57 310 787 8192</span>
               </li>
               <li className="flex items-center gap-3">
-                <Mail size={18} className="text-primary shrink-0" />
+                <Mail size={18} className="text-brand-500 shrink-0" />
                 <span>hola@zamisprint.com</span>
               </li>
             </ul>
@@ -88,14 +88,26 @@ const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-neutral-200 flex flex-col md:flex-row justify-between items-center gap-6">
+        <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6">
           <p className="text-neutral-500 text-sm text-center md:text-left">
             &copy; {new Date().getFullYear()} ZAMIS Print. Todos los derechos reservados.
           </p>
           
+          <div className="flex items-center gap-4 text-sm font-semibold text-neutral-400">
+            <span className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10">
+              <span className="w-8 text-center text-[10px] tracking-wider text-white bg-[#009ee3] rounded px-1 py-0.5">MERCADO PAGO</span>
+            </span>
+            <span className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10">
+              <span className="font-bold text-white tracking-wider text-xs italic">Nequi</span>
+            </span>
+            <span className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10">
+              <span className="font-bold text-white tracking-wider text-xs">Bancolombia</span>
+            </span>
+          </div>
+
           <div className="flex items-center gap-6 text-sm text-neutral-500">
-            <Link to="/privacy" className="hover:text-neutral-900 transition-colors">Privacidad</Link>
-            <Link to="/terms" className="hover:text-neutral-900 transition-colors">Términos</Link>
+            <Link to="/privacy" className="hover:text-white transition-colors">Privacidad</Link>
+            <Link to="/terms" className="hover:text-white transition-colors">Términos</Link>
           </div>
         </div>
       </div>
