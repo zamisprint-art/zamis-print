@@ -58,6 +58,11 @@ const SectionsTab = () => {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
+  // Delete Modal State
+  const [sectionToDelete, setSectionToDelete] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState('');
+
   const fetchSections = async () => {
     try {
       const { data } = await axios.get('/api/homesections/admin');
@@ -108,14 +113,24 @@ const SectionsTab = () => {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm('¿Estás seguro de eliminar esta sección del home?')) return;
+  const confirmDelete = (section) => {
+    setSectionToDelete(section);
+    setDeleteError('');
+  };
+
+  const executeDelete = async () => {
+    if (!sectionToDelete) return;
+    setIsDeleting(true);
+    setDeleteError('');
     try {
-      await axios.delete(`/api/homesections/${id}`);
-      fetchSections();
+      await axios.delete(`/api/homesections/${sectionToDelete._id}`);
+      await fetchSections();
+      setSectionToDelete(null);
     } catch (err) {
       console.error(err);
-      alert('Error al eliminar');
+      setDeleteError(err.response?.data?.message || 'Error al eliminar la sección');
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -214,7 +229,7 @@ const SectionsTab = () => {
                     <button onClick={() => openEdit(section)} className="p-2 rounded-xl text-blue-600 bg-blue-50 hover:bg-blue-100 transition-colors">
                       <Edit2 size={18} />
                     </button>
-                    <button onClick={() => handleDelete(section._id)} className="p-2 rounded-xl text-red-600 bg-red-50 hover:bg-red-100 transition-colors">
+                    <button onClick={() => confirmDelete(section)} className="p-2 rounded-xl text-red-600 bg-red-50 hover:bg-red-100 transition-colors">
                       <Trash2 size={18} />
                     </button>
                   </div>
@@ -364,6 +379,46 @@ const SectionsTab = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {sectionToDelete && (
+        <div className="fixed inset-0 bg-neutral-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl w-full max-w-md p-6 shadow-xl text-center">
+            <div className="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Trash2 size={24} strokeWidth={2.5} />
+            </div>
+            <h3 className="text-xl font-bold text-neutral-900 mb-2">¿Eliminar sección?</h3>
+            <p className="text-neutral-500 mb-6 text-sm">
+              Estás a punto de eliminar la sección <strong>"{sectionToDelete.title}"</strong> del Home. Esta acción la quitará de la página principal inmediatamente.
+            </p>
+
+            {deleteError && (
+              <div className="mb-4 p-3 bg-red-50 text-red-600 text-sm font-medium rounded-xl border border-red-100">
+                {deleteError}
+              </div>
+            )}
+
+            <div className="flex gap-3 justify-center">
+              <button 
+                onClick={() => setSectionToDelete(null)} 
+                className="flex-1 px-4 py-2.5 rounded-xl text-neutral-600 font-bold bg-neutral-100 hover:bg-neutral-200 transition-colors disabled:opacity-50"
+                disabled={isDeleting}
+              >
+                Cancelar
+              </button>
+              <button 
+                onClick={executeDelete} 
+                className="flex-1 px-4 py-2.5 rounded-xl bg-red-600 text-white font-bold hover:bg-red-700 transition-colors disabled:opacity-70 flex items-center justify-center gap-2"
+                disabled={isDeleting}
+              >
+                {isDeleting ? (
+                  <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div> Eliminando</>
+                ) : 'Sí, eliminar'}
+              </button>
+            </div>
           </div>
         </div>
       )}
