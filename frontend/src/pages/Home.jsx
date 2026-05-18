@@ -92,16 +92,17 @@ const Home = () => {
     );
   };
 
-  const SectionHeader = ({ emoji, label, title, desc, linkTo, linkLabel }) => (
-    <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-      className="flex flex-col sm:flex-row sm:items-end justify-between mb-2 gap-4">
-      <div>
-        <span className="text-brand-600 text-sm font-bold uppercase tracking-widest">{emoji} {label}</span>
-        <h2 className="text-3xl md:text-4xl font-extrabold mt-1">{title}</h2>
-        {desc && <p className="text-neutral-500 mt-2 max-w-lg">{desc}</p>}
-      </div>
-      <Link to={linkTo} className="shrink-0 inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-brand-500 text-brand-600 font-bold hover:bg-brand-500 hover:text-white transition-all duration-200 text-sm group">
-        {linkLabel} <span className="group-hover:translate-x-1 transition-transform">→</span>
+  const SectionHeader = ({ emoji, title, linkTo, linkLabel }) => (
+    <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+      className="flex items-center justify-between mb-4 px-2">
+      <h2 className="text-2xl md:text-3xl font-extrabold text-neutral-900 flex items-center gap-2 md:gap-3">
+        <span>{emoji}</span>
+        {title}
+      </h2>
+      <Link to={linkTo} className="shrink-0 text-brand-600 font-bold hover:text-brand-700 transition-colors text-sm md:text-base flex items-center gap-1 group">
+        <span className="hidden sm:inline">{linkLabel}</span>
+        <span className="sm:hidden">Ver más</span>
+        <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
       </Link>
     </motion.div>
   );
@@ -139,9 +140,7 @@ const Home = () => {
             <section className={`py-8 md:py-10 px-4 max-w-7xl mx-auto w-full ${section.type === 'sale' ? 'bg-gradient-to-b from-red-50/40 to-transparent' : ''}`}>
             <SectionHeader 
               emoji={section.emoji} 
-              label={section.label} 
               title={section.title}
-              desc={section.description}
               linkTo={section.linkTo} 
               linkLabel={section.linkLabel} 
             />
@@ -156,8 +155,7 @@ const Home = () => {
         <div className="w-full">
           <div className="w-full border-b border-neutral-200/60 shadow-[0_4px_16px_rgba(0,0,0,0.02)] relative z-10">
             <section id="newest" className="py-8 md:py-10 px-4 max-w-7xl mx-auto w-full">
-              <SectionHeader emoji="✨" label="Novedades Exclusivas" title="Recién Salidos de la Impresora"
-                desc="Descubre nuestras últimas creaciones en 3D. Diseños frescos, detallados y recién agregados a nuestro catálogo."
+              <SectionHeader emoji="✨" title="Recién Salidos de la Impresora"
                 linkTo="/shop?sort=newest" linkLabel="Ver Todo lo Nuevo" />
               <ProductCarousel items={newArrivals} fallback={recentProducts} />
             </section>
@@ -165,8 +163,7 @@ const Home = () => {
 
           <div className="w-full border-b border-neutral-200/60 shadow-[0_4px_16px_rgba(0,0,0,0.02)] relative z-10">
             <section id="featured" className="py-8 md:py-10 px-4 max-w-7xl mx-auto w-full">
-              <SectionHeader emoji="⭐" label="Destacados" title="Favoritos de la Comunidad"
-                desc="Ve a la segura con los clásicos. Estas son las piezas más populares y mejor valoradas por nuestros clientes."
+              <SectionHeader emoji="⭐" title="Favoritos de la Comunidad"
                 linkTo="/shop?sort=best-selling" linkLabel="Ver Más Vendidos" />
               <ProductCarousel items={featured} fallback={recentProducts} />
             </section>
@@ -175,8 +172,7 @@ const Home = () => {
           {onSale.length > 0 && (
             <div className="w-full border-b border-neutral-200/60 shadow-[0_4px_16px_rgba(0,0,0,0.02)] relative z-10">
               <section className="py-8 md:py-10 px-4 max-w-7xl mx-auto w-full bg-gradient-to-b from-red-50/40 to-transparent">
-                <SectionHeader emoji="🔥" label="Ofertas por Tiempo Limitado" title="Aprovecha Antes Que Vuelen"
-                  desc="Precios únicos y descuentos especiales en nuestras piezas seleccionadas. ¡No te quedes sin la tuya!"
+                <SectionHeader emoji="🔥" title="Aprovecha Antes Que Vuelen"
                   linkTo="/shop" linkLabel="Ver Todas las Ofertas" />
                 <ProductCarousel items={onSale} fallback={[]} />
               </section>
