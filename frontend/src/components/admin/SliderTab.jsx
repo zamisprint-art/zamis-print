@@ -360,7 +360,6 @@ const SliderTab = () => {
           </div>
         </div>
       )}
-    </div>
 
       {/* Delete Confirmation Modal */}
       {slideToDelete && (
