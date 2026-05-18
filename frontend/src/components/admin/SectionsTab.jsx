@@ -267,14 +267,21 @@ const SectionsTab = () => {
 
                 {form.type === 'category' ? (
                   <div>
-                    <label className="block text-sm font-semibold text-neutral-700 mb-1.5">Categoría a Mostrar</label>
-                    <input
-                      type="text"
+                    <label className="block text-sm font-semibold text-neutral-700 mb-1.5">Categoría a Mostrar *</label>
+                    <select
                       value={form.categoryFilter}
                       onChange={e => setForm({ ...form, categoryFilter: e.target.value })}
-                      placeholder="Ej: Figuras, Decoración, Llaveros..."
-                      className="w-full px-4 py-2.5 border border-neutral-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
-                    />
+                      className="w-full px-4 py-2.5 border border-neutral-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 bg-white"
+                      required
+                    >
+                      <option value="" disabled>Seleccione una categoría</option>
+                      <option value="Figuras y Coleccionables">Figuras y Coleccionables</option>
+                      <option value="Accesorios y Llaveros">Accesorios y Llaveros</option>
+                      <option value="Hogar y Decoración">Hogar y Decoración</option>
+                      <option value="Mascotas">Mascotas</option>
+                      <option value="Geek & Setup">Geek & Setup</option>
+                      <option value="Otros">Otros</option>
+                    </select>
                   </div>
                 ) : (
                   <div>
