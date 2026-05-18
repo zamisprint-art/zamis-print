@@ -322,6 +322,11 @@ const SliderTab = () => {
                 </div>
               </div>
 
+              <div>
+                <label className="block text-sm font-semibold text-neutral-700 mb-1.5">Descripción</label>
+                <textarea rows={2} value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} placeholder="Descripción breve..." className="w-full px-4 py-2.5 border border-neutral-300 rounded-xl text-sm resize-none focus:outline-none focus:ring-2 focus:ring-brand-500" />
+              </div>
+
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
