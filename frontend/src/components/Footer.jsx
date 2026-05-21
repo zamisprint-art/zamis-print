@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Mail, MapPin, Phone } from 'lucide-react';
+import { Mail, MapPin, Phone, Instagram, Facebook, Twitter } from 'lucide-react';
 import { TrustBadges } from './ecommerce';
 
 const Footer = () => {
@@ -17,14 +17,14 @@ const Footer = () => {
               Transformamos ideas en realidad usando tecnología de impresión 3D de vanguardia. Modelos precisos, materiales premium y acabados perfectos en Colombia.
             </p>
             <div className="flex gap-3">
-              <a href="#" className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-neutral-300 hover:bg-brand-500 hover:text-white transition-colors text-sm font-bold border border-white/10 hover:border-brand-500">
-                IG
+              <a href="https://instagram.com/zamisprint" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-neutral-300 hover:bg-brand-500 hover:text-white transition-colors border border-white/10 hover:border-brand-500 group">
+                <Instagram size={16} className="group-hover:scale-110 transition-transform" />
               </a>
-              <a href="#" className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-neutral-300 hover:bg-brand-500 hover:text-white transition-colors text-sm font-bold border border-white/10 hover:border-brand-500">
-                FB
+              <a href="https://facebook.com/zamisprint" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-neutral-300 hover:bg-brand-500 hover:text-white transition-colors border border-white/10 hover:border-brand-500 group">
+                <Facebook size={16} className="group-hover:scale-110 transition-transform" />
               </a>
-              <a href="#" className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-neutral-300 hover:bg-brand-500 hover:text-white transition-colors text-sm font-bold border border-white/10 hover:border-brand-500">
-                X
+              <a href="https://twitter.com/zamisprint" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-neutral-300 hover:bg-brand-500 hover:text-white transition-colors border border-white/10 hover:border-brand-500 group">
+                <Twitter size={16} className="group-hover:scale-110 transition-transform" />
               </a>
             </div>
           </div>
