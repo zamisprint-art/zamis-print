@@ -14,7 +14,7 @@ const Footer = () => {
               <img
                 src="/images/logo-transparent.png"
                 alt="ZAMIS Print"
-                className="h-14 sm:h-16 w-auto object-contain"
+                className="h-24 w-auto object-contain"
               />
             </Link>
             <p className="text-neutral-400 leading-relaxed text-sm">
