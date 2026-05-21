@@ -22,12 +22,12 @@ const ProductCard = ({ product }) => {
       variants={staggerItem}
       whileHover={!isOutOfStock ? hoverLift : {}}
       whileTap={!isOutOfStock ? tapScale : {}}
-      className="card-product group flex flex-col h-full"
+      className="card-product group flex flex-col h-full w-full"
     >
       {/* Image */}
       <Link
         to={`/product/${product._id}`}
-        className="block relative aspect-[4/5] overflow-hidden bg-neutral-50"
+        className="block relative aspect-square overflow-hidden bg-neutral-50 shrink-0"
         tabIndex={isOutOfStock ? -1 : 0}
       >
         <img
@@ -79,13 +79,13 @@ const ProductCard = ({ product }) => {
       {/* Body */}
       <div className="p-4 flex flex-col flex-grow">
         {/* Category + subcategory */}
-        <span className="text-[10px] text-neutral-400 font-semibold uppercase tracking-wider mb-1.5">
+        <span className="text-[10px] text-neutral-400 font-semibold uppercase tracking-wider mb-1.5 line-clamp-1">
           {product.category}{product.subcategory ? ` › ${product.subcategory}` : ''}
         </span>
 
         {/* Name */}
         <Link to={`/product/${product._id}`}>
-          <h3 className="font-semibold text-sm sm:text-base text-neutral-900 leading-snug line-clamp-2 hover:text-brand-500 transition-colors mb-2">
+          <h3 className="font-semibold text-sm sm:text-base text-neutral-900 leading-snug line-clamp-2 hover:text-brand-500 transition-colors mb-2 min-h-[40px] sm:min-h-[44px]">
             {product.name}
           </h3>
         </Link>

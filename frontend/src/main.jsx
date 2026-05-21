@@ -14,12 +14,12 @@ axios.defaults.withCredentials = true;
 axios.defaults.baseURL = import.meta.env.VITE_API_URL || '';
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+  <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+    <StrictMode>
       <BrowserRouter>
         <ScrollToTop />
         <App />
       </BrowserRouter>
-    </GoogleOAuthProvider>
-  </StrictMode>,
+    </StrictMode>
+  </GoogleOAuthProvider>,
 )

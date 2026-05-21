@@ -73,11 +73,11 @@ const Home = () => {
           </button>
         )}
         
-        <div className="carousel-container flex gap-4 sm:gap-6 overflow-x-auto snap-x snap-mandatory pb-4 pt-2 px-4 sm:px-2 -mx-4 sm:-mx-2 hide-scrollbar scroll-smooth relative">
+        <div className="carousel-container flex gap-4 sm:gap-6 overflow-x-auto snap-x snap-mandatory pb-4 pt-2 px-4 sm:px-2 -mx-4 sm:-mx-2 hide-scrollbar scroll-smooth relative items-stretch">
           {list.map((product, index) => (
             <motion.div key={product._id} initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }} transition={{ duration: 0.4, delay: index * 0.08 }} 
-              className="w-[85vw] sm:w-[280px] lg:w-[300px] shrink-0 snap-start h-full">
+              className="w-[75vw] sm:w-[220px] lg:w-[240px] shrink-0 snap-start h-auto flex">
               <ProductCard product={product} />
             </motion.div>
           ))}

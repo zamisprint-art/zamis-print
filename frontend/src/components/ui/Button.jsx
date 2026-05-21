@@ -10,6 +10,8 @@ const Button = ({
   variant = 'primary',
   size = 'md',
   loading = false,
+  isLoading = false,       // alias de loading (compatibilidad)
+  loadingText = null,      // texto mientras carga
   disabled = false,
   fullWidth = false,
   icon = null,
@@ -19,6 +21,8 @@ const Button = ({
   className = '',
   ...props
 }) => {
+  const isActuallyLoading = loading || isLoading;
+
   const sizeClass = {
     xs: 'btn-xs',
     sm: 'btn-sm',
@@ -40,18 +44,21 @@ const Button = ({
     <motion.button
       type={type}
       onClick={onClick}
-      disabled={disabled || loading}
-      whileTap={!disabled && !loading ? { scale: 0.97 } : {}}
+      disabled={disabled || isActuallyLoading}
+      whileTap={!disabled && !isActuallyLoading ? { scale: 0.97 } : {}}
       className={`btn ${variantClass} ${sizeClass} ${fullWidth ? 'btn-full' : ''} ${className}`}
       {...props}
     >
-      {loading ? (
-        <Loader2 className="w-4 h-4 animate-spin" />
+      {isActuallyLoading ? (
+        <>
+          <Loader2 className="w-4 h-4 animate-spin" />
+          {loadingText && <span>{loadingText}</span>}
+        </>
       ) : (
         icon && iconPosition === 'left' && <span className="shrink-0">{icon}</span>
       )}
-      {children && <span>{children}</span>}
-      {!loading && icon && iconPosition === 'right' && (
+      {!isActuallyLoading && children && <span>{children}</span>}
+      {!isActuallyLoading && icon && iconPosition === 'right' && (
         <span className="shrink-0">{icon}</span>
       )}
     </motion.button>
