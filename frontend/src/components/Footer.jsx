@@ -12,10 +12,9 @@ const Footer = () => {
           <div className="space-y-6">
             <Link to="/" className="inline-block transition-transform hover:scale-105">
               <img
-                src="/images/logo.png"
+                src="/images/logo-transparent.png"
                 alt="ZAMIS Print"
                 className="h-14 sm:h-16 w-auto object-contain"
-                style={{ mixBlendMode: 'screen', filter: 'brightness(1.1)' }}
               />
             </Link>
             <p className="text-neutral-400 leading-relaxed text-sm">
