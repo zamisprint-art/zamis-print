@@ -23,8 +23,12 @@ const orderSchema = new mongoose.Schema({
     ],
     shippingAddress: {
         fullName:   { type: String },
+        email:      { type: String },
+        documentType: { type: String, enum: ['C.C.', 'C.E.', 'NIT', 'Pasaporte'] },
+        documentNumber: { type: String },
         phone:      { type: String },
         address:    { type: String, required: true },
+        department: { type: String },
         city:       { type: String, required: true },
         postalCode: { type: String, required: true },
         country:    { type: String, required: true, default: 'Colombia' },

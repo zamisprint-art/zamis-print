@@ -1,12 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useCartStore } from '../store/useCartStore';
 import { useAuthStore } from '../store/useAuthStore';
-import { CheckCircle2, Truck, CreditCard, ChevronRight, ShieldCheck, Lock } from 'lucide-react';
+import { CheckCircle2, Truck, CreditCard, ChevronRight, ShieldCheck, Lock, User, FileText, MapPin, Phone, Mail } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '../components/ui';
 import { TrustBadges, PriceDisplay } from '../components/ecommerce';
+import { COLOMBIA, DOCUMENT_TYPES } from '../data/colombia';
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -16,11 +17,23 @@ const Checkout = () => {
   const [shippingAddress, setShippingAddress] = useState({
     fullName: '',
     email: '',
+    documentType: 'C.C.',
+    documentNumber: '',
+    phone: '',
     address: '',
+    department: '',
     city: '',
     postalCode: '',
-    phone: ''
   });
+
+  const availableCities = useMemo(() => {
+    if (!shippingAddress.department) return [];
+    return COLOMBIA.find(d => d.dep === shippingAddress.department)?.cities || [];
+  }, [shippingAddress.department]);
+
+  const handleDepartmentChange = (e) => {
+    setShippingAddress(prev => ({ ...prev, department: e.target.value, city: '' }));
+  };
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [processingStep, setProcessingStep] = useState(0);
@@ -103,8 +116,11 @@ const Checkout = () => {
   };
 
   const handleChange = (e) => {
-    setShippingAddress({ ...shippingAddress, [e.target.name]: e.target.value });
+    setShippingAddress(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
+
+  const selectClass = "w-full px-4 py-3 text-base rounded-xl border-2 border-neutral-200 bg-neutral-50 text-neutral-800 focus:outline-none focus:border-brand-500 focus:bg-white transition-all duration-200 cursor-pointer appearance-none";
+  const inputClass  = "input-field py-3 text-base";
 
   if (cartItems.length === 0) return null;
 
@@ -209,64 +225,132 @@ const Checkout = () => {
               animate={{ opacity: 1, x: 0 }}
               className="bg-white p-6 sm:p-8 rounded-3xl border border-neutral-200 shadow-sm"
             >
-              <h2 className="text-2xl font-bold mb-6 text-neutral-900">¿A dónde enviamos tu pedido?</h2>
+              <h2 className="text-2xl font-bold mb-2 text-neutral-900">¿A dónde enviamos tu pedido?</h2>
+              <p className="text-sm text-neutral-400 mb-6">Todos los campos son obligatorios.</p>
               <form id="checkout-form" onSubmit={handlePayment} className="space-y-5">
+
+                {/* ── Sección 1: Datos Personales ── */}
+                <div className="flex items-center gap-2 text-xs font-bold text-brand-600 uppercase tracking-widest mb-1">
+                  <User size={13} /> Datos del Receptor
+                </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-1.5">Nombre de quien recibe</label>
-                    <input
-                      type="text" name="fullName" required
+                    <label className="block text-sm font-medium text-neutral-700 mb-1.5">Nombre completo</label>
+                    <input type="text" name="fullName" required
                       value={shippingAddress.fullName} onChange={handleChange}
-                      className="input-field py-3 text-lg" placeholder="Ej. Juan Pérez"
+                      className={inputClass} placeholder="Ej. Juan Pérez"
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-neutral-700 mb-1.5">Correo electrónico</label>
-                    <input
-                      type="email" name="email" required
-                      value={shippingAddress.email} onChange={handleChange}
-                      className="input-field py-3 text-lg" placeholder="tu@correo.com"
+                    <div className="relative">
+                      <input type="email" name="email" required
+                        value={shippingAddress.email} onChange={handleChange}
+                        className={inputClass + " pl-10"} placeholder="tu@correo.com"
+                      />
+                      <Mail size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* ── Sección 2: Documento ── */}
+                <div className="flex items-center gap-2 text-xs font-bold text-brand-600 uppercase tracking-widest mt-2 mb-1">
+                  <FileText size={13} /> Identificación
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-1.5">Tipo de documento</label>
+                    <div className="relative">
+                      <select name="documentType" required
+                        value={shippingAddress.documentType} onChange={handleChange}
+                        className={selectClass + " pr-10"}
+                      >
+                        {DOCUMENT_TYPES.map(dt => (
+                          <option key={dt.value} value={dt.value}>{dt.label}</option>
+                        ))}
+                      </select>
+                      <ChevronRight size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 rotate-90 pointer-events-none" />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-1.5">Número de documento</label>
+                    <input type="text" name="documentNumber" required inputMode="numeric"
+                      value={shippingAddress.documentNumber} onChange={handleChange}
+                      className={inputClass} placeholder="Ej. 1020304050"
                     />
                   </div>
+                </div>
+
+                {/* ── Sección 3: Dirección ── */}
+                <div className="flex items-center gap-2 text-xs font-bold text-brand-600 uppercase tracking-widest mt-2 mb-1">
+                  <MapPin size={13} /> Dirección de Envío
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-neutral-700 mb-1.5">Dirección completa</label>
-                  <input
-                    type="text" name="address" required
+                  <input type="text" name="address" required
                     value={shippingAddress.address} onChange={handleChange}
-                    className="input-field py-3 text-lg" placeholder="Calle Falsa 123, Depto 4"
+                    className={inputClass} placeholder="Calle 123 # 45-67, Apto 8"
                   />
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-1.5">Ciudad</label>
-                    <input
-                      type="text" name="city" required
-                      value={shippingAddress.city} onChange={handleChange}
-                      className="input-field py-3 text-lg" placeholder="Ciudad"
-                    />
+                    <label className="block text-sm font-medium text-neutral-700 mb-1.5">Departamento</label>
+                    <div className="relative">
+                      <select name="department" required
+                        value={shippingAddress.department} onChange={handleDepartmentChange}
+                        className={selectClass + " pr-10"}
+                      >
+                        <option value="">Selecciona un departamento...</option>
+                        {COLOMBIA.map(d => (
+                          <option key={d.dep} value={d.dep}>{d.dep}</option>
+                        ))}
+                      </select>
+                      <ChevronRight size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 rotate-90 pointer-events-none" />
+                    </div>
                   </div>
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-1.5">Ciudad / Municipio</label>
+                    <div className="relative">
+                      <select name="city" required
+                        value={shippingAddress.city} onChange={handleChange}
+                        disabled={!shippingAddress.department}
+                        className={selectClass + " pr-10 disabled:opacity-50 disabled:cursor-not-allowed"}
+                      >
+                        <option value="">{shippingAddress.department ? 'Selecciona una ciudad...' : 'Primero elige un departamento'}</option>
+                        {availableCities.map(c => (
+                          <option key={c} value={c}>{c}</option>
+                        ))}
+                      </select>
+                      <ChevronRight size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 rotate-90 pointer-events-none" />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-neutral-700 mb-1.5">Código Postal</label>
-                    <input
-                      type="number" name="postalCode" required inputMode="numeric"
+                    <input type="text" name="postalCode" required inputMode="numeric"
                       value={shippingAddress.postalCode} onChange={handleChange}
-                      className="input-field py-3 text-lg" placeholder="12345"
+                      className={inputClass} placeholder="Ej. 110111"
                     />
                   </div>
+                  <div>
+                    <label className="block text-sm font-medium text-neutral-700 mb-1.5">Teléfono (WhatsApp)</label>
+                    <div className="relative">
+                      <input type="tel" name="phone" required inputMode="tel"
+                        value={shippingAddress.phone} onChange={handleChange}
+                        className={inputClass + " pl-10"} placeholder="+57 310 000 0000"
+                      />
+                      <Phone size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
+                    </div>
+                    <p className="text-xs text-neutral-500 mt-2 flex items-center gap-1">
+                      <ShieldCheck size={13} className="text-green-400" />
+                      Solo para actualizaciones de tu pedido.
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-1.5">Teléfono (WhatsApp)</label>
-                  <input
-                    type="tel" name="phone" required inputMode="tel"
-                    value={shippingAddress.phone} onChange={handleChange}
-                    className="input-field py-3 text-lg" placeholder="55 1234 5678"
-                  />
-                  <p className="text-xs text-neutral-500 mt-2 flex items-center gap-1">
-                    <ShieldCheck size={14} className="text-green-400" />
-                    Solo te contactaremos por actualizaciones de tu pedido.
-                  </p>
-                </div>
+
               </form>
             </motion.div>
           </div>
