@@ -213,8 +213,7 @@ const MyAccount = () => {
                   <p>No se encontraron pedidos con estos filtros.</p>
                   <button onClick={() => { setSearchTerm(''); setFilterStatus('Todos'); }} className="mt-4 text-brand-600 font-semibold hover:underline">Limpiar filtros</button>
                 </div>
-              ) : (
-                paginatedOrders.map((order, i) => (
+              ) : paginatedOrders.map((order, i) => (
                 <motion.div
                   key={order._id}
                   initial={{ opacity: 0, y: 10 }}
