@@ -11,7 +11,12 @@ const Footer = () => {
           {/* Brand Column */}
           <div className="space-y-6">
             <Link to="/" className="inline-block transition-transform hover:scale-105">
-              <img src="/images/logo.png" alt="ZAMIS Print" className="h-12 sm:h-14 w-auto object-contain" style={{ filter: 'drop-shadow(0 0 8px rgba(255,255,255,0.15)) brightness(1.05)' }} />
+              <img
+                src="/images/logo.png"
+                alt="ZAMIS Print"
+                className="h-14 sm:h-16 w-auto object-contain"
+                style={{ mixBlendMode: 'screen', filter: 'brightness(1.1)' }}
+              />
             </Link>
             <p className="text-neutral-400 leading-relaxed text-sm">
               Transformamos ideas en realidad usando tecnología de impresión 3D de vanguardia. Modelos precisos, materiales premium y acabados perfectos en Colombia.
