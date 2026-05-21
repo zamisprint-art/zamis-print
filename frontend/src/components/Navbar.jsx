@@ -131,7 +131,7 @@ const Navbar = () => {
             <a href="https://www.instagram.com/zamis_print?igsh=MWZ0aTQ4ajYxeW1oZg==" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="text-brand-200 hover:text-white transition-colors group">
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:scale-110 transition-transform"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
             </a>
-            <a href="https://facebook.com/zamisprint" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="text-brand-200 hover:text-white transition-colors group">
+            <a href="https://www.facebook.com/share/1CVUHmRr9X/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="text-brand-200 hover:text-white transition-colors group">
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:scale-110 transition-transform"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
             </a>
             <a href="https://www.tiktok.com/@zamis.print.oficial?_r=1&_t=ZS-96XFtfCgk7E" target="_blank" rel="noopener noreferrer" aria-label="TikTok" className="text-brand-200 hover:text-white transition-colors group">
