@@ -19,6 +19,7 @@ const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [scrolled, setScrolled] = useState(false);
   const searchRef = useRef(null);
@@ -274,9 +275,13 @@ const Navbar = () => {
             <div className="flex items-center justify-end gap-1 shrink-0">
 
               {/* Búsqueda móvil */}
-              <Link to="/shop" className="sm:hidden p-2 rounded-lg text-neutral-600 hover:text-brand-600 hover:bg-neutral-50 transition-colors" aria-label="Buscar">
-                <Search size={22} />
-              </Link>
+              <button 
+                onClick={() => setMobileSearchOpen(!mobileSearchOpen)} 
+                className="md:hidden p-2 rounded-lg text-neutral-600 hover:text-brand-600 hover:bg-neutral-50 transition-colors" 
+                aria-label="Buscar"
+              >
+                {mobileSearchOpen ? <X size={22} className="text-brand-600" /> : <Search size={22} />}
+              </button>
 
               {/* Carrito */}
               <button
@@ -343,6 +348,34 @@ const Navbar = () => {
 
 
       </nav>
+
+      {/* ── Barra de Búsqueda Móvil Desplegable ── */}
+      <AnimatePresence>
+        {mobileSearchOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="md:hidden bg-white border-b border-neutral-100 overflow-hidden"
+          >
+            <div className="p-4 pt-0">
+              <form onSubmit={(e) => { handleSearch(e); setMobileSearchOpen(false); }} className="relative">
+                <input
+                  type="search"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Buscar figuras, impresiones..."
+                  className="w-full h-12 pl-4 pr-14 rounded-xl border-2 border-neutral-200 bg-neutral-50 text-sm focus:outline-none focus:border-brand-500 focus:bg-white transition-all"
+                  autoFocus
+                />
+                <button type="submit" className="absolute right-0 top-0 h-12 w-14 flex items-center justify-center bg-brand-500 hover:bg-brand-600 text-white rounded-r-xl transition-colors">
+                  <Search size={20} />
+                </button>
+              </form>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* ── Drawer (móvil + hamburger compacto de scroll) ── */}
       <AnimatePresence>
