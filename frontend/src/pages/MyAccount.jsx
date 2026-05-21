@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useAuthStore } from '../store/useAuthStore';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Package, User, LogOut, ShoppingBag, ChevronRight, CheckCircle2, Clock, Truck, XCircle } from 'lucide-react';
+import { Package, User, LogOut, ShoppingBag, ChevronRight, CheckCircle2, Clock, Truck, XCircle, Search, Filter, ChevronLeft, ChevronDown } from 'lucide-react';
 
 const formatCOP = (v) =>
   new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(v);
@@ -30,6 +30,41 @@ const MyAccount = () => {
   const [loading, setLoading] = useState(true);
   const { userInfo, logout } = useAuthStore();
   const navigate = useNavigate();
+
+  // Filters & Pagination State
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterStatus, setFilterStatus] = useState('Todos');
+  const [sortOrder, setSortOrder] = useState('newest');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  // Derived State
+  const filteredOrders = orders
+    .filter(order => {
+      if (filterStatus !== 'Todos' && order.orderStatus !== filterStatus) return false;
+      if (searchTerm) {
+        const term = searchTerm.toLowerCase();
+        const matchId = order._id.toLowerCase().includes(term);
+        const matchProduct = order.orderItems.some(item => item.name.toLowerCase().includes(term));
+        if (!matchId && !matchProduct) return false;
+      }
+      return true;
+    })
+    .sort((a, b) => {
+      if (sortOrder === 'newest') return new Date(b.createdAt) - new Date(a.createdAt);
+      if (sortOrder === 'oldest') return new Date(a.createdAt) - new Date(b.createdAt);
+      if (sortOrder === 'price-desc') return b.totalPrice - a.totalPrice;
+      if (sortOrder === 'price-asc') return a.totalPrice - b.totalPrice;
+      return 0;
+    });
+
+  const totalPages = Math.max(1, Math.ceil(filteredOrders.length / itemsPerPage));
+  const paginatedOrders = filteredOrders.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  // Reset to page 1 on filter changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, filterStatus, sortOrder]);
 
   useEffect(() => {
     if (!userInfo) {
@@ -104,9 +139,55 @@ const MyAccount = () => {
           transition={{ delay: 0.1 }}
           className="flex-1 w-full"
         >
-          <div className="mb-6">
-            <h1 className="text-3xl font-extrabold text-neutral-900">Mis Pedidos</h1>
-            <p className="text-neutral-500 mt-1">Historial completo de tus compras en ZAMIS Print</p>
+          <div className="mb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <div>
+              <h1 className="text-3xl font-extrabold text-neutral-900">Mis Pedidos</h1>
+              <p className="text-neutral-500 mt-1">Historial completo de tus compras en ZAMIS Print</p>
+            </div>
+            
+            {/* Toolbar: Buscador y Filtros */}
+            {!loading && orders.length > 0 && (
+              <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                <div className="relative w-full sm:w-64">
+                  <input 
+                    type="text" 
+                    placeholder="Buscar por ID o producto..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 bg-white border border-neutral-200 rounded-xl text-sm focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10 transition-all"
+                  />
+                  <Search size={16} className="absolute left-3 top-2.5 text-neutral-400" />
+                </div>
+                
+                <div className="flex gap-2 w-full sm:w-auto">
+                  <select 
+                    value={filterStatus}
+                    onChange={(e) => setFilterStatus(e.target.value)}
+                    className="flex-1 sm:flex-none px-3 py-2 bg-white border border-neutral-200 rounded-xl text-sm text-neutral-700 focus:outline-none focus:border-brand-500 cursor-pointer appearance-none"
+                    style={{ backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`, backgroundPosition: 'right 0.5rem center', backgroundRepeat: 'no-repeat', backgroundSize: '1.5em 1.5em', paddingRight: '2.5rem' }}
+                  >
+                    <option value="Todos">Todos los estados</option>
+                    <option value="Pendiente">Pendiente</option>
+                    <option value="Pagado">Pagado</option>
+                    <option value="En Producción">En Producción</option>
+                    <option value="Enviado">Enviado</option>
+                    <option value="Pago Fallido">Pago Fallido</option>
+                  </select>
+
+                  <select 
+                    value={sortOrder}
+                    onChange={(e) => setSortOrder(e.target.value)}
+                    className="flex-1 sm:flex-none px-3 py-2 bg-white border border-neutral-200 rounded-xl text-sm text-neutral-700 focus:outline-none focus:border-brand-500 cursor-pointer appearance-none"
+                    style={{ backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`, backgroundPosition: 'right 0.5rem center', backgroundRepeat: 'no-repeat', backgroundSize: '1.5em 1.5em', paddingRight: '2.5rem' }}
+                  >
+                    <option value="newest">Más recientes</option>
+                    <option value="oldest">Más antiguos</option>
+                    <option value="price-desc">Mayor precio</option>
+                    <option value="price-asc">Menor precio</option>
+                  </select>
+                </div>
+              </div>
+            )}
           </div>
 
           {loading ? (
@@ -126,7 +207,14 @@ const MyAccount = () => {
             </div>
           ) : (
             <div className="flex flex-col gap-4">
-              {orders.map((order, i) => (
+              {paginatedOrders.length === 0 ? (
+                <div className="bg-white rounded-2xl border border-neutral-200 shadow-sm p-12 text-center text-neutral-500">
+                  <Search size={32} className="mx-auto mb-4 text-neutral-300" />
+                  <p>No se encontraron pedidos con estos filtros.</p>
+                  <button onClick={() => { setSearchTerm(''); setFilterStatus('Todos'); }} className="mt-4 text-brand-600 font-semibold hover:underline">Limpiar filtros</button>
+                </div>
+              ) : (
+                paginatedOrders.map((order, i) => (
                 <motion.div
                   key={order._id}
                   initial={{ opacity: 0, y: 10 }}
@@ -176,6 +264,32 @@ const MyAccount = () => {
                   </div>
                 </motion.div>
               ))}
+              
+              {/* Paginación */}
+              {totalPages > 1 && (
+                <div className="flex items-center justify-between bg-white border border-neutral-200 rounded-2xl px-6 py-4 mt-2 shadow-sm">
+                  <p className="text-sm text-neutral-500">
+                    Mostrando <span className="font-semibold text-neutral-900">{(currentPage - 1) * itemsPerPage + 1}</span> a <span className="font-semibold text-neutral-900">{Math.min(currentPage * itemsPerPage, filteredOrders.length)}</span> de <span className="font-semibold text-neutral-900">{filteredOrders.length}</span> pedidos
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <button 
+                      onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                      disabled={currentPage === 1}
+                      className="p-2 rounded-lg border border-neutral-200 text-neutral-600 hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    >
+                      <ChevronLeft size={16} />
+                    </button>
+                    <span className="text-sm font-semibold text-neutral-700 px-2">{currentPage} / {totalPages}</span>
+                    <button 
+                      onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                      disabled={currentPage === totalPages}
+                      className="p-2 rounded-lg border border-neutral-200 text-neutral-600 hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    >
+                      <ChevronRight size={16} />
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </motion.div>
