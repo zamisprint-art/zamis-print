@@ -17,7 +17,7 @@ const Footer = () => {
               Transformamos ideas en realidad usando tecnología de impresión 3D de vanguardia. Modelos precisos, materiales premium y acabados perfectos en Colombia.
             </p>
             <div className="flex gap-3">
-              <a href="https://instagram.com/zamisprint" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-neutral-300 hover:bg-brand-500 hover:text-white transition-colors border border-white/10 hover:border-brand-500 group">
+              <a href="https://www.instagram.com/zamis_print?igsh=MWZ0aTQ4ajYxeW1oZg==" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-neutral-300 hover:bg-brand-500 hover:text-white transition-colors border border-white/10 hover:border-brand-500 group">
                 <Instagram size={16} className="group-hover:scale-110 transition-transform" />
               </a>
               <a href="https://facebook.com/zamisprint" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-neutral-300 hover:bg-brand-500 hover:text-white transition-colors border border-white/10 hover:border-brand-500 group">
