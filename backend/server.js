@@ -20,10 +20,13 @@ const app = express();
 
 // Middleware
 const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  'https://zamisprint.com',
+  'https://www.zamisprint.com',
   'https://zamisprint.vercel.app',
   'http://localhost:5173',
   'http://localhost:3000',
-];
+].filter(Boolean);
 
 app.use(cors({
   origin: (origin, callback) => {
