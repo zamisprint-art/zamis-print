@@ -4,7 +4,7 @@ import { Resend } from 'resend';
 import { orderConfirmationEmail, newOrderAdminEmail, orderShippedEmail } from '../utils/emailTemplates.js';
 
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'hola@zamisprint.com';
-const FROM_EMAIL  = 'ZAMIS Print <onboarding@resend.dev>';
+const FROM_EMAIL  = process.env.RESEND_FROM_EMAIL || 'ZAMIS Print <onboarding@resend.dev>';
 
 // Helper: send email without crashing the main flow
 const sendEmail = async ({ to, subject, html }) => {

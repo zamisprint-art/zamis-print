@@ -85,7 +85,8 @@ export const orderConfirmationEmail = (order) => {
               <p style="margin:0 0 8px;font-weight:700;font-size:14px;">📦 Datos de envío</p>
               <p style="margin:0;font-size:14px;color:#4b5563;line-height:1.6;">
                 ${order.shippingAddress?.fullName}<br/>
-                ${order.shippingAddress?.address}, ${order.shippingAddress?.city}<br/>
+                ${order.shippingAddress?.address}, ${order.shippingAddress?.city}, ${order.shippingAddress?.department}<br/>
+                ${order.shippingAddress?.documentType} ${order.shippingAddress?.documentNumber}<br/>
                 ${order.shippingAddress?.phone ? `📱 ${order.shippingAddress.phone}` : ''}
               </p>
             </div>
@@ -155,8 +156,8 @@ export const newOrderAdminEmail = (order) => {
 
             <h3 style="margin:0 0 12px;font-size:15px;color:#374151;">👤 Cliente</h3>
             <p style="margin:0 0 20px;font-size:14px;color:#4b5563;line-height:1.8;padding:12px;background:#f9f9f9;border-radius:8px;">
-              <strong>${order.shippingAddress?.fullName}</strong><br/>
-              📍 ${order.shippingAddress?.address}, ${order.shippingAddress?.city}<br/>
+              <strong>${order.shippingAddress?.fullName}</strong> (${order.shippingAddress?.documentType} ${order.shippingAddress?.documentNumber})<br/>
+              📍 ${order.shippingAddress?.address}, ${order.shippingAddress?.city}, ${order.shippingAddress?.department}<br/>
               📱 ${order.shippingAddress?.phone || 'Sin teléfono'}
             </p>
 
@@ -273,7 +274,7 @@ export const orderShippedEmail = (order) => `
             <p style="font-size:16px;margin:0 0 16px;">Hola <strong>${order.shippingAddress?.fullName || 'Cliente'}</strong>,</p>
             <p style="font-size:15px;color:#4b5563;line-height:1.7;margin:0 0 24px;">
               Tu pedido <strong>#${String(order._id).slice(-8).toUpperCase()}</strong> ha sido enviado y está en camino a:<br/>
-              <strong>${order.shippingAddress?.address}, ${order.shippingAddress?.city}</strong>
+              <strong>${order.shippingAddress?.address}, ${order.shippingAddress?.city}, ${order.shippingAddress?.department}</strong>
             </p>
             <p style="font-size:14px;color:#6b7280;margin:0;">
               ¿Preguntas? Escríbenos por 
