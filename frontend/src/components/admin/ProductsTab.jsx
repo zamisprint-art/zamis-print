@@ -79,10 +79,10 @@ const ProductsTab = () => {
       } catch (error) {
         alert(error.response?.data?.message || 'Error al eliminar');
       }
-    }
-  };
-
   const handleToggleActive = async (product) => {
+    const action = product.isActive !== false ? 'ocultar' : 'activar';
+    if (!window.confirm(`¿Estás seguro de ${action} este producto en la tienda?`)) return;
+
     try {
       const currentIsActive = product.isActive !== false;
       await axios.put(`/api/products/${product._id}`, { ...product, isActive: !currentIsActive }, { withCredentials: true });
@@ -94,6 +94,10 @@ const ProductsTab = () => {
 
   const handleSaveProduct = async (e) => {
     e.preventDefault();
+    
+    const actionText = isEditing ? 'guardar los cambios en este producto' : 'crear este nuevo producto';
+    if (!window.confirm(`¿Estás seguro de ${actionText}?`)) return;
+
     try {
       if (isEditing) {
         await axios.put(`/api/products/${currentProduct._id}`, currentProduct, { withCredentials: true });
