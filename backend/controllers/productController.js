@@ -8,7 +8,7 @@ const getProducts = async (req, res) => {
     const pageSize = req.query.limit === 'all' ? 0 : (Number(req.query.limit) || 20);
     const page = Number(req.query.page) || 1;
 
-    const query = { isActive: true };
+    const query = { isActive: { $ne: false } };
 
     if (req.query.search) {
         query.name = {
