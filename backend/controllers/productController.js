@@ -81,7 +81,7 @@ const updateProduct = async (req, res) => {
         category, subcategory, countInStock,
         requiresTextPersonalization, requiresImagePersonalization, isCustomizable,
         isFeatured, isNewArrival, isOnSale, salePrice,
-        material, color, size, measurements, personalizationLevel,
+        material, colors, size, measurements, personalizationLevel,
     } = req.body;
 
     const product = await Product.findById(req.params.id);
@@ -106,7 +106,7 @@ const updateProduct = async (req, res) => {
         product.salePrice = salePrice !== undefined ? salePrice : product.salePrice;
         // Advanced filters
         product.material = material !== undefined ? material : product.material;
-        product.color = color !== undefined ? color : product.color;
+        product.colors = colors !== undefined ? colors : product.colors;
         product.size = size !== undefined ? size : product.size;
         product.measurements = measurements !== undefined ? measurements : product.measurements;
         product.personalizationLevel = personalizationLevel !== undefined ? personalizationLevel : product.personalizationLevel;
