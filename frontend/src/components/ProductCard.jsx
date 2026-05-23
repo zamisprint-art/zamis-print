@@ -81,7 +81,7 @@ const ProductCard = ({ product }) => {
       </Link>
 
       {/* Body */}
-      <div className="p-4 flex flex-col flex-grow">
+      <div className="p-4 flex flex-col flex-grow relative overflow-hidden bg-white transition-all duration-300 group-hover:pb-16">
         {/* Category + subcategory */}
         <span className="text-[10px] text-neutral-400 font-semibold uppercase tracking-wider mb-1.5 line-clamp-1">
           {product.category}{product.subcategory ? ` › ${product.subcategory}` : ''}
@@ -94,52 +94,38 @@ const ProductCard = ({ product }) => {
           </h3>
         </Link>
 
-        {/* Material + Size tags */}
-        {(product.material || product.size) && (
-          <div className="flex flex-wrap gap-1.5 mb-3">
-            {product.material && (
-              <span className="text-[9px] bg-neutral-100 text-neutral-500 px-1.5 py-0.5 rounded-md font-medium uppercase">
-                {product.material}
-              </span>
-            )}
-            {product.size && (
-              <span className="text-[9px] bg-neutral-100 text-neutral-500 px-1.5 py-0.5 rounded-md font-medium uppercase">
-                {product.size}
-              </span>
-            )}
-          </div>
-        )}
-
-        {/* Rating - subtle */}
-        <div className="mb-3 opacity-80">
-          <Rating value={product.rating} text={`${product.numReviews}`} />
-        </div>
-
-        {/* Price + CTA */}
-        <div className="flex items-end justify-between mt-auto pt-3 border-t border-neutral-100/60">
-          <div className="flex flex-col">
-            {product.isOnSale && product.salePrice ? (
-              <div className="flex flex-col">
-                <span className="text-[11px] text-neutral-400 line-through leading-none mb-1">
-                  {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(product.price)}
-                </span>
-                <span className="font-bold text-red-500 text-sm sm:text-base leading-none">
-                  {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(product.salePrice)}
-                </span>
-              </div>
-            ) : (
-              <span className="font-bold text-neutral-900 text-sm sm:text-base leading-none">
+        {/* Price */}
+        <div className="mt-1 mb-2">
+          {product.isOnSale && product.salePrice ? (
+            <div className="flex flex-col">
+              <span className="text-[11px] text-neutral-400 line-through leading-none mb-1">
                 {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(product.price)}
               </span>
-            )}
-          </div>
-          
+              <span className="font-bold text-red-500 text-base sm:text-lg leading-none">
+                {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(product.salePrice)}
+              </span>
+            </div>
+          ) : (
+            <span className="font-bold text-neutral-900 text-base sm:text-lg leading-none block">
+              {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(product.price)}
+            </span>
+          )}
+        </div>
+
+        {/* Rating - subtle */}
+        <div className="mt-auto opacity-80 pt-1">
+          <Rating value={product.rating} text={`(${product.numReviews})`} />
+        </div>
+
+        {/* Add to Cart Hover Button */}
+        <div className="absolute left-0 right-0 bottom-0 p-3 translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 ease-out bg-gradient-to-t from-white via-white to-transparent pt-8">
           <Link
             to={`/product/${product._id}`}
-            className={`w-8 h-8 flex items-center justify-center rounded-full bg-neutral-100 text-neutral-600 hover:bg-brand-500 hover:text-white transition-colors ${isOutOfStock ? 'opacity-40 pointer-events-none' : ''}`}
+            className={`w-full flex items-center justify-center gap-2 py-2 rounded-xl bg-neutral-900 text-white font-bold hover:bg-brand-500 hover:shadow-lg transition-colors ${isOutOfStock ? 'opacity-40 pointer-events-none bg-neutral-300' : ''}`}
             aria-label="Ver producto"
           >
             <ShoppingCart className="w-4 h-4" />
+            <span className="text-sm">{isOutOfStock ? 'Agotado' : 'Agregar al Carro'}</span>
           </Link>
         </div>
       </div>
