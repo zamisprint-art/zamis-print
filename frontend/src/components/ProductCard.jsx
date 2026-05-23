@@ -41,7 +41,7 @@ const ProductCard = ({ product }) => {
             e.target.src = 'https://via.placeholder.com/400x300?text=Imagen+No+Disponible';
           }}
           alt={product.name}
-          className={`w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105 ${isOutOfStock ? 'opacity-50 grayscale' : ''}`}
+          className={`w-full h-full object-contain p-3 object-center transition-transform duration-700 group-hover:scale-105 ${isOutOfStock ? 'opacity-50 grayscale' : ''}`}
           loading="lazy"
         />
 
