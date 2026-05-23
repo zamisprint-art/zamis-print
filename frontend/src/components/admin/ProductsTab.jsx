@@ -79,6 +79,9 @@ const ProductsTab = () => {
       } catch (error) {
         alert(error.response?.data?.message || 'Error al eliminar');
       }
+    }
+  };
+
   const handleToggleActive = async (product) => {
     const action = product.isActive !== false ? 'ocultar' : 'activar';
     if (!window.confirm(`¿Estás seguro de ${action} este producto en la tienda?`)) return;
