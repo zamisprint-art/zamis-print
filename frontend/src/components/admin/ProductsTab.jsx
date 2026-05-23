@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Package, PlusCircle, Edit, Trash2, X, Upload, Search, ChevronLeft, ChevronRight, Check, Eye, EyeOff } from 'lucide-react';
 import { PRODUCT_COLORS } from '../../utils/colors';
+import ConfirmModal from '../ui/ConfirmModal';
 
 export const CATEGORY_STRUCTURE = {
   "Figuras y Coleccionables": ["Personalizados", "Fan-Art", "Esculturas/Bustos", "Articulados", "Otros"],
@@ -31,6 +32,20 @@ const ProductsTab = () => {
   });
   const [uploadingImage, setUploadingImage] = useState(false);
   const [uploadingModel, setUploadingModel] = useState(false);
+
+  // Confirm Modal State
+  const [confirmConfig, setConfirmConfig] = useState({
+    isOpen: false,
+    title: '',
+    message: '',
+    confirmText: 'Aceptar',
+    variant: 'primary',
+    onConfirm: () => {}
+  });
+
+  const openConfirm = (options) => {
+    setConfirmConfig({ ...confirmConfig, ...options, isOpen: true });
+  };
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -72,47 +87,65 @@ const ProductsTab = () => {
   };
 
   const handleDeleteProduct = async (id) => {
-    if (window.confirm('¿Estás seguro de eliminar este producto?')) {
-      try {
-        await axios.delete(`/api/products/${id}`, { withCredentials: true });
-        fetchProducts();
-      } catch (error) {
-        alert(error.response?.data?.message || 'Error al eliminar');
+    openConfirm({
+      title: 'Eliminar Producto',
+      message: '¿Estás seguro de eliminar este producto? Esta acción no se puede deshacer.',
+      confirmText: 'Sí, Eliminar',
+      variant: 'danger',
+      onConfirm: async () => {
+        try {
+          await axios.delete(`/api/products/${id}`, { withCredentials: true });
+          fetchProducts();
+        } catch (error) {
+          alert(error.response?.data?.message || 'Error al eliminar');
+        }
       }
-    }
+    });
   };
 
   const handleToggleActive = async (product) => {
     const action = product.isActive !== false ? 'ocultar' : 'activar';
-    if (!window.confirm(`¿Estás seguro de ${action} este producto en la tienda?`)) return;
-
-    try {
-      const currentIsActive = product.isActive !== false;
-      await axios.put(`/api/products/${product._id}`, { ...product, isActive: !currentIsActive }, { withCredentials: true });
-      fetchProducts();
-    } catch (error) {
-      alert(error.response?.data?.message || 'Error al cambiar estado');
-    }
+    openConfirm({
+      title: product.isActive !== false ? 'Ocultar Producto' : 'Activar Producto',
+      message: `¿Estás seguro de ${action} este producto en la tienda?`,
+      confirmText: `Sí, ${action}`,
+      variant: product.isActive !== false ? 'warning' : 'primary',
+      onConfirm: async () => {
+        try {
+          const currentIsActive = product.isActive !== false;
+          await axios.put(`/api/products/${product._id}`, { ...product, isActive: !currentIsActive }, { withCredentials: true });
+          fetchProducts();
+        } catch (error) {
+          alert(error.response?.data?.message || 'Error al cambiar estado');
+        }
+      }
+    });
   };
 
   const handleSaveProduct = async (e) => {
     e.preventDefault();
     
     const actionText = isEditing ? 'guardar los cambios en este producto' : 'crear este nuevo producto';
-    if (!window.confirm(`¿Estás seguro de ${actionText}?`)) return;
-
-    try {
-      if (isEditing) {
-        await axios.put(`/api/products/${currentProduct._id}`, currentProduct, { withCredentials: true });
-      } else {
-        const { data: created } = await axios.post('/api/products', {}, { withCredentials: true });
-        await axios.put(`/api/products/${created._id}`, currentProduct, { withCredentials: true });
+    openConfirm({
+      title: isEditing ? 'Guardar Cambios' : 'Crear Producto',
+      message: `¿Estás seguro de ${actionText}?`,
+      confirmText: isEditing ? 'Sí, Guardar' : 'Sí, Crear',
+      variant: 'primary',
+      onConfirm: async () => {
+        try {
+          if (isEditing) {
+            await axios.put(`/api/products/${currentProduct._id}`, currentProduct, { withCredentials: true });
+          } else {
+            const { data: created } = await axios.post('/api/products', {}, { withCredentials: true });
+            await axios.put(`/api/products/${created._id}`, currentProduct, { withCredentials: true });
+          }
+          setIsModalOpen(false);
+          fetchProducts();
+        } catch (error) {
+          alert(error.response?.data?.message || 'Error al guardar');
+        }
       }
-      setIsModalOpen(false);
-      fetchProducts();
-    } catch (error) {
-      alert(error.response?.data?.message || 'Error al guardar');
-    }
+    });
   };
 
   const uploadFileHandler = async (e, type) => {
@@ -516,6 +549,7 @@ const ProductsTab = () => {
           </div>
         </div>
       )}
+      <ConfirmModal {...confirmConfig} onClose={() => setConfirmConfig({ ...confirmConfig, isOpen: false })} />
     </div>
   );
 };
