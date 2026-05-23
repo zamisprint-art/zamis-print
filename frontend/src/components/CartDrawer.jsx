@@ -115,7 +115,7 @@ const CartDrawer = () => {
                             {formatPrice(item.price * item.qty)}
                           </span>
                           <button 
-                            onClick={() => removeItem(item.product)}
+                            onClick={() => removeItem(item.product, item.selectedColor)}
                             className="p-1.5 text-neutral-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
                             title="Eliminar"
                           >

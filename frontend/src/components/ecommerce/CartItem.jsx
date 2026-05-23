@@ -15,7 +15,7 @@ import QuantitySelector from './QuantitySelector';
  *   />
  */
 const CartItem = ({ item, onQtyChange, onRemove }) => {
-  const { _id, name, image, price, countInStock, qty } = item;
+  const { product, name, image, price, countInStock, qty, selectedColor } = item;
 
   return (
     <motion.div
@@ -45,14 +45,14 @@ const CartItem = ({ item, onQtyChange, onRemove }) => {
         <div className="flex items-center justify-between gap-3 mt-auto">
           <QuantitySelector
             value={qty}
-            onChange={(newQty) => onQtyChange(_id, newQty)}
+            onChange={(newQty) => onQtyChange(product, selectedColor, newQty)}
             min={1}
             max={countInStock}
             size="sm"
           />
 
           <button
-            onClick={() => onRemove(_id)}
+            onClick={() => onRemove(product, selectedColor)}
             aria-label={`Eliminar ${name}`}
             className="btn-icon-sm btn-ghost text-neutral-500 hover:text-danger transition-colors"
           >

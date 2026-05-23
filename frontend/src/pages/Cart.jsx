@@ -18,8 +18,8 @@ const Cart = () => {
   const totalItems    = cartItems.reduce((acc, item) => acc + item.qty, 0);
   const totalPrice    = cartItems.reduce((acc, item) => acc + item.qty * item.price, 0);
 
-  const handleQtyChange = (productId, newQty) => {
-    const item = cartItems.find((i) => i.product === productId);
+  const handleQtyChange = (productId, selectedColor, newQty) => {
+    const item = cartItems.find((i) => i.product === productId && i.selectedColor === selectedColor);
     if (item) addItem({ ...item, qty: newQty });
   };
 
