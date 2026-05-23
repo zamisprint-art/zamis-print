@@ -450,15 +450,7 @@ const ProductsTab = () => {
                     <label className="block text-sm font-medium text-neutral-700 mb-1">Medidas (cm)</label>
                     <input type="text" value={currentProduct.measurements || ''} onChange={(e) => setCurrentProduct({...currentProduct, measurements: e.target.value})} className="w-full border rounded-lg p-2" placeholder="Ej: 10 x 5 x 8 cm" />
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-1">Nivel de Personalización</label>
-                    <select value={currentProduct.personalizationLevel || 'Ninguna'} onChange={(e) => setCurrentProduct({...currentProduct, personalizationLevel: e.target.value})} className="w-full border rounded-lg p-2">
-                      <option value="Ninguna">Ninguna</option>
-                      <option value="Básica">Básica (texto/color)</option>
-                      <option value="Avanzada">Avanzada (imagen+texto)</option>
-                      <option value="Premium">Premium (diseño completo)</option>
-                    </select>
-                  </div>
+
                   <div>
                     <label className="block text-sm font-medium text-neutral-700 mb-1">Precio de Oferta ($)</label>
                     <input type="number" value={currentProduct.salePrice || ''} onChange={(e) => setCurrentProduct({...currentProduct, salePrice: e.target.value})} className="w-full border rounded-lg p-2" placeholder="Dejar vacío si no hay oferta" />
@@ -472,7 +464,7 @@ const ProductsTab = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <label className="flex items-center gap-3 cursor-pointer">
                     <input type="checkbox" id="isCustomizable" checked={currentProduct.isCustomizable || false} onChange={(e) => setCurrentProduct({...currentProduct, isCustomizable: e.target.checked})} className="w-5 h-5 text-brand-600 rounded focus:ring-brand-500 border-neutral-300" />
-                    <span className="text-sm font-medium text-neutral-900">⚡ Configurador Premium</span>
+                    <span className="text-sm font-medium text-neutral-900">⚡ Habilitar Tallas y Grabado (PRO)</span>
                   </label>
                   <label className="flex items-center gap-3 cursor-pointer">
                     <input type="checkbox" checked={currentProduct.isFeatured || false} onChange={(e) => setCurrentProduct({...currentProduct, isFeatured: e.target.checked})} className="w-5 h-5 text-amber-500 rounded focus:ring-amber-400 border-neutral-300" />

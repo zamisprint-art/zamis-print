@@ -27,9 +27,7 @@ const ProductDetail = () => {
   const [activeMedia, setActiveMedia]             = useState(null); // '3d' | 'main' | url
   const [loading, setLoading]                     = useState(true);
   const [qty, setQty]                             = useState(1);
-  const [customMaterial, setCustomMaterial]         = useState('Estándar');
-  const [customSize, setCustomSize]                 = useState('100%');
-  const [customFinish, setCustomFinish]             = useState('Limpiado');
+  const [customSize, setCustomSize]                 = useState('15 cms');
   const [customFont, setCustomFont]                 = useState('Clásica');
   const [customTextColor, setCustomTextColor]       = useState('Blanco');
   const [personalizationText, setPersonalizationText]   = useState('');
@@ -74,10 +72,7 @@ const ProductDetail = () => {
   const getCustomPriceAdditions = () => {
     if (!product?.isCustomizable) return 0;
     let extra = 0;
-    if (customMaterial === 'Premium') extra += 15000;
-    if (customMaterial === 'Especial') extra += 20000;
-    if (customSize === '150%') extra += 35000;
-    if (customFinish === 'Pintado a mano') extra += 50000;
+    if (customSize === '20 cms') extra += 20000;
     if (personalizationText.trim() !== '') extra += 10000;
     return extra;
   };
@@ -98,11 +93,9 @@ const ProductDetail = () => {
     let finalPersonalizationText = personalizationText;
     if (product.isCustomizable) {
       const details = [
-        `Material: ${customMaterial}`,
-        `Tamaño: ${customSize}`,
-        `Acabado: ${customFinish}`,
+        `Tamaño: ${customSize}`
       ];
-      if (personalizationText) details.push(`Texto: "${personalizationText}" | Fuente: ${customFont} | Color: ${customTextColor} (Ubicación según arrastre)`);
+      if (personalizationText) details.push(`Texto: "${personalizationText}" | Fuente: ${customFont} | Color: ${customTextColor}`);
       finalPersonalizationText = details.join(' | ');
     }
 
@@ -387,45 +380,14 @@ const ProductDetail = () => {
                   <h3 className="text-lg font-bold text-neutral-900">Configurador Premium</h3>
                 </div>
 
-                {/* Step 1: Material */}
+                {/* Step 1: Size */}
                 <div className="relative z-10">
                   <label className="flex items-center gap-2 text-sm font-bold text-neutral-900 mb-3">
                     <span className="w-5 h-5 rounded-full bg-neutral-100 flex items-center justify-center text-xs text-neutral-500">1</span>
-                    Material y Color
-                  </label>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    {['Estándar', 'Premium', 'Especial'].map(opt => (
-                      <button
-                        key={opt}
-                        onClick={() => setCustomMaterial(opt)}
-                        className={`relative py-3 px-4 rounded-xl border-2 text-sm font-semibold transition-all flex flex-col items-start gap-1 overflow-hidden ${
-                          customMaterial === opt 
-                            ? 'bg-brand-50 border-brand-500 text-brand-900 shadow-md ring-1 ring-brand-500/20' 
-                            : 'bg-white border-neutral-200 text-neutral-600 hover:border-brand-300 hover:bg-neutral-50'
-                        }`}
-                      >
-                        {customMaterial === opt && (
-                          <div className="absolute top-0 right-0 w-0 h-0 border-t-[28px] border-l-[28px] border-t-brand-500 border-l-transparent">
-                            <span className="absolute -top-[24px] -left-[14px] text-white text-[10px] font-bold">✓</span>
-                          </div>
-                        )}
-                        <span>{opt}</span>
-                        <span className={`text-[11px] font-medium ${customMaterial === opt ? 'text-brand-600' : 'text-neutral-400'}`}>
-                          {opt === 'Estándar' ? 'Incluido' : opt === 'Premium' ? '+$15.000' : '+$20.000'}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Step 2: Size */}
-                <div className="relative z-10">
-                  <label className="flex items-center gap-2 text-sm font-bold text-neutral-900 mb-3">
-                    <span className="w-5 h-5 rounded-full bg-neutral-100 flex items-center justify-center text-xs text-neutral-500">2</span>
-                    Escala / Tamaño
+                    Tamaño de la Figura
                   </label>
                   <div className="grid grid-cols-2 gap-3">
-                    {['100%', '150%'].map(opt => (
+                    {['15 cms', '20 cms'].map(opt => (
                       <button
                         key={opt}
                         onClick={() => setCustomSize(opt)}
@@ -440,50 +402,19 @@ const ProductDetail = () => {
                             <span className="absolute -top-[24px] -left-[14px] text-white text-[10px] font-bold">✓</span>
                           </div>
                         )}
-                        <span>{opt === '100%' ? 'Original (100%)' : 'Extra Grande (150%)'}</span>
-                        <span className={`text-[11px] font-medium ${customSize === opt ? 'text-brand-600' : 'text-neutral-400'}`}>
-                          {opt === '100%' ? 'Incluido' : '+$35.000'}
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Step 3: Finish */}
-                <div className="relative z-10">
-                  <label className="flex items-center gap-2 text-sm font-bold text-neutral-900 mb-3">
-                    <span className="w-5 h-5 rounded-full bg-neutral-100 flex items-center justify-center text-xs text-neutral-500">3</span>
-                    Acabado
-                  </label>
-                  <div className="grid grid-cols-2 gap-3">
-                    {['Limpiado', 'Pintado a mano'].map(opt => (
-                      <button
-                        key={opt}
-                        onClick={() => setCustomFinish(opt)}
-                        className={`relative py-3 px-4 rounded-xl border-2 text-sm font-semibold transition-all flex flex-col items-start gap-1 overflow-hidden ${
-                          customFinish === opt 
-                            ? 'bg-brand-50 border-brand-500 text-brand-900 shadow-md ring-1 ring-brand-500/20' 
-                            : 'bg-white border-neutral-200 text-neutral-600 hover:border-brand-300 hover:bg-neutral-50'
-                        }`}
-                      >
-                        {customFinish === opt && (
-                          <div className="absolute top-0 right-0 w-0 h-0 border-t-[28px] border-l-[28px] border-t-brand-500 border-l-transparent">
-                            <span className="absolute -top-[24px] -left-[14px] text-white text-[10px] font-bold">✓</span>
-                          </div>
-                        )}
                         <span>{opt}</span>
-                        <span className={`text-[11px] font-medium ${customFinish === opt ? 'text-brand-600' : 'text-neutral-400'}`}>
-                          {opt === 'Limpiado' ? 'Incluido' : '+$50.000'}
+                        <span className={`text-[11px] font-medium ${customSize === opt ? 'text-brand-600' : 'text-neutral-400'}`}>
+                          {opt === '15 cms' ? 'Incluido' : '+$20.000'}
                         </span>
                       </button>
                     ))}
                   </div>
                 </div>
 
-                {/* Step 4: Text */}
+                {/* Step 2: Text */}
                 <div className="relative z-10">
                   <label className="flex items-center gap-2 text-sm font-bold text-neutral-900 mb-3">
-                    <span className="w-5 h-5 rounded-full bg-neutral-100 flex items-center justify-center text-xs text-neutral-500">4</span>
+                    <span className="w-5 h-5 rounded-full bg-neutral-100 flex items-center justify-center text-xs text-neutral-500">2</span>
                     Grabado Personalizado (+$10.000)
                   </label>
                   <input
