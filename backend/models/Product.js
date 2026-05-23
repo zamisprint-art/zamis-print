@@ -132,10 +132,9 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: false,
     },
-    color: {
+    colors: [{
         type: String,
-        required: false,
-    },
+    }],
     size: {
         type: String, // e.g. 'Pequeño', 'Mediano', 'Grande', 'Extra Grande'
         required: false,

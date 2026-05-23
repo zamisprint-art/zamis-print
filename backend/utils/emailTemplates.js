@@ -10,7 +10,7 @@ export const orderConfirmationEmail = (order) => {
         <tr>
             <td style="padding:10px 0;border-bottom:1px solid #f0f0f0;">
                 <strong>${item.name}</strong><br/>
-                <span style="color:#888;font-size:13px;">Cantidad: ${item.qty}</span>
+                <span style="color:#888;font-size:13px;">Cantidad: ${item.qty}${item.selectedColor ? ` | Color: ${item.selectedColor}` : ''}</span>
                 ${item.personalizationText ? `<br/><span style="color:#7c3aed;font-size:12px;">✏️ ${item.personalizationText}</span>` : ''}
             </td>
             <td style="padding:10px 0;border-bottom:1px solid #f0f0f0;text-align:right;white-space:nowrap;">
@@ -126,7 +126,7 @@ export const newOrderAdminEmail = (order) => {
         new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(n);
 
     const itemsList = order.orderItems.map(item =>
-        `• ${item.name} x${item.qty} — ${formatPrice(item.price * item.qty)}${item.personalizationText ? ` [✏️ ${item.personalizationText}]` : ''}`
+        `• ${item.name} x${item.qty} — ${formatPrice(item.price * item.qty)}${item.selectedColor ? ` [🎨 ${item.selectedColor}]` : ''}${item.personalizationText ? ` [✏️ ${item.personalizationText}]` : ''}`
     ).join('\n');
 
     return `

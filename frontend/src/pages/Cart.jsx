@@ -67,8 +67,9 @@ const Cart = () => {
                     onRemove={removeItem}
                   />
                   {/* Personalization notes */}
-                  {(item.personalizationText || item.personalizationImage) && (
-                    <div className="ml-24 mt-1 px-4 py-2 rounded-xl bg-brand-500/10 border border-brand-500/20 text-xs text-brand-300 flex flex-col gap-0.5">
+                  {(item.personalizationText || item.personalizationImage || item.selectedColor) && (
+                    <div className="ml-24 mt-1 px-4 py-2 rounded-xl bg-brand-500/10 border border-brand-500/20 text-xs text-brand-700 flex flex-col gap-0.5">
+                      {item.selectedColor && <span>🎨 Color: <span className="font-bold">{item.selectedColor}</span></span>}
                       {item.personalizationText && <span>✏️ Texto: {item.personalizationText}</span>}
                       {item.personalizationImage && <span>📎 Foto de referencia incluida</span>}
                     </div>

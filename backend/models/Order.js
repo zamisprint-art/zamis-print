@@ -17,6 +17,7 @@ const orderSchema = new mongoose.Schema({
                 required: false,
                 ref: 'Product',
             },
+            selectedColor: { type: String },
             personalizationText: { type: String },
             personalizationImage: { type: String }, // Path to uploaded image if required
         }

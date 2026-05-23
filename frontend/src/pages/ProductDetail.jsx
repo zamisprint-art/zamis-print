@@ -15,6 +15,7 @@ import TrustBadges from '../components/ecommerce/TrustBadges';
 import ProductCard from '../components/ProductCard';
 import { fadeUp, fadeLeft, fadeRight } from '../design-system/tokens';
 import { optimizeImage } from '../utils/cloudinary';
+import { PRODUCT_COLORS } from '../utils/colors';
 
 const Product3DViewer = lazy(() => import('../components/Product3DViewer'));
 
@@ -33,6 +34,7 @@ const ProductDetail = () => {
   const [customTextColor, setCustomTextColor]       = useState('Blanco');
   const [personalizationText, setPersonalizationText]   = useState('');
   const [personalizationImage, setPersonalizationImage] = useState(null);
+  const [selectedColor, setSelectedColor]         = useState(null);
   
   const [rating, setRating]                       = useState(0);
   const [comment, setComment]                     = useState('');
@@ -82,6 +84,11 @@ const ProductDetail = () => {
   const finalPrice = basePrice + getCustomPriceAdditions();
 
   const handleAddToCart = () => {
+    if (product.colors && product.colors.length > 0 && !selectedColor) {
+      alert('Por favor selecciona un color antes de añadir al carrito.');
+      return;
+    }
+
     if (product.requiresTextPersonalization && !product.isCustomizable && !personalizationText) {
       alert('Por favor ingresa el texto de personalización.');
       return;
@@ -106,6 +113,7 @@ const ProductDetail = () => {
       price: finalPrice, // Use the computed price
       countInStock: product.countInStock,
       qty,
+      selectedColor,
       personalizationText: finalPersonalizationText,
       personalizationImage: personalizationImage ? 'uploaded_file_path' : null,
     });
@@ -343,6 +351,30 @@ const ProductDetail = () => {
           <p className="text-neutral-600 text-base leading-relaxed max-w-xl">{product.description}</p>
 
           <div className="w-full h-px bg-neutral-200/60 my-2" />
+
+          {/* Color Selection */}
+          {product.colors && product.colors.length > 0 && (
+            <div className="mb-4">
+              <h3 className="text-sm font-bold text-neutral-900 mb-3">Color: <span className="font-medium text-neutral-500">{selectedColor || 'Selecciona uno'}</span></h3>
+              <div className="flex flex-wrap gap-3">
+                {product.colors.map(colorName => {
+                  const colorData = PRODUCT_COLORS.find(c => c.name === colorName);
+                  if (!colorData) return null;
+                  const isSelected = selectedColor === colorName;
+                  
+                  return (
+                    <button
+                      key={colorName}
+                      onClick={() => setSelectedColor(colorName)}
+                      className={`relative w-10 h-10 rounded-full border-2 transition-transform hover:scale-110 flex items-center justify-center ${isSelected ? 'ring-2 ring-offset-2 ring-brand-500 scale-110' : ''}`}
+                      style={{ background: colorData.hex, borderColor: isSelected ? 'transparent' : '#e5e7eb' }}
+                      title={colorName}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           {/* Personalization Options */}
           <div className="flex flex-col gap-6">

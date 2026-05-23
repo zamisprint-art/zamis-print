@@ -8,24 +8,24 @@ export const useCartStore = create(
             isDrawerOpen: false, // Nuevo estado para el Mini-Cart
             toggleDrawer: (isOpen) => set({ isDrawerOpen: isOpen }), // Función para abrir/cerrar
             addItem: (item) => set((state) => {
-                const existItem = state.cartItems.find((x) => x.product === item.product);
+                const existItem = state.cartItems.find((x) => x.product === item.product && x.selectedColor === item.selectedColor);
 
                 if (existItem) {
                     return {
                         cartItems: state.cartItems.map((x) =>
-                            x.product === existItem.product ? item : x
+                            (x.product === existItem.product && x.selectedColor === existItem.selectedColor) ? item : x
                         ),
-                        isDrawerOpen: true, // Se abre automáticamente al añadir
+                        isDrawerOpen: true,
                     };
                 } else {
                     return {
                         cartItems: [...state.cartItems, item],
-                        isDrawerOpen: true, // Se abre automáticamente al añadir
+                        isDrawerOpen: true,
                     };
                 }
             }),
-            removeItem: (id) => set((state) => ({
-                cartItems: state.cartItems.filter((x) => x.product !== id),
+            removeItem: (id, selectedColor = undefined) => set((state) => ({
+                cartItems: state.cartItems.filter((x) => !(x.product === id && x.selectedColor === selectedColor)),
             })),
             clearCart: () => set({ cartItems: [] }),
         }),

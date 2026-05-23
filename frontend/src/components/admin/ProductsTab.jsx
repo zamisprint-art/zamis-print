@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Package, PlusCircle, Edit, Trash2, X, Upload, Search, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Package, PlusCircle, Edit, Trash2, X, Upload, Search, ChevronLeft, ChevronRight, Check } from 'lucide-react';
+import { PRODUCT_COLORS } from '../../utils/colors';
 
 export const CATEGORY_STRUCTURE = {
   "Figuras y Coleccionables": ["Personalizados", "Fan-Art", "Esculturas/Bustos", "Articulados", "Otros"],
@@ -26,7 +27,7 @@ const ProductsTab = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [currentProduct, setCurrentProduct] = useState({
-    _id: '', name: '', price: 0, category: '', countInStock: 0, description: '', image: '', model3D: '', gallery: []
+    _id: '', name: '', price: 0, category: '', countInStock: 0, description: '', image: '', model3D: '', gallery: [], colors: []
   });
   const [uploadingImage, setUploadingImage] = useState(false);
   const [uploadingModel, setUploadingModel] = useState(false);
@@ -58,7 +59,7 @@ const ProductsTab = () => {
   // --- PRODUCT CRUD HANDLERS ---
   const handleOpenCreateModal = () => {
     setIsEditing(false);
-    setCurrentProduct({ _id: '', name: '', price: 0, category: '', countInStock: 0, description: '', image: '', model3D: '', gallery: [] });
+    setCurrentProduct({ _id: '', name: '', price: 0, category: '', countInStock: 0, description: '', image: '', model3D: '', gallery: [], colors: [] });
     setUploadError('');
     setIsModalOpen(true);
   };
@@ -416,9 +417,34 @@ const ProductsTab = () => {
                       <option value="Extra Grande">Extra Grande</option>
                     </select>
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-1">Color principal</label>
-                    <input type="text" value={currentProduct.color || ''} onChange={(e) => setCurrentProduct({...currentProduct, color: e.target.value})} className="w-full border rounded-lg p-2" placeholder="Ej: Negro, Blanco, Multicolor" />
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-neutral-700 mb-2">Colores Disponibles (Opcional)</label>
+                    <div className="flex flex-wrap gap-2">
+                      {PRODUCT_COLORS.map(color => {
+                        const isSelected = currentProduct.colors?.includes(color.name);
+                        return (
+                          <button
+                            key={color.name}
+                            type="button"
+                            onClick={() => {
+                              const currentColors = currentProduct.colors || [];
+                              if (isSelected) {
+                                setCurrentProduct({...currentProduct, colors: currentColors.filter(c => c !== color.name)});
+                              } else {
+                                setCurrentProduct({...currentProduct, colors: [...currentColors, color.name]});
+                              }
+                            }}
+                            className={`relative w-8 h-8 rounded-full border-2 transition-transform hover:scale-110 flex items-center justify-center ${isSelected ? 'ring-2 ring-offset-2 ring-brand-500 scale-110' : ''}`}
+                            style={{ background: color.hex, borderColor: isSelected ? 'transparent' : '#e5e7eb' }}
+                            title={color.name}
+                          >
+                            {isSelected && (
+                              <Check size={14} className={color.name === 'Blanco' || color.name === 'Amarillo' || color.name === 'Glow (Brilla)' ? 'text-neutral-900' : 'text-white'} />
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-neutral-700 mb-1">Medidas (cm)</label>
