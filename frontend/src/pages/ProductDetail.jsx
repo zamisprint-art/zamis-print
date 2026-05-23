@@ -180,10 +180,7 @@ const ProductDetail = () => {
                   }
                   onError={(e) => { e.target.onerror = null; e.target.src = 'https://via.placeholder.com/600x600?text=Imagen+No+Disponible'; }}
                   alt={product.name}
-                  className={`w-full h-full object-cover pointer-events-none transition-all duration-500 ${
-                    customMaterial === 'Especial' ? 'contrast-125 saturate-150 hue-rotate-15' : 
-                    customMaterial === 'Premium' ? 'sepia-[.2] contrast-110' : ''
-                  } ${customSize === '150%' ? 'scale-110' : 'scale-100'}`}
+                  className={`w-full h-full object-cover pointer-events-none transition-all duration-500`}
                 />
                 
                 {/* Live Text Engraving Overlay - Draggable */}
