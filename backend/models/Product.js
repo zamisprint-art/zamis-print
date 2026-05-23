@@ -106,6 +106,10 @@ const productSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
+    isActive: {
+        type: Boolean,
+        default: true,
+    },
     // --- Featured / Merchandising ---
     isFeatured: {
         type: Boolean,

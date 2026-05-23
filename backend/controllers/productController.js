@@ -8,7 +8,7 @@ const getProducts = async (req, res) => {
     const pageSize = req.query.limit === 'all' ? 0 : (Number(req.query.limit) || 20);
     const page = Number(req.query.page) || 1;
 
-    const query = {};
+    const query = { isActive: true };
 
     if (req.query.search) {
         query.name = {
@@ -52,6 +52,44 @@ const getProductById = async (req, res) => {
     }
 };
 
+// @desc    Fetch all products for Admin (including inactive)
+// @route   GET /api/products/admin
+// @access  Private/Admin
+const getAdminProducts = async (req, res) => {
+    const pageSize = req.query.limit === 'all' ? 0 : (Number(req.query.limit) || 20);
+    const page = Number(req.query.page) || 1;
+
+    const query = {};
+
+    if (req.query.search) {
+        query.name = {
+            $regex: req.query.search,
+            $options: 'i',
+        };
+    }
+
+    if (req.query.category && req.query.category !== 'all') {
+        query.category = req.query.category;
+    }
+
+    const count = await Product.countDocuments({ ...query });
+    
+    let productsQuery = Product.find({ ...query }).sort({ createdAt: -1 });
+    
+    if (pageSize > 0) {
+        productsQuery = productsQuery.limit(pageSize).skip(pageSize * (page - 1));
+    }
+    
+    const products = await productsQuery;
+
+    res.json({ 
+        products, 
+        page, 
+        pages: pageSize > 0 ? Math.ceil(count / pageSize) : 1, 
+        total: count 
+    });
+};
+
 // @desc    Create a product
 // @route   POST /api/products
 // @access  Private/Admin
@@ -66,6 +104,7 @@ const createProduct = async (req, res) => {
         description: 'Sample description',
         requiresTextPersonalization: false,
         requiresImagePersonalization: false,
+        isActive: true,
     });
 
     const createdProduct = await product.save();
@@ -81,7 +120,7 @@ const updateProduct = async (req, res) => {
         category, subcategory, countInStock,
         requiresTextPersonalization, requiresImagePersonalization, isCustomizable,
         isFeatured, isNewArrival, isOnSale, salePrice,
-        material, colors, size, measurements, personalizationLevel,
+        material, colors, size, measurements, personalizationLevel, isActive,
     } = req.body;
 
     const product = await Product.findById(req.params.id);
@@ -110,6 +149,7 @@ const updateProduct = async (req, res) => {
         product.size = size !== undefined ? size : product.size;
         product.measurements = measurements !== undefined ? measurements : product.measurements;
         product.personalizationLevel = personalizationLevel !== undefined ? personalizationLevel : product.personalizationLevel;
+        product.isActive = isActive !== undefined ? isActive : product.isActive;
 
         const updatedProduct = await product.save();
         res.json(updatedProduct);
@@ -168,4 +208,4 @@ const createProductReview = async (req, res) => {
     }
 };
 
-export { getProducts, getProductById, createProduct, updateProduct, deleteProduct, createProductReview };
+export { getProducts, getAdminProducts, getProductById, createProduct, updateProduct, deleteProduct, createProductReview };

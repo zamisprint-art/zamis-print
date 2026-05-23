@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Package, PlusCircle, Edit, Trash2, X, Upload, Search, ChevronLeft, ChevronRight, Check } from 'lucide-react';
+import { Package, PlusCircle, Edit, Trash2, X, Upload, Search, ChevronLeft, ChevronRight, Check, Eye, EyeOff } from 'lucide-react';
 import { PRODUCT_COLORS } from '../../utils/colors';
 
 export const CATEGORY_STRUCTURE = {
@@ -35,7 +35,7 @@ const ProductsTab = () => {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const { data: resData } = await axios.get(`/api/products?page=${page}&limit=20&search=${search}&category=${category}`);
+      const { data: resData } = await axios.get(`/api/products/admin?page=${page}&limit=20&search=${search}&category=${category}`, { withCredentials: true });
       setData(resData);
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -79,6 +79,16 @@ const ProductsTab = () => {
       } catch (error) {
         alert(error.response?.data?.message || 'Error al eliminar');
       }
+    }
+  };
+
+  const handleToggleActive = async (product) => {
+    try {
+      const currentIsActive = product.isActive !== false;
+      await axios.put(`/api/products/${product._id}`, { ...product, isActive: !currentIsActive }, { withCredentials: true });
+      fetchProducts();
+    } catch (error) {
+      alert(error.response?.data?.message || 'Error al cambiar estado');
     }
   };
 
@@ -186,14 +196,19 @@ const ProductsTab = () => {
                 </tr>
               </thead>
               <tbody>
-                {data.products.map((product) => (
-                  <tr key={product._id} className="border-b border-neutral-100 hover:bg-neutral-50 transition-colors">
+                {data.products.map((product) => {
+                  const isActive = product.isActive !== false;
+                  return (
+                  <tr key={product._id} className={`border-b border-neutral-100 transition-colors ${!isActive ? 'bg-neutral-100/60 opacity-60' : 'hover:bg-neutral-50'}`}>
                     <td className="py-4 px-4">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-lg overflow-hidden bg-neutral-100 shrink-0">
-                          <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+                          <img src={product.image} alt={product.name} className={`w-full h-full object-cover ${!isActive ? 'grayscale' : ''}`} />
                         </div>
-                        <div className="font-bold text-neutral-900">{product.name}</div>
+                        <div className="font-bold text-neutral-900">
+                          {product.name}
+                          {!isActive && <span className="ml-2 px-2 py-0.5 rounded text-[10px] font-bold bg-neutral-200 text-neutral-600 uppercase tracking-wider">Inactivo</span>}
+                        </div>
                       </div>
                     </td>
                     <td className="py-4 px-4 text-neutral-600">{product.category}</td>
@@ -204,6 +219,9 @@ const ProductsTab = () => {
                       </span>
                     </td>
                     <td className="py-4 px-4 flex justify-end gap-2">
+                      <button onClick={() => handleToggleActive(product)} className={`p-2 rounded-lg transition-colors ${isActive ? 'bg-amber-50 text-amber-600 hover:bg-amber-100' : 'bg-green-50 text-green-600 hover:bg-green-100'}`} title={isActive ? 'Ocultar producto' : 'Activar producto'}>
+                        {isActive ? <EyeOff size={18} /> : <Eye size={18} />}
+                      </button>
                       <button onClick={() => handleOpenEditModal(product)} className="p-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors">
                         <Edit size={18} />
                       </button>
@@ -212,7 +230,7 @@ const ProductsTab = () => {
                       </button>
                     </td>
                   </tr>
-                ))}
+                )})}
                 {data.products.length === 0 && (
                   <tr>
                     <td colSpan="5" className="text-center py-8 text-neutral-500">No se encontraron productos con esos filtros.</td>
