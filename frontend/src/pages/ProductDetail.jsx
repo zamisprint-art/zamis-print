@@ -180,7 +180,7 @@ const ProductDetail = () => {
                   }
                   onError={(e) => { e.target.onerror = null; e.target.src = 'https://via.placeholder.com/600x600?text=Imagen+No+Disponible'; }}
                   alt={product.name}
-                  className={`w-full h-full object-cover pointer-events-none transition-all duration-500`}
+                  className={`w-full h-full object-contain p-4 pointer-events-none transition-all duration-500`}
                 />
                 
                 {/* Live Text Engraving Overlay - Draggable */}
@@ -290,7 +290,7 @@ const ProductDetail = () => {
                   (activeMedia === 'main' || (!activeMedia && !product.model3D?.startsWith('http'))) ? 'border-brand-500 shadow-md ring-2 ring-brand-500/20' : 'border-neutral-200 hover:border-brand-300 opacity-70 hover:opacity-100'
                 }`}
               >
-                <img src={optimizeImage(product.image, 150)} alt="Principal" className="w-full h-full object-cover" />
+                <img src={optimizeImage(product.image, 150)} alt="Principal" className="w-full h-full object-contain p-1" />
               </button>
             )}
 
@@ -303,7 +303,7 @@ const ProductDetail = () => {
                   activeMedia === imgUrl ? 'border-brand-500 shadow-md ring-2 ring-brand-500/20' : 'border-neutral-200 hover:border-brand-300 opacity-70 hover:opacity-100'
                 }`}
               >
-                <img src={optimizeImage(imgUrl, 150)} alt={`Galería ${idx}`} className="w-full h-full object-cover" />
+                <img src={optimizeImage(imgUrl, 150)} alt={`Galería ${idx}`} className="w-full h-full object-contain p-1" />
               </button>
             ))}
           </motion.div>
