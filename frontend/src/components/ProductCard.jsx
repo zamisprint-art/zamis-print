@@ -48,11 +48,15 @@ const ProductCard = ({ product }) => {
         {/* Overlay badges — left */}
         <div className="absolute top-3 left-3 flex flex-col gap-1.5">
           {product.isFeatured && (
-            <span className="flex items-center gap-1 bg-amber-400 text-amber-900 text-[10px] font-bold px-2 py-0.5 rounded-full shadow">
-              <Star className="w-3 h-3" /> Destacado
+            <span className="flex items-center justify-center w-6 h-6 bg-amber-400 text-amber-900 rounded-full shadow" title="Destacado">
+              <Star className="w-3.5 h-3.5" fill="currentColor" />
             </span>
           )}
-          {isNew && <Badge variant="new">Nuevo</Badge>}
+          {isNew && (
+            <span className="flex items-center justify-center w-6 h-6 bg-brand-500 text-white text-[11px] font-black rounded-full shadow" title="Nuevo">
+              N
+            </span>
+          )}
           {product.isOnSale && discount > 0 && (
             <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow">
               -{discount}% OFF
