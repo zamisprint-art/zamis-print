@@ -4,5 +4,8 @@
   "scripts": {
     "build": "cd frontend && npm install && npm run build",
     "vercel-build": "cd frontend && npm install && npm run build"
+  },
+  "dependencies": {
+    "sharp": "^0.34.5"
   }
 }
