@@ -116,6 +116,37 @@ const Home = () => {
       {/* Hero Section */}
       <HeroSlider />
 
+      {/* Categorías Principales (Quick Links) */}
+      <section className="py-10 max-w-7xl mx-auto px-4 w-full bg-surface-base">
+        <h2 className="text-xl md:text-2xl font-extrabold text-neutral-900 mb-8 text-center">Explora nuestras categorías</h2>
+        <div className="grid grid-cols-4 gap-2 sm:gap-6">
+          <Link to="/shop?category=Figuras y Coleccionables" className="group flex flex-col items-center">
+            <div className="w-16 h-16 sm:w-28 sm:h-28 rounded-full overflow-hidden mb-3 border-4 border-white shadow-md group-hover:shadow-brand-500/20 group-hover:scale-105 transition-all duration-300">
+              <img src="/images/category-figures.jpg" alt="Figuras" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onError={(e) => { e.target.src = 'https://via.placeholder.com/150?text=Figuras' }} />
+            </div>
+            <span className="font-bold text-neutral-800 text-[10px] sm:text-sm text-center group-hover:text-brand-600 transition-colors leading-tight">Figuras<br/>Coleccionables</span>
+          </Link>
+          <Link to="/shop?category=Hogar y Decoración" className="group flex flex-col items-center">
+            <div className="w-16 h-16 sm:w-28 sm:h-28 rounded-full overflow-hidden mb-3 border-4 border-white shadow-md group-hover:shadow-brand-500/20 group-hover:scale-105 transition-all duration-300">
+              <img src="/images/category-home.jpg" alt="Hogar" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onError={(e) => { e.target.src = 'https://via.placeholder.com/150?text=Hogar' }} />
+            </div>
+            <span className="font-bold text-neutral-800 text-[10px] sm:text-sm text-center group-hover:text-brand-600 transition-colors leading-tight">Decoración<br/>Hogar</span>
+          </Link>
+          <Link to="/about" className="group flex flex-col items-center">
+            <div className="w-16 h-16 sm:w-28 sm:h-28 rounded-full overflow-hidden mb-3 border-4 border-white shadow-md group-hover:shadow-brand-500/20 group-hover:scale-105 transition-all duration-300 bg-neutral-100 flex items-center justify-center">
+              <span className="text-2xl sm:text-4xl">⚙️</span>
+            </div>
+            <span className="font-bold text-neutral-800 text-[10px] sm:text-sm text-center group-hover:text-brand-600 transition-colors leading-tight">Prototipos<br/>3D</span>
+          </Link>
+          <Link to="/shop?sort=newest" className="group flex flex-col items-center">
+            <div className="w-16 h-16 sm:w-28 sm:h-28 rounded-full overflow-hidden mb-3 border-4 border-white shadow-md group-hover:shadow-brand-500/20 group-hover:scale-105 transition-all duration-300 bg-brand-500 flex items-center justify-center text-white">
+              <span className="text-2xl sm:text-4xl">✨</span>
+            </div>
+            <span className="font-bold text-brand-600 text-[10px] sm:text-sm text-center group-hover:text-brand-700 transition-colors leading-tight">Lo<br/>Nuevo</span>
+          </Link>
+        </div>
+      </section>
+
       {/* Secciones Dinámicas */}
       {homeSections.map((section, index) => {
         let items = [];
@@ -136,7 +167,7 @@ const Home = () => {
         if (!loading && items.length === 0 && section.type !== 'newest') return null;
 
         return (
-          <div key={section._id} className="w-full border-b border-neutral-200/60 shadow-[0_4px_16px_rgba(0,0,0,0.02)] relative z-10">
+          <div key={section._id} className={`w-full border-b border-neutral-200/60 shadow-[0_4px_16px_rgba(0,0,0,0.02)] relative z-10 ${index % 2 !== 0 ? 'bg-neutral-50/50' : 'bg-white'}`}>
             <section className={`pt-4 pb-0 md:pt-6 md:pb-0 px-4 max-w-7xl mx-auto w-full ${section.type === 'sale' ? 'bg-gradient-to-b from-red-50/40 to-transparent' : ''}`}>
             <SectionHeader 
               emoji={section.emoji} 

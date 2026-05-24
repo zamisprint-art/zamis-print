@@ -24,6 +24,7 @@ const Checkout = () => {
     department: '',
     city: '',
     postalCode: '',
+    instructions: '',
   });
 
   const availableCities = useMemo(() => {
@@ -349,6 +350,18 @@ const Checkout = () => {
                       Solo para actualizaciones de tu pedido.
                     </p>
                   </div>
+                </div>
+
+                {/* ── Sección 4: Instrucciones ── */}
+                <div className="flex items-center gap-2 text-xs font-bold text-brand-600 uppercase tracking-widest mt-6 mb-1">
+                  <FileText size={13} /> Instrucciones de Entrega
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-neutral-700 mb-1.5">Notas adicionales (Opcional)</label>
+                  <textarea name="instructions" rows="2"
+                    value={shippingAddress.instructions} onChange={handleChange}
+                    className="input-field py-3 text-base resize-none w-full" placeholder="Ej. Dejar en portería, casa con rejas negras, etc."
+                  />
                 </div>
 
               </form>
