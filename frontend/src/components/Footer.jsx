@@ -4,9 +4,9 @@ import { TrustBadges } from './ecommerce';
 
 const Footer = () => {
   return (
-    <footer className="bg-neutral-950 pt-16 pb-8 border-t border-neutral-900 mt-auto text-neutral-400">
+    <footer className="bg-neutral-950 pt-10 pb-8 border-t border-neutral-900 mt-auto text-neutral-400">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
           
           {/* Brand Column */}
           <div className="space-y-4 lg:pr-8">
@@ -14,7 +14,7 @@ const Footer = () => {
               <img
                 src="/images/logo-transparent.png"
                 alt="ZAMIS Print"
-                className="h-16 md:h-20 w-auto object-contain -ml-2"
+                className="h-12 md:h-14 w-auto object-contain -ml-2"
               />
             </Link>
             <p className="text-neutral-400 leading-relaxed text-sm">
@@ -35,8 +35,8 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-white font-bold text-lg mb-4">Enlaces Rápidos</h4>
-            <ul className="space-y-2.5 text-sm">
+            <h4 className="text-white font-bold text-lg mb-3">Enlaces Rápidos</h4>
+            <ul className="space-y-1.5 text-sm">
               <li>
                 <Link to="/shop" className="hover:text-brand-400 transition-colors">Catálogo de Productos</Link>
               </li>
@@ -54,8 +54,8 @@ const Footer = () => {
 
           {/* Support */}
           <div>
-            <h4 className="text-white font-bold text-lg mb-4">Soporte</h4>
-            <ul className="space-y-2.5 text-sm">
+            <h4 className="text-white font-bold text-lg mb-3">Soporte</h4>
+            <ul className="space-y-1.5 text-sm">
               <li>
                 <Link to="/faq" className="hover:text-brand-400 transition-colors">Preguntas Frecuentes</Link>
               </li>
@@ -73,8 +73,8 @@ const Footer = () => {
 
           {/* Contact & Newsletter */}
           <div>
-            <h4 className="text-white font-bold text-lg mb-4">Contáctanos</h4>
-            <ul className="space-y-3 text-sm mb-6">
+            <h4 className="text-white font-bold text-lg mb-3">Contáctanos</h4>
+            <ul className="space-y-2 text-sm mb-4">
               <li className="flex items-start gap-3">
                 <MapPin size={18} className="text-brand-500 shrink-0 mt-0.5" />
                 <span>Bogotá, Colombia<br/>Envíos a todo el país</span>
