@@ -30,6 +30,9 @@ const ProductDetail = () => {
   const [isZoomed, setIsZoomed]                   = useState(false);
   const [backgroundPos, setBackgroundPos]         = useState({ x: 50, y: 50 });
   const [isLightboxOpen, setIsLightboxOpen]       = useState(false);
+  
+  // Tabs State
+  const [activeTab, setActiveTab]                 = useState('description');
 
   const [loading, setLoading]                     = useState(true);
   const [qty, setQty]                             = useState(1);
@@ -420,8 +423,18 @@ const ProductDetail = () => {
             <p className="text-sm text-neutral-500 font-medium mt-1">IVA Incluido. Envío calculado en el checkout.</p>
           </div>
 
-          {/* Description */}
-          <p className="text-neutral-600 text-base leading-relaxed max-w-xl">{product.description}</p>
+          {/* Quick Features */}
+          <ul className="space-y-2 mt-1 mb-2">
+            <li className="flex items-center gap-2 text-sm font-medium text-neutral-600">
+              <span className="text-brand-500 font-bold text-lg leading-none">✓</span> Material Eco-amigable y Resistente
+            </li>
+            <li className="flex items-center gap-2 text-sm font-medium text-neutral-600">
+              <span className="text-brand-500 font-bold text-lg leading-none">✓</span> Fabricado bajo demanda con precisión
+            </li>
+            <li className="flex items-center gap-2 text-sm font-medium text-neutral-600">
+              <span className="text-brand-500 font-bold text-lg leading-none">✓</span> Soporte en Colombia y Garantía ZAMIS
+            </li>
+          </ul>
 
           <div className="w-full h-px bg-neutral-200/60 my-2" />
 
@@ -611,97 +624,196 @@ const ProductDetail = () => {
         </motion.div>
       </div>
 
-      {/* Reviews Section */}
-      <motion.div
-        variants={fadeUp}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: '-60px' }}
-        className="border-t border-neutral-200 pt-16"
-      >
-        <h2 className="text-3xl font-bold mb-8">Opiniones de Clientes</h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          {/* Reviews List */}
-          <div className="space-y-4">
-            {product.reviews.length === 0 ? (
-              <div className="bg-neutral-50 border border-neutral-100 p-8 rounded-2xl text-neutral-500 text-sm text-center">
-                Todavía no hay opiniones. ¡Sé el primero en calificar este producto!
-              </div>
-            ) : (
-              product.reviews.map((review) => (
-                <div key={review._id} className="bg-white border border-neutral-200 p-6 rounded-2xl shadow-sm">
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="font-bold text-neutral-900">{review.name}</span>
-                    <Rating value={review.rating} />
-                  </div>
-                  <p className="text-neutral-600 text-sm leading-relaxed">{review.comment}</p>
-                  <p className="text-xs font-semibold text-neutral-400 mt-4 uppercase tracking-wider">{review.createdAt?.substring(0, 10)}</p>
-                </div>
-              ))
-            )}
-          </div>
-
-          {/* Write Review */}
-          <div className="bg-neutral-50 border border-neutral-100 p-8 rounded-[2rem] h-fit">
-            <h3 className="text-2xl font-bold mb-6 text-neutral-900">Escribe tu opinión</h3>
-
-            {reviewSuccess && (
-              <Alert type="success" title="¡Reseña enviada!" message="Gracias por tu opinión." dismissible className="mb-4" />
-            )}
-            {reviewError && (
-              <Alert type="danger" message={reviewError} dismissible className="mb-4" />
-            )}
-
-            {userInfo ? (
-              <form onSubmit={submitReview} className="flex flex-col gap-4">
-                <div>
-                  <label className="label-base">Calificación</label>
-                  <select
-                    value={rating}
-                    onChange={(e) => setRating(Number(e.target.value))}
-                    className="input-field"
-                    required
-                  >
-                    <option value="">Selecciona...</option>
-                    <option value="1">1 — Pobre</option>
-                    <option value="2">2 — Regular</option>
-                    <option value="3">3 — Bueno</option>
-                    <option value="4">4 — Muy Bueno</option>
-                    <option value="5">5 — Excelente</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="label-base">Comentario</label>
-                  <textarea
-                    rows={3}
-                    value={comment}
-                    onChange={(e) => setComment(e.target.value)}
-                    className="input-field resize-none"
-                    placeholder="¿Qué te pareció el producto?"
-                    required
-                  />
-                </div>
-                <Button
-                  type="submit"
-                  variant="primary"
-                  fullWidth
-                  loading={reviewLoading}
-                >
-                  Enviar Reseña
-                </Button>
-              </form>
-            ) : (
-              <div className="bg-surface-raised p-6 rounded-xl text-center border border-neutral-100">
-                <p className="text-neutral-400 mb-4 text-sm">Debes iniciar sesión para escribir una reseña.</p>
-                <Button variant="outline" fullWidth onClick={() => navigate('/login')}>
-                  Iniciar Sesión
-                </Button>
-              </div>
-            )}
-          </div>
+      {/* TABS SECTION */}
+      <div className="mt-12 border-t border-neutral-200 pt-8">
+        <div className="flex border-b border-neutral-200 overflow-x-auto hide-scrollbar mb-8">
+          {[
+            { id: 'description', label: 'Descripción' },
+            { id: 'specs', label: 'Especificaciones' },
+            { id: 'shipping', label: 'Envíos y Garantía' },
+            { id: 'reviews', label: `Reseñas (${product.reviews?.length || 0})` },
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`px-6 py-4 font-bold text-sm uppercase tracking-wider whitespace-nowrap transition-colors relative ${
+                activeTab === tab.id ? 'text-brand-600' : 'text-neutral-400 hover:text-neutral-900'
+              }`}
+            >
+              {tab.label}
+              {activeTab === tab.id && (
+                <motion.div layoutId="activeTab" className="absolute bottom-0 left-0 right-0 h-1 bg-brand-500" />
+              )}
+            </button>
+          ))}
         </div>
-      </motion.div>
+
+        <div className="min-h-[300px] mb-12">
+          <AnimatePresence mode="wait">
+            {activeTab === 'description' && (
+              <motion.div
+                key="desc"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="text-neutral-600 text-base leading-relaxed max-w-4xl space-y-4"
+              >
+                <h3 className="text-2xl font-bold text-neutral-900 mb-4">Sobre este diseño</h3>
+                <p>{product.description}</p>
+                <p>Nuestras piezas de impresión 3D son creadas con dedicación y alta precisión. Cada curva y detalle ha sido optimizado para ofrecerte no solo un artículo estético, sino también duradero y funcional.</p>
+              </motion.div>
+            )}
+
+            {activeTab === 'specs' && (
+              <motion.div
+                key="specs"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="max-w-4xl"
+              >
+                <h3 className="text-2xl font-bold text-neutral-900 mb-6">Especificaciones Técnicas</h3>
+                <div className="bg-white border border-neutral-200 rounded-2xl overflow-hidden shadow-sm">
+                  <table className="w-full text-left text-sm text-neutral-600">
+                    <tbody className="divide-y divide-neutral-100">
+                      <tr className="hover:bg-neutral-50 transition-colors">
+                        <td className="px-6 py-4 font-bold text-neutral-900 w-1/3 bg-neutral-50/50">Material de Impresión</td>
+                        <td className="px-6 py-4">PLA Premium / PETG (Plástico ecológico de alta resistencia)</td>
+                      </tr>
+                      <tr className="hover:bg-neutral-50 transition-colors">
+                        <td className="px-6 py-4 font-bold text-neutral-900 bg-neutral-50/50">Resolución de Capa</td>
+                        <td className="px-6 py-4">0.12mm - 0.20mm (Calidad Detallada)</td>
+                      </tr>
+                      <tr className="hover:bg-neutral-50 transition-colors">
+                        <td className="px-6 py-4 font-bold text-neutral-900 bg-neutral-50/50">Mantenimiento</td>
+                        <td className="px-6 py-4">Limpiar con paño seco. No exponer a temperaturas superiores a 50°C.</td>
+                      </tr>
+                      <tr className="hover:bg-neutral-50 transition-colors">
+                        <td className="px-6 py-4 font-bold text-neutral-900 bg-neutral-50/50">Origen</td>
+                        <td className="px-6 py-4">Diseñado y fabricado por ZAMIS Print (Colombia)</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </motion.div>
+            )}
+
+            {activeTab === 'shipping' && (
+              <motion.div
+                key="shipping"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="max-w-4xl space-y-6 text-neutral-600 leading-relaxed"
+              >
+                <div>
+                  <h3 className="text-xl font-bold text-neutral-900 mb-2">Tiempos de Fabricación</h3>
+                  <p>Al ser un producto personalizado y fabricado bajo demanda mediante impresión 3D, el tiempo de preparación toma entre <strong>2 a 4 días hábiles</strong>. Nos aseguramos de que la calidad de cada capa sea perfecta antes de enviarlo.</p>
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-neutral-900 mb-2">Envíos Nacionales</h3>
+                  <p>Realizamos envíos a todo Colombia. Una vez fabricado, el tiempo de tránsito suele ser de 1 a 3 días hábiles adicionales dependiendo de tu ciudad.</p>
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-neutral-900 mb-2">Garantía ZAMIS</h3>
+                  <p>Si tu producto llega con algún defecto de fabricación o sufre daños irreparables durante el transporte, tienes 5 días hábiles para reportarlo y te fabricaremos uno nuevo sin costo adicional.</p>
+                </div>
+              </motion.div>
+            )}
+
+            {activeTab === 'reviews' && (
+              <motion.div
+                key="reviews"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="w-full"
+              >
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                  {/* Reviews List */}
+                  <div className="space-y-4">
+                    {product.reviews.length === 0 ? (
+                      <div className="bg-neutral-50 border border-neutral-100 p-8 rounded-2xl text-neutral-500 text-sm text-center">
+                        Todavía no hay opiniones. ¡Sé el primero en calificar este producto!
+                      </div>
+                    ) : (
+                      product.reviews.map((review) => (
+                        <div key={review._id} className="bg-white border border-neutral-200 p-6 rounded-2xl shadow-sm">
+                          <div className="flex items-center justify-between mb-3">
+                            <span className="font-bold text-neutral-900">{review.name}</span>
+                            <Rating value={review.rating} />
+                          </div>
+                          <p className="text-neutral-600 text-sm leading-relaxed">{review.comment}</p>
+                          <p className="text-xs font-semibold text-neutral-400 mt-4 uppercase tracking-wider">{review.createdAt?.substring(0, 10)}</p>
+                        </div>
+                      ))
+                    )}
+                  </div>
+
+                  {/* Write Review */}
+                  <div className="bg-neutral-50 border border-neutral-100 p-8 rounded-[2rem] h-fit">
+                    <h3 className="text-2xl font-bold mb-6 text-neutral-900">Escribe tu opinión</h3>
+
+                    {reviewSuccess && (
+                      <Alert type="success" title="¡Reseña enviada!" message="Gracias por tu opinión." dismissible className="mb-4" />
+                    )}
+                    {reviewError && (
+                      <Alert type="danger" message={reviewError} dismissible className="mb-4" />
+                    )}
+
+                    {userInfo ? (
+                      <form onSubmit={submitReview} className="flex flex-col gap-4">
+                        <div>
+                          <label className="label-base">Calificación</label>
+                          <select
+                            value={rating}
+                            onChange={(e) => setRating(Number(e.target.value))}
+                            className="input-field"
+                            required
+                          >
+                            <option value="">Selecciona...</option>
+                            <option value="1">1 — Pobre</option>
+                            <option value="2">2 — Regular</option>
+                            <option value="3">3 — Bueno</option>
+                            <option value="4">4 — Muy Bueno</option>
+                            <option value="5">5 — Excelente</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="label-base">Comentario</label>
+                          <textarea
+                            rows={3}
+                            value={comment}
+                            onChange={(e) => setComment(e.target.value)}
+                            className="input-field resize-none"
+                            placeholder="¿Qué te pareció el producto?"
+                            required
+                          />
+                        </div>
+                        <Button
+                          type="submit"
+                          variant="primary"
+                          fullWidth
+                          loading={reviewLoading}
+                        >
+                          Enviar Reseña
+                        </Button>
+                      </form>
+                    ) : (
+                      <div className="bg-surface-raised p-6 rounded-xl text-center border border-neutral-100">
+                        <p className="text-neutral-400 mb-4 text-sm">Debes iniciar sesión para escribir una reseña.</p>
+                        <Button variant="outline" fullWidth onClick={() => navigate('/login')}>
+                          Iniciar Sesión
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
 
       {/* Recommendations Section */}
       {relatedProducts.length > 0 && (
