@@ -98,7 +98,7 @@ const Home = () => {
   const SectionHeader = ({ emoji, title, linkTo, linkLabel }) => (
     <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
       className="flex items-center justify-between mb-4 px-2">
-      <h2 className="text-2xl md:text-3xl font-extrabold text-neutral-900 flex items-center gap-2 md:gap-3">
+      <h2 className="text-xl md:text-2xl font-bold text-neutral-900 flex items-center gap-2 md:gap-3">
         <span>{emoji}</span>
         {title}
       </h2>
@@ -121,7 +121,7 @@ const Home = () => {
 
       {/* Categorías Principales (Quick Links) */}
       <section className="py-10 max-w-7xl mx-auto px-4 w-full bg-surface-base">
-        <h2 className="text-xl md:text-2xl font-extrabold text-neutral-900 mb-8 text-center">Explora nuestras categorías</h2>
+        <h2 className="text-lg md:text-xl font-bold text-neutral-900 mb-6 text-center">Explora nuestras categorías</h2>
         <div className="flex justify-center gap-4 sm:gap-10 flex-wrap">
           {loading ? (
             <div className="flex justify-center gap-4 sm:gap-10 flex-wrap">
@@ -261,7 +261,7 @@ const Home = () => {
         
         <div className="max-w-7xl mx-auto px-4 relative z-10">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">¿Por qué elegir ZAMIS Print?</h2>
+            <h2 className="text-2xl md:text-3xl font-bold mb-4">¿Por qué elegir ZAMIS Print?</h2>
             <div className="h-1 w-16 bg-primary mx-auto rounded-full"></div>
           </div>
           
@@ -273,7 +273,7 @@ const Home = () => {
               className="glass-panel p-10 rounded-3xl group hover:border-primary/30 transition-all duration-300 hover:-translate-y-2"
             >
               <div className="w-16 h-16 mx-auto bg-primary/10 text-primary rounded-2xl flex items-center justify-center mb-6 text-2xl group-hover:scale-110 group-hover:bg-primary/20 transition-transform">✨</div>
-              <h3 className="text-2xl font-bold mb-4">Calidad Premium</h3>
+              <h3 className="text-lg md:text-xl font-bold mb-2">Calidad Premium</h3>
               <p className="text-neutral-500">Usamos resina y PLA de la más alta calidad para asegurar detalles perfectos y durabilidad incomparable.</p>
             </motion.div>
             
@@ -285,7 +285,7 @@ const Home = () => {
               className="glass-panel p-10 rounded-3xl group hover:border-accent/30 transition-all duration-300 hover:-translate-y-2"
             >
               <div className="w-16 h-16 mx-auto bg-accent/10 text-accent rounded-2xl flex items-center justify-center mb-6 text-2xl group-hover:scale-110 group-hover:bg-accent/20 transition-transform">🎨</div>
-              <h3 className="text-2xl font-bold mb-4">100% Personalizable</h3>
+              <h3 className="text-lg md:text-xl font-bold mb-2">100% Personalizable</h3>
               <p className="text-neutral-500">Desde colores hasta grabados de texto o modelos a medida. Tu imaginación es nuestro único límite.</p>
             </motion.div>
             
@@ -297,7 +297,7 @@ const Home = () => {
               className="glass-panel p-10 rounded-3xl group hover:border-green-500/30 transition-all duration-300 hover:-translate-y-2"
             >
               <div className="w-16 h-16 mx-auto bg-green-500/10 text-green-400 rounded-2xl flex items-center justify-center mb-6 text-2xl group-hover:scale-110 group-hover:bg-green-500/20 transition-transform">🚀</div>
-              <h3 className="text-2xl font-bold mb-4">Envíos Rápidos</h3>
+              <h3 className="text-lg md:text-xl font-bold mb-2">Envíos Rápidos</h3>
               <p className="text-neutral-500">Producimos y enviamos en tiempo récord a toda Colombia para que tengas tu pieza cuanto antes.</p>
             </motion.div>
           </div>
