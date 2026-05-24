@@ -74,14 +74,14 @@ const ProductsTab = () => {
   // --- PRODUCT CRUD HANDLERS ---
   const handleOpenCreateModal = () => {
     setIsEditing(false);
-    setCurrentProduct({ _id: '', name: '', price: 0, category: '', countInStock: 0, description: '', image: '', model3D: '', gallery: [], colors: [] });
+    setCurrentProduct({ _id: '', name: '', price: 0, category: '', countInStock: 0, description: '', image: '', model3D: '', gallery: [], colors: [], specifications: [] });
     setUploadError('');
     setIsModalOpen(true);
   };
 
   const handleOpenEditModal = (product) => {
     setIsEditing(true);
-    setCurrentProduct({ ...product });
+    setCurrentProduct({ specifications: [], ...product });
     setUploadError('');
     setIsModalOpen(true);
   };
@@ -513,6 +513,73 @@ const ProductsTab = () => {
                     <label className="block text-sm font-medium text-neutral-700 mb-1">Precio de Oferta ($)</label>
                     <input type="number" value={currentProduct.salePrice || ''} onChange={(e) => setCurrentProduct({...currentProduct, salePrice: e.target.value})} className="w-full border rounded-lg p-2" placeholder="Dejar vacío si no hay oferta" />
                   </div>
+                </div>
+              </div>
+
+              {/* Dynamic Specifications */}
+              <div className="mt-4 p-4 border border-neutral-200 rounded-xl bg-neutral-50/50 space-y-4">
+                <div className="flex justify-between items-center">
+                  <h3 className="text-sm font-bold text-neutral-800 uppercase tracking-wide">Especificaciones Técnicas (Dinámicas)</h3>
+                  <button 
+                    type="button" 
+                    onClick={() => {
+                      const currentSpecs = currentProduct.specifications || [];
+                      setCurrentProduct({...currentProduct, specifications: [...currentSpecs, { name: '', value: '' }]});
+                    }}
+                    className="text-sm text-brand-600 font-bold flex items-center gap-1 hover:text-brand-700 bg-brand-50 px-3 py-1.5 rounded-lg"
+                  >
+                    <PlusCircle size={16} /> Añadir Fila
+                  </button>
+                </div>
+                
+                <div className="space-y-3">
+                  {(!currentProduct.specifications || currentProduct.specifications.length === 0) ? (
+                    <p className="text-sm text-neutral-500 italic text-center py-4 bg-white rounded-lg border border-neutral-200">No hay especificaciones dinámicas añadidas.</p>
+                  ) : (
+                    currentProduct.specifications.map((spec, index) => (
+                      <div key={index} className="flex gap-3 items-start bg-white p-2 rounded-lg border border-neutral-200">
+                        <div className="flex-1">
+                          <input 
+                            type="text" 
+                            placeholder="Característica (Ej. Material)" 
+                            value={spec.name} 
+                            onChange={(e) => {
+                              const newSpecs = [...currentProduct.specifications];
+                              newSpecs[index].name = e.target.value;
+                              setCurrentProduct({...currentProduct, specifications: newSpecs});
+                            }}
+                            className="w-full border rounded-lg p-2 text-sm font-bold text-neutral-700 bg-neutral-50"
+                            required
+                          />
+                        </div>
+                        <div className="flex-[2]">
+                          <input 
+                            type="text" 
+                            placeholder="Valor (Ej. PLA Premium)" 
+                            value={spec.value} 
+                            onChange={(e) => {
+                              const newSpecs = [...currentProduct.specifications];
+                              newSpecs[index].value = e.target.value;
+                              setCurrentProduct({...currentProduct, specifications: newSpecs});
+                            }}
+                            className="w-full border rounded-lg p-2 text-sm"
+                            required
+                          />
+                        </div>
+                        <button 
+                          type="button" 
+                          onClick={() => {
+                            const newSpecs = currentProduct.specifications.filter((_, i) => i !== index);
+                            setCurrentProduct({...currentProduct, specifications: newSpecs});
+                          }}
+                          className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors mt-0.5"
+                          title="Eliminar fila"
+                        >
+                          <Trash2 size={18} />
+                        </button>
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
 

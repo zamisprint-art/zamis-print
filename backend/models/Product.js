@@ -151,6 +151,11 @@ const productSchema = new mongoose.Schema({
         type: String, // 'Ninguna', 'Básica', 'Avanzada', 'Premium'
         default: 'Ninguna',
     },
+    // --- Dynamic Specifications ---
+    specifications: [{
+        name: { type: String, required: true },
+        value: { type: String, required: true }
+    }],
 }, {
     timestamps: true,
 });
