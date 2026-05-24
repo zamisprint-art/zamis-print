@@ -121,6 +121,7 @@ const updateProduct = async (req, res) => {
         requiresTextPersonalization, requiresImagePersonalization, isCustomizable,
         isFeatured, isNewArrival, isOnSale, salePrice,
         material, colors, size, measurements, personalizationLevel, isActive,
+        specifications,
     } = req.body;
 
     const product = await Product.findById(req.params.id);
@@ -150,6 +151,7 @@ const updateProduct = async (req, res) => {
         product.measurements = measurements !== undefined ? measurements : product.measurements;
         product.personalizationLevel = personalizationLevel !== undefined ? personalizationLevel : product.personalizationLevel;
         product.isActive = isActive !== undefined ? isActive : product.isActive;
+        product.specifications = specifications !== undefined ? specifications : product.specifications;
 
         const updatedProduct = await product.save();
         res.json(updatedProduct);
