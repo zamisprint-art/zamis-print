@@ -9,12 +9,12 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
           
           {/* Brand Column */}
-          <div className="space-y-6">
+          <div className="space-y-4 lg:pr-8">
             <Link to="/" className="inline-block transition-transform hover:scale-105">
               <img
                 src="/images/logo-transparent.png"
                 alt="ZAMIS Print"
-                className="h-24 w-auto object-contain"
+                className="h-16 md:h-20 w-auto object-contain -ml-2"
               />
             </Link>
             <p className="text-neutral-400 leading-relaxed text-sm">
@@ -35,8 +35,8 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-white font-bold text-lg mb-6">Enlaces Rápidos</h4>
-            <ul className="space-y-4 text-sm">
+            <h4 className="text-white font-bold text-lg mb-4">Enlaces Rápidos</h4>
+            <ul className="space-y-2.5 text-sm">
               <li>
                 <Link to="/shop" className="hover:text-brand-400 transition-colors">Catálogo de Productos</Link>
               </li>
@@ -54,8 +54,8 @@ const Footer = () => {
 
           {/* Support */}
           <div>
-            <h4 className="text-white font-bold text-lg mb-6">Soporte</h4>
-            <ul className="space-y-4 text-sm">
+            <h4 className="text-white font-bold text-lg mb-4">Soporte</h4>
+            <ul className="space-y-2.5 text-sm">
               <li>
                 <Link to="/faq" className="hover:text-brand-400 transition-colors">Preguntas Frecuentes</Link>
               </li>
@@ -73,8 +73,8 @@ const Footer = () => {
 
           {/* Contact & Newsletter */}
           <div>
-            <h4 className="text-white font-bold text-lg mb-6">Contáctanos</h4>
-            <ul className="space-y-4 text-sm mb-6">
+            <h4 className="text-white font-bold text-lg mb-4">Contáctanos</h4>
+            <ul className="space-y-3 text-sm mb-6">
               <li className="flex items-start gap-3">
                 <MapPin size={18} className="text-brand-500 shrink-0 mt-0.5" />
                 <span>Bogotá, Colombia<br/>Envíos a todo el país</span>
