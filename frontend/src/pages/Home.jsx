@@ -123,7 +123,16 @@ const Home = () => {
       <section className="py-10 max-w-7xl mx-auto px-4 w-full bg-surface-base">
         <h2 className="text-xl md:text-2xl font-extrabold text-neutral-900 mb-8 text-center">Explora nuestras categorías</h2>
         <div className="flex justify-center gap-4 sm:gap-10 flex-wrap">
-          {categoryLinks.length > 0 ? (
+          {loading ? (
+            <div className="flex justify-center gap-4 sm:gap-10 flex-wrap">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="flex flex-col items-center w-[80px] sm:w-[120px] animate-pulse">
+                  <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-neutral-200 mb-3" />
+                  <div className="h-3 w-16 bg-neutral-200 rounded mt-1" />
+                </div>
+              ))}
+            </div>
+          ) : categoryLinks.length > 0 ? (
             categoryLinks.map(link => (
               <Link key={link._id} to={link.linkTo} className="group flex flex-col items-center w-[80px] sm:w-[120px]">
                 <div className="p-1 rounded-full bg-gradient-to-tr from-brand-400 to-brand-600 shadow-lg group-hover:shadow-brand-500/40 group-hover:-translate-y-1 transition-all duration-300 mb-3">
