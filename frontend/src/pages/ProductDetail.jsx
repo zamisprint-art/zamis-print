@@ -235,7 +235,7 @@ const ProductDetail = () => {
                   alt={product.name}
                   className="w-full h-full object-contain p-4 pointer-events-none transition-transform duration-200 ease-out"
                   style={{
-                    transform: isZoomed && !product.isCustomizable ? 'scale(2.5)' : 'scale(1)',
+                    transform: isZoomed && !product.isCustomizable ? 'scale(1.6)' : 'scale(1)',
                     transformOrigin: `${backgroundPos.x}% ${backgroundPos.y}%`
                   }}
                 />
