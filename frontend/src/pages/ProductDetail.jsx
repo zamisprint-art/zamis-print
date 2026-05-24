@@ -1,8 +1,8 @@
-import { useState, useEffect, lazy, Suspense, useRef } from 'react';
+import { useState, useEffect, lazy, Suspense, useRef, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
-import { ShoppingCart } from 'lucide-react';
+import { ShoppingCart, ChevronLeft, ChevronRight, Maximize2, X } from 'lucide-react';
 import { useCartStore } from '../store/useCartStore';
 import { useAuthStore } from '../store/useAuthStore';
 import Rating from '../components/Rating';
@@ -24,7 +24,13 @@ const ProductDetail = () => {
   const navigate     = useNavigate();
   const [product, setProduct]                     = useState(null);
   const [relatedProducts, setRelatedProducts]     = useState([]);
-  const [activeMedia, setActiveMedia]             = useState(null); // '3d' | 'main' | url
+  
+  // Media Gallery State
+  const [mediaIndex, setMediaIndex]               = useState(0);
+  const [isZoomed, setIsZoomed]                   = useState(false);
+  const [backgroundPos, setBackgroundPos]         = useState({ x: 50, y: 50 });
+  const [isLightboxOpen, setIsLightboxOpen]       = useState(false);
+
   const [loading, setLoading]                     = useState(true);
   const [qty, setQty]                             = useState(1);
   const [customSize, setCustomSize]                 = useState('15 cms');
@@ -66,6 +72,47 @@ const ProductDetail = () => {
   useEffect(() => { fetchProduct(); }, [id]);
 
   const containerRef = useRef(null);
+
+  const allMedia = useMemo(() => {
+    if (!product) return [];
+    const media = [];
+    if (product.model3D?.startsWith('http')) {
+      media.push({ type: '3d', url: product.model3D });
+    }
+    if (product.image && product.image !== '/images/sample.jpg') {
+      media.push({ type: 'image', url: product.image, isMain: true });
+    }
+    if (product.gallery && product.gallery.length > 0) {
+      product.gallery.forEach(url => {
+        media.push({ type: 'image', url });
+      });
+    }
+    // Si no hay nada, poner placeholder
+    if (media.length === 0) {
+      media.push({ type: 'image', url: 'https://via.placeholder.com/600x600?text=ZAMIS+Print' });
+    }
+    return media;
+  }, [product]);
+
+  const currentMedia = allMedia[mediaIndex] || { type: 'image', url: 'https://via.placeholder.com/600x600?text=ZAMIS+Print' };
+
+  // Handlers for Gallery
+  const handleNextMedia = (e) => {
+    if (e) e.stopPropagation();
+    setMediaIndex((prev) => (prev === allMedia.length - 1 ? 0 : prev + 1));
+  };
+  const handlePrevMedia = (e) => {
+    if (e) e.stopPropagation();
+    setMediaIndex((prev) => (prev === 0 ? allMedia.length - 1 : prev - 1));
+  };
+
+  const handleMouseMove = (e) => {
+    if (!containerRef.current || currentMedia.type !== 'image' || product?.isCustomizable) return;
+    const { left, top, width, height } = containerRef.current.getBoundingClientRect();
+    const x = ((e.clientX - left) / width) * 100;
+    const y = ((e.clientY - top) / height) * 100;
+    setBackgroundPos({ x, y });
+  };
 
   // --- Pricing Logic ---
   const basePrice = product?.price || 0;
@@ -159,28 +206,38 @@ const ProductDetail = () => {
             variants={fadeLeft}
             initial="hidden"
             animate="visible"
-            className="h-[400px] sm:h-[500px] lg:h-[580px] rounded-2xl overflow-hidden border border-neutral-200 bg-surface-base shadow-2xl relative"
+            className="h-[400px] sm:h-[500px] lg:h-[580px] rounded-2xl overflow-hidden border border-neutral-200 bg-surface-base shadow-2xl relative group"
+            onMouseEnter={() => setIsZoomed(true)}
+            onMouseLeave={() => {
+              setIsZoomed(false);
+              setBackgroundPos({ x: 50, y: 50 });
+            }}
+            onMouseMove={handleMouseMove}
           >
-            {(!activeMedia && product.model3D?.startsWith('http')) || activeMedia === '3d' ? (
+            {currentMedia.type === '3d' ? (
               <Suspense fallback={
                 <div className="w-full h-full flex flex-col items-center justify-center gap-4">
                   <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-brand-500" />
                   <p className="text-neutral-400 animate-pulse text-sm">Cargando experiencia 3D...</p>
                 </div>
               }>
-                <Product3DViewer modelUrl={product.model3D} />
+                <Product3DViewer modelUrl={currentMedia.url} />
               </Suspense>
             ) : (
-              <div ref={containerRef} className="relative w-full h-full group overflow-hidden touch-none">
+              <div 
+                ref={containerRef} 
+                className="relative w-full h-full overflow-hidden touch-none cursor-zoom-in"
+                onClick={() => setIsLightboxOpen(true)}
+              >
                 <img
-                  src={
-                    activeMedia && activeMedia !== 'main' 
-                      ? optimizeImage(activeMedia, 800) 
-                      : (product.image && product.image !== '/images/sample.jpg' ? optimizeImage(product.image, 800) : 'https://via.placeholder.com/600x600?text=ZAMIS+Print')
-                  }
+                  src={optimizeImage(currentMedia.url, 800)}
                   onError={(e) => { e.target.onerror = null; e.target.src = 'https://via.placeholder.com/600x600?text=Imagen+No+Disponible'; }}
                   alt={product.name}
-                  className={`w-full h-full object-contain p-4 pointer-events-none transition-all duration-500`}
+                  className="w-full h-full object-contain p-4 pointer-events-none transition-transform duration-200 ease-out"
+                  style={{
+                    transform: isZoomed && !product.isCustomizable ? 'scale(2.5)' : 'scale(1)',
+                    transformOrigin: `${backgroundPos.x}% ${backgroundPos.y}%`
+                  }}
                 />
                 
                 {/* Live Text Engraving Overlay - Draggable */}
@@ -192,9 +249,10 @@ const ProductDetail = () => {
                     dragConstraints={containerRef}
                     dragElastic={0.1}
                     dragMomentum={false}
-                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center items-center cursor-move z-10 group"
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center items-center cursor-move z-10"
+                    onClick={(e) => e.stopPropagation()}
                   >
-                    <div className="px-6 py-4 rounded-xl border-2 border-transparent group-hover:border-white/30 group-hover:bg-black/10 transition-all flex flex-col items-center">
+                    <div className="px-6 py-4 rounded-xl border-2 border-transparent hover:border-white/30 hover:bg-black/10 transition-all flex flex-col items-center group/text">
                       <div 
                         className={`relative text-5xl md:text-7xl select-none leading-none ${
                           customFont === 'Clásica' ? 'font-serif font-bold tracking-wider' : 
@@ -255,7 +313,7 @@ const ProductDetail = () => {
                           {personalizationText}
                         </span>
                       </div>
-                      <p className="opacity-0 group-hover:opacity-100 text-white/90 text-[10px] uppercase tracking-widest text-center mt-3 flex items-center justify-center gap-1 select-none transition-opacity bg-black/50 px-2 py-1 rounded-full">
+                      <p className="opacity-0 group-hover/text:opacity-100 text-white/90 text-[10px] uppercase tracking-widest text-center mt-3 flex items-center justify-center gap-1 select-none transition-opacity bg-black/50 px-2 py-1 rounded-full">
                         <span className="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span> Arrastra para ubicar
                       </p>
                     </div>
@@ -263,47 +321,54 @@ const ProductDetail = () => {
                 )}
               </div>
             )}
+
+            {/* Carousel Navigation Arrows */}
+            {allMedia.length > 1 && (
+              <>
+                <button
+                  onClick={handlePrevMedia}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 backdrop-blur-md rounded-full shadow-lg flex items-center justify-center text-neutral-800 hover:bg-brand-500 hover:text-white transition-all opacity-0 group-hover:opacity-100 z-10"
+                >
+                  <ChevronLeft className="w-6 h-6" />
+                </button>
+                <button
+                  onClick={handleNextMedia}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/80 backdrop-blur-md rounded-full shadow-lg flex items-center justify-center text-neutral-800 hover:bg-brand-500 hover:text-white transition-all opacity-0 group-hover:opacity-100 z-10"
+                >
+                  <ChevronRight className="w-6 h-6" />
+                </button>
+              </>
+            )}
+
+            {/* Expand Icon */}
+            {currentMedia.type === 'image' && (
+              <button 
+                onClick={() => setIsLightboxOpen(true)}
+                className="absolute top-4 right-4 w-10 h-10 bg-white/80 backdrop-blur-md rounded-full shadow-lg flex items-center justify-center text-neutral-800 hover:bg-brand-500 hover:text-white transition-all opacity-0 group-hover:opacity-100 z-10"
+              >
+                <Maximize2 className="w-5 h-5" />
+              </button>
+            )}
           </motion.div>
 
           {/* Thumbnails Gallery */}
           <motion.div variants={fadeLeft} className="flex gap-3 overflow-x-auto pb-2 snap-x hide-scrollbar">
-            {/* 3D Thumbnail */}
-            {product.model3D?.startsWith('http') && (
-              <button
-                onClick={() => setActiveMedia('3d')}
-                className={`w-20 h-20 shrink-0 rounded-xl overflow-hidden border-2 transition-all ${
-                  (!activeMedia || activeMedia === '3d') ? 'border-brand-500 shadow-md ring-2 ring-brand-500/20' : 'border-neutral-200 hover:border-brand-300 opacity-70 hover:opacity-100'
-                }`}
-              >
-                <div className="w-full h-full bg-neutral-100 flex flex-col items-center justify-center text-brand-500">
-                  <span className="font-bold text-lg leading-none">3D</span>
-                  <span className="text-[10px] font-semibold mt-1">Visor</span>
-                </div>
-              </button>
-            )}
-            
-            {/* Main Image Thumbnail */}
-            {product.image && product.image !== '/images/sample.jpg' && (
-              <button
-                onClick={() => setActiveMedia('main')}
-                className={`w-20 h-20 shrink-0 rounded-xl overflow-hidden border-2 transition-all ${
-                  (activeMedia === 'main' || (!activeMedia && !product.model3D?.startsWith('http'))) ? 'border-brand-500 shadow-md ring-2 ring-brand-500/20' : 'border-neutral-200 hover:border-brand-300 opacity-70 hover:opacity-100'
-                }`}
-              >
-                <img src={optimizeImage(product.image, 150)} alt="Principal" className="w-full h-full object-contain p-1" />
-              </button>
-            )}
-
-            {/* Extra Gallery Thumbnails */}
-            {product.gallery?.map((imgUrl, idx) => (
+            {allMedia.map((media, idx) => (
               <button
                 key={idx}
-                onClick={() => setActiveMedia(imgUrl)}
+                onClick={() => setMediaIndex(idx)}
                 className={`w-20 h-20 shrink-0 rounded-xl overflow-hidden border-2 transition-all ${
-                  activeMedia === imgUrl ? 'border-brand-500 shadow-md ring-2 ring-brand-500/20' : 'border-neutral-200 hover:border-brand-300 opacity-70 hover:opacity-100'
+                  mediaIndex === idx ? 'border-brand-500 shadow-md ring-2 ring-brand-500/20' : 'border-neutral-200 hover:border-brand-300 opacity-70 hover:opacity-100'
                 }`}
               >
-                <img src={optimizeImage(imgUrl, 150)} alt={`Galería ${idx}`} className="w-full h-full object-contain p-1" />
+                {media.type === '3d' ? (
+                  <div className="w-full h-full bg-neutral-100 flex flex-col items-center justify-center text-brand-500">
+                    <span className="font-bold text-lg leading-none">3D</span>
+                    <span className="text-[10px] font-semibold mt-1">Visor</span>
+                  </div>
+                ) : (
+                  <img src={optimizeImage(media.url, 150)} alt={`Thumbnail ${idx}`} className="w-full h-full object-contain p-1 bg-white" />
+                )}
               </button>
             ))}
           </motion.div>
@@ -661,6 +726,79 @@ const ProductDetail = () => {
           }
         </Button>
       </div>
+
+      {/* Lightbox Modal */}
+      <AnimatePresence>
+        {isLightboxOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[9999] bg-black/95 flex flex-col touch-none"
+          >
+            {/* Toolbar */}
+            <div className="absolute top-0 left-0 right-0 p-4 flex justify-between items-center z-10">
+              <div className="text-white font-bold tracking-widest uppercase text-sm bg-black/50 px-3 py-1 rounded-full">
+                {mediaIndex + 1} / {allMedia.length}
+              </div>
+              <button 
+                onClick={() => setIsLightboxOpen(false)}
+                className="w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            {/* Main Lightbox Content */}
+            <div className="flex-grow relative flex items-center justify-center">
+              {currentMedia.type === '3d' ? (
+                <div className="w-full max-w-4xl h-[60vh] bg-neutral-900 rounded-xl overflow-hidden">
+                  <Suspense fallback={<div className="animate-spin rounded-full h-12 w-12 border-t-2 border-brand-500 mx-auto mt-20" />}>
+                    <Product3DViewer modelUrl={currentMedia.url} />
+                  </Suspense>
+                </div>
+              ) : (
+                <img 
+                  src={optimizeImage(currentMedia.url, 1200)} 
+                  alt="Lightbox" 
+                  className="max-w-full max-h-[80vh] object-contain select-none"
+                />
+              )}
+
+              {/* Prev / Next */}
+              {allMedia.length > 1 && (
+                <>
+                  <button onClick={handlePrevMedia} className="absolute left-4 top-1/2 -translate-y-1/2 w-14 h-14 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white transition-colors">
+                    <ChevronLeft className="w-8 h-8" />
+                  </button>
+                  <button onClick={handleNextMedia} className="absolute right-4 top-1/2 -translate-y-1/2 w-14 h-14 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white transition-colors">
+                    <ChevronRight className="w-8 h-8" />
+                  </button>
+                </>
+              )}
+            </div>
+
+            {/* Lightbox Thumbnails */}
+            <div className="h-32 p-4 flex gap-3 overflow-x-auto justify-center hide-scrollbar">
+              {allMedia.map((media, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setMediaIndex(idx)}
+                  className={`w-20 h-20 shrink-0 rounded-lg overflow-hidden border-2 transition-all ${
+                    mediaIndex === idx ? 'border-brand-500 opacity-100 scale-110' : 'border-transparent opacity-50 hover:opacity-80'
+                  }`}
+                >
+                  {media.type === '3d' ? (
+                    <div className="w-full h-full bg-neutral-800 flex items-center justify-center text-brand-500 font-bold">3D</div>
+                  ) : (
+                    <img src={optimizeImage(media.url, 150)} alt="Thumb" className="w-full h-full object-contain p-1 bg-white" />
+                  )}
+                </button>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
