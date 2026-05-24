@@ -516,6 +516,29 @@ const ProductsTab = () => {
                 </div>
               </div>
 
+              {/* Merchandising Flags */}
+              <div className="mt-4 p-4 border border-brand-100 rounded-xl bg-brand-50/30 space-y-3">
+                <h3 className="text-sm font-bold text-neutral-800 uppercase tracking-wide">Destacar Producto</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <label className="flex items-center gap-3 cursor-pointer">
+                    <input type="checkbox" id="isCustomizable" checked={currentProduct.isCustomizable || false} onChange={(e) => setCurrentProduct({...currentProduct, isCustomizable: e.target.checked})} className="w-5 h-5 text-brand-600 rounded focus:ring-brand-500 border-neutral-300" />
+                    <span className="text-sm font-medium text-neutral-900">⚡ Habilitar Tallas y Grabado (PRO)</span>
+                  </label>
+                  <label className="flex items-center gap-3 cursor-pointer">
+                    <input type="checkbox" checked={currentProduct.isFeatured || false} onChange={(e) => setCurrentProduct({...currentProduct, isFeatured: e.target.checked})} className="w-5 h-5 text-amber-500 rounded focus:ring-amber-400 border-neutral-300" />
+                    <span className="text-sm font-medium text-neutral-900">⭐ Producto Destacado</span>
+                  </label>
+                  <label className="flex items-center gap-3 cursor-pointer">
+                    <input type="checkbox" checked={currentProduct.isNewArrival || false} onChange={(e) => setCurrentProduct({...currentProduct, isNewArrival: e.target.checked})} className="w-5 h-5 text-green-600 rounded focus:ring-green-500 border-neutral-300" />
+                    <span className="text-sm font-medium text-neutral-900">🆕 Nueva llegada</span>
+                  </label>
+                  <label className="flex items-center gap-3 cursor-pointer">
+                    <input type="checkbox" checked={currentProduct.isOnSale || false} onChange={(e) => setCurrentProduct({...currentProduct, isOnSale: e.target.checked})} className="w-5 h-5 text-red-500 rounded focus:ring-red-400 border-neutral-300" />
+                    <span className="text-sm font-medium text-neutral-900">🏷️ En Oferta</span>
+                  </label>
+                </div>
+              </div>
+
               {/* Dynamic Specifications */}
               <div className="mt-4 p-4 border border-neutral-200 rounded-xl bg-neutral-50/50 space-y-4">
                 <div className="flex justify-between items-center">
@@ -580,29 +603,6 @@ const ProductsTab = () => {
                       </div>
                     ))
                   )}
-                </div>
-              </div>
-
-              {/* Merchandising Flags */}
-              <div className="mt-4 p-4 border border-brand-100 rounded-xl bg-brand-50/30 space-y-3">
-                <h3 className="text-sm font-bold text-neutral-800 uppercase tracking-wide">Destacar Producto</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <label className="flex items-center gap-3 cursor-pointer">
-                    <input type="checkbox" id="isCustomizable" checked={currentProduct.isCustomizable || false} onChange={(e) => setCurrentProduct({...currentProduct, isCustomizable: e.target.checked})} className="w-5 h-5 text-brand-600 rounded focus:ring-brand-500 border-neutral-300" />
-                    <span className="text-sm font-medium text-neutral-900">⚡ Habilitar Tallas y Grabado (PRO)</span>
-                  </label>
-                  <label className="flex items-center gap-3 cursor-pointer">
-                    <input type="checkbox" checked={currentProduct.isFeatured || false} onChange={(e) => setCurrentProduct({...currentProduct, isFeatured: e.target.checked})} className="w-5 h-5 text-amber-500 rounded focus:ring-amber-400 border-neutral-300" />
-                    <span className="text-sm font-medium text-neutral-900">⭐ Producto Destacado</span>
-                  </label>
-                  <label className="flex items-center gap-3 cursor-pointer">
-                    <input type="checkbox" checked={currentProduct.isNewArrival || false} onChange={(e) => setCurrentProduct({...currentProduct, isNewArrival: e.target.checked})} className="w-5 h-5 text-green-600 rounded focus:ring-green-500 border-neutral-300" />
-                    <span className="text-sm font-medium text-neutral-900">🆕 Nueva llegada</span>
-                  </label>
-                  <label className="flex items-center gap-3 cursor-pointer">
-                    <input type="checkbox" checked={currentProduct.isOnSale || false} onChange={(e) => setCurrentProduct({...currentProduct, isOnSale: e.target.checked})} className="w-5 h-5 text-red-500 rounded focus:ring-red-400 border-neutral-300" />
-                    <span className="text-sm font-medium text-neutral-900">🏷️ En Oferta</span>
-                  </label>
                 </div>
               </div>
 

@@ -33,6 +33,7 @@ const ProductDetail = () => {
   
   // Tabs State
   const [activeTab, setActiveTab]                 = useState('description');
+  const [showAllSpecs, setShowAllSpecs]           = useState(false);
 
   const [loading, setLoading]                     = useState(true);
   const [qty, setQty]                             = useState(1);
@@ -674,22 +675,27 @@ const ProductDetail = () => {
               >
                 <h3 className="text-2xl font-bold text-neutral-900 mb-6">Especificaciones Técnicas</h3>
                 {product.specifications && product.specifications.length > 0 ? (
-                  <div className="bg-white border border-neutral-200 rounded-2xl overflow-hidden shadow-sm">
-                    <table className="w-full text-left text-sm text-neutral-600">
-                      <tbody className="divide-y divide-neutral-100">
-                        {product.specifications.map((spec, index) => (
-                          <tr key={index} className="hover:bg-neutral-50 transition-colors">
-                            <td className="px-6 py-4 font-bold text-neutral-900 w-1/3 bg-neutral-50/50">{spec.name}</td>
-                            <td className="px-6 py-4">{spec.value}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                  <div className="space-y-4">
+                    <div className="space-y-3">
+                      {product.specifications.slice(0, showAllSpecs ? undefined : 5).map((spec, index) => (
+                        <div key={index} className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-4 pb-3 border-b border-neutral-100 last:border-0">
+                          <span className="font-bold text-neutral-900 sm:w-1/3 shrink-0">{spec.name}</span>
+                          <span className="text-neutral-600 leading-relaxed">{spec.value}</span>
+                        </div>
+                      ))}
+                    </div>
+                    {product.specifications.length > 5 && (
+                      <button 
+                        onClick={() => setShowAllSpecs(!showAllSpecs)}
+                        className="text-brand-600 font-bold hover:text-brand-700 transition-colors text-sm flex items-center gap-1 mt-4"
+                      >
+                        {showAllSpecs ? 'Ocultar información' : `Ver todas las especificaciones (${product.specifications.length})`}
+                      </button>
+                    )}
                   </div>
                 ) : (
-                  <div className="bg-neutral-50 border border-neutral-100 rounded-2xl p-8 text-center">
-                    <p className="text-neutral-500 mb-2">Aún no se han detallado especificaciones técnicas para este producto.</p>
-                    <p className="text-sm text-neutral-400">Ponte en contacto con soporte si necesitas detalles específicos.</p>
+                  <div className="text-neutral-500">
+                    <p>Aún no se han detallado especificaciones técnicas para este producto.</p>
                   </div>
                 )}
               </motion.div>
