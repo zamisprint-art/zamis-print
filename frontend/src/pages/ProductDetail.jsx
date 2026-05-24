@@ -1,8 +1,8 @@
 import { useState, useEffect, lazy, Suspense, useRef, useMemo } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
-import { ShoppingCart, ChevronLeft, ChevronRight, Maximize2, X } from 'lucide-react';
+import { ShoppingCart, ChevronLeft, ChevronRight, Maximize2, X, Home, ChevronRight as ChevronRightIcon } from 'lucide-react';
 import { useCartStore } from '../store/useCartStore';
 import { useAuthStore } from '../store/useAuthStore';
 import Rating from '../components/Rating';
@@ -404,13 +404,22 @@ const ProductDetail = () => {
           className="flex flex-col gap-6"
         >
           {/* Breadcrumb Category */}
-          {product.category && (
-            <div className="flex items-center gap-2 text-sm font-semibold text-neutral-400 mb-1">
-              <span className="hover:text-neutral-900 cursor-pointer transition-colors">Catálogo</span>
-              <span>/</span>
-              <span className="text-brand-600">{product.category}</span>
-            </div>
-          )}
+          <nav className="flex items-center gap-2 text-sm font-medium text-neutral-500 mb-2" aria-label="Breadcrumb">
+            <Link to="/" className="flex items-center gap-1 hover:text-brand-600 transition-colors">
+              <Home size={14} />
+              <span>Inicio</span>
+            </Link>
+            <ChevronRightIcon size={14} className="text-neutral-300" />
+            <Link to="/" className="hover:text-brand-600 transition-colors">
+              Catálogo
+            </Link>
+            {product.category && (
+              <>
+                <ChevronRightIcon size={14} className="text-neutral-300" />
+                <span className="text-brand-600 font-bold truncate max-w-[200px] sm:max-w-xs">{product.category}</span>
+              </>
+            )}
+          </nav>
 
           {/* Title */}
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-neutral-900 leading-[1.1] tracking-tight">{product.name}</h1>
