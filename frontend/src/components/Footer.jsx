@@ -9,12 +9,12 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
           
           {/* Brand Column */}
-          <div className="space-y-4 lg:pr-8">
+          <div className="space-y-4 text-center flex flex-col items-center">
             <h4 className="text-white font-bold text-lg mb-3">Sobre ZAMIS</h4>
-            <p className="text-neutral-400 leading-relaxed text-sm">
+            <p className="text-neutral-400 leading-relaxed text-sm max-w-sm">
               Transformamos ideas en realidad usando tecnología de impresión 3D de vanguardia. Modelos precisos, materiales premium y acabados perfectos en Colombia.
             </p>
-            <div className="flex gap-3">
+            <div className="flex justify-center gap-3">
               <a href="https://www.instagram.com/zamis_print?igsh=MWZ0aTQ4ajYxeW1oZg==" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-neutral-300 hover:bg-brand-500 hover:text-white transition-colors border border-white/10 hover:border-brand-500 group">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:scale-110 transition-transform"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
               </a>
@@ -28,9 +28,9 @@ const Footer = () => {
           </div>
 
           {/* Quick Links */}
-          <div>
+          <div className="text-center flex flex-col items-center">
             <h4 className="text-white font-bold text-lg mb-3">Enlaces Rápidos</h4>
-            <ul className="space-y-1.5 text-sm">
+            <ul className="space-y-1.5 text-sm flex flex-col items-center">
               <li>
                 <Link to="/shop" className="hover:text-brand-400 transition-colors">Catálogo de Productos</Link>
               </li>
@@ -47,9 +47,9 @@ const Footer = () => {
           </div>
 
           {/* Support */}
-          <div>
+          <div className="text-center flex flex-col items-center">
             <h4 className="text-white font-bold text-lg mb-3">Soporte</h4>
-            <ul className="space-y-1.5 text-sm">
+            <ul className="space-y-1.5 text-sm flex flex-col items-center">
               <li>
                 <Link to="/faq" className="hover:text-brand-400 transition-colors">Preguntas Frecuentes</Link>
               </li>
@@ -66,18 +66,18 @@ const Footer = () => {
           </div>
 
           {/* Contact & Newsletter */}
-          <div>
+          <div className="text-center flex flex-col items-center">
             <h4 className="text-white font-bold text-lg mb-3">Contáctanos</h4>
-            <ul className="space-y-2 text-sm mb-4">
-              <li className="flex items-start gap-3">
-                <MapPin size={18} className="text-brand-500 shrink-0 mt-0.5" />
-                <span>Bogotá, Colombia<br/>Envíos a todo el país</span>
+            <ul className="space-y-2 text-sm mb-4 flex flex-col items-center">
+              <li className="flex flex-col sm:flex-row items-center gap-2 sm:gap-3 text-center sm:text-left">
+                <MapPin size={18} className="text-brand-500 shrink-0" />
+                <span>Bogotá, Colombia - Envíos a todo el país</span>
               </li>
-              <li className="flex items-center gap-3">
+              <li className="flex items-center gap-2 sm:gap-3">
                 <Phone size={18} className="text-brand-500 shrink-0" />
                 <span>+57 310 787 8192</span>
               </li>
-              <li className="flex items-center gap-3">
+              <li className="flex items-center gap-2 sm:gap-3">
                 <Mail size={18} className="text-brand-500 shrink-0" />
                 <span>hola@zamisprint.com</span>
               </li>
@@ -92,7 +92,7 @@ const Footer = () => {
               <img
                 src="/images/logo-transparent.png"
                 alt="ZAMIS Print"
-                className="h-8 md:h-10 w-auto object-contain opacity-75 hover:opacity-100 transition-opacity"
+                className="h-14 md:h-16 w-auto object-contain opacity-75 hover:opacity-100 transition-opacity"
               />
             </Link>
             <p className="text-neutral-500 text-sm text-center sm:text-left">
