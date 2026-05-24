@@ -67,7 +67,7 @@ const CustomerLogin = () => {
   return (
     <div className="flex items-center justify-center min-h-[calc(100vh-64px)] px-4 py-12">
       <div className="glass-panel p-8 md:p-12 rounded-2xl w-full max-w-md">
-        <h1 className="text-3xl font-bold mb-2 text-center">
+        <h1 className="text-xl md:text-2xl font-bold mb-2 text-center">
           {isLogin ? 'Bienvenido a ZAMIS Print' : 'Crea tu Cuenta'}
         </h1>
         <p className="text-neutral-500 text-center mb-8">

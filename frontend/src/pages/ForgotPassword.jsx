@@ -43,7 +43,7 @@ const ForgotPassword = () => {
           </div>
         </div>
 
-        <h1 className="text-3xl font-bold mb-2 text-center">¿Olvidaste tu contraseña?</h1>
+        <h1 className="text-xl md:text-2xl font-bold mb-2 text-center">¿Olvidaste tu contraseña?</h1>
         <p className="text-neutral-500 text-center mb-8">
           Ingresa tu correo y te enviaremos un enlace para restablecerla.
         </p>

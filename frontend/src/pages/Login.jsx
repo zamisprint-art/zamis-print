@@ -37,7 +37,7 @@ const Login = () => {
   return (
     <div className="flex items-center justify-center min-h-[calc(100vh-64px)] px-4">
       <div className="glass-panel p-8 md:p-12 rounded-2xl w-full max-w-md">
-        <h1 className="text-3xl font-bold mb-8 text-center text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
+        <h1 className="text-xl md:text-2xl font-bold mb-8 text-center text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">
           Iniciar Sesión
         </h1>
 

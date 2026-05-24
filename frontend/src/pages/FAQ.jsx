@@ -67,7 +67,7 @@ const FAQ = () => (
       {/* Header */}
       <div className="text-center mb-16">
         <p className="text-brand-600 text-sm font-semibold uppercase tracking-widest mb-3">Ayuda</p>
-        <h1 className="text-4xl md:text-5xl font-extrabold text-neutral-900 mb-4">
+        <h1 className="text-2xl md:text-3xl md:text-3xl md:text-4xl font-bold text-neutral-900 mb-4">
           Preguntas Frecuentes
         </h1>
         <p className="text-neutral-500 text-lg">

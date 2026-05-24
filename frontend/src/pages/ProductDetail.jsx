@@ -422,7 +422,7 @@ const ProductDetail = () => {
           </nav>
 
           {/* Title */}
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-neutral-900 leading-[1.1] tracking-tight">{product.name}</h1>
+          <h1 className="text-xl md:text-2xl sm:text-2xl md:text-3xl lg:text-3xl md:text-4xl font-bold text-neutral-900 leading-[1.1] tracking-tight">{product.name}</h1>
 
           {/* Rating */}
           <Rating value={product.rating} text={`${product.numReviews} reseñas verificadas`} />
@@ -838,7 +838,7 @@ const ProductDetail = () => {
         >
           <div className="flex items-end justify-between mb-8">
             <div>
-              <h2 className="text-3xl font-extrabold text-neutral-900 tracking-tight">
+              <h2 className="text-xl md:text-2xl font-bold text-neutral-900 tracking-tight">
                 También te podría gustar
               </h2>
               <p className="text-neutral-500 mt-2">Productos relacionados que otros clientes compraron</p>

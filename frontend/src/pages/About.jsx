@@ -48,7 +48,7 @@ const About = () => {
           </div>
           <div className="flex flex-col gap-8">
             <div>
-              <h2 className="text-3xl font-bold mb-4">Nuestra Historia</h2>
+              <h2 className="text-xl md:text-2xl font-bold mb-4">Nuestra Historia</h2>
               <p className="text-neutral-600 leading-relaxed text-lg">
                 ZAMIS Print nació con una visión clara: revolucionar la forma en que las personas interactúan con sus ideas. Lo que comenzó como una fascinación por la tecnología de impresión 3D se ha transformado en un estudio creativo donde la ingeniería y el arte convergen. Hoy, combinamos tecnología de deposición fundida (FDM) y resina de ultra alta resolución (SLA) para entregar piezas que superan los más altos estándares de calidad, desde coleccionables personalizados hasta soluciones funcionales.
               </p>
@@ -71,7 +71,7 @@ const About = () => {
       <section className="bg-surface-card py-24 border-y border-neutral-200 mt-12">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">¿Cómo trabajamos?</h2>
+            <h2 className="text-2xl md:text-3xl font-bold mb-4">¿Cómo trabajamos?</h2>
             <div className="h-1 w-24 bg-brand-500 mx-auto rounded-full"></div>
           </div>
 

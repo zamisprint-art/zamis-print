@@ -5,7 +5,7 @@ const Terms = () => (
     <div className="max-w-3xl mx-auto">
       <div className="text-center mb-12">
         <p className="text-brand-600 text-sm font-semibold uppercase tracking-widest mb-3">Legal</p>
-        <h1 className="text-4xl font-extrabold text-neutral-900">Términos y Condiciones</h1>
+        <h1 className="text-2xl md:text-3xl font-bold text-neutral-900">Términos y Condiciones</h1>
         <p className="text-neutral-500 mt-3">Última actualización: Abril 2025</p>
       </div>
 

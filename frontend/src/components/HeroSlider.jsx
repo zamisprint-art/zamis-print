@@ -146,7 +146,7 @@ const HeroSlider = () => {
                   {slide.subtitle}
                 </h3>
               )}
-              <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-3 leading-tight drop-shadow-lg">
+              <h1 className="text-xl sm:text-2xl lg:text-xl md:text-2xl font-bold text-white mb-3 leading-tight drop-shadow-lg">
                 {slide.title}
               </h1>
               {slide.description && (

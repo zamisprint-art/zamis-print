@@ -106,7 +106,7 @@ const Contact = () => {
                 <div className="w-20 h-20 bg-green-100 text-green-500 rounded-full flex items-center justify-center mb-4">
                   <Send size={40} />
                 </div>
-                <h2 className="text-3xl font-bold text-neutral-900">¡Mensaje Enviado!</h2>
+                <h2 className="text-xl md:text-2xl font-bold text-neutral-900">¡Mensaje Enviado!</h2>
                 <p className="text-neutral-500 max-w-md">
                   Gracias por escribirnos. Hemos recibido tu mensaje y nuestro equipo se pondrá en contacto contigo en las próximas 24 horas.
                 </p>

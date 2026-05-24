@@ -126,7 +126,7 @@ const SliderTab = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
         <div>
-          <h2 className="text-2xl font-extrabold text-neutral-900">Gestión del Slider</h2>
+          <h2 className="text-2xl font-bold text-neutral-900">Gestión del Slider</h2>
           <p className="text-sm text-neutral-500 mt-1">{slides.length} diapositivas en total</p>
         </div>
         <button

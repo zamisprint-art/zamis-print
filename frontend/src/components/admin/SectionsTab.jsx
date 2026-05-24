@@ -161,7 +161,7 @@ const SectionsTab = () => {
     <div className="flex flex-col gap-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-extrabold text-neutral-900">Secciones del Home</h2>
+          <h2 className="text-2xl font-bold text-neutral-900">Secciones del Home</h2>
           <p className="text-sm text-neutral-500 mt-1">Configura las tiras de productos de la página principal.</p>
         </div>
         <button onClick={openCreate} className="btn-primary flex items-center gap-2">

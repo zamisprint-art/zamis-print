@@ -186,7 +186,7 @@ const DashboardTab = () => {
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-2xl font-extrabold text-neutral-900">Dashboard</h2>
+        <h2 className="text-2xl font-bold text-neutral-900">Dashboard</h2>
         <p className="text-sm text-neutral-500 mt-1">Resumen general de ZAMIS Print</p>
       </div>
 

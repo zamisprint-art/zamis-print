@@ -150,7 +150,7 @@ const Checkout = () => {
                 </div>
               </div>
               <div>
-                <h2 className="text-2xl font-extrabold text-white mb-2">Procesando tu pago</h2>
+                <h2 className="text-2xl font-bold text-white mb-2">Procesando tu pago</h2>
                 <p className="text-neutral-400 text-sm">Esto solo tomará unos segundos</p>
               </div>
               <div className="w-full space-y-3">

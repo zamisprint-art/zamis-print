@@ -146,7 +146,7 @@ const Shop = () => {
             <span className="w-8 h-1 bg-brand-500 rounded-full"></span>
             <span className="text-brand-600 text-xs font-bold uppercase tracking-[0.2em]">Catálogo</span>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-black text-neutral-900 tracking-tight">
+          <h1 className="text-xl md:text-2xl sm:text-2xl md:text-3xl font-bold text-neutral-900 tracking-tight">
             {querySearch ? (
               <>Resultados para <span className="text-brand-500">"{querySearch}"</span></>
             ) : 'Todos los Productos'}

@@ -28,7 +28,7 @@ const Maintenance = () => {
           </div>
         </div>
 
-        <h1 className="text-4xl font-black text-white tracking-tight mb-4 uppercase">
+        <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight mb-4 uppercase">
           ZAMIS<span className="text-brand-500"></span>Print
         </h1>
 

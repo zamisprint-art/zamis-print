@@ -29,7 +29,7 @@ const Cart = () => {
       {/* Header */}
       <motion.div variants={fadeUp} initial="hidden" animate="visible" className="mb-10">
         <p className="text-brand-600 text-sm font-semibold uppercase tracking-widest mb-2">Resumen</p>
-        <h1 className="text-4xl font-extrabold text-neutral-900">
+        <h1 className="text-2xl md:text-3xl font-bold text-neutral-900">
           Tu Carrito
           {totalItems > 0 && (
             <span className="ml-3 badge badge-info text-base normal-case tracking-normal">{totalItems} {totalItems === 1 ? 'ítem' : 'ítems'}</span>

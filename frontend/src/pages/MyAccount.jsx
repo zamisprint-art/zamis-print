@@ -106,7 +106,7 @@ const MyAccount = () => {
               <div className="w-20 h-20 rounded-full bg-white/20 flex items-center justify-center mx-auto mb-3 text-white">
                 <User size={36} />
               </div>
-              <h2 className="text-xl font-extrabold text-white">{userInfo?.name}</h2>
+              <h2 className="text-xl font-bold text-white">{userInfo?.name}</h2>
               <p className="text-brand-100 text-sm mt-1">{userInfo?.email}</p>
             </div>
 
@@ -141,7 +141,7 @@ const MyAccount = () => {
         >
           <div className="mb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
-              <h1 className="text-3xl font-extrabold text-neutral-900">Mis Pedidos</h1>
+              <h1 className="text-xl md:text-2xl font-bold text-neutral-900">Mis Pedidos</h1>
               <p className="text-neutral-500 mt-1">Historial completo de tus compras en ZAMIS Print</p>
             </div>
             
