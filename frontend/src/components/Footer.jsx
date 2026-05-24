@@ -10,13 +10,7 @@ const Footer = () => {
           
           {/* Brand Column */}
           <div className="space-y-4 lg:pr-8">
-            <Link to="/" className="inline-block transition-transform hover:scale-105">
-              <img
-                src="/images/logo-transparent.png"
-                alt="ZAMIS Print"
-                className="h-12 md:h-14 w-auto object-contain -ml-2"
-              />
-            </Link>
+            <h4 className="text-white font-bold text-lg mb-3">Sobre ZAMIS</h4>
             <p className="text-neutral-400 leading-relaxed text-sm">
               Transformamos ideas en realidad usando tecnología de impresión 3D de vanguardia. Modelos precisos, materiales premium y acabados perfectos en Colombia.
             </p>
@@ -93,9 +87,18 @@ const Footer = () => {
 
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-neutral-500 text-sm text-center md:text-left">
-            &copy; {new Date().getFullYear()} ZAMIS Print. Todos los derechos reservados.
-          </p>
+          <div className="flex items-center gap-4 flex-col sm:flex-row">
+            <Link to="/" className="inline-block transition-transform hover:scale-105">
+              <img
+                src="/images/logo-transparent.png"
+                alt="ZAMIS Print"
+                className="h-8 md:h-10 w-auto object-contain opacity-75 hover:opacity-100 transition-opacity"
+              />
+            </Link>
+            <p className="text-neutral-500 text-sm text-center sm:text-left">
+              &copy; {new Date().getFullYear()} ZAMIS Print. Todos los derechos reservados.
+            </p>
+          </div>
           
           <div className="flex flex-wrap justify-center items-center gap-3 md:gap-4 text-sm font-semibold text-neutral-400">
             <span className="flex items-center px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 shadow-sm">
