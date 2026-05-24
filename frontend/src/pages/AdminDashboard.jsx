@@ -7,8 +7,7 @@ import BillingTab from '../components/admin/BillingTab';
 import OrdersTab from '../components/admin/OrdersTab';
 import ProductsTab from '../components/admin/ProductsTab';
 import DashboardTab from '../components/admin/DashboardTab';
-import SliderTab from '../components/admin/SliderTab';
-import SectionsTab from '../components/admin/SectionsTab';
+import HomeDesignTab from '../components/admin/HomeDesignTab';
 import CustomersTab from '../components/admin/CustomersTab';
 
 const AdminDashboard = () => {
@@ -61,16 +60,10 @@ const AdminDashboard = () => {
           <Settings size={20} /> Configuración
         </button>
         <button 
-          onClick={() => setActiveTab('slider')}
-          className={`flex items-center gap-3 p-4 rounded-xl transition-colors ${activeTab === 'slider' ? 'bg-primary text-neutral-900' : 'glass-panel hover:bg-white/5'}`}
+          onClick={() => setActiveTab('design')}
+          className={`flex items-center gap-3 p-4 rounded-xl transition-colors ${activeTab === 'design' ? 'bg-primary text-neutral-900' : 'glass-panel hover:bg-white/5'}`}
         >
-          <Layers size={20} /> Slider Home
-        </button>
-        <button 
-          onClick={() => setActiveTab('sections')}
-          className={`flex items-center gap-3 p-4 rounded-xl transition-colors ${activeTab === 'sections' ? 'bg-primary text-neutral-900' : 'glass-panel hover:bg-white/5'}`}
-        >
-          <Layout size={20} /> Secciones Home
+          <Layout size={20} /> Diseño Home
         </button>
         <button 
           onClick={() => setActiveTab('customers')}
@@ -120,12 +113,8 @@ const AdminDashboard = () => {
           </div>
         )}
 
-        {activeTab === 'slider' && (
-          <SliderTab />
-        )}
-
-        {activeTab === 'sections' && (
-          <SectionsTab />
+        {activeTab === 'design' && (
+          <HomeDesignTab />
         )}
 
         {activeTab === 'customers' && (

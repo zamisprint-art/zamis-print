@@ -26,17 +26,20 @@ const SectionSkeleton = () => (
 const Home = () => {
   const [allProducts, setAllProducts] = useState([]);
   const [homeSections, setHomeSections] = useState([]);
+  const [categoryLinks, setCategoryLinks] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [prodRes, secRes] = await Promise.all([
+        const [prodRes, secRes, catRes] = await Promise.all([
           axios.get('/api/products?limit=100'), // Necesitamos suficientes para llenar las categorías dinámicas
-          axios.get('/api/homesections')
+          axios.get('/api/homesections'),
+          axios.get('/api/categorylinks')
         ]);
         setAllProducts(prodRes.data.products || []);
         setHomeSections(secRes.data || []);
+        setCategoryLinks(catRes.data.filter(link => link.isActive) || []);
       } catch (error) {
         console.error('Error fetching data for Home:', error);
       } finally {
@@ -120,41 +123,60 @@ const Home = () => {
       <section className="py-10 max-w-7xl mx-auto px-4 w-full bg-surface-base">
         <h2 className="text-xl md:text-2xl font-extrabold text-neutral-900 mb-8 text-center">Explora nuestras categorías</h2>
         <div className="flex justify-center gap-4 sm:gap-10 flex-wrap">
-          <Link to="/shop?category=Figuras y Coleccionables" className="group flex flex-col items-center w-[80px] sm:w-[120px]">
-            <div className="p-1 rounded-full bg-gradient-to-tr from-brand-400 to-brand-600 shadow-lg group-hover:shadow-brand-500/40 group-hover:-translate-y-1 transition-all duration-300 mb-3">
-              <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-white flex items-center justify-center border-4 border-white overflow-hidden">
-                <span className="text-3xl sm:text-5xl group-hover:scale-110 transition-transform duration-300">🧸</span>
-              </div>
-            </div>
-            <span className="font-bold text-neutral-800 text-xs sm:text-sm text-center group-hover:text-brand-600 transition-colors leading-tight">Figuras<br/>Coleccionables</span>
-          </Link>
+          {categoryLinks.length > 0 ? (
+            categoryLinks.map(link => (
+              <Link key={link._id} to={link.linkTo} className="group flex flex-col items-center w-[80px] sm:w-[120px]">
+                <div className="p-1 rounded-full bg-gradient-to-tr from-brand-400 to-brand-600 shadow-lg group-hover:shadow-brand-500/40 group-hover:-translate-y-1 transition-all duration-300 mb-3">
+                  <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-white flex items-center justify-center border-4 border-white overflow-hidden">
+                    {link.image.length < 10 && /\p{Emoji}/u.test(link.image) ? (
+                      <span className="text-3xl sm:text-5xl group-hover:scale-110 transition-transform duration-300">{link.image}</span>
+                    ) : (
+                      <img src={link.image} alt={link.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" onError={(e) => { e.target.src = 'https://via.placeholder.com/150?text=Link' }} />
+                    )}
+                  </div>
+                </div>
+                <span className="font-bold text-neutral-800 text-xs sm:text-sm text-center group-hover:text-brand-600 transition-colors leading-tight" dangerouslySetInnerHTML={{ __html: link.title.replace('\\n', '<br/>') }}></span>
+              </Link>
+            ))
+          ) : (
+            <>
+              <Link to="/shop?category=Figuras y Coleccionables" className="group flex flex-col items-center w-[80px] sm:w-[120px]">
+                <div className="p-1 rounded-full bg-gradient-to-tr from-brand-400 to-brand-600 shadow-lg group-hover:shadow-brand-500/40 group-hover:-translate-y-1 transition-all duration-300 mb-3">
+                  <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-white flex items-center justify-center border-4 border-white overflow-hidden">
+                    <span className="text-3xl sm:text-5xl group-hover:scale-110 transition-transform duration-300">🧸</span>
+                  </div>
+                </div>
+                <span className="font-bold text-neutral-800 text-xs sm:text-sm text-center group-hover:text-brand-600 transition-colors leading-tight">Figuras<br/>Coleccionables</span>
+              </Link>
 
-          <Link to="/shop?category=Hogar y Decoración" className="group flex flex-col items-center w-[80px] sm:w-[120px]">
-            <div className="p-1 rounded-full bg-gradient-to-tr from-brand-400 to-brand-600 shadow-lg group-hover:shadow-brand-500/40 group-hover:-translate-y-1 transition-all duration-300 mb-3">
-              <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-white flex items-center justify-center border-4 border-white overflow-hidden">
-                <span className="text-3xl sm:text-5xl group-hover:scale-110 transition-transform duration-300">🪴</span>
-              </div>
-            </div>
-            <span className="font-bold text-neutral-800 text-xs sm:text-sm text-center group-hover:text-brand-600 transition-colors leading-tight">Decoración<br/>Hogar</span>
-          </Link>
+              <Link to="/shop?category=Hogar y Decoración" className="group flex flex-col items-center w-[80px] sm:w-[120px]">
+                <div className="p-1 rounded-full bg-gradient-to-tr from-brand-400 to-brand-600 shadow-lg group-hover:shadow-brand-500/40 group-hover:-translate-y-1 transition-all duration-300 mb-3">
+                  <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-white flex items-center justify-center border-4 border-white overflow-hidden">
+                    <span className="text-3xl sm:text-5xl group-hover:scale-110 transition-transform duration-300">🪴</span>
+                  </div>
+                </div>
+                <span className="font-bold text-neutral-800 text-xs sm:text-sm text-center group-hover:text-brand-600 transition-colors leading-tight">Decoración<br/>Hogar</span>
+              </Link>
 
-          <Link to="/about" className="group flex flex-col items-center w-[80px] sm:w-[120px]">
-            <div className="p-1 rounded-full bg-gradient-to-tr from-neutral-400 to-neutral-600 shadow-lg group-hover:shadow-neutral-500/40 group-hover:-translate-y-1 transition-all duration-300 mb-3">
-              <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-white flex items-center justify-center border-4 border-white overflow-hidden">
-                <span className="text-3xl sm:text-5xl group-hover:scale-110 transition-transform duration-300">⚙️</span>
-              </div>
-            </div>
-            <span className="font-bold text-neutral-800 text-xs sm:text-sm text-center group-hover:text-neutral-600 transition-colors leading-tight">Prototipos<br/>3D</span>
-          </Link>
+              <Link to="/about" className="group flex flex-col items-center w-[80px] sm:w-[120px]">
+                <div className="p-1 rounded-full bg-gradient-to-tr from-neutral-400 to-neutral-600 shadow-lg group-hover:shadow-neutral-500/40 group-hover:-translate-y-1 transition-all duration-300 mb-3">
+                  <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-white flex items-center justify-center border-4 border-white overflow-hidden">
+                    <span className="text-3xl sm:text-5xl group-hover:scale-110 transition-transform duration-300">⚙️</span>
+                  </div>
+                </div>
+                <span className="font-bold text-neutral-800 text-xs sm:text-sm text-center group-hover:text-neutral-600 transition-colors leading-tight">Prototipos<br/>3D</span>
+              </Link>
 
-          <Link to="/shop?sort=newest" className="group flex flex-col items-center w-[80px] sm:w-[120px]">
-            <div className="p-1 rounded-full bg-gradient-to-tr from-yellow-400 to-orange-500 shadow-lg group-hover:shadow-orange-500/40 group-hover:-translate-y-1 transition-all duration-300 mb-3">
-              <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-white flex items-center justify-center border-4 border-white overflow-hidden">
-                <span className="text-3xl sm:text-5xl group-hover:scale-110 transition-transform duration-300">✨</span>
-              </div>
-            </div>
-            <span className="font-bold text-neutral-800 text-xs sm:text-sm text-center group-hover:text-orange-500 transition-colors leading-tight">Lo<br/>Nuevo</span>
-          </Link>
+              <Link to="/shop?sort=newest" className="group flex flex-col items-center w-[80px] sm:w-[120px]">
+                <div className="p-1 rounded-full bg-gradient-to-tr from-yellow-400 to-orange-500 shadow-lg group-hover:shadow-orange-500/40 group-hover:-translate-y-1 transition-all duration-300 mb-3">
+                  <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-white flex items-center justify-center border-4 border-white overflow-hidden">
+                    <span className="text-3xl sm:text-5xl group-hover:scale-110 transition-transform duration-300">✨</span>
+                  </div>
+                </div>
+                <span className="font-bold text-neutral-800 text-xs sm:text-sm text-center group-hover:text-orange-500 transition-colors leading-tight">Lo<br/>Nuevo</span>
+              </Link>
+            </>
+          )}
         </div>
       </section>
 

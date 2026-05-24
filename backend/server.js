@@ -12,6 +12,7 @@ import uploadRoutes from './routes/uploadRoutes.js';
 import inventoryRoutes from './routes/inventoryRoutes.js';
 import slideRoutes from './routes/slideRoutes.js';
 import homeSectionRoutes from './routes/homeSectionRoutes.js';
+import categoryLinkRoutes from './routes/categoryLinkRoutes.js';
 
 // Load environment variables
 dotenv.config();
@@ -71,6 +72,7 @@ app.use('/api/upload', uploadRoutes);
 app.use('/api/inventory', inventoryRoutes);
 app.use('/api/slides', slideRoutes);
 app.use('/api/homesections', homeSectionRoutes);
+app.use('/api/categorylinks', categoryLinkRoutes);
 
 // Make uploads folder static
 const __dirname = path.resolve();
