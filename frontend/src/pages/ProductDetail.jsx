@@ -114,6 +114,24 @@ const ProductDetail = () => {
     setBackgroundPos({ x, y });
   };
 
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setIsLightboxOpen(false);
+      }
+    };
+    if (isLightboxOpen) {
+      document.addEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'unset';
+    };
+  }, [isLightboxOpen]);
+
   // --- Pricing Logic ---
   const basePrice = product?.price || 0;
   const getCustomPriceAdditions = () => {
