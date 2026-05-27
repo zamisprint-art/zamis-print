@@ -50,9 +50,9 @@ const Home = () => {
   }, []);
 
   // Derived sections
-  const featured   = allProducts.filter(p => p.isFeatured).slice(0, 12);
+  const featured = allProducts.filter(p => p.isFeatured).slice(0, 12);
   const newArrivals = allProducts.filter(p => p.isNewArrival).slice(0, 12);
-  const onSale     = allProducts.filter(p => p.isOnSale && p.salePrice).slice(0, 12);
+  const onSale = allProducts.filter(p => p.isOnSale && p.salePrice).slice(0, 12);
   // Fallback: if admin hasn't configured flags yet, show most recent
   const recentProducts = allProducts.slice(0, 12);
 
@@ -63,7 +63,7 @@ const Home = () => {
     const scrollLeft = (e) => {
       e.currentTarget.parentElement.querySelector('.carousel-container').scrollBy({ left: -320, behavior: 'smooth' });
     };
-    
+
     const scrollRight = (e) => {
       e.currentTarget.parentElement.querySelector('.carousel-container').scrollBy({ left: 320, behavior: 'smooth' });
     };
@@ -75,11 +75,11 @@ const Home = () => {
             <ChevronLeft size={24} />
           </button>
         )}
-        
+
         <div className="carousel-container flex gap-4 sm:gap-6 overflow-x-auto snap-x snap-mandatory pb-4 pt-2 px-4 sm:px-2 -mx-4 sm:-mx-2 hide-scrollbar scroll-smooth relative items-stretch">
           {list.map((product, index) => (
             <motion.div key={product._id} initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }} transition={{ duration: 0.4, delay: index * 0.08 }} 
+              viewport={{ once: true }} transition={{ duration: 0.4, delay: index * 0.08 }}
               className="w-[75vw] sm:w-[220px] lg:w-[240px] shrink-0 snap-start h-auto flex">
               <ProductCard product={product} />
             </motion.div>
@@ -95,17 +95,16 @@ const Home = () => {
     );
   };
 
-  const SectionHeader = ({ emoji, title, linkTo, linkLabel }) => (
+  const SectionHeader = ({ title, linkTo, linkLabel }) => (
     <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-      className="flex items-center justify-between mb-4 px-2">
-      <h2 className="text-xl md:text-2xl font-bold text-neutral-900 flex items-center gap-2 md:gap-3">
-        <span>{emoji}</span>
+      className="flex items-center justify-between mb-6 px-2">
+      <h2 className="text-xl md:text-2xl font-bold tracking-tight text-neutral-900">
         {title}
       </h2>
-      <Link to={linkTo} className="shrink-0 text-brand-600 font-bold hover:text-brand-700 transition-colors text-sm md:text-base flex items-center gap-1 group">
+      <Link to={linkTo} className="shrink-0 text-xs md:text-sm font-semibold uppercase tracking-wider text-brand-600 hover:text-brand-700 transition-colors flex items-center gap-0.5 group pb-1 border-b border-transparent hover:border-brand-600/30">
         <span className="hidden sm:inline">{linkLabel}</span>
         <span className="sm:hidden">Ver más</span>
-        <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
+        <ChevronRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
       </Link>
     </motion.div>
   );
@@ -155,7 +154,7 @@ const Home = () => {
                     <span className="text-3xl sm:text-5xl group-hover:scale-110 transition-transform duration-300">🧸</span>
                   </div>
                 </div>
-                <span className="font-bold text-neutral-800 text-xs sm:text-sm text-center group-hover:text-brand-600 transition-colors leading-tight">Figuras<br/>Coleccionables</span>
+                <span className="font-bold text-neutral-800 text-xs sm:text-sm text-center group-hover:text-brand-600 transition-colors leading-tight">Figuras<br />Coleccionables</span>
               </Link>
 
               <Link to="/shop?category=Hogar y Decoración" className="group flex flex-col items-center w-[80px] sm:w-[120px]">
@@ -164,7 +163,7 @@ const Home = () => {
                     <span className="text-3xl sm:text-5xl group-hover:scale-110 transition-transform duration-300">🪴</span>
                   </div>
                 </div>
-                <span className="font-bold text-neutral-800 text-xs sm:text-sm text-center group-hover:text-brand-600 transition-colors leading-tight">Decoración<br/>Hogar</span>
+                <span className="font-bold text-neutral-800 text-xs sm:text-sm text-center group-hover:text-brand-600 transition-colors leading-tight">Decoración<br />Hogar</span>
               </Link>
 
               <Link to="/about" className="group flex flex-col items-center w-[80px] sm:w-[120px]">
@@ -173,7 +172,7 @@ const Home = () => {
                     <span className="text-3xl sm:text-5xl group-hover:scale-110 transition-transform duration-300">⚙️</span>
                   </div>
                 </div>
-                <span className="font-bold text-neutral-800 text-xs sm:text-sm text-center group-hover:text-neutral-600 transition-colors leading-tight">Prototipos<br/>3D</span>
+                <span className="font-bold text-neutral-800 text-xs sm:text-sm text-center group-hover:text-neutral-600 transition-colors leading-tight">Prototipos<br />3D</span>
               </Link>
 
               <Link to="/shop?sort=newest" className="group flex flex-col items-center w-[80px] sm:w-[120px]">
@@ -182,7 +181,7 @@ const Home = () => {
                     <span className="text-3xl sm:text-5xl group-hover:scale-110 transition-transform duration-300">✨</span>
                   </div>
                 </div>
-                <span className="font-bold text-neutral-800 text-xs sm:text-sm text-center group-hover:text-orange-500 transition-colors leading-tight">Lo<br/>Nuevo</span>
+                <span className="font-bold text-neutral-800 text-xs sm:text-sm text-center group-hover:text-orange-500 transition-colors leading-tight">Lo<br />Nuevo</span>
               </Link>
             </>
           )}
@@ -211,13 +210,12 @@ const Home = () => {
         return (
           <div key={section._id} className={`w-full border-b border-neutral-200/60 shadow-[0_4px_16px_rgba(0,0,0,0.02)] relative z-10 ${index % 2 !== 0 ? 'bg-neutral-50/50' : 'bg-white'}`}>
             <section className={`pt-4 pb-0 md:pt-6 md:pb-0 px-4 max-w-7xl mx-auto w-full ${section.type === 'sale' ? 'bg-gradient-to-b from-red-50/40 to-transparent' : ''}`}>
-            <SectionHeader 
-              emoji={section.emoji} 
-              title={section.title}
-              linkTo={section.linkTo} 
-              linkLabel={section.linkLabel} 
-            />
-            {loading ? <SectionSkeleton /> : <ProductCarousel items={items} fallback={recentProducts} />}
+              <SectionHeader
+                title={section.title}
+                linkTo={section.linkTo}
+                linkLabel={section.linkLabel}
+              />
+              {loading ? <SectionSkeleton /> : <ProductCarousel items={items} fallback={recentProducts} />}
             </section>
           </div>
         );
@@ -228,7 +226,7 @@ const Home = () => {
         <div className="w-full">
           <div className="w-full border-b border-neutral-200/60 shadow-[0_4px_16px_rgba(0,0,0,0.02)] relative z-10">
             <section id="newest" className="pt-4 pb-0 md:pt-6 md:pb-0 px-4 max-w-7xl mx-auto w-full">
-              <SectionHeader emoji="✨" title="Recién Salidos de la Impresora"
+              <SectionHeader title="Recién Salidos de la Impresora"
                 linkTo="/shop?sort=newest" linkLabel="Ver Todo lo Nuevo" />
               <ProductCarousel items={newArrivals} fallback={recentProducts} />
             </section>
@@ -236,7 +234,7 @@ const Home = () => {
 
           <div className="w-full border-b border-neutral-200/60 shadow-[0_4px_16px_rgba(0,0,0,0.02)] relative z-10">
             <section id="featured" className="pt-4 pb-0 md:pt-6 md:pb-0 px-4 max-w-7xl mx-auto w-full">
-              <SectionHeader emoji="⭐" title="Favoritos de la Comunidad"
+              <SectionHeader title="Favoritos de la Comunidad"
                 linkTo="/shop?sort=best-selling" linkLabel="Ver Más Vendidos" />
               <ProductCarousel items={featured} fallback={recentProducts} />
             </section>
@@ -245,7 +243,7 @@ const Home = () => {
           {onSale.length > 0 && (
             <div className="w-full border-b border-neutral-200/60 shadow-[0_4px_16px_rgba(0,0,0,0.02)] relative z-10">
               <section className="pt-4 pb-0 md:pt-6 md:pb-0 px-4 max-w-7xl mx-auto w-full bg-gradient-to-b from-red-50/40 to-transparent">
-                <SectionHeader emoji="🔥" title="Aprovecha Antes Que Vuelen"
+                <SectionHeader title="Aprovecha Antes Que Vuelen"
                   linkTo="/shop" linkLabel="Ver Todas las Ofertas" />
                 <ProductCarousel items={onSale} fallback={[]} />
               </section>
@@ -253,20 +251,20 @@ const Home = () => {
           )}
         </div>
       )}
-      
+
       {/* Value Proposition Section */}
       <section className="py-24 bg-surface-card/50 border-t border-neutral-100 relative overflow-hidden">
         {/* Decorative background glow */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-primary/5 blur-[120px] rounded-full pointer-events-none"></div>
-        
+
         <div className="max-w-7xl mx-auto px-4 relative z-10">
           <div className="text-center mb-16">
             <h2 className="text-2xl md:text-3xl font-bold mb-4">¿Por qué elegir ZAMIS Print?</h2>
             <div className="h-1 w-16 bg-primary mx-auto rounded-full"></div>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 text-center mb-20">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -276,8 +274,8 @@ const Home = () => {
               <h3 className="text-lg md:text-xl font-bold mb-2">Calidad Premium</h3>
               <p className="text-neutral-500">Usamos resina y PLA de la más alta calidad para asegurar detalles perfectos y durabilidad incomparable.</p>
             </motion.div>
-            
-            <motion.div 
+
+            <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -288,8 +286,8 @@ const Home = () => {
               <h3 className="text-lg md:text-xl font-bold mb-2">100% Personalizable</h3>
               <p className="text-neutral-500">Desde colores hasta grabados de texto o modelos a medida. Tu imaginación es nuestro único límite.</p>
             </motion.div>
-            
-            <motion.div 
+
+            <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
