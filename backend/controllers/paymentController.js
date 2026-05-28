@@ -1,5 +1,5 @@
 import { MercadoPagoConfig, Preference, Payment } from 'mercadopago';
-import { Resend } from 'resend';
+import sendEmail from '../utils/sendEmail.js';
 import Order from '../models/Order.js';
 import Product from '../models/Product.js';
 
@@ -9,7 +9,6 @@ const formatCOP = (v) =>
 // ─── Email Helper ─────────────────────────────────────────────────────────────
 const sendConfirmationEmail = async (order, payerEmail) => {
     try {
-        const resend = new Resend(process.env.RESEND_API_KEY);
         const toEmail = payerEmail || order.shippingAddress?.email || 'admin@zamisprint.com';
 
         const itemsHtml = order.orderItems
@@ -21,8 +20,7 @@ const sendConfirmationEmail = async (order, payerEmail) => {
                 </tr>`)
             .join('');
 
-        await resend.emails.send({
-            from: 'ZAMIS Print <onboarding@resend.dev>',
+        await sendEmail({
             to: toEmail,
             subject: `✅ ¡Pedido confirmado! #${order._id.toString().slice(-8).toUpperCase()} — ZAMIS Print`,
             html: `
@@ -120,11 +118,9 @@ const sendConfirmationEmail = async (order, payerEmail) => {
 
 const sendLowStockAlertEmail = async (product) => {
     try {
-        const resend = new Resend(process.env.RESEND_API_KEY);
         const adminEmail = process.env.ADMIN_EMAIL || 'admin@zamisprint.com';
         
-        await resend.emails.send({
-            from: 'ZAMIS Print Alerts <onboarding@resend.dev>',
+        await sendEmail({
             to: adminEmail,
             subject: `⚠️ Alerta de Stock Bajo: ${product.name} — ZAMIS Print`,
             html: `

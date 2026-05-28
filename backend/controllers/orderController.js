@@ -1,21 +1,9 @@
 import Order from '../models/Order.js';
 import Product from '../models/Product.js';
-import { Resend } from 'resend';
+import sendEmail from '../utils/sendEmail.js';
 import { orderConfirmationEmail, newOrderAdminEmail, orderShippedEmail } from '../utils/emailTemplates.js';
 
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'hola@zamisprint.com';
-const FROM_EMAIL  = process.env.RESEND_FROM_EMAIL || 'ZAMIS Print <onboarding@resend.dev>';
-
-// Helper: send email without crashing the main flow
-const sendEmail = async ({ to, subject, html }) => {
-    try {
-        const resend = new Resend(process.env.RESEND_API_KEY);
-        await resend.emails.send({ from: FROM_EMAIL, to, subject, html });
-        console.log(`✅ Email sent to ${to}: ${subject}`);
-    } catch (err) {
-        console.error(`⚠️  Email failed (non-critical): ${err.message}`);
-    }
-};
 
 // @desc    Create new order
 // @route   POST /api/orders

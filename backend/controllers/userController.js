@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import User from '../models/User.js';
 import generateToken from '../utils/generateToken.js';
-import { Resend } from 'resend';
+import sendEmail from '../utils/sendEmail.js';
 import { resetPasswordEmail } from '../utils/emailTemplates.js';
 import { OAuth2Client } from 'google-auth-library';
 
@@ -122,20 +122,18 @@ const forgotPassword = async (req, res) => {
 
         const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${rawToken}`;
 
-        const resend = new Resend(process.env.RESEND_API_KEY);
-        const { data, error } = await resend.emails.send({
-            from: 'ZAMIS Print <onboarding@resend.dev>',
+        const { success, error, messageId } = await sendEmail({
             to: user.email,
             subject: '🔐 Restablece tu contraseña — ZAMIS Print',
             html: resetPasswordEmail(user.name, resetUrl),
         });
 
-        if (error) {
-            console.error('Resend error:', error);
+        if (!success) {
+            console.error('Email error:', error);
             return res.status(500).json({ message: 'Error al enviar el correo.' });
         }
 
-        console.log(`✅ Reset email enviado a: ${user.email} | Resend ID: ${data?.id}`);
+        console.log(`✅ Reset email enviado a: ${user.email} | ID: ${messageId}`);
         res.status(200).json({ message: 'Si el correo existe, recibirás un enlace en breve.' });
     } catch (err) {
         console.error('forgotPassword error:', err);
