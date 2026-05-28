@@ -35,7 +35,7 @@ function App() {
   return (
     <>
       <Toaster 
-        position="top-right" 
+        position="bottom-right" 
         toastOptions={{
           className: 'glass-panel text-sm md:text-base font-medium',
           style: {
