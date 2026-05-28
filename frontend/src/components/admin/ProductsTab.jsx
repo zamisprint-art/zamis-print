@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Package, PlusCircle, Edit, Trash2, X, Upload, Search, ChevronLeft, ChevronRight, Check, Eye, EyeOff } from 'lucide-react';
+import toast from 'react-hot-toast';
 import { PRODUCT_COLORS } from '../../utils/colors';
 import ConfirmModal from '../ui/ConfirmModal';
 
@@ -97,7 +98,7 @@ const ProductsTab = () => {
           await axios.delete(`/api/products/${id}`, { withCredentials: true });
           fetchProducts();
         } catch (error) {
-          alert(error.response?.data?.message || 'Error al eliminar');
+          toast.error(error.response?.data?.message || 'Error al eliminar');
         }
       }
     });
@@ -116,7 +117,7 @@ const ProductsTab = () => {
           await axios.put(`/api/products/${product._id}`, { ...product, isActive: !currentIsActive }, { withCredentials: true });
           fetchProducts();
         } catch (error) {
-          alert(error.response?.data?.message || 'Error al cambiar estado');
+          toast.error(error.response?.data?.message || 'Error al cambiar estado');
         }
       }
     });
@@ -142,7 +143,7 @@ const ProductsTab = () => {
           setIsModalOpen(false);
           fetchProducts();
         } catch (error) {
-          alert(error.response?.data?.message || 'Error al guardar');
+          toast.error(error.response?.data?.message || 'Error al guardar');
         }
       }
     });

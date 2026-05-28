@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Package, AlertTriangle, ArrowUpCircle, ArrowDownCircle, PlusCircle, Edit } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const InventoryTab = () => {
   const [productsData, setProductsData] = useState({ products: [], page: 1, pages: 1, total: 0 });
@@ -98,7 +99,7 @@ const InventoryTab = () => {
       setIsModalOpen(false);
       fetchData();
     } catch (error) {
-      alert(error.response?.data?.message || 'Error guardando datos');
+      toast.error(error.response?.data?.message || 'Error guardando datos');
     }
   };
 

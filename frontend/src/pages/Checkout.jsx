@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 import { useCartStore } from '../store/useCartStore';
 import { useAuthStore } from '../store/useAuthStore';
 import { CheckCircle2, Truck, CreditCard, ChevronRight, ShieldCheck, Lock, User, FileText, MapPin, Phone, Mail } from 'lucide-react';
@@ -109,7 +110,7 @@ const Checkout = () => {
       console.error('Payment error:', error);
       const msg = error.response?.data?.message || 'Error de conexión con el servidor.';
       const detail = error.response?.data?.detail ? `\nDetalle técnico: ${error.response.data.detail}` : '';
-      alert(`No pudimos procesar tu pago.\n\n${msg}${detail}\n\nPor favor intenta nuevamente.`);
+      toast.error(`No pudimos procesar tu pago.\n\n${msg}${detail}\n\nPor favor intenta nuevamente.`);
       setIsProcessing(false);
       setProcessingStep(0);
       setStep(2);

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Search, ChevronLeft, ChevronRight, ChevronDown, ChevronUp, MapPin, FileText, Phone, Mail, Package } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const formatCOP = (v) =>
   new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(v);
@@ -54,7 +55,7 @@ const OrdersTab = () => {
       await axios.put(`/api/orders/${id}/status`, { status });
       fetchOrders();
     } catch (error) {
-      alert('Error cambiando estado');
+      toast.error('Error cambiando estado');
     }
   };
 

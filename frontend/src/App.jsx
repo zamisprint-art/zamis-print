@@ -21,6 +21,7 @@ import MyAccount from './pages/MyAccount';
 import Maintenance from './pages/Maintenance';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
+import { Toaster } from 'react-hot-toast';
 
 // Private Route Wrapper for Admin
 const AdminRoute = ({ children }) => {
@@ -32,8 +33,23 @@ function App() {
   const isMaintenance = import.meta.env.VITE_MAINTENANCE_MODE === 'true';
 
   return (
-    <Routes>
-      {/* Public Store Layout */}
+    <>
+      <Toaster 
+        position="top-right" 
+        toastOptions={{
+          className: 'glass-panel text-sm md:text-base font-medium',
+          style: {
+            background: 'rgba(255, 255, 255, 0.8)',
+            backdropFilter: 'blur(16px)',
+            color: '#1f2937',
+            border: '1px solid rgba(255, 255, 255, 0.3)',
+          },
+          success: { iconTheme: { primary: '#10b981', secondary: '#fff' } },
+          error: { iconTheme: { primary: '#ef4444', secondary: '#fff' } },
+        }}
+      />
+      <Routes>
+        {/* Public Store Layout */}
       <Route path="/" element={isMaintenance ? <Maintenance /> : <StoreLayout />}>
         {!isMaintenance && (
           <>

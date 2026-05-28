@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { DollarSign, CheckCircle, Clock, AlertTriangle, FileText, Search, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, Filter, Download, Plus, DollarSign, Calendar, RefreshCcw, Tag, CreditCard, CheckCircle, Clock, AlertTriangle, FileText, ChevronLeft, ChevronRight } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const BillingTab = () => {
   const [data, setData] = useState({ orders: [], page: 1, pages: 1, total: 0, stats: { totalCobrado: 0, totalPendiente: 0 } });
@@ -70,7 +71,7 @@ const BillingTab = () => {
       });
       refreshData();
     } catch (error) {
-      alert(error.response?.data?.message || 'Error al registrar la venta externa');
+      toast.error(error.response?.data?.message || 'Error al registrar la venta externa');
     } finally {
       setIsSubmittingExternal(false);
     }
@@ -96,7 +97,7 @@ const BillingTab = () => {
       setIsModalOpen(false);
       fetchOrders();
     } catch (error) {
-      alert(error.response?.data?.message || 'Error al actualizar el cobro');
+      toast.error(error.response?.data?.message || 'Error al actualizar el cobro');
     }
   };
 
@@ -135,7 +136,7 @@ const BillingTab = () => {
       link.click();
       document.body.removeChild(link);
     } catch (e) {
-      alert("Error exportando reporte");
+      toast.error("Error exportando reporte");
     }
   };
 

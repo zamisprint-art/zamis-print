@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 import { ShoppingCart, ChevronLeft, ChevronRight, Maximize2, X, Home, ChevronRight as ChevronRightIcon } from 'lucide-react';
 import { useCartStore } from '../store/useCartStore';
+import toast from 'react-hot-toast';
 import { useAuthStore } from '../store/useAuthStore';
 import Rating from '../components/Rating';
 import { Button } from '../components/ui';
@@ -149,12 +150,12 @@ const ProductDetail = () => {
 
   const handleAddToCart = () => {
     if (product.colors && product.colors.length > 0 && !selectedColor) {
-      alert('Por favor selecciona un color antes de añadir al carrito.');
+      toast.error('Por favor selecciona un color antes de añadir al carrito.');
       return;
     }
 
     if (product.requiresTextPersonalization && !product.isCustomizable && !personalizationText) {
-      alert('Por favor ingresa el texto de personalización.');
+      toast.error('Por favor ingresa el texto de personalización.');
       return;
     }
     
