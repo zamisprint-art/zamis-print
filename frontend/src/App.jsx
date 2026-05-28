@@ -85,6 +85,7 @@ function App() {
       {/* Catch-all during maintenance */}
       {isMaintenance && <Route path="*" element={<Navigate to="/" replace />} />}
     </Routes>
+    </>
   );
 }
 export default App;
