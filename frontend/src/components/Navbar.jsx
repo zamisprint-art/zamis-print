@@ -104,8 +104,8 @@ const Navbar = () => {
         <div className="max-w-7xl mx-auto px-4 py-2 flex justify-between items-center h-10">
           {/* Contacto Izquierda */}
           <div className="hidden sm:flex items-center gap-5 shrink-0 z-10 bg-brand-900 pr-4">
-            <a href="mailto:hola@zamisprint.com" className="flex items-center gap-1.5 hover:text-white transition-colors">
-              <Mail size={12} /> hola@zamisprint.com
+            <a href="mailto:info@zamisprint.com" className="flex items-center gap-1.5 hover:text-white transition-colors">
+              <Mail size={12} /> info@zamisprint.com
             </a>
             <a href="tel:+573107878192" className="flex items-center gap-1.5 hover:text-white transition-colors">
               <Phone size={12} /> +57 310 787 8192
@@ -454,8 +454,8 @@ const Navbar = () => {
               </nav>
 
               <div className="px-6 py-5 border-t border-neutral-100 space-y-2">
-                <a href="mailto:hola@zamisprint.com" className="flex items-center gap-2 text-sm text-neutral-500 hover:text-brand-600 transition-colors">
-                  <Mail size={14} /> hola@zamisprint.com
+                <a href="mailto:info@zamisprint.com" className="flex items-center gap-2 text-sm text-neutral-500 hover:text-brand-600 transition-colors">
+                  <Mail size={14} /> info@zamisprint.com
                 </a>
                 <a href="tel:+573107878192" className="flex items-center gap-2 text-sm text-neutral-500 hover:text-brand-600 transition-colors">
                   <Phone size={14} /> +57 310 787 8192

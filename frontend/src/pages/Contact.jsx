@@ -62,7 +62,7 @@ const Contact = () => {
               <div>
                 <h3 className="text-lg font-bold text-neutral-900 mb-1">Email</h3>
                 <p className="text-neutral-500 mb-2">Soporte y cotizaciones</p>
-                <a href="mailto:hola@zamisprint.com" className="text-brand-600 font-semibold hover:underline">hola@zamisprint.com</a>
+                <a href="mailto:info@zamisprint.com" className="text-brand-600 font-semibold hover:underline">info@zamisprint.com</a>
               </div>
             </div>
 

@@ -46,7 +46,7 @@ const Maintenance = () => {
             <span className="text-neutral-300 font-medium">De regreso pronto</span>
           </div>
           <a
-            href="mailto:hola@zamisprint.com"
+            href="mailto:info@zamisprint.com"
             className="bg-brand-500/10 hover:bg-brand-500/20 transition-colors rounded-xl p-4 border border-brand-500/30 flex items-center justify-center gap-3 group cursor-pointer"
           >
             <Mail className="w-5 h-5 text-brand-400 group-hover:scale-110 transition-transform" />

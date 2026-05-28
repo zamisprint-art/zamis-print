@@ -27,11 +27,11 @@ const Privacy = () => (
           },
           {
             title: '5. Tus derechos',
-            body: 'Tienes derecho a acceder, corregir o eliminar tus datos personales en cualquier momento. Para ejercer este derecho, contáctanos a hola@zamisprint.com y responderemos en un plazo máximo de 5 días hábiles.'
+            body: 'Tienes derecho a acceder, corregir o eliminar tus datos personales en cualquier momento. Para ejercer este derecho, contáctanos a info@zamisprint.com y responderemos en un plazo máximo de 5 días hábiles.'
           },
           {
             title: '6. Contacto',
-            body: 'Si tienes preguntas sobre esta política, escríbenos a hola@zamisprint.com o visita nuestra página de Contacto.'
+            body: 'Si tienes preguntas sobre esta política, escríbenos a info@zamisprint.com o visita nuestra página de Contacto.'
           },
         ].map((section, i) => (
           <div key={i}>
