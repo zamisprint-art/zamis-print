@@ -105,7 +105,7 @@ export const orderConfirmationEmail = (order) => {
           <td style="background:#f4f4f8;padding:24px 40px;text-align:center;border-top:1px solid #e5e7eb;">
             <p style="margin:0;font-size:12px;color:#9ca3af;">© 2026 ZAMIS Print · Impresión 3D Personalizada · Colombia</p>
             <p style="margin:6px 0 0;font-size:12px;color:#9ca3af;">
-              <a href="https://zamisprint.vercel.app" style="color:#7c3aed;text-decoration:none;">zamisprint.vercel.app</a>
+              <a href="${process.env.FRONTEND_URL || 'https://zamisprint.com'}" style="color:#7c3aed;text-decoration:none;">zamisprint.com</a>
             </p>
           </td>
         </tr>
@@ -167,7 +167,7 @@ export const newOrderAdminEmail = (order) => {
             </div>
 
             <div style="text-align:center;margin-top:24px;">
-              <a href="https://zamisprint.vercel.app/admin" 
+              <a href="${process.env.FRONTEND_URL || 'https://zamisprint.com'}/admin" 
                  style="display:inline-block;background:#7c3aed;color:#ffffff;padding:14px 32px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px;">
                 Ir al Panel Admin →
               </a>
@@ -242,7 +242,7 @@ export const resetPasswordEmail = (name, resetUrl) => `
           <td style="background:#f4f4f8;padding:24px 40px;text-align:center;border-top:1px solid #e5e7eb;">
             <p style="margin:0;font-size:12px;color:#9ca3af;">© 2026 ZAMIS Print · Impresión 3D Personalizada · Colombia</p>
             <p style="margin:6px 0 0;font-size:12px;color:#9ca3af;">
-              <a href="https://zamisprint.vercel.app" style="color:#7c3aed;text-decoration:none;">zamisprint.vercel.app</a>
+              <a href="${process.env.FRONTEND_URL || 'https://zamisprint.com'}" style="color:#7c3aed;text-decoration:none;">zamisprint.com</a>
             </p>
           </td>
         </tr>
