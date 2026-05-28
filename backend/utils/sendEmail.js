@@ -9,15 +9,20 @@ import nodemailer from 'nodemailer';
  */
 const sendEmail = async ({ to, subject, html }) => {
     try {
+        const port = parseInt(process.env.SMTP_PORT || '465', 10);
         // Configuración del transporter usando SMTP
         const transporter = nodemailer.createTransport({
             host: process.env.SMTP_HOST || 'mail.privateemail.com',
-            port: process.env.SMTP_PORT || 465,
-            secure: true, // true para 465, false para otros puertos
+            port: port,
+            secure: port === 465, // true para 465, false para 587 o 25
             auth: {
                 user: process.env.SMTP_USER,
                 pass: process.env.SMTP_PASS,
             },
+            tls: {
+                // Previene problemas de conexión con certificados intermedios
+                rejectUnauthorized: false
+            }
         });
 
         // Configuración del remitente
