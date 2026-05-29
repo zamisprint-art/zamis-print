@@ -233,7 +233,7 @@ const OrderSuccess = () => {
         >
           ¿Tienes preguntas sobre tu pedido?{' '}
           <a
-            href="https://wa.me/1234567890?text=Hola,%20tengo%20una%20pregunta%20sobre%20mi%20pedido"
+            href="https://wa.me/573107878192?text=Hola,%20tengo%20una%20pregunta%20sobre%20mi%20pedido"
             target="_blank"
             rel="noopener noreferrer"
             className="text-green-400 hover:text-green-300 font-medium underline"
