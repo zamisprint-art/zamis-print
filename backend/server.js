@@ -13,6 +13,10 @@ import inventoryRoutes from './routes/inventoryRoutes.js';
 import slideRoutes from './routes/slideRoutes.js';
 import homeSectionRoutes from './routes/homeSectionRoutes.js';
 import categoryLinkRoutes from './routes/categoryLinkRoutes.js';
+import helmet from 'helmet';
+import mongoSanitize from 'express-mongo-sanitize';
+import rateLimit from 'express-rate-limit';
+import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
 // Load environment variables
 dotenv.config();
@@ -40,8 +44,25 @@ app.use(cors({
   },
   credentials: true,
 }));
-app.use(express.json({ limit: '150mb' }));
-app.use(express.urlencoded({ extended: true, limit: '150mb' }));
+
+// Basic Security Headers
+app.use(helmet());
+app.use(helmet.crossOriginResourcePolicy({ policy: 'cross-origin' })); // Para permitir que el frontend cargue imágenes desde el backend si es necesario
+
+// Rate Limiting (Protección contra fuerza bruta y DoS)
+const limiter = rateLimit({
+    windowMs: 10 * 60 * 1000, // 10 minutos
+    max: 500, // Límite de 500 peticiones por IP cada 10 min
+    message: 'Too many requests from this IP, please try again later.'
+});
+app.use('/api', limiter);
+
+// Data Sanitization contra inyección NoSQL
+app.use(mongoSanitize());
+
+// Reducimos el límite de carga de 150mb a 10mb
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser());
 
 // Database connection
@@ -81,6 +102,10 @@ app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 app.get('/api', (req, res) => {
     res.json({ message: 'ZAMIS Print API is running...' });
 });
+
+// Manejo Global de Errores
+app.use(notFound);
+app.use(errorHandler);
 
 // Start Server
 const PORT = process.env.PORT || 5000;
