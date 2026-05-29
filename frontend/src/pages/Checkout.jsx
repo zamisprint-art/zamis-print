@@ -425,6 +425,12 @@ const Checkout = () => {
               >
                 {!isProcessing && <>Continuar al Pago <ChevronRight size={20} className="ml-2" /></>}
               </Button>
+              <div className="mt-3 text-center text-xs text-neutral-500 flex flex-col items-center gap-1">
+                <span className="font-medium text-brand-600 bg-brand-50 px-2 py-0.5 rounded border border-brand-100">
+                  Aceptamos Nequi y Daviplata
+                </span>
+                <span>Selecciona "PSE" en la siguiente pantalla</span>
+              </div>
               <div className="mt-8">
                 <TrustBadges variant="checkout" />
               </div>
@@ -450,6 +456,9 @@ const Checkout = () => {
               <ChevronRight size={20} />
             </>}
           </Button>
+          <div className="mt-2 text-center text-[10px] text-neutral-500 font-medium leading-tight">
+            Para pagar con <span className="text-brand-600 font-bold">Nequi o Daviplata</span>, selecciona PSE en el siguiente paso.
+          </div>
         </div>
 
       </div>
