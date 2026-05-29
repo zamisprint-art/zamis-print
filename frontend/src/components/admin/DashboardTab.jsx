@@ -183,6 +183,14 @@ const DashboardTab = () => {
     </div>
   );
 
+  if (!stats) return (
+    <div className="flex flex-col items-center justify-center h-64 gap-3">
+      <AlertCircle className="text-red-500 w-12 h-12" />
+      <p className="text-neutral-700 font-medium text-lg">Error cargando la información</p>
+      <p className="text-neutral-500 text-sm">Verifica tu conexión o si tu sesión expiró. Puedes recargar la página.</p>
+    </div>
+  );
+
   return (
     <div className="space-y-8">
       <div>
