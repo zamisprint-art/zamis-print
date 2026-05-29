@@ -14,7 +14,6 @@ import slideRoutes from './routes/slideRoutes.js';
 import homeSectionRoutes from './routes/homeSectionRoutes.js';
 import categoryLinkRoutes from './routes/categoryLinkRoutes.js';
 import helmet from 'helmet';
-import mongoSanitize from 'express-mongo-sanitize';
 import rateLimit from 'express-rate-limit';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
@@ -57,8 +56,6 @@ const limiter = rateLimit({
 });
 app.use('/api', limiter);
 
-// Data Sanitization contra inyección NoSQL
-app.use(mongoSanitize());
 
 // Reducimos el límite de carga de 150mb a 10mb
 app.use(express.json({ limit: '10mb' }));
