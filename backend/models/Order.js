@@ -78,7 +78,7 @@ const orderSchema = new mongoose.Schema({
     // --- COBROS Y FINANZAS ---
     estadoCobro: {
         type: String,
-        enum: ['pendiente', 'pagado', 'vencido'],
+        enum: ['pendiente', 'pagado', 'vencido', 'fallido'],
         default: 'pendiente'
     },
     metodoPagoCobro: {

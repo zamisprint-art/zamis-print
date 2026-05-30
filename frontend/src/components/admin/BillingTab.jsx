@@ -210,6 +210,7 @@ const BillingTab = () => {
           <option value="pendiente">Pendiente</option>
           <option value="pagado">Pagado</option>
           <option value="vencido">Vencido</option>
+          <option value="fallido">Fallido</option>
         </select>
         <button type="submit" className="bg-brand-500 hover:bg-brand-600 text-white px-4 py-2 rounded-xl font-bold transition-colors">
           Buscar
@@ -256,6 +257,10 @@ const BillingTab = () => {
                         ) : estado === 'vencido' ? (
                           <span className="inline-flex items-center gap-1 px-3 py-1 bg-red-100 text-red-700 font-bold text-xs rounded-full">
                             <AlertTriangle size={14} /> VENCIDO
+                          </span>
+                        ) : estado === 'fallido' ? (
+                          <span className="inline-flex items-center gap-1 px-3 py-1 bg-neutral-200 text-neutral-600 font-bold text-xs rounded-full">
+                            <AlertTriangle size={14} /> FALLIDO
                           </span>
                         ) : (
                           <span className="inline-flex items-center gap-1 px-3 py-1 bg-yellow-100 text-yellow-700 font-bold text-xs rounded-full">
@@ -394,6 +399,7 @@ const BillingTab = () => {
                   <option value="pendiente">🟡 Pendiente</option>
                   <option value="pagado">✅ Pagado</option>
                   <option value="vencido">🔴 Vencido (Mora)</option>
+                  <option value="fallido">❌ Fallido</option>
                 </select>
               </div>
               

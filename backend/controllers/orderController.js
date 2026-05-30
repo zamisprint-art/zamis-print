@@ -147,7 +147,7 @@ const getOrders = async (req, res) => {
                 },
                 totalPendiente: {
                     $sum: {
-                        $cond: [{ $ne: ["$estadoCobro", "pagado"] }, "$totalPrice", 0]
+                        $cond: [{ $in: ["$estadoCobro", ["pendiente", "vencido"]] }, "$totalPrice", 0]
                     }
                 }
             }

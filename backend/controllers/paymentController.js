@@ -262,6 +262,7 @@ const paymentWebhook = async (req, res) => {
 
         } else if (status === 'rejected' || status === 'cancelled') {
             order.orderStatus = 'Pago Fallido';
+            order.estadoCobro = 'fallido';
             await order.save();
             console.log(`[MP Webhook] ❌ Order ${external_reference} payment REJECTED`);
         }
