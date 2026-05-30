@@ -212,6 +212,16 @@ const updateBillingStatus = async (req, res) => {
         if (req.body.notaCobroInterna !== undefined) order.notaCobroInterna = req.body.notaCobroInterna;
         if (req.body.fechaCobro) order.fechaCobro = req.body.fechaCobro;
         
+        // Editar detalles de venta externa
+        if (req.body.clientName !== undefined && order.shippingAddress) order.shippingAddress.fullName = req.body.clientName;
+        if (req.body.clientPhone !== undefined && order.shippingAddress) order.shippingAddress.phone = req.body.clientPhone;
+        if (req.body.description !== undefined && order.orderItems && order.orderItems.length > 0) order.orderItems[0].name = req.body.description;
+        if (req.body.totalPrice !== undefined) {
+            order.totalPrice = Number(req.body.totalPrice);
+            order.itemsPrice = Number(req.body.totalPrice);
+        }
+        if (req.body.canalVenta !== undefined) order.canalVenta = req.body.canalVenta;
+        
         // Si se marca como pagado y no estaba pagado antes
         if (req.body.estadoCobro === 'pagado' && !order.isPaid) {
             order.isPaid = true;

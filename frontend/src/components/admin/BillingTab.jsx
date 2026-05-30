@@ -40,6 +40,11 @@ const BillingTab = () => {
   };
 
   const [formData, setFormData] = useState({
+    clientName: '',
+    clientPhone: '',
+    description: '',
+    totalPrice: '',
+    canalVenta: 'Web',
     estadoCobro: 'pendiente',
     metodoPagoCobro: 'mercadopago',
     notaCobroInterna: ''
@@ -86,6 +91,11 @@ const BillingTab = () => {
   const openBillingModal = (order) => {
     setSelectedOrder(order);
     setFormData({
+      clientName: order.user?.name || order.shippingAddress?.fullName || '',
+      clientPhone: order.shippingAddress?.phone || '',
+      description: order.orderItems?.[0]?.name || '',
+      totalPrice: order.totalPrice || '',
+      canalVenta: order.canalVenta || 'Web',
       estadoCobro: order.estadoCobro || 'pendiente',
       metodoPagoCobro: order.metodoPagoCobro || order.paymentMethod || 'mercadopago',
       notaCobroInterna: order.notaCobroInterna || ''
@@ -312,6 +322,68 @@ const BillingTab = () => {
             <p className="text-sm text-neutral-500 mb-4 font-mono">Pedido #{String(selectedOrder?._id).slice(-8).toUpperCase()}</p>
             
             <form onSubmit={handleBillingSubmit} className="flex flex-col gap-4">
+              
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-sm font-semibold mb-1">Cliente</label>
+                  <input 
+                    type="text"
+                    value={formData.clientName} 
+                    onChange={e => setFormData({...formData, clientName: e.target.value})} 
+                    className="w-full border rounded-lg p-2 text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold mb-1">Teléfono</label>
+                  <input 
+                    type="text"
+                    value={formData.clientPhone} 
+                    onChange={e => setFormData({...formData, clientPhone: e.target.value})} 
+                    className="w-full border rounded-lg p-2 text-sm"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-1">Descripción / Producto</label>
+                <input 
+                  type="text"
+                  value={formData.description} 
+                  onChange={e => setFormData({...formData, description: e.target.value})} 
+                  className="w-full border rounded-lg p-2 text-sm"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-sm font-semibold mb-1">Total (COP)</label>
+                  <input 
+                    type="number"
+                    value={formData.totalPrice} 
+                    onChange={e => setFormData({...formData, totalPrice: e.target.value})} 
+                    className="w-full border rounded-lg p-2 font-bold text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold mb-1">Canal Venta</label>
+                  <select 
+                    value={formData.canalVenta} 
+                    onChange={e => setFormData({...formData, canalVenta: e.target.value})} 
+                    className="w-full border rounded-lg p-2 text-sm"
+                  >
+                    <option value="Web">Web (Tienda)</option>
+                    <option value="WhatsApp">WhatsApp</option>
+                    <option value="Instagram">Instagram</option>
+                    <option value="Facebook">Facebook</option>
+                    <option value="Feria">Feria / Evento</option>
+                    <option value="Local">Local Físico</option>
+                    <option value="Otro">Otro Canal</option>
+                  </select>
+                </div>
+              </div>
+
+              <hr className="border-neutral-200 my-1" />
+
               <div>
                 <label className="block text-sm font-semibold mb-1">Estado de Cobro</label>
                 <select 
