@@ -230,7 +230,7 @@ const BillingTab = () => {
                   <th className="py-4 px-4">Fecha</th>
                   <th className="py-4 px-4">Total</th>
                   <th className="py-4 px-4">Estado Cobro</th>
-                  <th className="py-4 px-4">Nota / Método</th>
+                  <th className="py-4 px-4">Producto / Método</th>
                   <th className="py-4 px-4 text-right">Acción</th>
                 </tr>
               </thead>
@@ -269,8 +269,9 @@ const BillingTab = () => {
                         )}
                       </td>
                       <td className="py-4 px-4 text-sm text-neutral-500 max-w-xs truncate">
-                        {order.metodoPagoCobro && <div className="font-semibold capitalize">{order.metodoPagoCobro}</div>}
-                        {order.notaCobroInterna && <div className="text-xs truncate" title={order.notaCobroInterna}>{order.notaCobroInterna}</div>}
+                        {order.orderItems?.[0]?.name && <div className="text-xs font-semibold text-brand-600 truncate" title={order.orderItems[0].name}>{order.orderItems[0].name}</div>}
+                        {order.metodoPagoCobro && <div className="font-semibold capitalize mt-0.5">{order.metodoPagoCobro}</div>}
+                        {order.notaCobroInterna && <div className="text-xs truncate italic" title={order.notaCobroInterna}>{order.notaCobroInterna}</div>}
                       </td>
                       <td className="py-4 px-4 text-right">
                         <button 
