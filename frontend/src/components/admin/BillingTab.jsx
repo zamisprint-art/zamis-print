@@ -402,18 +402,6 @@ const BillingTab = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold mb-1">Estado del Pago</label>
-                <select 
-                  value={externalFormData.estadoCobro} 
-                  onChange={e => setExternalFormData({...externalFormData, estadoCobro: e.target.value})} 
-                  className="w-full border border-neutral-300 rounded-lg p-2 font-bold"
-                >
-                  <option value="pagado">✅ Pagado</option>
-                  <option value="pendiente">🟡 Pendiente por Cobrar</option>
-                </select>
-              </div>
-
-              <div>
                 <label className="block text-sm font-semibold mb-1">Canal de Venta</label>
                 <select 
                   value={externalFormData.canalVenta} 
@@ -430,7 +418,7 @@ const BillingTab = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-semibold mb-1">Monto Total Cobrado (COP)</label>
+                <label className="block text-sm font-semibold mb-1">Total (COP)</label>
                 <input 
                   type="number"
                   required
@@ -440,6 +428,18 @@ const BillingTab = () => {
                   onChange={e => setExternalFormData({...externalFormData, totalPrice: e.target.value})} 
                   className="w-full border border-neutral-300 rounded-lg p-2 font-bold"
                 />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-1">Estado del Pago</label>
+                <select 
+                  value={externalFormData.estadoCobro} 
+                  onChange={e => setExternalFormData({...externalFormData, estadoCobro: e.target.value})} 
+                  className="w-full border border-neutral-300 rounded-lg p-2 font-bold"
+                >
+                  <option value="pagado">✅ Pagado</option>
+                  <option value="pendiente">🟡 Pendiente por Cobrar</option>
+                </select>
               </div>
 
               <div>
