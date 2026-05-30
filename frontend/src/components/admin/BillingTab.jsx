@@ -46,8 +46,11 @@ const BillingTab = () => {
   });
   const [externalFormData, setExternalFormData] = useState({
     description: '',
+    clientName: '',
+    clientPhone: '',
     canalVenta: 'WhatsApp',
     totalPrice: '',
+    estadoCobro: 'pagado',
     metodoPagoCobro: 'transferencia',
     notaCobroInterna: ''
   });
@@ -59,17 +62,20 @@ const BillingTab = () => {
       await axios.post('/api/orders/external', {
         ...externalFormData,
         totalPrice: Number(externalFormData.totalPrice),
-        fechaCobro: new Date()
+        fechaCobro: externalFormData.estadoCobro === 'pagado' ? new Date() : null
       }, { withCredentials: true });
       setIsExternalSaleModalOpen(false);
       setExternalFormData({
         description: '',
+        clientName: '',
+        clientPhone: '',
         canalVenta: 'WhatsApp',
         totalPrice: '',
+        estadoCobro: 'pagado',
         metodoPagoCobro: 'transferencia',
         notaCobroInterna: ''
       });
-      refreshData();
+      fetchOrders();
     } catch (error) {
       toast.error(error.response?.data?.message || 'Error al registrar la venta externa');
     } finally {
@@ -369,6 +375,42 @@ const BillingTab = () => {
                   onChange={e => setExternalFormData({...externalFormData, description: e.target.value})} 
                   className="w-full border border-neutral-300 rounded-lg p-2"
                 />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-sm font-semibold mb-1">Nombre del Cliente</label>
+                  <input 
+                    type="text"
+                    required
+                    placeholder="Ej. Juan Pérez"
+                    value={externalFormData.clientName} 
+                    onChange={e => setExternalFormData({...externalFormData, clientName: e.target.value})} 
+                    className="w-full border border-neutral-300 rounded-lg p-2"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold mb-1">Teléfono</label>
+                  <input 
+                    type="text"
+                    placeholder="Ej. 3001234567"
+                    value={externalFormData.clientPhone} 
+                    onChange={e => setExternalFormData({...externalFormData, clientPhone: e.target.value})} 
+                    className="w-full border border-neutral-300 rounded-lg p-2"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold mb-1">Estado del Pago</label>
+                <select 
+                  value={externalFormData.estadoCobro} 
+                  onChange={e => setExternalFormData({...externalFormData, estadoCobro: e.target.value})} 
+                  className="w-full border border-neutral-300 rounded-lg p-2 font-bold"
+                >
+                  <option value="pagado">✅ Pagado</option>
+                  <option value="pendiente">🟡 Pendiente por Cobrar</option>
+                </select>
               </div>
 
               <div>

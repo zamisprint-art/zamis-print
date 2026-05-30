@@ -250,8 +250,13 @@ const addExternalOrder = async (req, res) => {
         canalVenta,
         metodoPagoCobro,
         fechaCobro,
-        notaCobroInterna
+        notaCobroInterna,
+        clientName,
+        clientPhone,
+        estadoCobro
     } = req.body;
+
+    const isPaid = estadoCobro === 'pagado';
 
     const order = new Order({
         orderItems: [
@@ -263,6 +268,8 @@ const addExternalOrder = async (req, res) => {
             }
         ],
         shippingAddress: {
+            fullName: clientName || 'Venta Externa',
+            phone: clientPhone || '',
             address: 'Venta Externa',
             city: 'N/A',
             postalCode: '00000',
@@ -272,13 +279,13 @@ const addExternalOrder = async (req, res) => {
         itemsPrice: totalPrice,
         shippingPrice: 0,
         totalPrice: totalPrice,
-        isPaid: true,
-        paidAt: fechaCobro || Date.now(),
-        orderStatus: 'Entregado',
-        estadoCobro: 'pagado',
+        isPaid: isPaid,
+        paidAt: isPaid ? (fechaCobro || Date.now()) : null,
+        orderStatus: isPaid ? 'Entregado' : 'Pendiente',
+        estadoCobro: estadoCobro || 'pagado',
         metodoPagoCobro,
         notaCobroInterna,
-        fechaCobro: fechaCobro || Date.now(),
+        fechaCobro: isPaid ? (fechaCobro || Date.now()) : null,
         canalVenta: canalVenta || 'Otro'
     });
 
