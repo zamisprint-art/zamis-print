@@ -160,6 +160,18 @@ const Contact = () => {
                   ></textarea>
                 </div>
 
+                <div className="flex items-start gap-2">
+                  <input
+                    type="checkbox"
+                    id="contact_terms"
+                    required
+                    className="mt-1 w-4 h-4 text-brand-600 border-neutral-300 rounded focus:ring-brand-500"
+                  />
+                  <label htmlFor="contact_terms" className="text-xs text-neutral-600 leading-tight">
+                    Autorizo el tratamiento de mis datos personales según la <a href="/privacy" target="_blank" className="text-brand-600 font-bold hover:underline">Política de Privacidad</a> para ser contactado.
+                  </label>
+                </div>
+
                 <Button type="submit" variant="primary" size="lg" fullWidth icon={<Send size={18}/>}>
                   Enviar Mensaje
                 </Button>
