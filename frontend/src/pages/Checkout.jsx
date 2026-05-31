@@ -440,9 +440,11 @@ const Checkout = () => {
                 size="lg"
                 isLoading={isProcessing}
                 loadingText="Procesando..."
-                className="hidden md:flex w-full justify-center items-center shadow-primary/30"
+                icon={<ChevronRight size={20} />}
+                iconPosition="right"
+                className="hidden md:flex w-full justify-center shadow-primary/30"
               >
-                {!isProcessing && <>Continuar al Pago <ChevronRight size={20} className="ml-2" /></>}
+                {!isProcessing && "Continuar al Pago"}
               </Button>
               <div className="mt-3 text-center text-xs text-neutral-500 flex flex-col items-center gap-1">
                 <span className="font-medium text-brand-600 bg-brand-50 px-2 py-0.5 rounded border border-brand-100">
