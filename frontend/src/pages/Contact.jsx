@@ -89,8 +89,9 @@ const Contact = () => {
             
             {/* Socials */}
             <div className="flex gap-4 mt-4 px-2">
-              <a href="#" className="w-10 h-10 rounded-full bg-neutral-200 text-neutral-600 flex items-center justify-center hover:bg-brand-500 hover:text-white transition-colors font-bold text-sm">IG</a>
-              <a href="#" className="w-10 h-10 rounded-full bg-neutral-200 text-neutral-600 flex items-center justify-center hover:bg-brand-500 hover:text-white transition-colors font-bold text-sm">FB</a>
+              <a href="https://www.instagram.com/zamis_print?igsh=MWZ0aTQ4ajYxeW1oZg==" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-neutral-200 text-neutral-600 flex items-center justify-center hover:bg-brand-500 hover:text-white transition-colors font-bold text-sm">IG</a>
+              <a href="https://www.facebook.com/share/1CVUHmRr9X/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-neutral-200 text-neutral-600 flex items-center justify-center hover:bg-brand-500 hover:text-white transition-colors font-bold text-sm">FB</a>
+              <a href="https://www.tiktok.com/@zamis.print.oficial?_r=1&_t=ZS-96XFtfCgk7E" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-neutral-200 text-neutral-600 flex items-center justify-center hover:bg-brand-500 hover:text-white transition-colors font-bold text-sm">TK</a>
             </div>
           </motion.div>
 
