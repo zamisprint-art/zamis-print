@@ -38,7 +38,7 @@ const OrdersTab = () => {
   const fetchOrders = async () => {
     setLoading(true);
     try {
-      const { data: resData } = await axios.get(`/api/orders?page=${page}&limit=20&search=${search}&orderStatus=${orderStatus}`);
+      const { data: resData } = await axios.get(`/api/orders?page=${page}&limit=20&search=${encodeURIComponent(search)}&orderStatus=${orderStatus}`);
       setData(resData);
     } catch (error) {
       console.error('Error fetching orders:', error);

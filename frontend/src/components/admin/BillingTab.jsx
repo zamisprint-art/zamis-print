@@ -20,7 +20,7 @@ const BillingTab = () => {
   const fetchOrders = async () => {
     setLoading(true);
     try {
-      const { data: resData } = await axios.get(`/api/orders?page=${page}&limit=20&search=${search}&estadoCobro=${estadoCobro}`);
+      const { data: resData } = await axios.get(`/api/orders?page=${page}&limit=20&search=${encodeURIComponent(search)}&estadoCobro=${estadoCobro}`);
       setData(resData);
     } catch (error) {
       console.error('Error fetching orders:', error);
