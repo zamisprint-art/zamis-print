@@ -437,7 +437,7 @@ const Checkout = () => {
                 form="checkout-form"
                 type="submit"
                 disabled={isProcessing}
-                size="xl"
+                size="lg"
                 isLoading={isProcessing}
                 loadingText="Procesando..."
                 className="hidden md:flex w-full justify-center items-center shadow-primary/30"
@@ -463,7 +463,7 @@ const Checkout = () => {
             form="checkout-form"
             type="submit"
             disabled={isProcessing}
-            size="xl"
+            size="lg"
             isLoading={isProcessing}
             loadingText="Procesando..."
             className="w-full flex justify-center items-center shadow-primary/30"
