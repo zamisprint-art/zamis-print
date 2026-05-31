@@ -124,7 +124,7 @@ const OrdersTab = () => {
                 <div key={order._id} className="border-b border-neutral-100 last:border-0">
                   {/* Main Row */}
                   <div className="grid grid-cols-[1fr_1fr_2fr_1fr_1.5fr_1.5fr_36px] items-center px-4 py-3 gap-3 hover:bg-neutral-50 transition-colors">
-                    <span className="font-mono text-sm text-neutral-700">#{order._id.substring(0, 8).toUpperCase()}</span>
+                    <span className="font-mono text-sm text-neutral-700">#{String(order._id).slice(-8).toUpperCase()}</span>
                     <span className="text-sm text-neutral-600">{new Date(order.createdAt).toLocaleDateString('es-CO')}</span>
                     <div className="min-w-0">
                       <div className="font-semibold text-sm text-neutral-900 truncate">{order.user?.name || sa.fullName || 'Invitado'}</div>
