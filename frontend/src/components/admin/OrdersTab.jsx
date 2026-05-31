@@ -7,6 +7,7 @@ const formatCOP = (v) =>
   new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(v);
 
 const STATUS_COLORS = {
+  'Intento':       'bg-neutral-100 text-neutral-500 border border-neutral-200',
   'Pendiente':     'bg-yellow-100 text-yellow-700',
   'Pagado':        'bg-blue-100 text-blue-700',
   'En Producción': 'bg-purple-100 text-purple-700',
@@ -83,7 +84,8 @@ const OrdersTab = () => {
             className="px-4 py-2 border border-neutral-300 rounded-xl focus:ring-2 focus:ring-brand-500 bg-white"
           >
             <option value="all">Todos los estados</option>
-            <option value="Pendiente">Pendiente</option>
+            <option value="Intento">Intento de Pago</option>
+            <option value="Pendiente">Pendiente (Aprobado/Manual)</option>
             <option value="Pagado">Pagado</option>
             <option value="En Producción">En Producción</option>
             <option value="Enviado">Enviado</option>
@@ -140,6 +142,7 @@ const OrdersTab = () => {
                       value={order.orderStatus}
                       onChange={(e) => handleOrderStatusChange(order._id, e.target.value)}
                     >
+                      <option value="Intento">Intento</option>
                       <option value="Pendiente">Pendiente</option>
                       <option value="Pagado">Pagado</option>
                       <option value="En Producción">En Producción</option>

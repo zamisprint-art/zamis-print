@@ -70,7 +70,7 @@ const orderSchema = new mongoose.Schema({
     orderStatus: {
         type: String,
         required: true,
-        default: 'Pendiente', // Pendiente, Pagado, En Producción, Enviado
+        default: 'Intento', // Intento, Pendiente, Pagado, En Producción, Enviado
     },
     deliveredAt: {
         type: Date,
