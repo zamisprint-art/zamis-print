@@ -93,16 +93,26 @@ const getOrders = async (req, res) => {
 
     // Búsqueda general
     if (req.query.search) {
-        const searchRegex = new RegExp(req.query.search, 'i');
+        const cleanSearch = req.query.search.replace('#', '').trim();
+        const searchRegex = new RegExp(cleanSearch, 'i');
+        
         query.$or = [
             { 'shippingAddress.fullName': searchRegex },
             { 'shippingAddress.email': searchRegex },
             { 'shippingAddress.phone': searchRegex }
         ];
 
-        // Validar si es un ObjectId de Mongoose para buscar por ID de pedido
-        if (req.query.search.match(/^[0-9a-fA-F]{24}$/)) {
-            query.$or.push({ _id: req.query.search });
+        // Permitir búsqueda parcial por el ID de MongoDB (ej: B885E02E)
+        if (cleanSearch.match(/^[0-9a-fA-F]{1,24}$/)) {
+            query.$or.push({
+                $expr: {
+                    $regexMatch: {
+                        input: { $toString: "$_id" },
+                        regex: cleanSearch,
+                        options: "i"
+                    }
+                }
+            });
         }
     }
 
