@@ -211,6 +211,7 @@ const BillingTab = () => {
           <option value="pagado">Pagado</option>
           <option value="vencido">Vencido</option>
           <option value="fallido">Fallido</option>
+          <option value="intento">Abandono / Intento</option>
         </select>
         <button type="submit" className="bg-brand-500 hover:bg-brand-600 text-white px-4 py-2 rounded-xl font-bold transition-colors">
           Buscar
@@ -261,6 +262,10 @@ const BillingTab = () => {
                         ) : estado === 'fallido' ? (
                           <span className="inline-flex items-center gap-1 px-3 py-1 bg-neutral-200 text-neutral-600 font-bold text-xs rounded-full">
                             <AlertTriangle size={14} /> FALLIDO
+                          </span>
+                        ) : estado === 'intento' ? (
+                          <span className="inline-flex items-center gap-1 px-3 py-1 bg-neutral-100 text-neutral-500 font-bold text-xs rounded-full border border-neutral-200">
+                            <Clock size={14} /> ABANDONO
                           </span>
                         ) : (
                           <span className="inline-flex items-center gap-1 px-3 py-1 bg-yellow-100 text-yellow-700 font-bold text-xs rounded-full">
@@ -401,6 +406,7 @@ const BillingTab = () => {
                   <option value="pagado">✅ Pagado</option>
                   <option value="vencido">🔴 Vencido (Mora)</option>
                   <option value="fallido">❌ Fallido</option>
+                  <option value="intento">⚪ Abandono / Intento</option>
                 </select>
               </div>
               
