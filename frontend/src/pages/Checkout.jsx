@@ -365,6 +365,25 @@ const Checkout = () => {
                   />
                 </div>
 
+                {/* ── Sección 5: Legales ── */}
+                <div className="mt-6 p-4 bg-neutral-50 rounded-xl border border-neutral-200">
+                  <label className="flex items-start gap-3 cursor-pointer group">
+                    <div className="relative flex items-center pt-0.5">
+                      <input 
+                        type="checkbox" 
+                        required 
+                        className="peer w-5 h-5 appearance-none border-2 border-neutral-300 rounded bg-white checked:bg-brand-600 checked:border-brand-600 transition-all cursor-pointer"
+                      />
+                      <svg className="absolute w-5 h-5 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                    </div>
+                    <span className="text-sm text-neutral-600 leading-tight">
+                      He leído y acepto los <a href="/terms" target="_blank" className="text-brand-600 font-bold hover:underline">Términos y Condiciones</a> (incluyendo políticas de envíos y devoluciones) y autorizo el tratamiento de mis datos personales según la <a href="/privacy" target="_blank" className="text-brand-600 font-bold hover:underline">Política de Privacidad</a> de ZAMIS Print.
+                    </span>
+                  </label>
+                </div>
+
               </form>
             </motion.div>
           </div>

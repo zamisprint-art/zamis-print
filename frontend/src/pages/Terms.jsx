@@ -1,60 +1,66 @@
-import { Link } from 'react-router-dom';
+import React from 'react';
+import { Shield } from 'lucide-react';
+import { motion } from 'framer-motion';
 
-const Terms = () => (
-  <div className="min-h-screen bg-surface-base py-20 px-4">
-    <div className="max-w-3xl mx-auto">
-      <div className="text-center mb-12">
-        <p className="text-brand-600 text-sm font-semibold uppercase tracking-widest mb-3">Legal</p>
-        <h1 className="text-2xl md:text-3xl font-bold text-neutral-900">Términos y Condiciones</h1>
-        <p className="text-neutral-500 mt-3">Última actualización: Abril 2025</p>
-      </div>
-
-      <div className="bg-white rounded-2xl border border-neutral-200 shadow-sm p-8 md:p-12 space-y-8">
-        {[
-          {
-            title: '1. Aceptación de los términos',
-            body: 'Al acceder y utilizar la plataforma ZAMIS Print, aceptas cumplir con estos Términos y Condiciones. Si no estás de acuerdo con alguna parte, te pedimos que no utilices nuestros servicios.'
-          },
-          {
-            title: '2. Productos y personalización',
-            body: 'Todos los productos son fabricados bajo demanda mediante tecnología de impresión 3D. Los tiempos de producción estimados se indican en cada producto. ZAMIS Print se reserva el derecho de rechazar pedidos que infrinjan derechos de terceros o incluyan contenido inapropiado.'
-          },
-          {
-            title: '3. Precios y pagos',
-            body: 'Los precios están expresados en Pesos Colombianos (COP) e incluyen IVA cuando aplica. El pago se procesa de forma segura a través de MercadoPago. El pedido se confirma únicamente cuando el pago es aprobado.'
-          },
-          {
-            title: '4. Envíos',
-            body: 'Realizamos envíos a todo el territorio colombiano. Los tiempos de entrega son estimados y pueden variar por factores externos (carrier, condiciones climáticas, etc.). El costo de envío se calcula según la dirección de entrega.'
-          },
-          {
-            title: '5. Devoluciones y garantías',
-            body: 'Aceptamos devoluciones dentro de los 7 días siguientes a la recepción del producto, únicamente si el producto presenta defectos de fabricación o daños en el envío. Los productos personalizados no son elegibles para devolución salvo defecto comprobado.'
-          },
-          {
-            title: '6. Propiedad intelectual',
-            body: 'Todo el contenido de ZAMIS Print (diseños, imágenes, logotipos, modelos 3D) es propiedad de ZAMIS Print y está protegido por derechos de autor. Está prohibida su reproducción sin autorización expresa.'
-          },
-          {
-            title: '7. Modificaciones',
-            body: 'ZAMIS Print se reserva el derecho de modificar estos términos en cualquier momento. Te notificaremos por correo electrónico ante cambios significativos. El uso continuo de la plataforma implica la aceptación de los nuevos términos.'
-          },
-        ].map((section, i) => (
-          <div key={i}>
-            <h2 className="text-lg font-bold text-neutral-900 mb-2">{section.title}</h2>
-            <p className="text-neutral-600 leading-relaxed">{section.body}</p>
-          </div>
-        ))}
-
-        <div className="border-t border-neutral-100 pt-6 text-sm text-neutral-500">
-          ¿Tienes dudas?{' '}
-          <Link to="/contact" className="text-brand-600 hover:underline font-medium">
-            Contáctanos
-          </Link>
+const Terms = () => {
+  return (
+    <div className="min-h-screen bg-surface-base py-12 px-4 sm:px-6 lg:px-8">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="max-w-4xl mx-auto bg-white rounded-3xl shadow-sm border border-neutral-200 overflow-hidden"
+      >
+        <div className="bg-gradient-to-r from-brand-600 to-brand-800 px-8 py-12 text-center text-white">
+          <Shield size={48} className="mx-auto mb-4 text-brand-100" />
+          <h1 className="text-3xl font-extrabold tracking-tight mb-2">Términos y Condiciones</h1>
+          <p className="text-brand-100 font-medium">Última actualización: {new Date().toLocaleDateString('es-CO')}</p>
         </div>
-      </div>
+        
+        <div className="p-8 md:p-12 prose prose-brand max-w-none text-neutral-600">
+          <h2 className="text-2xl font-bold text-neutral-900 mt-0">1. Información General</h2>
+          <p>
+            Bienvenido a <strong>ZAMIS Print</strong>. Estos términos y condiciones regulan el uso de nuestro sitio web y la compra de nuestros productos. Al acceder a esta página o realizar una compra, aceptas estar sujeto a los siguientes términos. 
+            El sitio web es operado por <strong>[NOMBRE_DE_TU_EMPRESA_O_TU_NOMBRE]</strong> (en adelante "la empresa"), identificada con NIT/CC <strong>[TU_NIT_O_CC]</strong>, con domicilio principal en <strong>[CIUDAD_DOMICILIO]</strong>.
+          </p>
+
+          <h2 className="text-2xl font-bold text-neutral-900 mt-8">2. Productos y Personalización</h2>
+          <p>
+            ZAMIS Print se especializa en la fabricación de artículos mediante impresión 3D. Debido a la naturaleza del proceso de fabricación aditiva, es posible que los productos presenten ligeras marcas de capas o variaciones milimétricas que son características propias de esta tecnología y no se consideran defectos.
+          </p>
+          <p>
+            <strong>Productos Personalizados:</strong> Cuando solicitas un producto personalizado, eres responsable de la exactitud de las especificaciones, textos y diseños proporcionados. ZAMIS Print no se hace responsable por errores en la información suministrada por el cliente.
+          </p>
+
+          <h2 className="text-2xl font-bold text-neutral-900 mt-8">3. Precios y Pagos</h2>
+          <p>
+            Todos los precios publicados en el sitio están en Pesos Colombianos (COP) y no incluyen los costos de envío, los cuales se calcularán y mostrarán antes de finalizar la compra. 
+            Nos reservamos el derecho de modificar los precios en cualquier momento. Procesamos nuestros pagos de forma segura a través de pasarelas de pago autorizadas (MercadoPago).
+          </p>
+
+          <h2 className="text-2xl font-bold text-neutral-900 mt-8">4. Excepción al Derecho de Retracto</h2>
+          <div className="bg-neutral-50 border-l-4 border-brand-500 p-4 rounded-r-lg my-4">
+            <p className="m-0 font-medium text-neutral-800">
+              De acuerdo con el artículo 47 de la Ley 1480 de 2011 (Estatuto del Consumidor de Colombia), el derecho de retracto <strong>NO aplica</strong> para bienes confeccionados conforme a las especificaciones del consumidor o claramente personalizados. 
+            </p>
+            <p className="m-0 mt-2 text-sm">
+              Al tratarse de impresiones 3D fabricadas bajo demanda o a medida, todas las ventas son finales y no se aceptan devoluciones por arrepentimiento una vez ha iniciado el proceso de fabricación.
+            </p>
+          </div>
+
+          <h2 className="text-2xl font-bold text-neutral-900 mt-8">5. Tiempos de Entrega</h2>
+          <p>
+            Al tratarse de productos fabricados bajo demanda, el tiempo de entrega total incluye el tiempo de producción (impresión 3D) más el tiempo de envío por parte de la transportadora. 
+            Los tiempos estimados se informarán al momento de la compra. ZAMIS Print no se hace responsable por retrasos atribuibles a la empresa de transporte o a situaciones de fuerza mayor.
+          </p>
+
+          <h2 className="text-2xl font-bold text-neutral-900 mt-8">6. Contacto</h2>
+          <p>
+            Para cualquier inquietud, reclamo o información adicional sobre estos Términos y Condiciones, puedes contactarnos al correo electrónico: <strong>[TU_CORREO_DE_SOPORTE]</strong> o al número de teléfono <strong>[TU_TELEFONO]</strong>.
+          </p>
+        </div>
+      </motion.div>
     </div>
-  </div>
-);
+  );
+};
 
 export default Terms;

@@ -13,6 +13,7 @@ import OrderSuccess from './pages/OrderSuccess';
 import FAQ from './pages/FAQ';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
+import Refunds from './pages/Refunds';
 import Login from './pages/Login';
 import { useAuthStore } from './store/useAuthStore';
 
@@ -64,6 +65,7 @@ function App() {
             <Route path="faq" element={<FAQ />} />
             <Route path="privacy" element={<Privacy />} />
             <Route path="terms" element={<Terms />} />
+            <Route path="refunds" element={<Refunds />} />
             <Route path="login" element={<CustomerLogin />} />
             <Route path="profile" element={<MyAccount />} />
             <Route path="forgot-password" element={<ForgotPassword />} />

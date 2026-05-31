@@ -54,10 +54,10 @@ const Footer = () => {
                 <Link to="/faq" className="hover:text-brand-400 transition-colors">Preguntas Frecuentes</Link>
               </li>
               <li>
-                <Link to="/shipping" className="hover:text-brand-400 transition-colors">Políticas de Envío</Link>
+                <Link to="/terms" className="hover:text-brand-400 transition-colors">Políticas de Envío</Link>
               </li>
               <li>
-                <Link to="/returns" className="hover:text-brand-400 transition-colors">Garantías y Devoluciones</Link>
+                <Link to="/refunds" className="hover:text-brand-400 transition-colors">Garantías y Devoluciones</Link>
               </li>
               <li>
                 <Link to="/contact" className="hover:text-brand-400 transition-colors">Contacto</Link>

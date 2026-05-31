@@ -143,6 +143,19 @@ const CustomerLogin = () => {
             )}
           </div>
 
+          {!isLogin && (
+            <div className="flex items-start gap-2 mt-4">
+              <input
+                type="checkbox"
+                id="terms"
+                required
+                className="mt-1 w-4 h-4 text-brand-600 border-neutral-300 rounded focus:ring-brand-500"
+              />
+              <label htmlFor="terms" className="text-xs text-neutral-600 leading-tight">
+                Al registrarme acepto los <a href="/terms" target="_blank" className="text-brand-600 font-bold hover:underline">Términos y Condiciones</a> y la <a href="/privacy" target="_blank" className="text-brand-600 font-bold hover:underline">Política de Privacidad</a>, y autorizo el tratamiento de mis datos personales.
+              </label>
+            </div>
+          )}
 
           <button
             type="submit"
