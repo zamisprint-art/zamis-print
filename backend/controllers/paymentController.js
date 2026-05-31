@@ -1,5 +1,6 @@
 import { MercadoPagoConfig, Preference, Payment } from 'mercadopago';
 import sendEmail from '../utils/sendEmail.js';
+import { newOrderAdminEmail } from '../utils/emailTemplates.js';
 import Order from '../models/Order.js';
 import Product from '../models/Product.js';
 
@@ -257,8 +258,16 @@ const paymentWebhook = async (req, res) => {
             }
 
             // 📧 Send confirmation email to customer
-            const customerEmail = payer?.email || order.user?.email;
+            const customerEmail = payer?.email || order.user?.email || order.shippingAddress?.email;
             await sendConfirmationEmail(order, customerEmail);
+
+            // 🚨 Send new order alert to admin
+            const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'hola@zamisprint.com';
+            await sendEmail({
+                to: ADMIN_EMAIL,
+                subject: `🚀 Nuevo pago recibido — $${order.totalPrice?.toLocaleString('es-CO')} COP`,
+                html: newOrderAdminEmail({ ...order.toObject(), shippingAddress: order.shippingAddress }),
+            });
 
         } else if (status === 'rejected' || status === 'cancelled') {
             order.orderStatus = 'Pago Fallido';

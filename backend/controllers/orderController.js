@@ -59,25 +59,6 @@ const addOrderItems = async (req, res) => {
 
     const createdOrder = await order.save();
     res.status(201).json(createdOrder);
-
-    // --- Send emails (non-blocking) ---
-    const customerEmail = req.user?.email || shippingAddress?.email;
-
-    // 1. Confirmation to customer
-    if (customerEmail) {
-        sendEmail({
-            to: customerEmail,
-            subject: `✅ Pedido confirmado — ZAMIS Print (#${String(createdOrder._id).slice(-8).toUpperCase()})`,
-            html: orderConfirmationEmail(createdOrder),
-        });
-    }
-
-    // 2. New order alert to admin
-    sendEmail({
-        to: ADMIN_EMAIL,
-        subject: `🚀 Nueva orden recibida — $${totalPrice?.toLocaleString('es-CO')} COP`,
-        html: newOrderAdminEmail({ ...createdOrder.toObject(), shippingAddress }),
-    });
 };
 
 // @desc    Get order by ID
@@ -240,6 +221,16 @@ const updateBillingStatus = async (req, res) => {
                     });
                     await product.save();
                 }
+            }
+
+            // --- Send emails (manual payment confirmed) ---
+            const customerEmail = order.user?.email || order.shippingAddress?.email;
+            if (customerEmail && !order.canalVenta?.includes('Externa')) {
+                sendEmail({
+                    to: customerEmail,
+                    subject: `✅ Pago Confirmado — ZAMIS Print (#${String(order._id).slice(-8).toUpperCase()})`,
+                    html: orderConfirmationEmail(order),
+                });
             }
         }
 
