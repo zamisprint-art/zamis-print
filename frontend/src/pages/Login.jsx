@@ -57,7 +57,7 @@ const Login = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="input-field"
-              placeholder="admin@zamisprint.com"
+              placeholder="tu@correo.com"
               required
             />
           </div>
