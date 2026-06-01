@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { Button } from '../components/ui';
 import SEOHead from '../components/SEOHead';
+import toast from 'react-hot-toast';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -16,7 +17,7 @@ const Contact = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!captchaValue) {
-      alert("Por favor, completa el reCAPTCHA para verificar que eres humano.");
+      toast.error("Por favor, completa el reCAPTCHA para verificar que eres humano.");
       return;
     }
     // Simulate API call
