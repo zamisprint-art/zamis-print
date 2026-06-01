@@ -117,9 +117,10 @@ const DashboardTab = () => {
         // Excluir los "Intentos" (abandonos) para que los KPIs del Dashboard cuadren perfectamente con la lógica financiera real
         const orders = allOrders.filter(o => o.orderStatus !== 'Intento' && o.estadoCobro !== 'intento');
 
-        // ── Ingresos totales (sólo órdenes pagadas) ──
-        const paid = orders.filter(o => o.isPaid || o.orderStatus === 'Pagado' || o.orderStatus === 'Entregado' || o.orderStatus === 'Enviado');
-        const totalRevenue = paid.reduce((a, o) => a + (o.totalPrice || 0), 0);
+        // ── Ingresos Financieros Exactos (alineados con pestaña Cobros) ──
+        const totalCobrado = orders.filter(o => o.estadoCobro === 'pagado').reduce((a, o) => a + (o.totalPrice || 0), 0);
+        const totalPendiente = orders.filter(o => o.estadoCobro === 'pendiente').reduce((a, o) => a + (o.totalPrice || 0), 0);
+        const totalRevenue = totalCobrado + totalPendiente;
 
         // ── KPIs ──
         const pendingOrders = orders.filter(o => o.orderStatus === 'Pendiente').length;
@@ -134,10 +135,13 @@ const DashboardTab = () => {
         const monthlySales = Array.from({ length: 6 }, (_, i) => {
           const d = new Date(now.getFullYear(), now.getMonth() - (5 - i), 1);
           const label = months[d.getMonth()];
-          const total = paid
+            const total = orders
             .filter(o => {
               const od = new Date(o.createdAt);
-              return od.getFullYear() === d.getFullYear() && od.getMonth() === d.getMonth();
+              // Para la gráfica de ventas, sumamos tanto pagados como pendientes (ingresos brutos)
+              return (o.estadoCobro === 'pagado' || o.estadoCobro === 'pendiente') && 
+                     od.getFullYear() === d.getFullYear() && 
+                     od.getMonth() === d.getMonth();
             })
             .reduce((a, o) => a + (o.totalPrice || 0), 0);
           return { label, total };
@@ -157,7 +161,7 @@ const DashboardTab = () => {
         ];
 
         setStats({
-          totalRevenue, totalOrders: orders.length, totalProducts: products.length,
+          totalRevenue, totalCobrado, totalPendiente, totalOrders: orders.length, totalProducts: products.length,
           pendingOrders, lowStockProducts, monthlySales, recentOrders, donutSegments,
         });
       } catch (err) {
@@ -202,12 +206,12 @@ const DashboardTab = () => {
         <p className="text-sm text-neutral-500 mt-1">Resumen general de ZAMIS Print</p>
       </div>
 
-      {/* ── KPI Cards ── */}
+      {/* ── KPI Cards Financieros ── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <KpiCard icon={DollarSign} label="Ingresos Totales" value={fmt(stats.totalRevenue)} color="bg-brand-500" />
-        <KpiCard icon={ShoppingBag} label="Total Pedidos" value={stats.totalOrders} color="bg-blue-500" />
-        <KpiCard icon={Clock} label="Pedidos Pendientes" value={stats.pendingOrders} color="bg-yellow-500" />
-        <KpiCard icon={AlertCircle} label="Productos Bajo Stock" value={stats.lowStockProducts} color="bg-red-500" />
+        <KpiCard icon={DollarSign} label="Ingresos Brutos" value={fmt(stats.totalRevenue)} color="bg-brand-500" />
+        <KpiCard icon={CheckCircle2} label="Total Pagado" value={fmt(stats.totalCobrado)} color="bg-blue-500" />
+        <KpiCard icon={Clock} label="Por Cobrar" value={fmt(stats.totalPendiente)} color="bg-yellow-500" />
+        <KpiCard icon={ShoppingBag} label="Pedidos Activos" value={stats.totalOrders} color="bg-purple-500" />
       </div>
 
       {/* ── Gráfico de Ventas + Donut ── */}
