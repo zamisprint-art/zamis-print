@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import ReCAPTCHA from 'react-google-recaptcha';
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { Button } from '../components/ui';
@@ -6,16 +7,24 @@ import SEOHead from '../components/SEOHead';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
-    name: '', email: '', subject: '', message: ''
+    name: '', email: '', phone: '', subject: '', message: ''
   });
   const [submitted, setSubmitted] = useState(false);
+  const [captchaValue, setCaptchaValue] = useState(null);
+  const recaptchaRef = useRef(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!captchaValue) {
+      alert("Por favor, completa el reCAPTCHA para verificar que eres humano.");
+      return;
+    }
     // Simulate API call
     setTimeout(() => {
       setSubmitted(true);
-      setFormData({ name: '', email: '', subject: '', message: '' });
+      setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+      if (recaptchaRef.current) recaptchaRef.current.reset();
+      setCaptchaValue(null);
     }, 1000);
   };
 
@@ -136,20 +145,29 @@ const Contact = () => {
                   </div>
                 </div>
 
-                <div>
-                  <label className="label-base">Asunto / Motivo</label>
-                  <select 
-                    required 
-                    value={formData.subject} onChange={e => setFormData({...formData, subject: e.target.value})}
-                    className="input-field bg-surface-base"
-                  >
-                    <option value="">Selecciona un motivo...</option>
-                    <option value="cotizacion">Cotizar un diseño personalizado</option>
-                    <option value="duda_pedido">Duda sobre un pedido existente</option>
-                    <option value="soporte">Soporte general</option>
-                    <option value="otro">Otro</option>
-                  </select>
-                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="label-base">Número de Teléfono / WhatsApp</label>
+                    <input 
+                      type="tel" required 
+                      value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})}
+                      className="input-field bg-surface-base" placeholder="+57 300 000 0000"
+                    />
+                  </div>
+                  <div>
+                    <label className="label-base">Asunto / Motivo</label>
+                    <select 
+                      required 
+                      value={formData.subject} onChange={e => setFormData({...formData, subject: e.target.value})}
+                      className="input-field bg-surface-base"
+                    >
+                      <option value="">Selecciona un motivo...</option>
+                      <option value="cotizacion">Cotizar un diseño personalizado</option>
+                      <option value="duda_pedido">Duda sobre un pedido existente</option>
+                      <option value="soporte">Soporte general</option>
+                      <option value="otro">Otro</option>
+                    </select>
+                  </div>
 
                 <div>
                   <label className="label-base">Mensaje</label>
@@ -171,6 +189,14 @@ const Contact = () => {
                   <label htmlFor="contact_terms" className="text-xs text-neutral-600 leading-tight">
                     Autorizo el tratamiento de mis datos personales según la <a href="/privacy" target="_blank" className="text-brand-600 font-bold hover:underline">Política de Privacidad</a> para ser contactado.
                   </label>
+                </div>
+
+                <div className="flex justify-center">
+                  <ReCAPTCHA
+                    ref={recaptchaRef}
+                    sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY || "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"} 
+                    onChange={(val) => setCaptchaValue(val)}
+                  />
                 </div>
 
                 <Button type="submit" variant="primary" size="lg" fullWidth icon={<Send size={18}/>}>
