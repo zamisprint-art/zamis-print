@@ -152,10 +152,10 @@ const Contact = () => {
                     <label className="label-base">Número de Teléfono / WhatsApp</label>
                     <input 
                       type="tel" required 
-                      value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})}
-                      className="input-field bg-surface-base" placeholder="+57 300 000 0000"
-                      maxLength={15} minLength={7} pattern="[0-9\s\-\+]+"
-                      title="Ingresa un número de teléfono válido (solo números, espacios, guiones o el signo +)"
+                      value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value.replace(/\D/g, '')})}
+                      className="input-field bg-surface-base" placeholder="Ej. 3101234567"
+                      maxLength={15} minLength={7} pattern="[0-9]+"
+                      title="Solo números permitidos"
                     />
                   </div>
                   <div>

@@ -118,7 +118,11 @@ const Checkout = () => {
   };
 
   const handleChange = (e) => {
-    setShippingAddress(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    let { name, value } = e.target;
+    if (name === 'documentNumber' || name === 'phone' || name === 'postalCode') {
+      value = value.replace(/\D/g, '');
+    }
+    setShippingAddress(prev => ({ ...prev, [name]: value }));
   };
 
   const selectClass = "w-full px-4 py-3 text-base rounded-xl border-2 border-neutral-200 bg-neutral-50 text-neutral-800 focus:outline-none focus:border-brand-500 focus:bg-white transition-all duration-200 cursor-pointer appearance-none";
@@ -347,8 +351,8 @@ const Checkout = () => {
                     <div className="relative">
                       <input type="tel" name="phone" required inputMode="tel"
                         value={shippingAddress.phone} onChange={handleChange}
-                        className={inputClass + " pl-10"} placeholder="+57 310 000 0000"
-                        maxLength={15} minLength={7} pattern="[0-9\s\-\+]+" title="Ingresa un número de teléfono válido"
+                        className={inputClass + " pl-10"} placeholder="Ej. 3101234567"
+                        maxLength={15} minLength={7} pattern="[0-9]+" title="Solo números permitidos"
                       />
                       <Phone size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
                     </div>
