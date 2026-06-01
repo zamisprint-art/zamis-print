@@ -128,6 +128,9 @@ const DashboardTab = () => {
         const shippedOrders = orders.filter(o => o.orderStatus === 'Enviado').length;
         const deliveredOrders = orders.filter(o => o.orderStatus === 'Entregado').length;
         const lowStockProducts = products.filter(p => p.countInStock <= 3).length;
+        
+        // Pedidos que realmente están en proceso (excluye Entregados, Cancelados, Fallidos)
+        const activeOrders = orders.filter(o => ['Pendiente', 'Pagado', 'En Producción', 'Enviado'].includes(o.orderStatus)).length;
 
         // ── Ventas por mes (últimos 6 meses) ──
         const months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
@@ -161,7 +164,7 @@ const DashboardTab = () => {
         ];
 
         setStats({
-          totalRevenue, totalCobrado, totalPendiente, totalOrders: orders.length, totalProducts: products.length,
+          totalRevenue, totalCobrado, totalPendiente, activeOrders, totalProducts: products.length,
           pendingOrders, lowStockProducts, monthlySales, recentOrders, donutSegments,
         });
       } catch (err) {
@@ -211,7 +214,7 @@ const DashboardTab = () => {
         <KpiCard icon={DollarSign} label="Ingresos Brutos" value={fmt(stats.totalRevenue)} color="bg-brand-500" />
         <KpiCard icon={CheckCircle2} label="Total Pagado" value={fmt(stats.totalCobrado)} color="bg-blue-500" />
         <KpiCard icon={Clock} label="Por Cobrar" value={fmt(stats.totalPendiente)} color="bg-yellow-500" />
-        <KpiCard icon={ShoppingBag} label="Pedidos Activos" value={stats.totalOrders} color="bg-purple-500" />
+        <KpiCard icon={ShoppingBag} label="Pedidos Activos (En curso)" value={stats.activeOrders} color="bg-purple-500" />
       </div>
 
       {/* ── Gráfico de Ventas + Donut ── */}
