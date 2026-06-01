@@ -1,4 +1,3 @@
-import axios from 'axios';
 import Contact from '../models/contactModel.js';
 import sendEmail from '../utils/sendEmail.js';
 import { contactAdminEmail, contactUserEmail } from '../utils/emailTemplates.js';
@@ -14,8 +13,9 @@ export const submitContactForm = async (req, res) => {
     if (recaptchaToken) {
       const secretKey = process.env.RECAPTCHA_SECRET_KEY;
       if (secretKey) {
-        const verifyUrl = \`https://www.google.com/recaptcha/api/siteverify?secret=\${secretKey}&response=\${recaptchaToken}\`;
-        const { data } = await axios.post(verifyUrl);
+        const verifyUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${recaptchaToken}`;
+        const response = await fetch(verifyUrl, { method: 'POST' });
+        const data = await response.json();
 
         if (!data.success) {
           return res.status(400).json({ message: 'Validación de reCAPTCHA fallida', detail: data['error-codes'] });
@@ -44,7 +44,7 @@ export const submitContactForm = async (req, res) => {
       try {
         await sendEmail({
           to: adminEmail,
-          subject: \`Nuevo Mensaje: \${subject}\`,
+          subject: `Nuevo Mensaje: ${subject}`,
           html: contactAdminEmail({ name, email, phone, subject, message }),
         });
       } catch (err) {
