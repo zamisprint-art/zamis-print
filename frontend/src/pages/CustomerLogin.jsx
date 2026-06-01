@@ -3,6 +3,8 @@ import { useNavigate, useLocation, Link } from 'react-router-dom';
 import axios from 'axios';
 import { useAuthStore } from '../store/useAuthStore';
 import { GoogleLogin } from '@react-oauth/google';
+import ReCAPTCHA from 'react-google-recaptcha';
+import { useRef } from 'react';
 
 const CustomerLogin = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -11,6 +13,8 @@ const CustomerLogin = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [captchaValue, setCaptchaValue] = useState(null);
+  const recaptchaRef = useRef(null);
 
   const navigate = useNavigate();
   const { search } = useLocation();
@@ -53,12 +57,23 @@ const CustomerLogin = () => {
         const { data } = await axios.post('/api/users/login', { email, password });
         setCredentials(data);
       } else {
-        const { data } = await axios.post('/api/users', { name, email, password });
+        if (!captchaValue) {
+          setError("Por favor, completa el reCAPTCHA para verificar que eres humano.");
+          setLoading(false);
+          return;
+        }
+        const { data } = await axios.post('/api/users', { name, email, password, recaptchaToken: captchaValue });
         setCredentials(data);
+        if (recaptchaRef.current) recaptchaRef.current.reset();
+        setCaptchaValue(null);
       }
       navigate(redirect);
     } catch (err) {
       setError(err.response?.data?.message || err.message);
+      if (!isLogin && recaptchaRef.current) {
+        recaptchaRef.current.reset();
+        setCaptchaValue(null);
+      }
     } finally {
       setLoading(false);
     }
@@ -149,17 +164,27 @@ const CustomerLogin = () => {
           </div>
 
           {!isLogin && (
-            <div className="flex items-start gap-2 mt-4">
-              <input
-                type="checkbox"
-                id="terms"
-                required
-                className="mt-1 w-4 h-4 text-brand-600 border-neutral-300 rounded focus:ring-brand-500"
-              />
-              <label htmlFor="terms" className="text-xs text-neutral-600 leading-tight">
-                Al registrarme acepto los <a href="/terms" target="_blank" className="text-brand-600 font-bold hover:underline">Términos y Condiciones</a> y la <a href="/privacy" target="_blank" className="text-brand-600 font-bold hover:underline">Política de Privacidad</a>, y autorizo el tratamiento de mis datos personales.
-              </label>
-            </div>
+            <>
+              <div className="flex items-start gap-2 mt-4">
+                <input
+                  type="checkbox"
+                  id="terms"
+                  required
+                  className="mt-1 w-4 h-4 text-brand-600 border-neutral-300 rounded focus:ring-brand-500"
+                />
+                <label htmlFor="terms" className="text-xs text-neutral-600 leading-tight">
+                  Al registrarme acepto los <a href="/terms" target="_blank" className="text-brand-600 font-bold hover:underline">Términos y Condiciones</a> y la <a href="/privacy" target="_blank" className="text-brand-600 font-bold hover:underline">Política de Privacidad</a>, y autorizo el tratamiento de mis datos personales.
+                </label>
+              </div>
+
+              <div className="flex justify-center mt-4">
+                <ReCAPTCHA
+                  ref={recaptchaRef}
+                  sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY || "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"} 
+                  onChange={(val) => setCaptchaValue(val)}
+                />
+              </div>
+            </>
           )}
 
           <button

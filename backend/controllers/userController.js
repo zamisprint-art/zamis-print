@@ -37,7 +37,26 @@ const authUser = async (req, res) => {
 // @access  Public
 const registerUser = async (req, res) => {
     try {
-        const { name, email, password } = req.body;
+        const { name, email, password, recaptchaToken } = req.body;
+        
+        // 1. Verify reCAPTCHA token if provided
+        if (recaptchaToken) {
+            const secretKey = process.env.RECAPTCHA_SECRET_KEY;
+            if (secretKey) {
+                const verifyUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${recaptchaToken}`;
+                const response = await fetch(verifyUrl, { method: 'POST' });
+                const data = await response.json();
+
+                if (!data.success) {
+                    return res.status(400).json({ message: 'Validación de reCAPTCHA fallida', detail: data['error-codes'] });
+                }
+            } else {
+                console.warn('RECAPTCHA_SECRET_KEY is not defined in env. Skipping backend verification.');
+            }
+        } else {
+            return res.status(400).json({ message: 'El token de reCAPTCHA es obligatorio.' });
+        }
+
         const userExists = await User.findOne({ email });
 
         if (userExists) {
