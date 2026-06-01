@@ -43,7 +43,9 @@ export const submitContactForm = async (req, res) => {
       // Send to admin
       try {
         await sendEmail({
+          from: `Web ZAMIS Print <notificaciones@zamisprint.com>`,
           to: adminEmail,
+          replyTo: email,
           subject: `Nuevo Mensaje: ${subject}`,
           html: contactAdminEmail({ name, email, phone, subject, message }),
         });

@@ -9,19 +9,20 @@ import { Resend } from 'resend';
  * @param {string} options.subject Asunto del correo
  * @param {string} options.html Cuerpo del correo en formato HTML
  */
-const sendEmail = async ({ to, subject, html }) => {
+const sendEmail = async ({ to, subject, html, replyTo, from }) => {
     try {
         const resend = new Resend(process.env.RESEND_API_KEY);
-        // Usa el correo oficial como remitente. Si falla por falta de verificación DNS, 
-        // fallback temporal a la cuenta de prueba de Resend.
-        const fromEmail = process.env.SMTP_USER || 'ZAMIS Print <onboarding@resend.dev>';
+        const sender = from || `ZAMIS Print <info@zamisprint.com>`;
 
-        const { data, error } = await resend.emails.send({
-            from: `ZAMIS Print <info@zamisprint.com>`, // Forzamos el uso del dominio personalizado
+        const payload = {
+            from: sender,
             to,
             subject,
             html,
-        });
+        };
+        if (replyTo) payload.reply_to = replyTo;
+
+        const { data, error } = await resend.emails.send(payload);
 
         if (error) {
             console.error(`⚠️ Resend API Error: ${error.message}`);
