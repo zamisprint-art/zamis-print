@@ -17,6 +17,7 @@ import ProductCard from '../components/ProductCard';
 import { fadeUp, fadeLeft, fadeRight } from '../design-system/tokens';
 import { optimizeImage } from '../utils/cloudinary';
 import { PRODUCT_COLORS } from '../utils/colors';
+import SEOHead from '../components/SEOHead';
 
 const Product3DViewer = lazy(() => import('../components/Product3DViewer'));
 
@@ -219,7 +220,11 @@ const ProductDetail = () => {
 
   return (
     <div className="container-xl py-12 mb-20 md:mb-0">
-
+      <SEOHead 
+        title={`${product.name} | ZAMIS Print`}
+        description={product.description.substring(0, 150) + '...'}
+        image={product.images?.[0]?.url}
+      />
       {/* Main Grid */}
       <div className="grid-detail mb-16">
 

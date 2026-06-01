@@ -5,6 +5,7 @@ import { useAuthStore } from '../store/useAuthStore';
 import { GoogleLogin } from '@react-oauth/google';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useRef } from 'react';
+import SEOHead from '../components/SEOHead';
 
 const CustomerLogin = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -81,6 +82,10 @@ const CustomerLogin = () => {
 
   return (
     <div className="flex items-center justify-center min-h-[calc(100vh-64px)] px-4 py-12">
+      <SEOHead 
+        title={isLogin ? "Iniciar Sesión | ZAMIS Print" : "Registrarse | ZAMIS Print"}
+        description="Ingresa a tu cuenta de ZAMIS Print para gestionar tus pedidos y cotizaciones de impresión 3D."
+      />
       <div className="glass-panel p-8 md:p-12 rounded-2xl w-full max-w-md">
         <h1 className="text-xl md:text-2xl font-bold mb-2 text-center">
           {isLogin ? 'Bienvenido a ZAMIS Print' : 'Crea tu Cuenta'}

@@ -6,6 +6,7 @@ import { Button } from '../components/ui';
 import { EmptyState } from '../components/ui/Alert';
 import CartItem from '../components/ecommerce/CartItem';
 import TrustBadges from '../components/ecommerce/TrustBadges';
+import SEOHead from '../components/SEOHead';
 import { fadeUp, staggerContainer, staggerItem } from '../design-system/tokens';
 
 const formatCOP = (value) =>
@@ -25,6 +26,10 @@ const Cart = () => {
 
   return (
     <div className="container-xl py-12 mb-20 md:mb-0">
+      <SEOHead 
+        title="Carrito de Compras | ZAMIS Print"
+        description="Revisa los productos en tu carrito de ZAMIS Print. Finaliza tu pedido para recibir tus impresiones 3D personalizadas."
+      />
 
       {/* Header */}
       <motion.div variants={fadeUp} initial="hidden" animate="visible" className="mb-10">

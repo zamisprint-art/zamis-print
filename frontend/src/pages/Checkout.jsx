@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '../components/ui';
 import { TrustBadges, PriceDisplay } from '../components/ecommerce';
 import { COLOMBIA, DOCUMENT_TYPES } from '../data/colombia';
+import SEOHead from '../components/SEOHead';
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -132,6 +133,10 @@ const Checkout = () => {
 
   return (
     <>
+      <SEOHead 
+        title="Finalizar Compra | ZAMIS Print"
+        description="Paga de forma segura en ZAMIS Print. Aceptamos tarjetas, Nequi y PSE. Envíos garantizados a toda Colombia."
+      />
       {/* SECURE PAYMENT OVERLAY */}
       <AnimatePresence>
         {isProcessing && (

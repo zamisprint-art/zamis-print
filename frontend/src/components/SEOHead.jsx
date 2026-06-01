@@ -9,7 +9,7 @@ import { useEffect } from 'react';
  *     description="Explora nuestra colección de impresión 3D personalizada."
  *   />
  */
-const SEOHead = ({ title, description }) => {
+const SEOHead = ({ title, description, image }) => {
   useEffect(() => {
     // Actualizar título
     if (title) document.title = title;
@@ -33,7 +33,17 @@ const SEOHead = ({ title, description }) => {
       let twTitle = document.querySelector('meta[name="twitter:title"]');
       if (twTitle && title) twTitle.setAttribute('content', title);
     }
-  }, [title, description]);
+    
+    // Actualizar Imagen
+    const imageUrl = image || 'https://zamisprint.vercel.app/og-image.png'; // Fallback
+    
+    let ogImage = document.querySelector('meta[property="og:image"]');
+    if (ogImage) ogImage.setAttribute('content', imageUrl);
+    
+    let twImage = document.querySelector('meta[name="twitter:image"]');
+    if (twImage) twImage.setAttribute('content', imageUrl);
+    
+  }, [title, description, image]);
 
   return null; // No renderiza nada visible
 };
