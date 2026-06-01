@@ -111,8 +111,11 @@ const DashboardTab = () => {
           axios.get('/api/products?limit=all'),
         ]);
 
-        const orders = ordersRes.data.orders || [];
+        const allOrders = ordersRes.data.orders || [];
         const products = productsRes.data.products || [];
+
+        // Excluir los "Intentos" (abandonos) para que los KPIs del Dashboard cuadren perfectamente con la lógica financiera real
+        const orders = allOrders.filter(o => o.orderStatus !== 'Intento' && o.estadoCobro !== 'intento');
 
         // ── Ingresos totales (sólo órdenes pagadas) ──
         const paid = orders.filter(o => o.isPaid || o.orderStatus === 'Pagado' || o.orderStatus === 'Entregado' || o.orderStatus === 'Enviado');
@@ -168,12 +171,13 @@ const DashboardTab = () => {
 
   const fmt = (n) => new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(n);
   const statusColors = {
+    'Intento': 'bg-neutral-100 text-neutral-500 border border-neutral-200',
     'Pendiente': 'bg-yellow-100 text-yellow-700',
     'Pagado': 'bg-blue-100 text-blue-700',
     'En Producción': 'bg-purple-100 text-purple-700',
     'Enviado': 'bg-green-100 text-green-700',
     'Entregado': 'bg-teal-100 text-teal-700',
-    'Cancelado': 'bg-red-100 text-red-700',
+    'Pago Fallido': 'bg-red-100 text-red-700',
   };
 
   if (loading) return (
@@ -249,7 +253,7 @@ const DashboardTab = () => {
             <tbody>
               {stats.recentOrders.map((order) => (
                 <tr key={order._id} className="border-b border-neutral-50 hover:bg-neutral-50 transition-colors">
-                  <td className="py-4 px-6 font-mono text-neutral-500 text-xs">#{order._id.substring(0, 8).toUpperCase()}</td>
+                  <td className="py-4 px-6 font-mono text-neutral-500 text-xs">#{String(order._id).slice(-8).toUpperCase()}</td>
                   <td className="py-4 px-6 font-semibold text-neutral-900">
                     {order.user?.name || order.shippingAddress?.fullName || 'Invitado'}
                   </td>
