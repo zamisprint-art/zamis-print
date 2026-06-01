@@ -156,7 +156,7 @@ const HeroSlider = () => {
               )}
               <Link
                 to={slide.ctaLink || '/shop'}
-                className="btn-primary text-sm px-5 py-2.5 inline-block text-center"
+                className="btn-conversion text-sm px-5 py-2.5 inline-block text-center"
               >
                 {slide.ctaText || 'Ver más'}
               </Link>

@@ -128,7 +128,7 @@ const Cart = () => {
 
               {/* CTA */}
               <Button
-                variant="primary"
+                variant="conversion"
                 size="lg"
                 fullWidth
                 icon={<ArrowRight className="w-5 h-5" />}

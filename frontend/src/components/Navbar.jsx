@@ -100,10 +100,10 @@ const Navbar = () => {
     <header className="fixed top-0 left-0 z-50 w-full flex flex-col shadow-sm">
 
       {/* ── Top Ribbon (Fija) ── */}
-      <div className="bg-brand-900 text-brand-50 text-xs overflow-hidden border-b border-brand-800">
+      <div className="bg-neutral-900 text-neutral-50 text-xs overflow-hidden border-b border-neutral-800">
         <div className="max-w-7xl mx-auto px-4 py-2 flex justify-between items-center h-10">
           {/* Contacto Izquierda */}
-          <div className="hidden sm:flex items-center gap-5 shrink-0 z-10 bg-brand-900 pr-4">
+          <div className="hidden sm:flex items-center gap-5 shrink-0 z-10 bg-neutral-900 pr-4">
             <a href="mailto:info@zamisprint.com" className="flex items-center gap-1.5 hover:text-white transition-colors">
               <Mail size={12} /> info@zamisprint.com
             </a>
@@ -116,26 +116,26 @@ const Navbar = () => {
           <div className="flex-1 overflow-hidden flex items-center group relative h-full [mask-image:linear-gradient(to_right,transparent,black_5%,black_95%,transparent)] sm:[mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
             <div className="flex whitespace-nowrap animate-marquee group-hover:[animation-play-state:paused]">
               <div className="flex items-center justify-around w-max">
-                <span className="font-semibold tracking-wide px-8 sm:px-16 text-brand-200">✨ ¡Bienvenido a ZAMIS Print! • Transformando la imaginación en realidad 3D • Calidad premium en cada detalle ✨</span>
-                <span className="font-semibold tracking-wide px-8 sm:px-16 text-brand-200">✨ ¡Bienvenido a ZAMIS Print! • Transformando la imaginación en realidad 3D • Calidad premium en cada detalle ✨</span>
+                <span className="font-semibold tracking-wide px-8 sm:px-16 text-neutral-300">✨ ¡Bienvenido a ZAMIS Print! • Transformando la imaginación en realidad 3D • Calidad premium en cada detalle ✨</span>
+                <span className="font-semibold tracking-wide px-8 sm:px-16 text-neutral-300">✨ ¡Bienvenido a ZAMIS Print! • Transformando la imaginación en realidad 3D • Calidad premium en cada detalle ✨</span>
               </div>
               <div className="flex items-center justify-around w-max">
-                <span className="font-semibold tracking-wide px-8 sm:px-16 text-brand-200">✨ ¡Bienvenido a ZAMIS Print! • Transformando la imaginación en realidad 3D • Calidad premium en cada detalle ✨</span>
-                <span className="font-semibold tracking-wide px-8 sm:px-16 text-brand-200">✨ ¡Bienvenido a ZAMIS Print! • Transformando la imaginación en realidad 3D • Calidad premium en cada detalle ✨</span>
+                <span className="font-semibold tracking-wide px-8 sm:px-16 text-neutral-300">✨ ¡Bienvenido a ZAMIS Print! • Transformando la imaginación en realidad 3D • Calidad premium en cada detalle ✨</span>
+                <span className="font-semibold tracking-wide px-8 sm:px-16 text-neutral-300">✨ ¡Bienvenido a ZAMIS Print! • Transformando la imaginación en realidad 3D • Calidad premium en cada detalle ✨</span>
               </div>
             </div>
           </div>
 
           {/* Redes Derecha */}
-          <div className="hidden sm:flex items-center gap-3 shrink-0 z-10 bg-brand-900 pl-4">
-            <span className="text-brand-300">Síguenos:</span>
-            <a href="https://www.instagram.com/zamis_print?igsh=MWZ0aTQ4ajYxeW1oZg==" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="text-brand-200 hover:text-white transition-colors group">
+          <div className="hidden sm:flex items-center gap-3 shrink-0 z-10 bg-neutral-900 pl-4">
+            <span className="text-neutral-400">Síguenos:</span>
+            <a href="https://www.instagram.com/zamis_print?igsh=MWZ0aTQ4ajYxeW1oZg==" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="text-neutral-300 hover:text-white transition-colors group">
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:scale-110 transition-transform"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
             </a>
-            <a href="https://www.facebook.com/share/1CVUHmRr9X/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="text-brand-200 hover:text-white transition-colors group">
+            <a href="https://www.facebook.com/share/1CVUHmRr9X/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="text-neutral-300 hover:text-white transition-colors group">
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:scale-110 transition-transform"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
             </a>
-            <a href="https://www.tiktok.com/@zamis.print.oficial?_r=1&_t=ZS-96XFtfCgk7E" target="_blank" rel="noopener noreferrer" aria-label="TikTok" className="text-brand-200 hover:text-white transition-colors group">
+            <a href="https://www.tiktok.com/@zamis.print.oficial?_r=1&_t=ZS-96XFtfCgk7E" target="_blank" rel="noopener noreferrer" aria-label="TikTok" className="text-neutral-300 hover:text-white transition-colors group">
               <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" className="group-hover:scale-110 transition-transform"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path><path d="M15 8v1a4 4 0 0 0 4 4"></path><line x1="15" x2="15" y1="3" y2="21"></line></svg>
             </a>
           </div>

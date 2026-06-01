@@ -119,7 +119,7 @@ const ProductCard = ({ product }) => {
           </div>
           <Link
             to={`/product/${product._id}`}
-            className={`w-8 h-8 flex items-center justify-center rounded-full bg-neutral-100 text-neutral-600 hover:bg-brand-500 hover:text-white transition-colors ${isOutOfStock ? 'opacity-40 pointer-events-none' : ''}`}
+            className={`w-8 h-8 flex items-center justify-center rounded-full bg-neutral-100 text-neutral-600 hover:bg-conversion-500 hover:text-white transition-colors ${isOutOfStock ? 'opacity-40 pointer-events-none' : ''}`}
             aria-label="Ver producto"
           >
             <ShoppingCart className="w-4 h-4" />
@@ -130,7 +130,7 @@ const ProductCard = ({ product }) => {
         <div className="absolute left-0 right-0 bottom-0 p-3 translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 ease-out bg-gradient-to-t from-white via-white to-transparent pt-8">
           <Link
             to={`/product/${product._id}`}
-            className={`w-full flex items-center justify-center py-2 rounded-xl bg-neutral-900 text-white font-bold hover:bg-brand-500 hover:shadow-lg transition-colors ${isOutOfStock ? 'opacity-40 pointer-events-none bg-neutral-300' : ''}`}
+            className={`w-full flex items-center justify-center py-2 rounded-xl bg-conversion-500 text-white font-bold hover:bg-conversion-600 hover:shadow-[0_4px_14px_rgba(249,115,22,0.3)] transition-colors ${isOutOfStock ? 'opacity-40 pointer-events-none bg-neutral-300 text-neutral-500 hover:shadow-none' : ''}`}
             aria-label="Ver producto"
           >
             <span className="text-sm">{isOutOfStock ? 'Agotado' : 'Agregar'}</span>

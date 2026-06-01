@@ -434,6 +434,7 @@ const Checkout = () => {
 
               {/* Desktop Submit */}
               <Button
+                variant="conversion"
                 form="checkout-form"
                 type="submit"
                 disabled={isProcessing}
@@ -462,6 +463,7 @@ const Checkout = () => {
         {/* Mobile Sticky CTA */}
         <div className="fixed bottom-0 left-0 right-0 p-4 bg-surface-base/90 backdrop-blur-md border-t border-neutral-200 md:hidden z-50 shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
           <Button
+            variant="conversion"
             form="checkout-form"
             type="submit"
             disabled={isProcessing}

@@ -40,6 +40,16 @@
   --color-accent-600: #2563eb;
   --color-accent-700: #1d4ed8;
 
+  /* --- CONVERSION COLORS (ORANGE - SUAVIZADO) --- */
+  --color-conversion-50:  #fcf7f5;
+  --color-conversion-100: #faeee9;
+  --color-conversion-200: #f5dfd3;
+  --color-conversion-300: #f0c3a8;
+  --color-conversion-400: #eb9c73;
+  --color-conversion-500: #e06836; /* Un naranja terracota más suave y premium */
+  --color-conversion-600: #c25325;
+  --color-conversion-700: #9c411c;
+
   /* --- SEMANTIC COLORS --- */
   --color-success:      #22c55e;
   --color-success-dark: #16a34a;
@@ -205,6 +215,16 @@
     transform: translateY(-1px);
   }
   .btn-primary:active { transform: translateY(0); }
+
+  .btn-conversion {
+    @apply bg-conversion-500 hover:bg-conversion-600 active:bg-conversion-700 text-white font-bold;
+    box-shadow: 0 4px 14px rgba(249, 115, 22, 0.3);
+  }
+  .btn-conversion:hover {
+    box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4);
+    transform: translateY(-1px);
+  }
+  .btn-conversion:active { transform: translateY(0); }
 
   .btn-secondary {
     @apply bg-surface-raised hover:bg-neutral-200 text-neutral-800 border border-neutral-200;

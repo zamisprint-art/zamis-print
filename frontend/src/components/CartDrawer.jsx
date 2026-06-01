@@ -188,7 +188,7 @@ const CartDrawer = () => {
                   </button>
                   <button 
                     onClick={() => { toggleDrawer(false); navigate('/checkout'); }}
-                    className="w-full py-3 px-4 rounded-xl font-bold text-white bg-brand-600 hover:bg-brand-700 transition-colors shadow-lg shadow-brand-500/30 text-sm flex items-center justify-center gap-2"
+                    className="btn-conversion w-full py-3 px-4 rounded-xl text-sm flex items-center justify-center gap-2"
                   >
                     Pagar Ahora <ArrowRight size={16} />
                   </button>

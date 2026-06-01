@@ -34,6 +34,7 @@ const Button = ({
   const variantClass = {
     primary:   'btn-primary',
     secondary: 'btn-secondary',
+    conversion: 'btn-conversion',
     outline:   'btn-outline',
     ghost:     'btn-ghost',
     danger:    'btn-danger',

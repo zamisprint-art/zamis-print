@@ -616,7 +616,7 @@ const ProductDetail = () => {
 
           {/* Desktop CTA */}
           <Button
-            variant="primary"
+            variant="conversion"
             size="xl"
             fullWidth
             disabled={isOutOfStock}
@@ -856,7 +856,7 @@ const ProductDetail = () => {
       {/* Mobile Sticky CTA */}
       <div className="fixed bottom-0 left-0 right-0 p-4 bg-surface-base/90 backdrop-blur-md border-t border-neutral-200 md:hidden z-50">
         <Button
-          variant="primary"
+          variant="conversion"
           size="lg"
           fullWidth
           disabled={isOutOfStock}
