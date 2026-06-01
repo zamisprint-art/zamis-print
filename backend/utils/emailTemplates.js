@@ -292,3 +292,83 @@ export const orderShippedEmail = (order) => `
   </table>
 </body>
 </html>`;
+
+/**
+ * Email de notificación para el administrador cuando llega un nuevo mensaje de contacto.
+ */
+export const contactAdminEmail = (contactData) => `
+<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><title>Nuevo Mensaje de Contacto</title></head>
+<body style="margin:0;padding:0;font-family:'Segoe UI',Arial,sans-serif;background:#f4f4f8;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f8;padding:32px 0;">
+    <tr><td align="center">
+      <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+        <tr>
+          <td style="background:#1a1a2e;padding:28px 40px;text-align:center;">
+            <h2 style="margin:0;color:#a78bfa;font-size:22px;">📩 Nuevo Mensaje de Contacto</h2>
+            <p style="margin:6px 0 0;color:#6b7280;font-size:13px;">Asunto: ${contactData.subject}</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:32px 40px;">
+            <h3 style="margin:0 0 12px;font-size:15px;color:#374151;">👤 Detalles del prospecto</h3>
+            <p style="margin:0 0 20px;font-size:14px;color:#4b5563;line-height:1.8;padding:12px;background:#f9f9f9;border-radius:8px;">
+              <strong>Nombre:</strong> ${contactData.name}<br/>
+              <strong>Email:</strong> <a href="mailto:${contactData.email}" style="color:#7c3aed;">${contactData.email}</a><br/>
+              <strong>Teléfono:</strong> ${contactData.phone || 'No proporcionado'}
+            </p>
+            <h3 style="margin:0 0 12px;font-size:15px;color:#374151;">💬 Mensaje</h3>
+            <div style="background:#f9f9f9;border-radius:8px;padding:16px;margin-bottom:20px;">
+              <p style="margin:0;font-size:14px;color:#374151;white-space:pre-wrap;">${contactData.message}</p>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`;
+
+/**
+ * Email de auto-respuesta para el cliente.
+ */
+export const contactUserEmail = (contactData) => `
+<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><title>Mensaje Recibido</title></head>
+<body style="margin:0;padding:0;font-family:'Segoe UI',Arial,sans-serif;background:#f4f4f8;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f8;padding:32px 0;">
+    <tr><td align="center">
+      <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+        <tr>
+          <td style="background:linear-gradient(135deg,#7c3aed,#4f46e5);padding:40px;text-align:center;">
+            <h1 style="margin:0;color:#ffffff;font-size:28px;">ZAMIS Print</h1>
+            <p style="margin:8px 0 0;color:#c4b5fd;font-size:16px;">¡Hemos recibido tu mensaje!</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:32px 40px;">
+            <p style="font-size:16px;margin:0 0 16px;">Hola <strong>${contactData.name}</strong>,</p>
+            <p style="font-size:15px;color:#4b5563;line-height:1.7;margin:0 0 24px;">
+              Gracias por escribirnos. Queremos confirmarte que tu mensaje sobre <strong>"${contactData.subject}"</strong> ha llegado correctamente a nuestra bandeja de entrada.
+            </p>
+            <p style="font-size:15px;color:#4b5563;line-height:1.7;margin:0 0 24px;">
+              Nuestro equipo revisará tu consulta y te contactaremos lo más pronto posible para ayudarte.
+            </p>
+            <p style="font-size:14px;color:#6b7280;margin:0;">
+              Si tienes prisa, también puedes escribirnos directamente por 
+              <a href="https://wa.me/573107878192" style="color:#7c3aed;">WhatsApp al +57 310 787 8192</a>.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td style="background:#f4f4f8;padding:20px 40px;text-align:center;border-top:1px solid #e5e7eb;">
+            <p style="margin:0;font-size:12px;color:#9ca3af;">© 2026 ZAMIS Print · Colombia</p>
+          </td>
+        </tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`;

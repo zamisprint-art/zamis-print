@@ -5,28 +5,38 @@ import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { Button } from '../components/ui';
 import SEOHead from '../components/SEOHead';
 import toast from 'react-hot-toast';
+import axios from 'axios';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: '', email: '', phone: '', subject: '', message: ''
   });
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [captchaValue, setCaptchaValue] = useState(null);
   const recaptchaRef = useRef(null);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!captchaValue) {
       toast.error("Por favor, completa el reCAPTCHA para verificar que eres humano.");
       return;
     }
-    // Simulate API call
-    setTimeout(() => {
+    
+    setLoading(true);
+    try {
+      await axios.post('/api/contacts', { ...formData, recaptchaToken: captchaValue });
+      
       setSubmitted(true);
       setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
       if (recaptchaRef.current) recaptchaRef.current.reset();
       setCaptchaValue(null);
-    }, 1000);
+    } catch (error) {
+      const msg = error.response?.data?.message || 'Error al enviar el mensaje. Intenta de nuevo más tarde.';
+      toast.error(msg);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -206,8 +216,8 @@ const Contact = () => {
                   />
                 </div>
 
-                <Button type="submit" variant="primary" size="lg" fullWidth icon={<Send size={18}/>}>
-                  Enviar Mensaje
+                <Button type="submit" variant="primary" size="lg" fullWidth disabled={loading} icon={!loading && <Send size={18}/>}>
+                  {loading ? 'Enviando Mensaje...' : 'Enviar Mensaje'}
                 </Button>
               </form>
             )}
