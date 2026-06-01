@@ -168,6 +168,7 @@ const Contact = () => {
                       <option value="otro">Otro</option>
                     </select>
                   </div>
+                </div>
 
                 <div>
                   <label className="label-base">Mensaje</label>
