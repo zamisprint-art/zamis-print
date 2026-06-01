@@ -241,6 +241,7 @@ const Checkout = () => {
                     <input type="text" name="fullName" required
                       value={shippingAddress.fullName} onChange={handleChange}
                       className={inputClass} placeholder="Ej. Juan Pérez"
+                      maxLength={50} minLength={3}
                     />
                   </div>
                   <div>
@@ -249,6 +250,7 @@ const Checkout = () => {
                       <input type="email" name="email" required
                         value={shippingAddress.email} onChange={handleChange}
                         className={inputClass + " pl-10"} placeholder="tu@correo.com"
+                        maxLength={100}
                       />
                       <Mail size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
                     </div>
@@ -279,6 +281,7 @@ const Checkout = () => {
                     <input type="text" name="documentNumber" required inputMode="numeric"
                       value={shippingAddress.documentNumber} onChange={handleChange}
                       className={inputClass} placeholder="Ej. 1020304050"
+                      maxLength={20} minLength={5} pattern="[0-9]+" title="Solo números"
                     />
                   </div>
                 </div>
@@ -292,6 +295,7 @@ const Checkout = () => {
                   <input type="text" name="address" required
                     value={shippingAddress.address} onChange={handleChange}
                     className={inputClass} placeholder="Calle 123 # 45-67, Apto 8"
+                    maxLength={100} minLength={5}
                   />
                 </div>
 
@@ -335,6 +339,7 @@ const Checkout = () => {
                     <input type="text" name="postalCode" required inputMode="numeric"
                       value={shippingAddress.postalCode} onChange={handleChange}
                       className={inputClass} placeholder="Ej. 110111"
+                      maxLength={10} minLength={4} pattern="[0-9]+" title="Solo números"
                     />
                   </div>
                   <div>
@@ -343,6 +348,7 @@ const Checkout = () => {
                       <input type="tel" name="phone" required inputMode="tel"
                         value={shippingAddress.phone} onChange={handleChange}
                         className={inputClass + " pl-10"} placeholder="+57 310 000 0000"
+                        maxLength={15} minLength={7} pattern="[0-9\s\-\+]+" title="Ingresa un número de teléfono válido"
                       />
                       <Phone size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
                     </div>
@@ -362,6 +368,7 @@ const Checkout = () => {
                   <textarea name="instructions" rows="2"
                     value={shippingAddress.instructions} onChange={handleChange}
                     className="input-field py-3 text-base resize-none w-full" placeholder="Ej. Dejar en portería, casa con rejas negras, etc."
+                    maxLength={500}
                   />
                 </div>
 

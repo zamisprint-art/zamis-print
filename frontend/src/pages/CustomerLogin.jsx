@@ -107,6 +107,8 @@ const CustomerLogin = () => {
                 className="input-field"
                 placeholder="Juan Pérez"
                 required={!isLogin}
+                maxLength={50}
+                minLength={3}
               />
             </div>
           )}
@@ -120,6 +122,7 @@ const CustomerLogin = () => {
               className="input-field"
               placeholder="tu@correo.com"
               required
+              maxLength={100}
             />
           </div>
 
@@ -132,6 +135,8 @@ const CustomerLogin = () => {
               className="input-field"
               placeholder="••••••••"
               required
+              maxLength={128}
+              minLength={6}
             />
             {isLogin && (
               <Link

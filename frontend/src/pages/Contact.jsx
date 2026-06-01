@@ -133,6 +133,7 @@ const Contact = () => {
                       type="text" required 
                       value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})}
                       className="input-field bg-surface-base" placeholder="Ej. Juan Pérez"
+                      maxLength={50} minLength={3}
                     />
                   </div>
                   <div>
@@ -141,6 +142,7 @@ const Contact = () => {
                       type="email" required 
                       value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})}
                       className="input-field bg-surface-base" placeholder="ejemplo@correo.com"
+                      maxLength={100}
                     />
                   </div>
                 </div>
@@ -152,6 +154,8 @@ const Contact = () => {
                       type="tel" required 
                       value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})}
                       className="input-field bg-surface-base" placeholder="+57 300 000 0000"
+                      maxLength={15} minLength={7} pattern="[0-9\s\-\+]+"
+                      title="Ingresa un número de teléfono válido (solo números, espacios, guiones o el signo +)"
                     />
                   </div>
                   <div>
@@ -177,6 +181,7 @@ const Contact = () => {
                     value={formData.message} onChange={e => setFormData({...formData, message: e.target.value})}
                     className="input-field bg-surface-base resize-none" 
                     placeholder="Cuéntanos todos los detalles aquí..."
+                    maxLength={1000}
                   ></textarea>
                 </div>
 
