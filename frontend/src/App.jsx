@@ -25,7 +25,6 @@ const MyAccount = lazy(() => import('./pages/MyAccount'));
 const Maintenance = lazy(() => import('./pages/Maintenance'));
 const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
 const ResetPassword = lazy(() => import('./pages/ResetPassword'));
-import { Toaster } from 'react-hot-toast';
 
 // Private Route Wrapper for Admin
 const AdminRoute = ({ children }) => {
