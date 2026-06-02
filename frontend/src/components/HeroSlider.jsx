@@ -36,9 +36,9 @@ const FALLBACK_SLIDES = [
 ];
 
 const HeroSlider = () => {
-  // Iniciar vacío — evita el flash de slides anteriores mientras carga la API
-  const [slides, setSlides] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // Iniciar con fallback — asegura que el LCP cargue instantáneamente
+  const [slides, setSlides] = useState(FALLBACK_SLIDES);
+  const [loading, setLoading] = useState(false);
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(1);
 
@@ -129,6 +129,7 @@ const HeroSlider = () => {
             <img
               src={optimizeImage(slide.image, 1600)}
               alt={slide.title}
+              fetchPriority="high"
               className="w-full h-full object-cover object-top"
             />
           </div>
