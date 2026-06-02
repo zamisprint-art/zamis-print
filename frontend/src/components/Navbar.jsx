@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ShoppingCart, Menu, X, User, Phone, Mail, Search } from 'lucide-react';
+import { ShoppingCart, Menu, X, User, Phone, Mail, Search, ChevronLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 import { useCartStore } from '../store/useCartStore';
@@ -354,25 +354,44 @@ const Navbar = () => {
       <AnimatePresence>
         {mobileSearchOpen && (
           <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            className="md:hidden bg-white border-b border-neutral-100 overflow-hidden"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-[100] bg-white flex flex-col md:hidden"
           >
-            <div className="p-4 pt-0">
-              <form onSubmit={(e) => { handleSearch(e); setMobileSearchOpen(false); }} className="relative">
+            <div className="p-4 flex items-center gap-3 border-b border-neutral-100 pt-safe">
+              <button onClick={() => setMobileSearchOpen(false)} className="p-2 text-neutral-500 hover:text-neutral-900 rounded-full hover:bg-neutral-100 transition-colors">
+                <ChevronLeft size={24} />
+              </button>
+              <form onSubmit={(e) => { handleSearch(e); setMobileSearchOpen(false); }} className="flex-1 relative">
                 <input
                   type="search"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Buscar figuras, impresiones..."
-                  className="w-full h-12 pl-4 pr-14 rounded-xl border-2 border-neutral-200 bg-neutral-50 text-sm focus:outline-none focus:border-brand-500 focus:bg-white transition-all"
+                  className="w-full h-12 pl-4 pr-12 rounded-xl bg-neutral-100 text-base focus:outline-none focus:bg-neutral-50 transition-all"
                   autoFocus
                 />
-                <button type="submit" className="absolute right-0 top-0 h-12 w-14 flex items-center justify-center bg-brand-500 hover:bg-brand-600 text-white rounded-r-xl transition-colors">
+                <button type="submit" className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400">
                   <Search size={20} />
                 </button>
               </form>
+            </div>
+            
+            <div className="flex-1 p-5 bg-surface-base overflow-y-auto">
+              <p className="text-xs font-bold text-neutral-400 uppercase tracking-wider mb-4">Búsquedas sugeridas</p>
+              <div className="flex flex-wrap gap-2">
+                {['Funkos', 'Llaveros', 'Decoración', 'Macetas', 'Soporte', 'Figuras'].map(tag => (
+                  <button 
+                    key={tag} 
+                    onClick={() => { navigate(`/shop?q=${encodeURIComponent(tag)}`); setSearchQuery(''); setMobileSearchOpen(false); }} 
+                    className="px-4 py-2 bg-white border border-neutral-200 shadow-sm rounded-full text-sm font-medium text-neutral-700 hover:border-brand-500 hover:text-brand-600 transition-colors"
+                  >
+                    {tag}
+                  </button>
+                ))}
+              </div>
             </div>
           </motion.div>
         )}

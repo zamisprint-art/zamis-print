@@ -859,7 +859,7 @@ const ProductDetail = () => {
       )}
 
       {/* Mobile Sticky CTA */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-surface-base/90 backdrop-blur-md border-t border-neutral-200 md:hidden z-50">
+      <div className="fixed bottom-16 left-0 right-0 p-3 bg-surface-base/95 backdrop-blur-md border-t border-neutral-200 md:hidden z-[45]">
         <Button
           variant="conversion"
           size="lg"
