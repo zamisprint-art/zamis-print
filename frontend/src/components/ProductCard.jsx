@@ -83,12 +83,12 @@ const ProductCard = ({ product }) => {
       {/* Body */}
       <div className="p-4 flex flex-col flex-grow relative overflow-hidden bg-white transition-all duration-300 group-hover:pb-16">
         {/* Category + subcategory */}
-        <span className="text-[10px] text-neutral-400 font-semibold uppercase tracking-wider mb-1.5 line-clamp-1">
+        <span className="text-[10px] text-neutral-500 font-semibold uppercase tracking-wider mb-1.5 line-clamp-1">
           {product.category}{product.subcategory ? ` › ${product.subcategory}` : ''}
         </span>
 
         {/* Name */}
-        <Link to={`/product/${product._id}`}>
+        <Link to={`/product/${product._id}`} aria-label={`Ver detalles de ${product.name}`}>
           <h3 className="font-semibold text-sm sm:text-base text-neutral-900 leading-snug line-clamp-2 hover:text-brand-500 transition-colors mb-2 min-h-[40px] sm:min-h-[44px]">
             {product.name}
           </h3>
@@ -98,7 +98,7 @@ const ProductCard = ({ product }) => {
         <div className="mt-1 mb-2">
           {product.isOnSale && product.salePrice ? (
             <div className="flex flex-col">
-              <span className="text-[11px] text-neutral-400 line-through leading-none mb-1">
+              <span className="text-[11px] text-neutral-500 line-through leading-none mb-1">
                 {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(product.price)}
               </span>
               <span className="font-bold text-red-500 text-base sm:text-lg leading-none">
@@ -120,7 +120,7 @@ const ProductCard = ({ product }) => {
           <Link
             to={`/product/${product._id}`}
             className={`w-8 h-8 flex items-center justify-center rounded-full bg-neutral-100 text-neutral-600 hover:bg-conversion-500 hover:text-white transition-colors ${isOutOfStock ? 'opacity-40 pointer-events-none' : ''}`}
-            aria-label="Ver producto"
+            aria-label={`Ver o comprar ${product.name}`}
           >
             <ShoppingCart className="w-4 h-4" />
           </Link>
@@ -131,7 +131,7 @@ const ProductCard = ({ product }) => {
           <Link
             to={`/product/${product._id}`}
             className={`w-full flex items-center justify-center py-2 rounded-xl bg-conversion-500 text-white font-bold hover:bg-conversion-600 hover:shadow-[0_4px_14px_rgba(249,115,22,0.3)] transition-colors ${isOutOfStock ? 'opacity-40 pointer-events-none bg-neutral-300 text-neutral-500 hover:shadow-none' : ''}`}
-            aria-label="Ver producto"
+            aria-label={isOutOfStock ? `Producto agotado` : `Agregar ${product.name} al carrito`}
           >
             <span className="text-sm">{isOutOfStock ? 'Agotado' : 'Agregar'}</span>
           </Link>

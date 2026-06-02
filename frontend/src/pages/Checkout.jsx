@@ -246,17 +246,17 @@ const Checkout = () => {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-1.5">Nombre completo</label>
-                    <input type="text" name="fullName" required
+                    <label htmlFor="chk_fullName" className="block text-sm font-medium text-neutral-700 mb-1.5">Nombre completo</label>
+                    <input id="chk_fullName" type="text" name="fullName" required
                       value={shippingAddress.fullName} onChange={handleChange}
                       className={inputClass} placeholder="Ej. Juan Pérez"
                       maxLength={50} minLength={3}
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-1.5">Correo electrónico</label>
+                    <label htmlFor="chk_email" className="block text-sm font-medium text-neutral-700 mb-1.5">Correo electrónico</label>
                     <div className="relative">
-                      <input type="email" name="email" required
+                      <input id="chk_email" type="email" name="email" required
                         value={shippingAddress.email} onChange={handleChange}
                         className={inputClass + " pl-10"} placeholder="tu@correo.com"
                         maxLength={100}
@@ -272,9 +272,9 @@ const Checkout = () => {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-1.5">Tipo de documento</label>
+                    <label htmlFor="chk_docType" className="block text-sm font-medium text-neutral-700 mb-1.5">Tipo de documento</label>
                     <div className="relative">
-                      <select name="documentType" required
+                      <select id="chk_docType" name="documentType" required
                         value={shippingAddress.documentType} onChange={handleChange}
                         className={selectClass + " pr-10"}
                       >
@@ -286,8 +286,8 @@ const Checkout = () => {
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-1.5">Número de documento</label>
-                    <input type="text" name="documentNumber" required inputMode="numeric"
+                    <label htmlFor="chk_docNum" className="block text-sm font-medium text-neutral-700 mb-1.5">Número de documento</label>
+                    <input id="chk_docNum" type="text" name="documentNumber" required inputMode="numeric"
                       value={shippingAddress.documentNumber} onChange={handleChange}
                       className={inputClass} placeholder="Ej. 1020304050"
                       maxLength={20} minLength={5} pattern="[0-9]+" title="Solo números"
@@ -300,8 +300,8 @@ const Checkout = () => {
                   <MapPin size={13} /> Dirección de Envío
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-1.5">Dirección completa</label>
-                  <input type="text" name="address" required
+                  <label htmlFor="chk_address" className="block text-sm font-medium text-neutral-700 mb-1.5">Dirección completa</label>
+                  <input id="chk_address" type="text" name="address" required
                     value={shippingAddress.address} onChange={handleChange}
                     className={inputClass} placeholder="Calle 123 # 45-67, Apto 8"
                     maxLength={100} minLength={5}
@@ -310,9 +310,9 @@ const Checkout = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-1.5">Departamento</label>
+                    <label htmlFor="chk_department" className="block text-sm font-medium text-neutral-700 mb-1.5">Departamento</label>
                     <div className="relative">
-                      <select name="department" required
+                      <select id="chk_department" name="department" required
                         value={shippingAddress.department} onChange={handleDepartmentChange}
                         className={selectClass + " pr-10"}
                       >
@@ -325,9 +325,9 @@ const Checkout = () => {
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-1.5">Ciudad / Municipio</label>
+                    <label htmlFor="chk_city" className="block text-sm font-medium text-neutral-700 mb-1.5">Ciudad / Municipio</label>
                     <div className="relative">
-                      <select name="city" required
+                      <select id="chk_city" name="city" required
                         value={shippingAddress.city} onChange={handleChange}
                         disabled={!shippingAddress.department}
                         className={selectClass + " pr-10 disabled:opacity-50 disabled:cursor-not-allowed"}
@@ -344,20 +344,20 @@ const Checkout = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-1.5">Código Postal</label>
-                    <input type="text" name="postalCode" required inputMode="numeric"
+                    <label htmlFor="chk_postal" className="block text-sm font-medium text-neutral-700 mb-1.5">Código Postal</label>
+                    <input id="chk_postal" type="text" name="postalCode" required inputMode="numeric"
                       value={shippingAddress.postalCode} onChange={handleChange}
                       className={inputClass} placeholder="Ej. 110111"
-                      maxLength={10} minLength={4} pattern="[0-9]+" title="Solo números"
+                      maxLength={10} pattern="[0-9]+" title="Solo números"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-1.5">Teléfono (WhatsApp)</label>
+                    <label htmlFor="chk_phone" className="block text-sm font-medium text-neutral-700 mb-1.5">Celular de contacto</label>
                     <div className="relative">
-                      <input type="tel" name="phone" required inputMode="tel"
+                      <input id="chk_phone" type="tel" name="phone" required inputMode="numeric"
                         value={shippingAddress.phone} onChange={handleChange}
                         className={inputClass + " pl-10"} placeholder="Ej. 3101234567"
-                        maxLength={15} minLength={7} pattern="[0-9]+" title="Solo números permitidos"
+                        maxLength={15} minLength={10} pattern="[0-9]+" title="Solo números"
                       />
                       <Phone size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
                     </div>
@@ -373,12 +373,12 @@ const Checkout = () => {
                   <FileText size={13} /> Instrucciones de Entrega
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-1.5">Notas adicionales (Opcional)</label>
-                  <textarea name="instructions" rows="2"
+                  <label htmlFor="chk_instructions" className="block text-sm font-medium text-neutral-700 mb-1.5">Instrucciones de entrega <span className="text-neutral-400 font-normal">(Opcional)</span></label>
+                  <textarea id="chk_instructions" name="instructions" rows="2"
                     value={shippingAddress.instructions} onChange={handleChange}
-                    className="input-field py-3 text-base resize-none w-full" placeholder="Ej. Dejar en portería, casa con rejas negras, etc."
-                    maxLength={500}
-                  />
+                    className="input-field py-3 text-base resize-none w-full" placeholder="Dejar en portería, casa esquina, etc."
+                    maxLength={200}
+                  ></textarea>
                 </div>
 
                 {/* ── Sección 5: Legales ── */}

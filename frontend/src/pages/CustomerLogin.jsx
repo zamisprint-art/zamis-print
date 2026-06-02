@@ -119,8 +119,9 @@ const CustomerLogin = () => {
         <form onSubmit={submitHandler} className="space-y-6">
           {!isLogin && (
             <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-2">Nombre Completo</label>
+              <label htmlFor="name" className="block text-sm font-medium text-neutral-700 mb-2">Nombre Completo</label>
               <input
+                id="name"
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -134,8 +135,9 @@ const CustomerLogin = () => {
           )}
 
           <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-2">Correo Electrónico</label>
+            <label htmlFor="email" className="block text-sm font-medium text-neutral-700 mb-2">Correo Electrónico</label>
             <input
+              id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -147,8 +149,9 @@ const CustomerLogin = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-neutral-700 mb-2">Contraseña</label>
+            <label htmlFor="password" className="block text-sm font-medium text-neutral-700 mb-2">Contraseña</label>
             <input
+              id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

@@ -249,6 +249,7 @@ const Navbar = () => {
                               }}
                               className="p-1.5 rounded-lg bg-neutral-100 text-neutral-600 hover:bg-brand-500 hover:text-white transition-colors shrink-0"
                               title={product.isCustomizable ? 'Ver detalles' : 'Añadir al carrito'}
+                              aria-label={product.isCustomizable ? 'Ver detalles' : 'Añadir al carrito'}
                             >
                               <ShoppingCart size={14} />
                             </button>

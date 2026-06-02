@@ -139,8 +139,9 @@ const Contact = () => {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="label-base">Nombre Completo</label>
+                    <label htmlFor="contact_name" className="label-base">Nombre Completo</label>
                     <input 
+                      id="contact_name"
                       type="text" required 
                       value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})}
                       className="input-field bg-surface-base" placeholder="Ej. Juan Pérez"
@@ -148,8 +149,9 @@ const Contact = () => {
                     />
                   </div>
                   <div>
-                    <label className="label-base">Correo Electrónico</label>
+                    <label htmlFor="contact_email" className="label-base">Correo Electrónico</label>
                     <input 
+                      id="contact_email"
                       type="email" required 
                       value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})}
                       className="input-field bg-surface-base" placeholder="ejemplo@correo.com"
@@ -160,8 +162,9 @@ const Contact = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="label-base">Número de Teléfono / WhatsApp</label>
+                    <label htmlFor="contact_phone" className="label-base">Número de Teléfono / WhatsApp</label>
                     <input 
+                      id="contact_phone"
                       type="tel" required 
                       value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value.replace(/\D/g, '')})}
                       className="input-field bg-surface-base" placeholder="Ej. 3101234567"
@@ -170,8 +173,9 @@ const Contact = () => {
                     />
                   </div>
                   <div>
-                    <label className="label-base">Asunto / Motivo</label>
+                    <label htmlFor="contact_subject" className="label-base">Asunto / Motivo</label>
                     <select 
+                      id="contact_subject"
                       required 
                       value={formData.subject} onChange={e => setFormData({...formData, subject: e.target.value})}
                       className="input-field bg-surface-base"
@@ -186,8 +190,9 @@ const Contact = () => {
                 </div>
 
                 <div>
-                  <label className="label-base">Mensaje</label>
+                  <label htmlFor="contact_message" className="label-base">Mensaje</label>
                   <textarea 
+                    id="contact_message"
                     required rows="5"
                     value={formData.message} onChange={e => setFormData({...formData, message: e.target.value})}
                     className="input-field bg-surface-base resize-none" 
