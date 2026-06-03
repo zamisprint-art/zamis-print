@@ -361,7 +361,7 @@ const Navbar = () => {
             className="fixed inset-0 z-[100] bg-white flex flex-col md:hidden"
           >
             <div className="p-4 flex items-center gap-3 border-b border-neutral-100 pt-safe">
-              <button onClick={() => setMobileSearchOpen(false)} className="p-2 text-neutral-500 hover:text-neutral-900 rounded-full hover:bg-neutral-100 transition-colors">
+              <button aria-label="Cerrar búsqueda" onClick={() => setMobileSearchOpen(false)} className="p-2 text-neutral-500 hover:text-neutral-900 rounded-full hover:bg-neutral-100 transition-colors">
                 <ChevronLeft size={24} />
               </button>
               <form onSubmit={(e) => { handleSearch(e); setMobileSearchOpen(false); }} className="flex-1 relative">
@@ -373,7 +373,7 @@ const Navbar = () => {
                   className="w-full h-12 pl-4 pr-12 rounded-xl bg-neutral-100 text-base focus:outline-none focus:bg-neutral-50 transition-all"
                   autoFocus
                 />
-                <button type="submit" className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400">
+                <button aria-label="Buscar" type="submit" className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400">
                   <Search size={20} />
                 </button>
               </form>
@@ -421,7 +421,7 @@ const Navbar = () => {
                 <Link to="/" onClick={() => setIsOpen(false)} className="flex items-center bg-white rounded-2xl p-1 shadow-sm shrink-0">
                   <img src="/images/logo-transparent.png" alt="ZAMIS Print" className="h-16 w-auto object-contain rounded-xl" />
                 </Link>
-                <button onClick={() => setIsOpen(false)} className="p-2 rounded-full hover:bg-neutral-100 text-neutral-500 transition-colors">
+                <button aria-label="Cerrar menú" onClick={() => setIsOpen(false)} className="p-2 rounded-full hover:bg-neutral-100 text-neutral-500 transition-colors">
                   <X size={20} />
                 </button>
               </div>
@@ -435,7 +435,7 @@ const Navbar = () => {
                     placeholder="Buscar productos..."
                     className="w-full h-10 pl-4 pr-12 rounded-xl border-2 border-neutral-200 bg-neutral-50 text-sm focus:outline-none focus:border-brand-500"
                   />
-                  <button type="submit" className="absolute right-0 top-0 h-10 w-11 flex items-center justify-center bg-brand-500 text-white rounded-r-xl">
+                  <button aria-label="Buscar productos" type="submit" className="absolute right-0 top-0 h-10 w-11 flex items-center justify-center bg-brand-500 text-white rounded-r-xl">
                     <Search size={16} />
                   </button>
                 </form>
