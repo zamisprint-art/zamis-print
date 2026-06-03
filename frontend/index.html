@@ -71,6 +71,7 @@
         justify-content: center;
         background-color: #f1f5f9;
         z-index: 9999;
+        font-family: 'Outfit', sans-serif;
       }
       .loader-spinner {
         width: 48px;
@@ -79,9 +80,22 @@
         border-top-color: #8b5cf6;
         border-radius: 50%;
         animation: spin 1s linear infinite;
+        margin-bottom: 16px;
+      }
+      .loader-text {
+        color: #8b5cf6;
+        font-weight: 700;
+        font-size: 14px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        animation: pulse 1.5s ease-in-out infinite;
       }
       @keyframes spin { 
         to { transform: rotate(360deg); } 
+      }
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
       }
       /* Cuando React monta, reemplaza todo en #root, así que el loader desaparece automáticamente */
     </style>
@@ -90,6 +104,7 @@
     <div id="root">
       <div id="initial-loader">
         <div class="loader-spinner"></div>
+        <div class="loader-text">ZAMIS Print</div>
       </div>
     </div>
     <script type="module" src="/src/main.jsx"></script>

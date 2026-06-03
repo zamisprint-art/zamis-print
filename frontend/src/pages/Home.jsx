@@ -8,6 +8,7 @@ import HeroSlider from '../components/HeroSlider';
 import { Skeleton, Button, EmptyState } from '../components/ui';
 import { TrustBadges } from '../components/ecommerce';
 import SEOHead from '../components/SEOHead';
+import { optimizeImage } from '../utils/cloudinary';
 
 const SectionSkeleton = () => (
   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
@@ -139,7 +140,7 @@ const Home = () => {
                     {link.image.length < 10 && /\p{Emoji}/u.test(link.image) ? (
                       <span role="img" aria-hidden="true" className="text-3xl sm:text-5xl group-hover:scale-110 transition-transform duration-300">{link.image}</span>
                     ) : (
-                      <img src={link.image} alt={link.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" onError={(e) => { e.target.src = 'https://via.placeholder.com/150?text=Link' }} />
+                      <img src={optimizeImage(link.image, 200)} alt={link.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" onError={(e) => { e.target.src = 'https://via.placeholder.com/150?text=Link' }} />
                     )}
                   </div>
                 </div>
