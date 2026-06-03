@@ -116,12 +116,12 @@ const Navbar = () => {
           <div className="flex-1 overflow-hidden flex items-center group relative h-full [mask-image:linear-gradient(to_right,transparent,black_5%,black_95%,transparent)] sm:[mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
             <div className="flex whitespace-nowrap animate-marquee group-hover:[animation-play-state:paused]">
               <div className="flex items-center justify-around w-max">
-                <span className="font-semibold tracking-wide px-8 sm:px-16 text-neutral-300">✨ ¡Bienvenido a ZAMIS Print! • Transformando la imaginación en realidad 3D • Calidad premium en cada detalle ✨</span>
-                <span className="font-semibold tracking-wide px-8 sm:px-16 text-neutral-300">✨ ¡Bienvenido a ZAMIS Print! • Transformando la imaginación en realidad 3D • Calidad premium en cada detalle ✨</span>
+                <span className="font-semibold tracking-wide px-8 sm:px-16 text-neutral-300">¡Bienvenido a ZAMIS Print! • Transformando la imaginación en realidad 3D • Calidad premium en cada detalle</span>
+                <span className="font-semibold tracking-wide px-8 sm:px-16 text-neutral-300">¡Bienvenido a ZAMIS Print! • Transformando la imaginación en realidad 3D • Calidad premium en cada detalle</span>
               </div>
               <div className="flex items-center justify-around w-max">
-                <span className="font-semibold tracking-wide px-8 sm:px-16 text-neutral-300">✨ ¡Bienvenido a ZAMIS Print! • Transformando la imaginación en realidad 3D • Calidad premium en cada detalle ✨</span>
-                <span className="font-semibold tracking-wide px-8 sm:px-16 text-neutral-300">✨ ¡Bienvenido a ZAMIS Print! • Transformando la imaginación en realidad 3D • Calidad premium en cada detalle ✨</span>
+                <span className="font-semibold tracking-wide px-8 sm:px-16 text-neutral-300">¡Bienvenido a ZAMIS Print! • Transformando la imaginación en realidad 3D • Calidad premium en cada detalle</span>
+                <span className="font-semibold tracking-wide px-8 sm:px-16 text-neutral-300">¡Bienvenido a ZAMIS Print! • Transformando la imaginación en realidad 3D • Calidad premium en cada detalle</span>
               </div>
             </div>
           </div>
@@ -169,8 +169,8 @@ const Navbar = () => {
                     key={to}
                     to={to}
                     className={`px-4 py-2 rounded-xl text-sm font-bold transition-colors ${isActive
-                        ? 'text-brand-700 bg-brand-50'
-                        : 'text-neutral-600 hover:text-brand-600 hover:bg-neutral-50'
+                      ? 'text-brand-700 bg-brand-50'
+                      : 'text-neutral-600 hover:text-brand-600 hover:bg-neutral-50'
                       }`}
                   >
                     {label}
@@ -278,9 +278,9 @@ const Navbar = () => {
             <div className="flex items-center justify-end gap-1 shrink-0">
 
               {/* Búsqueda móvil */}
-              <button 
-                onClick={() => setMobileSearchOpen(!mobileSearchOpen)} 
-                className="md:hidden p-2 rounded-lg text-neutral-600 hover:text-brand-600 hover:bg-neutral-50 transition-colors" 
+              <button
+                onClick={() => setMobileSearchOpen(!mobileSearchOpen)}
+                className="md:hidden p-2 rounded-lg text-neutral-600 hover:text-brand-600 hover:bg-neutral-50 transition-colors"
                 aria-label="Buscar"
               >
                 {mobileSearchOpen ? <X size={22} className="text-brand-600" /> : <Search size={22} />}
@@ -380,14 +380,14 @@ const Navbar = () => {
                 </button>
               </form>
             </div>
-            
+
             <div className="flex-1 p-5 bg-surface-base overflow-y-auto">
               <p className="text-xs font-bold text-neutral-400 uppercase tracking-wider mb-4">Búsquedas sugeridas</p>
               <div className="flex flex-wrap gap-2">
                 {['Funkos', 'Llaveros', 'Decoración', 'Macetas', 'Soporte', 'Figuras'].map(tag => (
-                  <button 
-                    key={tag} 
-                    onClick={() => { navigate(`/shop?q=${encodeURIComponent(tag)}`); setSearchQuery(''); setMobileSearchOpen(false); }} 
+                  <button
+                    key={tag}
+                    onClick={() => { navigate(`/shop?q=${encodeURIComponent(tag)}`); setSearchQuery(''); setMobileSearchOpen(false); }}
                     className="px-4 py-2 bg-white border border-neutral-200 shadow-sm rounded-full text-sm font-medium text-neutral-700 hover:border-brand-500 hover:text-brand-600 transition-colors"
                   >
                     {tag}
