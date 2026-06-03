@@ -72,7 +72,7 @@ const Home = () => {
     return (
       <div className="relative group">
         {list.length > 4 && (
-          <button onClick={scrollLeft} className="absolute left-0 top-1/2 -translate-y-1/2 -ml-4 md:-ml-6 z-10 bg-white shadow-[0_4px_12px_rgba(0,0,0,0.1)] p-2 md:p-3 rounded-full opacity-0 md:opacity-0 group-hover:opacity-100 transition-all text-neutral-600 hover:text-brand-600 hover:scale-110 disabled:opacity-0 border border-neutral-100 hidden sm:block">
+          <button aria-label="Slide anterior" onClick={scrollLeft} className="absolute left-0 top-1/2 -translate-y-1/2 -ml-4 md:-ml-6 z-10 bg-white shadow-[0_4px_12px_rgba(0,0,0,0.1)] p-2 md:p-3 rounded-full opacity-0 md:opacity-0 group-hover:opacity-100 transition-all text-neutral-600 hover:text-brand-600 hover:scale-110 disabled:opacity-0 border border-neutral-100 hidden sm:block">
             <ChevronLeft size={24} />
           </button>
         )}
@@ -88,7 +88,7 @@ const Home = () => {
         </div>
 
         {list.length > 4 && (
-          <button onClick={scrollRight} className="absolute right-0 top-1/2 -translate-y-1/2 -mr-4 md:-mr-6 z-10 bg-white shadow-[0_4px_12px_rgba(0,0,0,0.1)] p-2 md:p-3 rounded-full opacity-0 md:opacity-0 group-hover:opacity-100 transition-all text-neutral-600 hover:text-brand-600 hover:scale-110 disabled:opacity-0 border border-neutral-100 hidden sm:block">
+          <button aria-label="Slide siguiente" onClick={scrollRight} className="absolute right-0 top-1/2 -translate-y-1/2 -mr-4 md:-mr-6 z-10 bg-white shadow-[0_4px_12px_rgba(0,0,0,0.1)] p-2 md:p-3 rounded-full opacity-0 md:opacity-0 group-hover:opacity-100 transition-all text-neutral-600 hover:text-brand-600 hover:scale-110 disabled:opacity-0 border border-neutral-100 hidden sm:block">
             <ChevronRight size={24} />
           </button>
         )}
@@ -127,8 +127,11 @@ const Home = () => {
             <div className="flex justify-center gap-4 sm:gap-10 flex-wrap">
               {[...Array(4)].map((_, i) => (
                 <div key={i} className="flex flex-col items-center w-[80px] sm:w-[120px] animate-pulse">
-                  <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-neutral-200 mb-3" />
-                  <div className="h-3 w-16 bg-neutral-200 rounded mt-1" />
+                  <div className="p-1 rounded-full bg-neutral-100 mb-3">
+                    <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-neutral-200 border-4 border-white" />
+                  </div>
+                  <div className="h-3 w-16 bg-neutral-200 rounded mt-1 mb-1" />
+                  <div className="h-3 w-12 bg-neutral-200 rounded" />
                 </div>
               ))}
             </div>
