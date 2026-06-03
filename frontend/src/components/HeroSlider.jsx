@@ -126,12 +126,16 @@ const HeroSlider = () => {
             <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent z-10" />
             {/* Overlay inferior sutil */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent z-10" />
-            <img
-              src={optimizeImage(slide.image, 1600)}
-              alt={slide.title}
-              fetchPriority="high"
-              className="w-full h-full object-cover object-top"
-            />
+            <picture>
+              <source media="(max-width: 640px)" srcSet={optimizeImage(slide.image, 640)} />
+              <source media="(max-width: 1024px)" srcSet={optimizeImage(slide.image, 1024)} />
+              <img
+                src={optimizeImage(slide.image, 1600)}
+                alt={slide.title}
+                fetchPriority="high"
+                className="w-full h-full object-cover object-top"
+              />
+            </picture>
           </div>
 
           {/* Content */}
@@ -172,21 +176,26 @@ const HeroSlider = () => {
           <div className="flex gap-2">
             <button
               onClick={prevSlide}
+              aria-label="Slide anterior"
               className="w-8 h-8 rounded-full border border-neutral-300 bg-surface-base/50 backdrop-blur-md flex items-center justify-center text-neutral-900 hover:bg-primary transition-colors hover:border-primary"
             >
               <ChevronLeft size={16} />
             </button>
             <button
               onClick={nextSlide}
+              aria-label="Slide siguiente"
               className="w-8 h-8 rounded-full border border-neutral-300 bg-surface-base/50 backdrop-blur-md flex items-center justify-center text-neutral-900 hover:bg-primary transition-colors hover:border-primary"
             >
               <ChevronRight size={16} />
             </button>
           </div>
-          <div className="flex gap-1.5">
+          <div className="flex gap-1.5" role="tablist">
             {slides.map((_, index) => (
               <button
                 key={index}
+                role="tab"
+                aria-selected={index === current}
+                aria-label={`Ir al slide ${index + 1}`}
                 onClick={() => { setDirection(index > current ? 1 : -1); setCurrent(index); }}
                 className={`h-1 transition-all duration-300 rounded-full ${
                   index === current ? 'w-8 bg-primary' : 'w-3 bg-white/30 hover:bg-white/50'

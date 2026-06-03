@@ -137,7 +137,7 @@ const Home = () => {
                 <div className="p-1 rounded-full bg-gradient-to-tr from-brand-400 to-brand-600 shadow-lg group-hover:shadow-brand-500/40 group-hover:-translate-y-1 transition-all duration-300 mb-3">
                   <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-white flex items-center justify-center border-4 border-white overflow-hidden">
                     {link.image.length < 10 && /\p{Emoji}/u.test(link.image) ? (
-                      <span className="text-3xl sm:text-5xl group-hover:scale-110 transition-transform duration-300">{link.image}</span>
+                      <span role="img" aria-hidden="true" className="text-3xl sm:text-5xl group-hover:scale-110 transition-transform duration-300">{link.image}</span>
                     ) : (
                       <img src={link.image} alt={link.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" onError={(e) => { e.target.src = 'https://via.placeholder.com/150?text=Link' }} />
                     )}
@@ -151,7 +151,7 @@ const Home = () => {
               <Link to="/shop?category=Figuras y Coleccionables" className="group flex flex-col items-center w-[80px] sm:w-[120px]">
                 <div className="p-1 rounded-full bg-gradient-to-tr from-brand-400 to-brand-600 shadow-lg group-hover:shadow-brand-500/40 group-hover:-translate-y-1 transition-all duration-300 mb-3">
                   <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-white flex items-center justify-center border-4 border-white overflow-hidden">
-                    <span className="text-3xl sm:text-5xl group-hover:scale-110 transition-transform duration-300">🧸</span>
+                    <span role="img" aria-hidden="true" className="text-3xl sm:text-5xl group-hover:scale-110 transition-transform duration-300">🧸</span>
                   </div>
                 </div>
                 <span className="font-bold text-neutral-800 text-xs sm:text-sm text-center group-hover:text-brand-600 transition-colors leading-tight">Figuras<br />Coleccionables</span>
@@ -160,7 +160,7 @@ const Home = () => {
               <Link to="/shop?category=Hogar y Decoración" className="group flex flex-col items-center w-[80px] sm:w-[120px]">
                 <div className="p-1 rounded-full bg-gradient-to-tr from-brand-400 to-brand-600 shadow-lg group-hover:shadow-brand-500/40 group-hover:-translate-y-1 transition-all duration-300 mb-3">
                   <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-white flex items-center justify-center border-4 border-white overflow-hidden">
-                    <span className="text-3xl sm:text-5xl group-hover:scale-110 transition-transform duration-300">🪴</span>
+                    <span role="img" aria-hidden="true" className="text-3xl sm:text-5xl group-hover:scale-110 transition-transform duration-300">🪴</span>
                   </div>
                 </div>
                 <span className="font-bold text-neutral-800 text-xs sm:text-sm text-center group-hover:text-brand-600 transition-colors leading-tight">Decoración<br />Hogar</span>
@@ -169,7 +169,7 @@ const Home = () => {
               <Link to="/about" className="group flex flex-col items-center w-[80px] sm:w-[120px]">
                 <div className="p-1 rounded-full bg-gradient-to-tr from-neutral-400 to-neutral-600 shadow-lg group-hover:shadow-neutral-500/40 group-hover:-translate-y-1 transition-all duration-300 mb-3">
                   <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-white flex items-center justify-center border-4 border-white overflow-hidden">
-                    <span className="text-3xl sm:text-5xl group-hover:scale-110 transition-transform duration-300">⚙️</span>
+                    <span role="img" aria-hidden="true" className="text-3xl sm:text-5xl group-hover:scale-110 transition-transform duration-300">⚙️</span>
                   </div>
                 </div>
                 <span className="font-bold text-neutral-800 text-xs sm:text-sm text-center group-hover:text-neutral-600 transition-colors leading-tight">Prototipos<br />3D</span>
@@ -178,7 +178,7 @@ const Home = () => {
               <Link to="/shop?sort=newest" className="group flex flex-col items-center w-[80px] sm:w-[120px]">
                 <div className="p-1 rounded-full bg-gradient-to-tr from-yellow-400 to-orange-500 shadow-lg group-hover:shadow-orange-500/40 group-hover:-translate-y-1 transition-all duration-300 mb-3">
                   <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-white flex items-center justify-center border-4 border-white overflow-hidden">
-                    <span className="text-3xl sm:text-5xl group-hover:scale-110 transition-transform duration-300">✨</span>
+                    <span role="img" aria-hidden="true" className="text-3xl sm:text-5xl group-hover:scale-110 transition-transform duration-300">✨</span>
                   </div>
                 </div>
                 <span className="font-bold text-neutral-800 text-xs sm:text-sm text-center group-hover:text-orange-500 transition-colors leading-tight">Lo<br />Nuevo</span>

@@ -1,10 +1,8 @@
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { ShoppingCart, Box, Star, Zap } from 'lucide-react';
 import Rating from './Rating';
 import { Badge } from './ui';
 import PriceDisplay from './ecommerce/PriceDisplay';
-import { staggerItem, hoverLift, tapScale } from '../design-system/tokens';
 import { optimizeImage } from '../utils/cloudinary';
 
 const ProductCard = ({ product }) => {
@@ -18,11 +16,8 @@ const ProductCard = ({ product }) => {
     : 0;
 
   return (
-    <motion.div
-      variants={staggerItem}
-      whileHover={!isOutOfStock ? hoverLift : {}}
-      whileTap={!isOutOfStock ? tapScale : {}}
-      className="card-product group flex flex-col h-full w-full"
+    <div
+      className={`card-product group flex flex-col h-full w-full transition-all duration-300 ${!isOutOfStock ? 'hover:-translate-y-1 active:scale-95' : ''}`}
     >
       {/* Image */}
       <Link
@@ -137,7 +132,7 @@ const ProductCard = ({ product }) => {
           </Link>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
