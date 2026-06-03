@@ -153,6 +153,8 @@ const Navbar = () => {
                 <img
                   src="/images/logo-transparent.png"
                   alt="ZAMIS Print"
+                  width="160"
+                  height="80"
                   className={`w-auto object-contain rounded-xl transition-all duration-300 ${scrolled ? 'h-8 sm:h-10' : 'h-16 sm:h-20'}`}
                 />
               </Link>
@@ -419,7 +421,7 @@ const Navbar = () => {
             >
               <div className="flex items-center justify-between px-6 py-6 border-b border-neutral-100">
                 <Link to="/" onClick={() => setIsOpen(false)} className="flex items-center bg-white rounded-2xl p-1 shadow-sm shrink-0">
-                  <img src="/images/logo-transparent.png" alt="ZAMIS Print" className="h-16 w-auto object-contain rounded-xl" />
+                  <img src="/images/logo-transparent.png" alt="ZAMIS Print" width="150" height="80" className="h-16 w-auto object-contain rounded-xl" />
                 </Link>
                 <button aria-label="Cerrar menú" onClick={() => setIsOpen(false)} className="p-2 rounded-full hover:bg-neutral-100 text-neutral-500 transition-colors">
                   <X size={20} />

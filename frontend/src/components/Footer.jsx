@@ -92,7 +92,9 @@ const Footer = () => {
               <img
                 src="/images/logo-transparent.png"
                 alt="ZAMIS Print"
-                className="h-14 md:h-16 w-auto object-contain opacity-75 hover:opacity-100 transition-opacity"
+                width="150"
+                height="80"
+                className="h-20 w-auto object-contain bg-white rounded-2xl p-2"
               />
             </Link>
             <p className="text-neutral-500 text-sm text-center sm:text-left">

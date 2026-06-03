@@ -2,9 +2,21 @@ export const optimizeImage = (url, width = 'auto') => {
   if (!url || typeof url !== 'string') return url;
   
   // Cloudinary Optimization
-  if (url.includes('res.cloudinary.com') && url.includes('/upload/') && !url.includes('f_auto')) {
-    const widthParam = width !== 'auto' ? `,w_${width},c_limit` : '';
-    return url.replace('/upload/', `/upload/f_auto,q_auto${widthParam}/`);
+  if (url.includes('res.cloudinary.com') && url.includes('/upload/')) {
+    const widthParam = width !== 'auto' ? `w_${width},c_limit` : '';
+    const baseTransforms = 'f_auto,q_auto';
+    const newTransforms = widthParam ? `${baseTransforms},${widthParam}` : baseTransforms;
+
+    const parts = url.split('/upload/');
+    if (parts.length === 2) {
+      const rightPart = parts[1];
+      if (rightPart.match(/^v\d+\//) || rightPart.indexOf('/') === -1) {
+         return `${parts[0]}/upload/${newTransforms}/${rightPart}`;
+      } else {
+         const afterTransform = rightPart.substring(rightPart.indexOf('/') + 1);
+         return `${parts[0]}/upload/${newTransforms}/${afterTransform}`;
+      }
+    }
   }
   
   // Unsplash Optimization
