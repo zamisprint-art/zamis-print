@@ -9,13 +9,19 @@ export const optimizeImage = (url, width = 'auto') => {
 
     const parts = url.split('/upload/');
     if (parts.length === 2) {
-      const rightPart = parts[1];
-      if (rightPart.match(/^v\d+\//) || rightPart.indexOf('/') === -1) {
-         return `${parts[0]}/upload/${newTransforms}/${rightPart}`;
-      } else {
-         const afterTransform = rightPart.substring(rightPart.indexOf('/') + 1);
-         return `${parts[0]}/upload/${newTransforms}/${afterTransform}`;
+      let rightPart = parts[1];
+      const firstSlashIdx = rightPart.indexOf('/');
+      
+      if (firstSlashIdx !== -1) {
+        const firstSegment = rightPart.substring(0, firstSlashIdx);
+        // Un segmento de transformación de Cloudinary tiene la forma "llave_valor,llave_valor"
+        const isTransform = firstSegment.split(',').every(part => /^[a-z]_[a-zA-Z0-9.]+$/.test(part));
+        
+        if (isTransform) {
+          rightPart = rightPart.substring(firstSlashIdx + 1);
+        }
       }
+      return `${parts[0]}/upload/${newTransforms}/${rightPart}`;
     }
   }
   
