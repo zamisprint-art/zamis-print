@@ -8,14 +8,11 @@ const CurvedEngravedText2D = ({ text, font, color }) => {
   const center = (chars.length - 1) / 2;
   
   // Parámetros ajustables de la curva
-  // angleStep controla qué tan junta está cada letra en el arco.
-  // radius controla la curvatura general (entre mayor, más plana la sonrisa).
-  const angleStep = 8; 
-  const radius = 250; 
+  // angleStep controla la separación (grados entre letras).
+  // radius controla la curvatura (mayor radio = más plano).
+  const angleStep = 10; 
+  const radius = 400; 
 
-  // Mapeamos los colores a valores CSS de gradiente y sombras para efecto "Hundido" (Bajo relieve)
-  // Para que parezca grabado, el fondo de la letra debe ser oscuro/transparente,
-  // con un reflejo brillante abajo y una sombra dura arriba.
   const getStyleForColor = () => {
     switch (color) {
       case 'Dorado':
@@ -55,7 +52,7 @@ const CurvedEngravedText2D = ({ text, font, color }) => {
 
   return (
     <div 
-      className={`relative select-none flex justify-center items-end ${
+      className={`relative select-none flex justify-center items-start pt-10 ${
         font === 'Clásica' ? 'font-serif font-bold' : 
         font === 'Divertida' ? 'font-black' : 
         font === 'Cursiva' ? 'italic font-semibold' : 'font-black uppercase'
@@ -65,8 +62,7 @@ const CurvedEngravedText2D = ({ text, font, color }) => {
         transform: 'perspective(600px) rotateX(15deg) rotateZ(-2deg)',
         fontFamily: font === 'Divertida' ? '"Comic Sans MS", "Marker Felt", sans-serif' : 
                     font === 'Cursiva' ? '"Brush Script MT", "Lucida Handwriting", cursive' : undefined,
-        // El contenedor debe ser lo suficientemente alto para alojar el radio
-        height: `${radius}px`,
+        height: '100px', // Reducimos el alto del contenedor principal
         width: '100%'
       }}
     >
@@ -75,13 +71,13 @@ const CurvedEngravedText2D = ({ text, font, color }) => {
         return (
           <span
             key={i}
-            className="absolute bottom-0 inline-block text-5xl md:text-7xl"
+            className="absolute top-0 inline-block text-5xl md:text-7xl"
             style={{
               color: styleParams.textColor,
               textShadow: styleParams.textShadow,
-              // Movemos el origen de rotación hacia el "centro del plato" invisible
-              transformOrigin: `50% -${radius - 100}px`,
-              // Rotamos la letra en ese eje
+              // Movemos el origen de rotación MUY abajo de la letra para crear un radio amplio ("sonrisa")
+              transformOrigin: `50% ${radius}px`,
+              // Rotamos la letra en ese eje (como es un punto abajo, negativo va a la izquierda)
               transform: `rotate(${angle}deg)`,
             }}
           >
