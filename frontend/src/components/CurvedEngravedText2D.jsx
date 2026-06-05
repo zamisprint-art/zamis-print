@@ -67,7 +67,10 @@ const CurvedEngravedText2D = ({ text, font, color }) => {
       }}
     >
       {chars.map((char, i) => {
-        const angle = (i - center) * angleStep;
+        // Invertimos el ángulo: (center - i) en lugar de (i - center).
+        // Esto hace que la primera letra gire a la izquierda y la última a la derecha
+        // cuando el origen de rotación está ARRIBA de las letras.
+        const angle = (center - i) * angleStep;
         return (
           <span
             key={i}
@@ -75,9 +78,11 @@ const CurvedEngravedText2D = ({ text, font, color }) => {
             style={{
               color: styleParams.textColor,
               textShadow: styleParams.textShadow,
-              // Movemos el origen de rotación MUY abajo de la letra para crear un radio amplio ("sonrisa")
-              transformOrigin: `50% ${radius}px`,
-              // Rotamos la letra en ese eje (como es un punto abajo, negativo va a la izquierda)
+              // Movemos el origen de rotación MUY arriba de la letra.
+              // Estar rotando desde arriba pone las letras en la parte INFERIOR del círculo,
+              // lo que genera una curva de "sonrisa" (◡).
+              transformOrigin: `50% -${radius}px`,
+              // Rotamos la letra en ese eje
               transform: `rotate(${angle}deg)`,
             }}
           >
