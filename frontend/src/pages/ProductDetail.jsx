@@ -20,6 +20,7 @@ import { PRODUCT_COLORS } from '../utils/colors';
 import SEOHead from '../components/SEOHead';
 
 const Product3DViewer = lazy(() => import('../components/Product3DViewer'));
+import CurvedEngravedText2D from '../components/CurvedEngravedText2D';
 
 const ProductDetail = () => {
   const { id }       = useParams();
@@ -297,66 +298,11 @@ const ProductDetail = () => {
                     onClick={(e) => e.stopPropagation()}
                   >
                     <div className="px-6 py-4 rounded-xl border-2 border-transparent hover:border-white/30 hover:bg-black/10 transition-all flex flex-col items-center group/text">
-                      <div 
-                        className={`relative text-5xl md:text-7xl select-none leading-none ${
-                          customFont === 'Clásica' ? 'font-serif font-bold tracking-wider' : 
-                          customFont === 'Divertida' ? 'font-black tracking-normal' : 
-                          customFont === 'Cursiva' ? 'italic font-semibold tracking-normal' : 'font-black uppercase tracking-[0.2em]'
-                        }`}
-                        style={{
-                          transform: 'perspective(500px) rotateX(15deg) rotateZ(-2deg)',
-                          fontFamily: customFont === 'Divertida' ? '"Comic Sans MS", "Marker Felt", sans-serif' : customFont === 'Cursiva' ? '"Brush Script MT", "Lucida Handwriting", cursive' : undefined
-                        }}
-                      >
-                        {/* BASE LAYER: 3D Extrusion and Drop Shadow */}
-                        <span 
-                          className="block"
-                          style={{ 
-                            color: customTextColor === 'Dorado' ? '#b45309' 
-                                 : customTextColor === 'Negro' ? '#0a0a0a' 
-                                 : customTextColor === 'Rojo' ? '#991b1b' 
-                                 : customTextColor === 'Azul' ? '#1e3a8a' 
-                                 : customTextColor === 'Verde' ? '#14532d' 
-                                 : '#94a3b8',
-                            textShadow: customTextColor === 'Dorado' 
-                              ? '0px 1px 0px #d97706, 0px 2px 0px #b45309, 0px 3px 0px #92400e, 0px 4px 0px #78350f, 0px 12px 20px rgba(0,0,0,0.7)'
-                              : customTextColor === 'Negro'
-                              ? '0px 1px 0px #171717, 0px 2px 0px #0a0a0a, 0px 3px 0px #000000, 0px 12px 20px rgba(0,0,0,0.9)'
-                              : customTextColor === 'Rojo'
-                              ? '0px 1px 0px #dc2626, 0px 2px 0px #b91c1c, 0px 3px 0px #991b1b, 0px 4px 0px #7f1d1d, 0px 12px 20px rgba(0,0,0,0.7)'
-                              : customTextColor === 'Azul'
-                              ? '0px 1px 0px #2563eb, 0px 2px 0px #1d4ed8, 0px 3px 0px #1e40af, 0px 4px 0px #1e3a8a, 0px 12px 20px rgba(0,0,0,0.7)'
-                              : customTextColor === 'Verde'
-                              ? '0px 1px 0px #16a34a, 0px 2px 0px #15803d, 0px 3px 0px #166534, 0px 4px 0px #14532d, 0px 12px 20px rgba(0,0,0,0.7)'
-                              : '0px 1px 0px #cbd5e1, 0px 2px 0px #94a3b8, 0px 3px 0px #64748b, 0px 4px 0px #475569, 0px 12px 20px rgba(0,0,0,0.6)',
-                          }}
-                        >
-                          {personalizationText}
-                        </span>
-                        
-                        {/* TOP LAYER: Metallic/Glossy Gradient Material */}
-                        <span 
-                          className="absolute inset-0 top-0 left-0 w-full h-full pointer-events-none"
-                          style={{
-                            backgroundImage: customTextColor === 'Dorado'
-                              ? 'linear-gradient(180deg, #fef08a 0%, #eab308 30%, #b45309 80%, #451a03 100%)'
-                              : customTextColor === 'Negro'
-                              ? 'linear-gradient(180deg, #737373 0%, #262626 40%, #000000 80%, #000000 100%)'
-                              : customTextColor === 'Rojo'
-                              ? 'linear-gradient(180deg, #fca5a5 0%, #ef4444 30%, #b91c1c 80%, #7f1d1d 100%)'
-                              : customTextColor === 'Azul'
-                              ? 'linear-gradient(180deg, #93c5fd 0%, #3b82f6 30%, #1d4ed8 80%, #1e3a8a 100%)'
-                              : customTextColor === 'Verde'
-                              ? 'linear-gradient(180deg, #86efac 0%, #22c55e 30%, #15803d 80%, #14532d 100%)'
-                              : 'linear-gradient(180deg, #ffffff 0%, #f1f5f9 30%, #94a3b8 80%, #475569 100%)',
-                            WebkitBackgroundClip: 'text',
-                            WebkitTextFillColor: 'transparent',
-                            color: 'transparent',
-                          }}
-                        >
-                          {personalizationText}
-                        </span>
-                      </div>
+                      <CurvedEngravedText2D 
+                        text={personalizationText}
+                        font={customFont}
+                        color={customTextColor}
+                      />
                       <p className="opacity-0 group-hover/text:opacity-100 text-white/90 text-[10px] uppercase tracking-widest text-center mt-3 flex items-center justify-center gap-1 select-none transition-opacity bg-black/50 px-2 py-1 rounded-full">
                         <span className="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span> Arrastra para ubicar
                       </p>
