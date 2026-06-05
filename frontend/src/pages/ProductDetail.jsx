@@ -203,6 +203,18 @@ const ProductDetail = () => {
   };
 
   /* ---------- Loading ---------- */
+  const getCustomTextColorHex = () => {
+    switch (customTextColor) {
+      case 'Dorado': return '#b45309';
+      case 'Negro': return '#0a0a0a';
+      case 'Rojo': return '#991b1b';
+      case 'Azul': return '#1e3a8a';
+      case 'Verde': return '#14532d';
+      case 'Blanco': return '#f8fafc';
+      default: return '#f8fafc';
+    }
+  };
+
   if (loading) return (
     <div className="container-xl py-12">
       <ProductDetailSkeleton />
@@ -249,7 +261,11 @@ const ProductDetail = () => {
                   <p className="text-neutral-400 animate-pulse text-sm">Cargando experiencia 3D...</p>
                 </div>
               }>
-                <Product3DViewer modelUrl={currentMedia.url} />
+                <Product3DViewer 
+                  modelUrl={currentMedia.url} 
+                  customText={personalizationText}
+                  customTextColorHex={getCustomTextColorHex()}
+                />
               </Suspense>
             ) : (
               <div 
@@ -902,7 +918,11 @@ const ProductDetail = () => {
               {currentMedia.type === '3d' ? (
                 <div className="w-full max-w-4xl h-[60vh] bg-neutral-900 rounded-xl overflow-hidden">
                   <Suspense fallback={<div className="animate-spin rounded-full h-12 w-12 border-t-2 border-brand-500 mx-auto mt-20" />}>
-                    <Product3DViewer modelUrl={currentMedia.url} />
+                    <Product3DViewer 
+                      modelUrl={currentMedia.url} 
+                      customText={personalizationText}
+                      customTextColorHex={getCustomTextColorHex()}
+                    />
                   </Suspense>
                 </div>
               ) : (

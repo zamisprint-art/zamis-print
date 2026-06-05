@@ -1,6 +1,7 @@
 import { Suspense, Component } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, useGLTF, Environment, Center } from '@react-three/drei';
+import CurvedText3D from './CurvedText3D';
 
 // Error Boundary para capturar fallos del render 3D (ej. HDR no disponible)
 class ThreeErrorBoundary extends Component {
@@ -37,7 +38,7 @@ const Model = ({ url }) => {
   return <primitive object={scene} />;
 };
 
-const Product3DViewer = ({ modelUrl }) => {
+const Product3DViewer = ({ modelUrl, customText, customTextColorHex }) => {
   return (
     <ThreeErrorBoundary>
       <div className="w-full h-full bg-surface-base/50 rounded-2xl overflow-hidden border border-neutral-200 relative cursor-move">
@@ -50,7 +51,15 @@ const Product3DViewer = ({ modelUrl }) => {
             <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} castShadow />
             <Environment preset="city" />
             <Center>
-              <Model url={modelUrl} />
+              <group>
+                <Model url={modelUrl} />
+                {customText && (
+                  <CurvedText3D 
+                    text={customText} 
+                    color={customTextColorHex || '#1e3a8a'}
+                  />
+                )}
+              </group>
             </Center>
             <OrbitControls
               enablePan={false}
