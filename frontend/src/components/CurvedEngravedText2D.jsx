@@ -10,7 +10,7 @@ const CurvedEngravedText2D = ({ text, font, color }) => {
   // Parámetros ajustables de la curva
   // angleStep controla la separación (grados entre letras).
   // radius controla la curvatura (mayor radio = más plano).
-  const angleStep = 10; 
+  const angleStep = 7; 
   const radius = 400; 
 
   const getStyleForColor = () => {
