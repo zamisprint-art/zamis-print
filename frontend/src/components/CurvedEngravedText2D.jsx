@@ -74,7 +74,7 @@ const CurvedEngravedText2D = ({ text, font, color }) => {
         return (
           <span
             key={i}
-            className="absolute top-0 inline-block text-5xl md:text-7xl"
+            className="absolute top-0 inline-block text-4xl md:text-6xl"
             style={{
               color: styleParams.textColor,
               textShadow: styleParams.textShadow,
