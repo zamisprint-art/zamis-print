@@ -8,21 +8,34 @@ import {
 // ─── Mini Bar Chart (sin dependencias externas) ───────────────────────────────
 const BarChart = ({ data }) => {
   if (!data || data.length === 0) return null;
-  const maxVal = Math.max(...data.map(d => d.total), 1);
+  // Calculate the max absolute value among sales and expenses to scale the bars correctly
+  const maxVal = Math.max(...data.map(d => Math.max(d.sales, d.expenses)), 1);
   return (
-    <div className="flex items-end gap-1.5 h-32 w-full">
+    <div className="flex items-end gap-2 h-32 w-full">
       {data.map((d, i) => {
-        const heightPct = Math.max(4, (d.total / maxVal) * 100);
+        const salesHeightPct = Math.max(2, (d.sales / maxVal) * 100);
+        const expensesHeightPct = Math.max(2, (d.expenses / maxVal) * 100);
         return (
           <div key={i} className="flex-1 flex flex-col items-center gap-1 group relative">
             {/* Tooltip */}
-            <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-neutral-900 text-white text-[10px] font-bold px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 pointer-events-none">
-              {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(d.total)}
+            <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-neutral-900 text-white text-[10px] p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 pointer-events-none flex flex-col gap-1">
+              <span className="text-brand-400 font-bold">V: {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(d.sales)}</span>
+              <span className="text-red-400 font-bold">G: {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(d.expenses)}</span>
+              <span className="text-green-400 font-bold">T: {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(d.net)}</span>
             </div>
-            <div
-              className="w-full rounded-t-lg bg-brand-500 hover:bg-brand-600 transition-all duration-500 cursor-pointer"
-              style={{ height: `${heightPct}%` }}
-            />
+            
+            <div className="flex items-end gap-1 w-full h-full justify-center">
+              {/* Sales Bar */}
+              <div
+                className="w-1/3 rounded-t-sm bg-brand-500 hover:bg-brand-600 transition-all duration-500 cursor-pointer"
+                style={{ height: `${salesHeightPct}%` }}
+              />
+              {/* Expenses Bar */}
+              <div
+                className="w-1/3 rounded-t-sm bg-red-400 hover:bg-red-500 transition-all duration-500 cursor-pointer"
+                style={{ height: `${expensesHeightPct}%` }}
+              />
+            </div>
             <span className="text-[9px] text-neutral-500 font-medium">{d.label}</span>
           </div>
         );
@@ -106,13 +119,15 @@ const DashboardTab = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const [ordersRes, productsRes] = await Promise.all([
+        const [ordersRes, productsRes, expensesRes] = await Promise.all([
           axios.get('/api/orders?limit=all'),
           axios.get('/api/products?limit=all'),
+          axios.get('/api/expenses'),
         ]);
 
         const allOrders = ordersRes.data.orders || [];
         const products = productsRes.data.products || [];
+        const allExpenses = expensesRes.data || [];
 
         // Excluir los "Intentos" (abandonos) para que los KPIs del Dashboard cuadren perfectamente con la lógica financiera real
         const orders = allOrders.filter(o => o.orderStatus !== 'Intento' && o.estadoCobro !== 'intento');
@@ -121,6 +136,10 @@ const DashboardTab = () => {
         const totalCobrado = orders.filter(o => o.estadoCobro === 'pagado').reduce((a, o) => a + (o.totalPrice || 0), 0);
         const totalPendiente = orders.filter(o => o.estadoCobro === 'pendiente').reduce((a, o) => a + (o.totalPrice || 0), 0);
         const totalRevenue = totalCobrado + totalPendiente;
+
+        // ── Gastos Financieros ──
+        const totalExpenses = allExpenses.reduce((a, e) => a + (e.amount || 0), 0);
+        const netProfit = totalRevenue - totalExpenses;
 
         // ── KPIs ──
         const pendingOrders = orders.filter(o => o.orderStatus === 'Pendiente').length;
@@ -132,22 +151,33 @@ const DashboardTab = () => {
         // Pedidos que realmente están en proceso (excluye Entregados, Cancelados, Fallidos)
         const activeOrders = orders.filter(o => ['Pendiente', 'Pagado', 'En Producción', 'Enviado'].includes(o.orderStatus)).length;
 
-        // ── Ventas por mes (últimos 6 meses) ──
+        // ── Ventas y Gastos por mes (últimos 6 meses) ──
         const months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
         const now = new Date();
         const monthlySales = Array.from({ length: 6 }, (_, i) => {
           const d = new Date(now.getFullYear(), now.getMonth() - (5 - i), 1);
           const label = months[d.getMonth()];
-            const total = orders
+          
+          const sales = orders
             .filter(o => {
               const od = new Date(o.createdAt);
-              // Para la gráfica de ventas, sumamos tanto pagados como pendientes (ingresos brutos)
               return (o.estadoCobro === 'pagado' || o.estadoCobro === 'pendiente') && 
                      od.getFullYear() === d.getFullYear() && 
                      od.getMonth() === d.getMonth();
             })
             .reduce((a, o) => a + (o.totalPrice || 0), 0);
-          return { label, total };
+
+          const expenses = allExpenses
+            .filter(e => {
+              const ed = new Date(e.date);
+              return ed.getFullYear() === d.getFullYear() && 
+                     ed.getMonth() === d.getMonth();
+            })
+            .reduce((a, e) => a + (e.amount || 0), 0);
+            
+          const net = sales - expenses;
+
+          return { label, sales, expenses, net };
         });
 
         // ── Últimas 5 órdenes ──
@@ -166,6 +196,7 @@ const DashboardTab = () => {
         setStats({
           totalRevenue, totalCobrado, totalPendiente, activeOrders, totalProducts: products.length,
           pendingOrders, lowStockProducts, monthlySales, recentOrders, donutSegments,
+          totalExpenses, netProfit
         });
       } catch (err) {
         console.error('Dashboard stats error:', err);
@@ -212,9 +243,9 @@ const DashboardTab = () => {
       {/* ── KPI Cards Financieros ── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <KpiCard icon={DollarSign} label="Ingresos Brutos" value={fmt(stats.totalRevenue)} color="bg-brand-500" />
-        <KpiCard icon={CheckCircle2} label="Total Pagado" value={fmt(stats.totalCobrado)} color="bg-blue-500" />
-        <KpiCard icon={Clock} label="Por Cobrar" value={fmt(stats.totalPendiente)} color="bg-yellow-500" />
-        <KpiCard icon={ShoppingBag} label="Pedidos Activos (En curso)" value={stats.activeOrders} color="bg-purple-500" />
+        <KpiCard icon={TrendingUp} label="Total Gastos" value={fmt(stats.totalExpenses)} color="bg-red-500" />
+        <KpiCard icon={CheckCircle2} label="Utilidad Neta" value={fmt(stats.netProfit)} color={stats.netProfit >= 0 ? "bg-green-500" : "bg-red-600"} />
+        <KpiCard icon={ShoppingBag} label="Pedidos Activos" value={stats.activeOrders} color="bg-purple-500" />
       </div>
 
       {/* ── Gráfico de Ventas + Donut ── */}

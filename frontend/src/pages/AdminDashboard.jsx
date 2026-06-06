@@ -9,6 +9,7 @@ import ProductsTab from '../components/admin/ProductsTab';
 import DashboardTab from '../components/admin/DashboardTab';
 import HomeDesignTab from '../components/admin/HomeDesignTab';
 import CustomersTab from '../components/admin/CustomersTab';
+import ExpensesTab from '../components/admin/ExpensesTab';
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -54,6 +55,12 @@ const AdminDashboard = () => {
           <DollarSign size={20} /> Cobros
         </button>
         <button 
+          onClick={() => setActiveTab('expenses')}
+          className={`flex items-center gap-3 p-4 rounded-xl transition-colors ${activeTab === 'expenses' ? 'bg-primary text-neutral-900' : 'glass-panel hover:bg-white/5'}`}
+        >
+          <DollarSign size={20} /> Gastos
+        </button>
+        <button 
           onClick={() => setActiveTab('settings')}
           className={`flex items-center gap-3 p-4 rounded-xl transition-colors ${activeTab === 'settings' ? 'bg-primary text-neutral-900' : 'glass-panel hover:bg-white/5'}`}
         >
@@ -89,6 +96,10 @@ const AdminDashboard = () => {
 
         {activeTab === 'cobros' && (
           <BillingTab />
+        )}
+
+        {activeTab === 'expenses' && (
+          <ExpensesTab />
         )}
 
         {activeTab === 'products' && (
