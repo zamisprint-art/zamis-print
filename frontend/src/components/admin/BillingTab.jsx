@@ -48,7 +48,8 @@ const BillingTab = () => {
     estadoCobro: 'pendiente',
     metodoPagoCobro: 'mercadopago',
     notaCobroInterna: '',
-    createdAt: ''
+    createdAt: '',
+    fechaCobro: ''
   });
   const [externalFormData, setExternalFormData] = useState({
     description: '',
@@ -101,7 +102,8 @@ const BillingTab = () => {
       estadoCobro: order.estadoCobro || 'pendiente',
       metodoPagoCobro: order.metodoPagoCobro || order.paymentMethod || 'mercadopago',
       notaCobroInterna: order.notaCobroInterna || '',
-      createdAt: order.createdAt ? new Date(order.createdAt).toISOString().split('T')[0] : ''
+      createdAt: order.createdAt ? new Date(order.createdAt).toISOString().split('T')[0] : '',
+      fechaCobro: (order.fechaCobro || order.paidAt || order.createdAt) ? new Date(order.fechaCobro || order.paidAt || order.createdAt).toISOString().split('T')[0] : ''
     });
     setIsModalOpen(true);
   };
@@ -394,11 +396,20 @@ const BillingTab = () => {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold mb-1">Fecha de Venta / Cobro</label>
+                  <label className="block text-sm font-semibold mb-1">Fecha de Creación</label>
                   <input 
                     type="date"
                     value={formData.createdAt} 
-                    onChange={e => setFormData({...formData, createdAt: e.target.value})} 
+                    disabled
+                    className="w-full border rounded-lg p-2 text-sm bg-neutral-100 text-neutral-500 cursor-not-allowed"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold mb-1">Fecha de Cobro/Pago</label>
+                  <input 
+                    type="date"
+                    value={formData.fechaCobro} 
+                    onChange={e => setFormData({...formData, fechaCobro: e.target.value})} 
                     className="w-full border rounded-lg p-2 text-sm bg-white"
                   />
                 </div>

@@ -201,17 +201,16 @@ const updateBillingStatus = async (req, res) => {
         if (req.body.estadoCobro) order.estadoCobro = req.body.estadoCobro;
         if (req.body.metodoPagoCobro) order.metodoPagoCobro = req.body.metodoPagoCobro;
         if (req.body.notaCobroInterna !== undefined) order.notaCobroInterna = req.body.notaCobroInterna;
-        let newCreatedAt;
-        if (req.body.createdAt) {
-            if (typeof req.body.createdAt === 'string' && req.body.createdAt.length === 10) {
-                newCreatedAt = new Date(`${req.body.createdAt}T12:00:00`);
+        if (req.body.fechaCobro) {
+            let newFechaCobro;
+            if (typeof req.body.fechaCobro === 'string' && req.body.fechaCobro.length === 10) {
+                newFechaCobro = new Date(`${req.body.fechaCobro}T12:00:00`);
             } else {
-                newCreatedAt = new Date(req.body.createdAt);
+                newFechaCobro = new Date(req.body.fechaCobro);
             }
-            order.createdAt = newCreatedAt;
+            order.fechaCobro = newFechaCobro;
             if (req.body.estadoCobro === 'pagado') {
-                order.fechaCobro = order.createdAt;
-                order.paidAt = order.createdAt;
+                order.paidAt = newFechaCobro;
             }
         }
         
@@ -257,13 +256,6 @@ const updateBillingStatus = async (req, res) => {
         }
 
         const updatedOrder = await order.save();
-        
-        // Force update createdAt
-        if (req.body.createdAt && newCreatedAt) {
-            await Order.findByIdAndUpdate(updatedOrder._id, { $set: { createdAt: newCreatedAt } }, { timestamps: false, strict: false });
-            updatedOrder.createdAt = newCreatedAt;
-        }
-        
         res.json(updatedOrder);
     } else {
         res.status(404).json({ message: 'Order not found' });

@@ -160,7 +160,7 @@ const DashboardTab = () => {
           
           const sales = orders
             .filter(o => {
-              const od = new Date(o.createdAt);
+              const od = new Date(o.fechaCobro || o.paidAt || o.createdAt);
               return (o.estadoCobro === 'pagado' || o.estadoCobro === 'pendiente') && 
                      od.getFullYear() === d.getFullYear() && 
                      od.getMonth() === d.getMonth();
