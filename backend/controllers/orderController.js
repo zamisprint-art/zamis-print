@@ -251,6 +251,13 @@ const updateBillingStatus = async (req, res) => {
         }
 
         const updatedOrder = await order.save();
+        
+        // Force update createdAt since Mongoose timestamps: true prevents modifying it via save()
+        if (req.body.createdAt) {
+            await Order.updateOne({ _id: updatedOrder._id }, { $set: { createdAt: order.createdAt } });
+            updatedOrder.createdAt = order.createdAt;
+        }
+        
         res.json(updatedOrder);
     } else {
         res.status(404).json({ message: 'Order not found' });
@@ -305,11 +312,17 @@ const addExternalOrder = async (req, res) => {
         metodoPagoCobro,
         notaCobroInterna,
         fechaCobro: isPaid ? finalDate : null,
-        canalVenta: canalVenta || 'Otro',
-        createdAt: finalDate
+        canalVenta: canalVenta || 'Otro'
     });
 
+    // We set createdAt manually using order.createdAt but Mongoose timestamps will override it on save
+    order.createdAt = finalDate;
     const createdOrder = await order.save();
+    
+    // Force update createdAt
+    await Order.updateOne({ _id: createdOrder._id }, { $set: { createdAt: finalDate } });
+    createdOrder.createdAt = finalDate;
+
     res.status(201).json(createdOrder);
 };
 
