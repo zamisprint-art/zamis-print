@@ -258,9 +258,9 @@ const updateBillingStatus = async (req, res) => {
 
         const updatedOrder = await order.save();
         
-        // Force update createdAt using the native MongoDB driver to bypass Mongoose's immutable createdAt protection
+        // Force update createdAt
         if (req.body.createdAt && newCreatedAt) {
-            await Order.collection.updateOne({ _id: updatedOrder._id }, { $set: { createdAt: newCreatedAt } });
+            await Order.findByIdAndUpdate(updatedOrder._id, { $set: { createdAt: newCreatedAt } }, { timestamps: false, strict: false });
             updatedOrder.createdAt = newCreatedAt;
         }
         
@@ -332,8 +332,8 @@ const addExternalOrder = async (req, res) => {
     order.createdAt = finalDate;
     const createdOrder = await order.save();
     
-    // Force update createdAt using the native MongoDB driver
-    await Order.collection.updateOne({ _id: createdOrder._id }, { $set: { createdAt: finalDate } });
+    // Force update createdAt
+    await Order.findByIdAndUpdate(createdOrder._id, { $set: { createdAt: finalDate } }, { timestamps: false, strict: false });
     createdOrder.createdAt = finalDate;
 
     res.status(201).json(createdOrder);
