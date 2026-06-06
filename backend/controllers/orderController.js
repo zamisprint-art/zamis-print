@@ -201,8 +201,14 @@ const updateBillingStatus = async (req, res) => {
         if (req.body.estadoCobro) order.estadoCobro = req.body.estadoCobro;
         if (req.body.metodoPagoCobro) order.metodoPagoCobro = req.body.metodoPagoCobro;
         if (req.body.notaCobroInterna !== undefined) order.notaCobroInterna = req.body.notaCobroInterna;
+        let newCreatedAt;
         if (req.body.createdAt) {
-            order.createdAt = new Date(req.body.createdAt);
+            if (req.body.createdAt.length === 10) {
+                newCreatedAt = new Date(`${req.body.createdAt}T12:00:00`);
+            } else {
+                newCreatedAt = new Date(req.body.createdAt);
+            }
+            order.createdAt = newCreatedAt;
             if (req.body.estadoCobro === 'pagado') {
                 order.fechaCobro = order.createdAt;
                 order.paidAt = order.createdAt;
@@ -253,9 +259,9 @@ const updateBillingStatus = async (req, res) => {
         const updatedOrder = await order.save();
         
         // Force update createdAt since Mongoose timestamps: true prevents modifying it via save()
-        if (req.body.createdAt) {
-            await Order.updateOne({ _id: updatedOrder._id }, { $set: { createdAt: order.createdAt } });
-            updatedOrder.createdAt = order.createdAt;
+        if (req.body.createdAt && newCreatedAt) {
+            await Order.updateOne({ _id: updatedOrder._id }, { $set: { createdAt: newCreatedAt } });
+            updatedOrder.createdAt = newCreatedAt;
         }
         
         res.json(updatedOrder);
@@ -282,7 +288,14 @@ const addExternalOrder = async (req, res) => {
     } = req.body;
 
     const isPaid = estadoCobro === 'pagado';
-    const finalDate = createdAt ? new Date(createdAt) : Date.now();
+    let finalDate = Date.now();
+    if (createdAt) {
+        if (createdAt.length === 10) {
+            finalDate = new Date(`${createdAt}T12:00:00`);
+        } else {
+            finalDate = new Date(createdAt);
+        }
+    }
 
     const order = new Order({
         orderItems: [
