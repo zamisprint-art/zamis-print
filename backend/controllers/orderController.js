@@ -201,7 +201,13 @@ const updateBillingStatus = async (req, res) => {
         if (req.body.estadoCobro) order.estadoCobro = req.body.estadoCobro;
         if (req.body.metodoPagoCobro) order.metodoPagoCobro = req.body.metodoPagoCobro;
         if (req.body.notaCobroInterna !== undefined) order.notaCobroInterna = req.body.notaCobroInterna;
-        if (req.body.fechaCobro) order.fechaCobro = req.body.fechaCobro;
+        if (req.body.createdAt) {
+            order.createdAt = new Date(req.body.createdAt);
+            if (req.body.estadoCobro === 'pagado') {
+                order.fechaCobro = order.createdAt;
+                order.paidAt = order.createdAt;
+            }
+        }
         
         // Editar detalles de venta externa
         if (req.body.clientName !== undefined && order.shippingAddress) order.shippingAddress.fullName = req.body.clientName;
@@ -264,10 +270,12 @@ const addExternalOrder = async (req, res) => {
         notaCobroInterna,
         clientName,
         clientPhone,
-        estadoCobro
+        estadoCobro,
+        createdAt
     } = req.body;
 
     const isPaid = estadoCobro === 'pagado';
+    const finalDate = createdAt ? new Date(createdAt) : Date.now();
 
     const order = new Order({
         orderItems: [
@@ -291,13 +299,14 @@ const addExternalOrder = async (req, res) => {
         shippingPrice: 0,
         totalPrice: totalPrice,
         isPaid: isPaid,
-        paidAt: isPaid ? (fechaCobro || Date.now()) : null,
+        paidAt: isPaid ? finalDate : null,
         orderStatus: isPaid ? 'Entregado' : 'Pendiente',
         estadoCobro: estadoCobro || 'pagado',
         metodoPagoCobro,
         notaCobroInterna,
-        fechaCobro: isPaid ? (fechaCobro || Date.now()) : null,
-        canalVenta: canalVenta || 'Otro'
+        fechaCobro: isPaid ? finalDate : null,
+        canalVenta: canalVenta || 'Otro',
+        createdAt: finalDate
     });
 
     const createdOrder = await order.save();

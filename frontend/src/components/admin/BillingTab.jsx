@@ -47,7 +47,8 @@ const BillingTab = () => {
     canalVenta: 'Web',
     estadoCobro: 'pendiente',
     metodoPagoCobro: 'mercadopago',
-    notaCobroInterna: ''
+    notaCobroInterna: '',
+    createdAt: ''
   });
   const [externalFormData, setExternalFormData] = useState({
     description: '',
@@ -57,7 +58,8 @@ const BillingTab = () => {
     totalPrice: '',
     estadoCobro: 'pagado',
     metodoPagoCobro: 'transferencia',
-    notaCobroInterna: ''
+    notaCobroInterna: '',
+    createdAt: new Date().toISOString().split('T')[0]
   });
 
   const handleExternalSaleSubmit = async (e) => {
@@ -66,8 +68,7 @@ const BillingTab = () => {
     try {
       await axios.post('/api/orders/external', {
         ...externalFormData,
-        totalPrice: Number(externalFormData.totalPrice),
-        fechaCobro: externalFormData.estadoCobro === 'pagado' ? new Date() : null
+        totalPrice: Number(externalFormData.totalPrice)
       }, { withCredentials: true });
       setIsExternalSaleModalOpen(false);
       setExternalFormData({
@@ -78,7 +79,8 @@ const BillingTab = () => {
         totalPrice: '',
         estadoCobro: 'pagado',
         metodoPagoCobro: 'transferencia',
-        notaCobroInterna: ''
+        notaCobroInterna: '',
+        createdAt: new Date().toISOString().split('T')[0]
       });
       fetchOrders();
     } catch (error) {
@@ -98,7 +100,8 @@ const BillingTab = () => {
       canalVenta: order.canalVenta || 'Web',
       estadoCobro: order.estadoCobro || 'pendiente',
       metodoPagoCobro: order.metodoPagoCobro || order.paymentMethod || 'mercadopago',
-      notaCobroInterna: order.notaCobroInterna || ''
+      notaCobroInterna: order.notaCobroInterna || '',
+      createdAt: order.createdAt ? new Date(order.createdAt).toISOString().split('T')[0] : ''
     });
     setIsModalOpen(true);
   };
@@ -107,8 +110,7 @@ const BillingTab = () => {
     e.preventDefault();
     try {
       await axios.put(`/api/orders/${selectedOrder._id}/billing`, {
-        ...formData,
-        fechaCobro: formData.estadoCobro === 'pagado' ? new Date() : null
+        ...formData
       }, { withCredentials: true });
       setIsModalOpen(false);
       fetchOrders();
@@ -391,6 +393,15 @@ const BillingTab = () => {
                     <option value="Otro">Otro Canal</option>
                   </select>
                 </div>
+                <div>
+                  <label className="block text-sm font-semibold mb-1">Fecha de Venta</label>
+                  <input 
+                    type="date"
+                    value={formData.createdAt} 
+                    onChange={e => setFormData({...formData, createdAt: e.target.value})} 
+                    className="w-full border rounded-lg p-2 text-sm"
+                  />
+                </div>
               </div>
 
               <hr className="border-neutral-200 my-1" />
@@ -481,6 +492,16 @@ const BillingTab = () => {
                     placeholder="Ej. 3001234567"
                     value={externalFormData.clientPhone} 
                     onChange={e => setExternalFormData({...externalFormData, clientPhone: e.target.value})} 
+                    className="w-full border border-neutral-300 rounded-lg p-2"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold mb-1">Fecha de Venta</label>
+                  <input 
+                    type="date"
+                    required
+                    value={externalFormData.createdAt} 
+                    onChange={e => setExternalFormData({...externalFormData, createdAt: e.target.value})} 
                     className="w-full border border-neutral-300 rounded-lg p-2"
                   />
                 </div>
