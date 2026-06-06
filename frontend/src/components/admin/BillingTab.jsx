@@ -394,12 +394,16 @@ const BillingTab = () => {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold mb-1">Fecha de Venta</label>
+                  <label className="block text-sm font-semibold mb-1 flex items-center gap-2">
+                    Fecha de Venta 
+                    {formData.canalVenta === 'Web' && <span className="text-[10px] bg-neutral-100 text-neutral-500 px-2 py-0.5 rounded-full">Bloqueado (Web)</span>}
+                  </label>
                   <input 
                     type="date"
                     value={formData.createdAt} 
                     onChange={e => setFormData({...formData, createdAt: e.target.value})} 
-                    className="w-full border rounded-lg p-2 text-sm"
+                    disabled={formData.canalVenta === 'Web'}
+                    className={`w-full border rounded-lg p-2 text-sm ${formData.canalVenta === 'Web' ? 'bg-neutral-100 text-neutral-500 cursor-not-allowed' : 'bg-white'}`}
                   />
                 </div>
               </div>
