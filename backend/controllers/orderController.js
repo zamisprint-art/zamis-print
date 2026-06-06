@@ -203,7 +203,7 @@ const updateBillingStatus = async (req, res) => {
         if (req.body.notaCobroInterna !== undefined) order.notaCobroInterna = req.body.notaCobroInterna;
         let newCreatedAt;
         if (req.body.createdAt) {
-            if (req.body.createdAt.length === 10) {
+            if (typeof req.body.createdAt === 'string' && req.body.createdAt.length === 10) {
                 newCreatedAt = new Date(`${req.body.createdAt}T12:00:00`);
             } else {
                 newCreatedAt = new Date(req.body.createdAt);
@@ -290,7 +290,7 @@ const addExternalOrder = async (req, res) => {
     const isPaid = estadoCobro === 'pagado';
     let finalDate = Date.now();
     if (createdAt) {
-        if (createdAt.length === 10) {
+        if (typeof createdAt === 'string' && createdAt.length === 10) {
             finalDate = new Date(`${createdAt}T12:00:00`);
         } else {
             finalDate = new Date(createdAt);
