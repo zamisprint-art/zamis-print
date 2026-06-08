@@ -21,6 +21,7 @@ import SEOHead from '../components/SEOHead';
 
 const Product3DViewer = lazy(() => import('../components/Product3DViewer'));
 import CurvedEngravedText2D from '../components/CurvedEngravedText2D';
+import FlatEngravedText2D from '../components/FlatEngravedText2D';
 
 const ProductDetail = () => {
   const { id }       = useParams();
@@ -282,10 +283,17 @@ const ProductDetail = () => {
                     onClick={(e) => e.stopPropagation()}
                   >
                     <div className="px-6 py-4 rounded-xl border-2 border-transparent hover:border-white/30 hover:bg-black/10 transition-all flex flex-col items-center group/text">
-                      <CurvedEngravedText2D 
-                        text={personalizationText}
-                        font={customFont}
-                      />
+                      {product.engravingType === 'curvo' ? (
+                        <CurvedEngravedText2D 
+                          text={personalizationText}
+                          font={customFont}
+                        />
+                      ) : (
+                        <FlatEngravedText2D 
+                          text={personalizationText}
+                          font={customFont}
+                        />
+                      )}
                       <p className="opacity-0 group-hover/text:opacity-100 text-white/90 text-[10px] uppercase tracking-widest text-center mt-3 flex items-center justify-center gap-1 select-none transition-opacity bg-black/50 px-2 py-1 rounded-full">
                         <span className="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span> Arrastra para ubicar
                       </p>

@@ -110,6 +110,11 @@ const productSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
+    engravingType: {
+        type: String,
+        enum: ['curvo', 'plano'],
+        default: 'plano',
+    },
     isActive: {
         type: Boolean,
         default: true,

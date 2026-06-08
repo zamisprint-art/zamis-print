@@ -29,7 +29,7 @@ const ProductsTab = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [currentProduct, setCurrentProduct] = useState({
-    _id: '', name: '', price: 0, category: '', countInStock: 0, description: '', image: '', model3D: '', gallery: [], colors: []
+    _id: '', name: '', price: 0, category: '', countInStock: 0, description: '', image: '', model3D: '', gallery: [], colors: [], engravingType: 'plano'
   });
   const [uploadingImage, setUploadingImage] = useState(false);
   const [uploadingModel, setUploadingModel] = useState(false);
@@ -41,7 +41,7 @@ const ProductsTab = () => {
     message: '',
     confirmText: 'Aceptar',
     variant: 'primary',
-    onConfirm: () => {}
+    onConfirm: () => { }
   });
 
   const openConfirm = (options) => {
@@ -75,7 +75,7 @@ const ProductsTab = () => {
   // --- PRODUCT CRUD HANDLERS ---
   const handleOpenCreateModal = () => {
     setIsEditing(false);
-    setCurrentProduct({ _id: '', name: '', price: 0, category: '', countInStock: 0, description: '', image: '', model3D: '', gallery: [], colors: [], specifications: [] });
+    setCurrentProduct({ _id: '', name: '', price: 0, category: '', countInStock: 0, description: '', image: '', model3D: '', gallery: [], colors: [], specifications: [], engravingType: 'plano' });
     setUploadError('');
     setIsModalOpen(true);
   };
@@ -125,7 +125,7 @@ const ProductsTab = () => {
 
   const handleSaveProduct = async (e) => {
     e.preventDefault();
-    
+
     const actionText = isEditing ? 'guardar los cambios en este producto' : 'crear este nuevo producto';
     openConfirm({
       title: isEditing ? 'Guardar Cambios' : 'Crear Producto',
@@ -164,7 +164,7 @@ const ProductsTab = () => {
     try {
       const config = { headers: { 'Content-Type': 'multipart/form-data' }, withCredentials: true };
       const { data: responseData } = await axios.post('/api/upload', formData, config);
-      
+
       if (type === 'image') {
         setCurrentProduct({ ...currentProduct, image: responseData.filePath });
         setUploadingImage(false);
@@ -197,17 +197,17 @@ const ProductsTab = () => {
       {/* Filters and Search */}
       <form onSubmit={handleSearchSubmit} className="flex flex-col sm:flex-row gap-3 w-full mb-6">
         <div className="relative w-full sm:w-64">
-          <input 
-            type="text" 
-            placeholder="Buscar producto por nombre..." 
+          <input
+            type="text"
+            placeholder="Buscar producto por nombre..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:outline-none"
           />
           <Search size={18} className="absolute left-3 top-2.5 text-neutral-400" />
         </div>
-        <select 
-          value={category} 
+        <select
+          value={category}
           onChange={(e) => { setCategory(e.target.value); setPage(1); }}
           className="px-4 py-2 border border-neutral-300 rounded-xl focus:ring-2 focus:ring-brand-500 bg-white"
         >
@@ -220,7 +220,7 @@ const ProductsTab = () => {
           Buscar
         </button>
       </form>
-      
+
       {loading ? (
         <div className="flex justify-center items-center h-64 text-neutral-500">Cargando catálogo...</div>
       ) : (
@@ -240,38 +240,39 @@ const ProductsTab = () => {
                 {data.products.map((product) => {
                   const isActive = product.isActive !== false;
                   return (
-                  <tr key={product._id} className={`border-b border-neutral-100 transition-colors ${!isActive ? 'bg-neutral-100/60 opacity-60' : 'hover:bg-neutral-50'}`}>
-                    <td className="py-4 px-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-lg overflow-hidden bg-neutral-100 shrink-0">
-                          <img src={product.image} alt={product.name} className={`w-full h-full object-cover ${!isActive ? 'grayscale' : ''}`} />
+                    <tr key={product._id} className={`border-b border-neutral-100 transition-colors ${!isActive ? 'bg-neutral-100/60 opacity-60' : 'hover:bg-neutral-50'}`}>
+                      <td className="py-4 px-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-lg overflow-hidden bg-neutral-100 shrink-0">
+                            <img src={product.image} alt={product.name} className={`w-full h-full object-cover ${!isActive ? 'grayscale' : ''}`} />
+                          </div>
+                          <div className="font-bold text-neutral-900">
+                            {product.name}
+                            {!isActive && <span className="ml-2 px-2 py-0.5 rounded text-[10px] font-bold bg-neutral-200 text-neutral-600 uppercase tracking-wider">Inactivo</span>}
+                          </div>
                         </div>
-                        <div className="font-bold text-neutral-900">
-                          {product.name}
-                          {!isActive && <span className="ml-2 px-2 py-0.5 rounded text-[10px] font-bold bg-neutral-200 text-neutral-600 uppercase tracking-wider">Inactivo</span>}
-                        </div>
-                      </div>
-                    </td>
-                    <td className="py-4 px-4 text-neutral-600">{product.category}</td>
-                    <td className="py-4 px-4 font-bold">${product.price.toLocaleString('es-CO')}</td>
-                    <td className="py-4 px-4">
-                      <span className={`px-2 py-1 rounded text-xs font-bold ${product.countInStock > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                        {product.countInStock}
-                      </span>
-                    </td>
-                    <td className="py-4 px-4 flex justify-end gap-2">
-                      <button onClick={() => handleToggleActive(product)} className={`p-2 rounded-lg transition-colors ${isActive ? 'bg-amber-50 text-amber-600 hover:bg-amber-100' : 'bg-green-50 text-green-600 hover:bg-green-100'}`} title={isActive ? 'Ocultar producto' : 'Activar producto'}>
-                        {isActive ? <EyeOff size={18} /> : <Eye size={18} />}
-                      </button>
-                      <button onClick={() => handleOpenEditModal(product)} className="p-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors">
-                        <Edit size={18} />
-                      </button>
-                      <button onClick={() => handleDeleteProduct(product._id)} className="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors">
-                        <Trash2 size={18} />
-                      </button>
-                    </td>
-                  </tr>
-                )})}
+                      </td>
+                      <td className="py-4 px-4 text-neutral-600">{product.category}</td>
+                      <td className="py-4 px-4 font-bold">${product.price.toLocaleString('es-CO')}</td>
+                      <td className="py-4 px-4">
+                        <span className={`px-2 py-1 rounded text-xs font-bold ${product.countInStock > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                          {product.countInStock}
+                        </span>
+                      </td>
+                      <td className="py-4 px-4 flex justify-end gap-2">
+                        <button onClick={() => handleToggleActive(product)} className={`p-2 rounded-lg transition-colors ${isActive ? 'bg-amber-50 text-amber-600 hover:bg-amber-100' : 'bg-green-50 text-green-600 hover:bg-green-100'}`} title={isActive ? 'Ocultar producto' : 'Activar producto'}>
+                          {isActive ? <EyeOff size={18} /> : <Eye size={18} />}
+                        </button>
+                        <button onClick={() => handleOpenEditModal(product)} className="p-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors">
+                          <Edit size={18} />
+                        </button>
+                        <button onClick={() => handleDeleteProduct(product._id)} className="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors">
+                          <Trash2 size={18} />
+                        </button>
+                      </td>
+                    </tr>
+                  )
+                })}
                 {data.products.length === 0 && (
                   <tr>
                     <td colSpan="5" className="text-center py-8 text-neutral-500">No se encontraron productos con esos filtros.</td>
@@ -288,15 +289,15 @@ const ProductsTab = () => {
                 Página {data.page} de {data.pages} ({data.total} productos)
               </span>
               <div className="flex gap-2">
-                <button 
-                  disabled={data.page === 1} 
+                <button
+                  disabled={data.page === 1}
                   onClick={() => setPage(p => p - 1)}
                   className="flex items-center gap-1 px-4 py-2 rounded-lg border border-neutral-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-neutral-50 transition-colors"
                 >
                   <ChevronLeft size={16} /> Anterior
                 </button>
-                <button 
-                  disabled={data.page === data.pages} 
+                <button
+                  disabled={data.page === data.pages}
                   onClick={() => setPage(p => p + 1)}
                   className="flex items-center gap-1 px-4 py-2 rounded-lg border border-neutral-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-neutral-50 transition-colors"
                 >
@@ -312,23 +313,23 @@ const ProductsTab = () => {
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm overflow-y-auto">
           <div className="bg-white w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl p-6 relative shadow-2xl my-auto">
-            <button 
+            <button
               onClick={() => setIsModalOpen(false)}
               className="absolute top-4 right-4 p-2 text-neutral-500 hover:text-neutral-900 rounded-full hover:bg-neutral-100 transition-colors"
             >
               <X size={24} />
             </button>
             <h2 className="text-2xl font-bold mb-6">{isEditing ? 'Editar Producto' : 'Crear Producto'}</h2>
-            
+
             <form onSubmit={handleSaveProduct} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-neutral-700 mb-1">Nombre</label>
-                  <input type="text" required value={currentProduct.name} onChange={(e) => setCurrentProduct({...currentProduct, name: e.target.value})} className="w-full border rounded-lg p-2" />
+                  <input type="text" required value={currentProduct.name} onChange={(e) => setCurrentProduct({ ...currentProduct, name: e.target.value })} className="w-full border rounded-lg p-2" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-neutral-700 mb-1">Categoría</label>
-                  <select required value={currentProduct.category} onChange={(e) => setCurrentProduct({...currentProduct, category: e.target.value, subcategory: ''})} className="w-full border rounded-lg p-2 bg-white">
+                  <select required value={currentProduct.category} onChange={(e) => setCurrentProduct({ ...currentProduct, category: e.target.value, subcategory: '' })} className="w-full border rounded-lg p-2 bg-white">
                     <option value="" disabled>Seleccione una categoría</option>
                     {CATEGORIES.map(cat => (
                       <option key={cat} value={cat}>{cat}</option>
@@ -341,7 +342,7 @@ const ProductsTab = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-neutral-700 mb-1">Subcategoría (Opcional)</label>
-                  <select value={currentProduct.subcategory || ''} onChange={(e) => setCurrentProduct({...currentProduct, subcategory: e.target.value})} className="w-full border rounded-lg p-2 bg-white" disabled={!currentProduct.category}>
+                  <select value={currentProduct.subcategory || ''} onChange={(e) => setCurrentProduct({ ...currentProduct, subcategory: e.target.value })} className="w-full border rounded-lg p-2 bg-white" disabled={!currentProduct.category}>
                     <option value="">Ninguna / Otra</option>
                     {currentProduct.category && CATEGORY_STRUCTURE[currentProduct.category]?.map(sub => (
                       <option key={sub} value={sub}>{sub}</option>
@@ -350,23 +351,23 @@ const ProductsTab = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-neutral-700 mb-1">Precio ($)</label>
-                  <input type="number" required value={currentProduct.price} onChange={(e) => setCurrentProduct({...currentProduct, price: e.target.value})} className="w-full border rounded-lg p-2" />
+                  <input type="number" required value={currentProduct.price} onChange={(e) => setCurrentProduct({ ...currentProduct, price: e.target.value })} className="w-full border rounded-lg p-2" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-neutral-700 mb-1">Stock</label>
-                  <input type="number" required value={currentProduct.countInStock} onChange={(e) => setCurrentProduct({...currentProduct, countInStock: e.target.value})} className="w-full border rounded-lg p-2" />
+                  <input type="number" required value={currentProduct.countInStock} onChange={(e) => setCurrentProduct({ ...currentProduct, countInStock: e.target.value })} className="w-full border rounded-lg p-2" />
                 </div>
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-neutral-700 mb-1">Descripción</label>
-                <textarea rows="3" required value={currentProduct.description} onChange={(e) => setCurrentProduct({...currentProduct, description: e.target.value})} className="w-full border rounded-lg p-2"></textarea>
+                <textarea rows="3" required value={currentProduct.description} onChange={(e) => setCurrentProduct({ ...currentProduct, description: e.target.value })} className="w-full border rounded-lg p-2"></textarea>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border border-neutral-200 rounded-xl bg-neutral-50">
                 <div>
                   <label className="block text-sm font-medium text-neutral-700 mb-1 flex items-center gap-2">
-                    <Upload size={16} className="text-brand-500"/> Subir Imagen Principal
+                    <Upload size={16} className="text-brand-500" /> Subir Imagen Principal
                   </label>
                   <p className="text-xs text-neutral-500 mb-3">Formatos: JPG, PNG, WEBP. Max: 10MB.</p>
                   <div className="flex items-start gap-4">
@@ -389,7 +390,7 @@ const ProductsTab = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-neutral-700 mb-1 flex items-center gap-2">
-                    <Upload size={16} className="text-neutral-500"/> Subir Modelo 3D
+                    <Upload size={16} className="text-neutral-500" /> Subir Modelo 3D
                   </label>
                   <p className="text-xs text-neutral-500 mb-3">Formatos: .GLB, .GLTF. Max: 10MB.</p>
                   <input type="file" onChange={(e) => uploadFileHandler(e, 'model')} className="w-full text-sm text-neutral-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-neutral-100 file:text-neutral-600 hover:file:bg-neutral-200 cursor-pointer" />
@@ -397,23 +398,23 @@ const ProductsTab = () => {
                   {currentProduct.model3D && !uploadingModel && <p className="text-xs text-green-600 mt-2 truncate" title={currentProduct.model3D}>✅ {currentProduct.model3D.split('/').pop()}</p>}
                 </div>
               </div>
-              
+
               {/* Gallery Section */}
               <div className="p-4 border border-neutral-200 rounded-xl bg-neutral-50 mt-4">
                 <label className="block text-sm font-medium text-neutral-700 mb-2 flex items-center justify-between">
-                  <span className="flex items-center gap-2"><Upload size={16} className="text-brand-500"/> Galería de Imágenes (Opcional)</span>
+                  <span className="flex items-center gap-2"><Upload size={16} className="text-brand-500" /> Galería de Imágenes (Opcional)</span>
                   <span className="text-xs font-normal text-neutral-500">Máximo 4 fotos</span>
                 </label>
-                
+
                 <div className="flex flex-wrap gap-4 mb-4">
                   {currentProduct.gallery?.map((imgUrl, idx) => (
                     <div key={idx} className="w-16 h-16 rounded-xl bg-neutral-100 overflow-hidden border border-neutral-200 relative group">
                       <img src={imgUrl} alt={`Gallery ${idx}`} className="w-full h-full object-cover" />
-                      <button 
+                      <button
                         type="button"
                         onClick={() => {
                           const newGallery = currentProduct.gallery.filter((_, i) => i !== idx);
-                          setCurrentProduct({...currentProduct, gallery: newGallery});
+                          setCurrentProduct({ ...currentProduct, gallery: newGallery });
                         }}
                         className="absolute inset-0 bg-red-500/80 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                       >
@@ -421,7 +422,7 @@ const ProductsTab = () => {
                       </button>
                     </div>
                   ))}
-                  
+
                   {(!currentProduct.gallery || currentProduct.gallery.length < 4) && (
                     <div className="w-16 h-16 rounded-xl border-2 border-dashed border-neutral-300 flex items-center justify-center relative hover:border-brand-500 hover:bg-brand-50 transition-colors">
                       {uploadingImage ? (
@@ -429,10 +430,10 @@ const ProductsTab = () => {
                       ) : (
                         <PlusCircle size={20} className="text-neutral-400" />
                       )}
-                      <input 
-                        type="file" 
-                        onChange={(e) => uploadFileHandler(e, 'gallery')} 
-                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" 
+                      <input
+                        type="file"
+                        onChange={(e) => uploadFileHandler(e, 'gallery')}
+                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                         disabled={uploadingImage}
                       />
                     </div>
@@ -456,7 +457,7 @@ const ProductsTab = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-neutral-700 mb-1">Material</label>
-                    <select value={currentProduct.material || ''} onChange={(e) => setCurrentProduct({...currentProduct, material: e.target.value})} className="w-full border rounded-lg p-2">
+                    <select value={currentProduct.material || ''} onChange={(e) => setCurrentProduct({ ...currentProduct, material: e.target.value })} className="w-full border rounded-lg p-2">
                       <option value="">Sin especificar</option>
                       <option value="PLA">PLA</option>
                       <option value="PETG">PETG</option>
@@ -468,7 +469,7 @@ const ProductsTab = () => {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-neutral-700 mb-1">Tamaño</label>
-                    <select value={currentProduct.size || ''} onChange={(e) => setCurrentProduct({...currentProduct, size: e.target.value})} className="w-full border rounded-lg p-2">
+                    <select value={currentProduct.size || ''} onChange={(e) => setCurrentProduct({ ...currentProduct, size: e.target.value })} className="w-full border rounded-lg p-2">
                       <option value="">Sin especificar</option>
                       <option value="Pequeño">Pequeño</option>
                       <option value="Mediano">Mediano</option>
@@ -488,9 +489,9 @@ const ProductsTab = () => {
                             onClick={() => {
                               const currentColors = currentProduct.colors || [];
                               if (isSelected) {
-                                setCurrentProduct({...currentProduct, colors: currentColors.filter(c => c !== color.name)});
+                                setCurrentProduct({ ...currentProduct, colors: currentColors.filter(c => c !== color.name) });
                               } else {
-                                setCurrentProduct({...currentProduct, colors: [...currentColors, color.name]});
+                                setCurrentProduct({ ...currentProduct, colors: [...currentColors, color.name] });
                               }
                             }}
                             className={`relative w-8 h-8 rounded-full border-2 transition-transform hover:scale-110 flex items-center justify-center ${isSelected ? 'ring-2 ring-offset-2 ring-brand-500 scale-110' : ''}`}
@@ -507,12 +508,12 @@ const ProductsTab = () => {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-neutral-700 mb-1">Medidas (cm)</label>
-                    <input type="text" value={currentProduct.measurements || ''} onChange={(e) => setCurrentProduct({...currentProduct, measurements: e.target.value})} className="w-full border rounded-lg p-2" placeholder="Ej: 10 x 5 x 8 cm" />
+                    <input type="text" value={currentProduct.measurements || ''} onChange={(e) => setCurrentProduct({ ...currentProduct, measurements: e.target.value })} className="w-full border rounded-lg p-2" placeholder="Ej: 10 x 5 x 8 cm" />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-neutral-700 mb-1">Precio de Oferta ($)</label>
-                    <input type="number" value={currentProduct.salePrice || ''} onChange={(e) => setCurrentProduct({...currentProduct, salePrice: e.target.value})} className="w-full border rounded-lg p-2" placeholder="Dejar vacío si no hay oferta" />
+                    <input type="number" value={currentProduct.salePrice || ''} onChange={(e) => setCurrentProduct({ ...currentProduct, salePrice: e.target.value })} className="w-full border rounded-lg p-2" placeholder="Dejar vacío si no hay oferta" />
                   </div>
                 </div>
               </div>
@@ -522,32 +523,48 @@ const ProductsTab = () => {
                 <h3 className="text-sm font-bold text-neutral-800 uppercase tracking-wide">Nivel de Personalización (Flujo de Venta)</h3>
                 <div className="space-y-2">
                   <label className="flex items-center gap-3 p-2 rounded-lg hover:bg-blue-50/50 cursor-pointer border border-transparent hover:border-blue-100 transition-all">
-                    <input type="radio" name="personalizationLevel" 
-                      checked={!currentProduct.isCustomizable && !currentProduct.requiresQuote} 
-                      onChange={() => setCurrentProduct({...currentProduct, isCustomizable: false, requiresQuote: false})} 
-                      className="w-5 h-5 text-blue-600 focus:ring-blue-500 border-neutral-300" 
+                    <input type="radio" name="personalizationLevel"
+                      checked={!currentProduct.isCustomizable && !currentProduct.requiresQuote}
+                      onChange={() => setCurrentProduct({ ...currentProduct, isCustomizable: false, requiresQuote: false })}
+                      className="w-5 h-5 text-blue-600 focus:ring-blue-500 border-neutral-300"
                     />
                     <div>
                       <span className="block text-sm font-bold text-neutral-900">Estándar (Venta Directa)</span>
                       <span className="block text-xs text-neutral-500">Producto de catálogo sin personalización. Botón "Añadir al Carrito".</span>
                     </div>
                   </label>
-                  <label className="flex items-center gap-3 p-2 rounded-lg hover:bg-brand-50/50 cursor-pointer border border-transparent hover:border-brand-100 transition-all">
-                    <input type="radio" name="personalizationLevel" 
-                      checked={currentProduct.isCustomizable && !currentProduct.requiresQuote} 
-                      onChange={() => setCurrentProduct({...currentProduct, isCustomizable: true, requiresQuote: false})} 
-                      className="w-5 h-5 text-brand-600 focus:ring-brand-500 border-neutral-300" 
+                  <label className="flex items-start gap-3 p-2 rounded-lg hover:bg-brand-50/50 cursor-pointer border border-transparent hover:border-brand-100 transition-all">
+                    <input type="radio" name="personalizationLevel"
+                      checked={currentProduct.isCustomizable && !currentProduct.requiresQuote}
+                      onChange={() => setCurrentProduct({ ...currentProduct, isCustomizable: true, requiresQuote: false, engravingType: currentProduct.engravingType || 'plano' })}
+                      className="w-5 h-5 text-brand-600 focus:ring-brand-500 border-neutral-300 mt-1"
                     />
-                    <div>
+                    <div className="flex-1">
                       <span className="block text-sm font-bold text-neutral-900">Personalización Simple (Configurable)</span>
-                      <span className="block text-xs text-neutral-500">Habilita selector de tallas y grabado de texto. Botón "Añadir al Carrito".</span>
+                      <span className="block text-xs text-neutral-500">Habilita selector de colores y grabado de texto. Botón "Añadir al Carrito".</span>
+                      
+                      {currentProduct.isCustomizable && !currentProduct.requiresQuote && (
+                        <div className="mt-3 p-3 bg-white border border-brand-200 rounded-lg shadow-sm w-full max-w-sm" onClick={(e) => e.stopPropagation()}>
+                          <label className="block text-xs font-bold text-brand-700 mb-2 uppercase tracking-wide">Tipo de Superficie de Grabado</label>
+                          <div className="flex gap-4">
+                            <label className="flex items-center gap-2 cursor-pointer">
+                              <input type="radio" name="engravingType" checked={currentProduct.engravingType === 'plano'} onChange={() => setCurrentProduct({...currentProduct, engravingType: 'plano'})} className="text-brand-500 focus:ring-brand-500" />
+                              <span className="text-sm font-medium text-neutral-700">Plana</span>
+                            </label>
+                            <label className="flex items-center gap-2 cursor-pointer">
+                              <input type="radio" name="engravingType" checked={currentProduct.engravingType === 'curvo'} onChange={() => setCurrentProduct({...currentProduct, engravingType: 'curvo'})} className="text-brand-500 focus:ring-brand-500" />
+                              <span className="text-sm font-medium text-neutral-700">Curva</span>
+                            </label>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </label>
                   <label className="flex items-center gap-3 p-2 rounded-lg hover:bg-green-50/50 cursor-pointer border border-transparent hover:border-green-100 transition-all">
-                    <input type="radio" name="personalizationLevel" 
-                      checked={currentProduct.requiresQuote} 
-                      onChange={() => setCurrentProduct({...currentProduct, isCustomizable: false, requiresQuote: true})} 
-                      className="w-5 h-5 text-green-600 focus:ring-green-500 border-neutral-300" 
+                    <input type="radio" name="personalizationLevel"
+                      checked={currentProduct.requiresQuote}
+                      onChange={() => setCurrentProduct({ ...currentProduct, isCustomizable: false, requiresQuote: true })}
+                      className="w-5 h-5 text-green-600 focus:ring-green-500 border-neutral-300"
                     />
                     <div>
                       <span className="block text-sm font-bold text-neutral-900">Diseño Exclusivo (Solicitar Diseño)</span>
@@ -562,15 +579,15 @@ const ProductsTab = () => {
                 <h3 className="text-sm font-bold text-neutral-800 uppercase tracking-wide">Destacar Producto</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <label className="flex items-center gap-3 cursor-pointer">
-                    <input type="checkbox" checked={currentProduct.isFeatured || false} onChange={(e) => setCurrentProduct({...currentProduct, isFeatured: e.target.checked})} className="w-5 h-5 text-amber-500 rounded focus:ring-amber-400 border-neutral-300" />
+                    <input type="checkbox" checked={currentProduct.isFeatured || false} onChange={(e) => setCurrentProduct({ ...currentProduct, isFeatured: e.target.checked })} className="w-5 h-5 text-amber-500 rounded focus:ring-amber-400 border-neutral-300" />
                     <span className="text-sm font-medium text-neutral-900">⭐ Producto Destacado</span>
                   </label>
                   <label className="flex items-center gap-3 cursor-pointer">
-                    <input type="checkbox" checked={currentProduct.isNewArrival || false} onChange={(e) => setCurrentProduct({...currentProduct, isNewArrival: e.target.checked})} className="w-5 h-5 text-green-600 rounded focus:ring-green-500 border-neutral-300" />
+                    <input type="checkbox" checked={currentProduct.isNewArrival || false} onChange={(e) => setCurrentProduct({ ...currentProduct, isNewArrival: e.target.checked })} className="w-5 h-5 text-green-600 rounded focus:ring-green-500 border-neutral-300" />
                     <span className="text-sm font-medium text-neutral-900">🆕 Nueva llegada</span>
                   </label>
                   <label className="flex items-center gap-3 cursor-pointer">
-                    <input type="checkbox" checked={currentProduct.isOnSale || false} onChange={(e) => setCurrentProduct({...currentProduct, isOnSale: e.target.checked})} className="w-5 h-5 text-red-500 rounded focus:ring-red-400 border-neutral-300" />
+                    <input type="checkbox" checked={currentProduct.isOnSale || false} onChange={(e) => setCurrentProduct({ ...currentProduct, isOnSale: e.target.checked })} className="w-5 h-5 text-red-500 rounded focus:ring-red-400 border-neutral-300" />
                     <span className="text-sm font-medium text-neutral-900">🏷️ En Oferta</span>
                   </label>
                 </div>
@@ -580,18 +597,18 @@ const ProductsTab = () => {
               <div className="mt-4 p-4 border border-neutral-200 rounded-xl bg-neutral-50/50 space-y-4">
                 <div className="flex justify-between items-center">
                   <h3 className="text-sm font-bold text-neutral-800 uppercase tracking-wide">Especificaciones Técnicas (Dinámicas)</h3>
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     onClick={() => {
                       const currentSpecs = currentProduct.specifications || [];
-                      setCurrentProduct({...currentProduct, specifications: [...currentSpecs, { name: '', value: '' }]});
+                      setCurrentProduct({ ...currentProduct, specifications: [...currentSpecs, { name: '', value: '' }] });
                     }}
                     className="text-sm text-brand-600 font-bold flex items-center gap-1 hover:text-brand-700 bg-brand-50 px-3 py-1.5 rounded-lg"
                   >
                     <PlusCircle size={16} /> Añadir Fila
                   </button>
                 </div>
-                
+
                 <div className="space-y-3">
                   {(!currentProduct.specifications || currentProduct.specifications.length === 0) ? (
                     <p className="text-sm text-neutral-500 italic text-center py-4 bg-white rounded-lg border border-neutral-200">No hay especificaciones dinámicas añadidas.</p>
@@ -599,38 +616,38 @@ const ProductsTab = () => {
                     currentProduct.specifications.map((spec, index) => (
                       <div key={index} className="flex gap-3 items-start bg-white p-2 rounded-lg border border-neutral-200">
                         <div className="flex-1">
-                          <input 
-                            type="text" 
-                            placeholder="Característica (Ej. Material)" 
-                            value={spec.name} 
+                          <input
+                            type="text"
+                            placeholder="Característica (Ej. Material)"
+                            value={spec.name}
                             onChange={(e) => {
                               const newSpecs = [...currentProduct.specifications];
                               newSpecs[index].name = e.target.value;
-                              setCurrentProduct({...currentProduct, specifications: newSpecs});
+                              setCurrentProduct({ ...currentProduct, specifications: newSpecs });
                             }}
                             className="w-full border rounded-lg p-2 text-sm font-bold text-neutral-700 bg-neutral-50"
                             required
                           />
                         </div>
                         <div className="flex-[2]">
-                          <input 
-                            type="text" 
-                            placeholder="Valor (Ej. PLA Premium)" 
-                            value={spec.value} 
+                          <input
+                            type="text"
+                            placeholder="Valor (Ej. PLA Premium)"
+                            value={spec.value}
                             onChange={(e) => {
                               const newSpecs = [...currentProduct.specifications];
                               newSpecs[index].value = e.target.value;
-                              setCurrentProduct({...currentProduct, specifications: newSpecs});
+                              setCurrentProduct({ ...currentProduct, specifications: newSpecs });
                             }}
                             className="w-full border rounded-lg p-2 text-sm"
                             required
                           />
                         </div>
-                        <button 
-                          type="button" 
+                        <button
+                          type="button"
                           onClick={() => {
                             const newSpecs = currentProduct.specifications.filter((_, i) => i !== index);
-                            setCurrentProduct({...currentProduct, specifications: newSpecs});
+                            setCurrentProduct({ ...currentProduct, specifications: newSpecs });
                           }}
                           className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors mt-0.5"
                           title="Eliminar fila"
