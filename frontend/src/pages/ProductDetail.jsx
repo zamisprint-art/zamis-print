@@ -482,33 +482,33 @@ const ProductDetail = () => {
                   </div>
                 </div>
 
-                {/* Step 2: Text */}
+                {/* Step 2: Text & Typography */}
                 <div className="relative z-10">
                   <label className="flex items-center gap-2 text-sm font-bold text-neutral-900 mb-3">
                     <span className="w-5 h-5 rounded-full bg-neutral-100 flex items-center justify-center text-xs text-neutral-500">2</span>
                     Grabado Personalizado (+$10.000)
                   </label>
-                  <input
-                    type="text"
-                    value={personalizationText}
-                    onChange={(e) => setPersonalizationText(e.target.value.substring(0, 15))}
-                    className="w-full px-4 py-3 rounded-xl border-2 border-neutral-200 bg-neutral-50 focus:bg-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all font-medium text-neutral-900 placeholder-neutral-400 outline-none"
-                    placeholder="Ej: MAX (Máximo 15 letras)"
-                  />
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-[1fr_200px] gap-3">
+                    <input
+                      type="text"
+                      value={personalizationText}
+                      onChange={(e) => setPersonalizationText(e.target.value.substring(0, 15).toUpperCase())}
+                      className="w-full px-4 py-3 rounded-xl border-2 border-neutral-200 bg-neutral-50 focus:bg-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all font-medium text-neutral-900 placeholder-neutral-400 outline-none"
+                      placeholder="Ej: MAX (Máximo 15 letras)"
+                    />
+                    
+                    <select 
+                      value={customFont} 
+                      onChange={(e) => setCustomFont(e.target.value)} 
+                      disabled={!personalizationText}
+                      className="w-full h-full border-2 border-neutral-200 rounded-xl px-4 py-3 bg-white text-sm font-semibold text-neutral-700 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 outline-none cursor-pointer transition-all disabled:opacity-50 disabled:bg-neutral-50 disabled:cursor-not-allowed"
+                    >
+                      <option value="Clásica">Clásica (Elegante)</option>
+                      <option value="Divertida">Divertida (Estilo Cómic)</option>
+                    </select>
+                  </div>
                 </div>
-
-                {/* Step 2b: Typography (Conditional based on text) */}
-                {personalizationText && (
-                  <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="relative z-10 grid grid-cols-1 gap-6 border-t border-brand-200 pt-6 mt-2">
-                    <div>
-                      <label className="block text-sm font-bold text-neutral-900 mb-3">Estilo de Letra</label>
-                      <select value={customFont} onChange={(e) => setCustomFont(e.target.value)} className="w-full border-2 border-neutral-200 rounded-xl px-4 py-2.5 bg-white text-sm font-semibold text-neutral-700 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 outline-none cursor-pointer transition-all">
-                        <option value="Clásica">Clásica (Elegante)</option>
-                        <option value="Divertida">Divertida (Estilo Cómic)</option>
-                      </select>
-                    </div>
-                  </motion.div>
-                )}
               </div>
             ) : (
               /* Legacy Personalization */
