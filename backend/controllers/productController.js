@@ -118,7 +118,7 @@ const updateProduct = async (req, res) => {
     const {
         name, price, description, image, gallery, model3D,
         category, subcategory, countInStock,
-        requiresTextPersonalization, requiresImagePersonalization, isCustomizable,
+        requiresTextPersonalization, requiresImagePersonalization, isCustomizable, requiresQuote,
         isFeatured, isNewArrival, isOnSale, salePrice,
         material, colors, size, measurements, personalizationLevel, isActive,
         specifications,
@@ -139,6 +139,7 @@ const updateProduct = async (req, res) => {
         product.requiresTextPersonalization = requiresTextPersonalization !== undefined ? requiresTextPersonalization : product.requiresTextPersonalization;
         product.requiresImagePersonalization = requiresImagePersonalization !== undefined ? requiresImagePersonalization : product.requiresImagePersonalization;
         product.isCustomizable = isCustomizable !== undefined ? isCustomizable : product.isCustomizable;
+        product.requiresQuote = requiresQuote !== undefined ? requiresQuote : product.requiresQuote;
         // Merchandising
         product.isFeatured = isFeatured !== undefined ? isFeatured : product.isFeatured;
         product.isNewArrival = isNewArrival !== undefined ? isNewArrival : product.isNewArrival;
