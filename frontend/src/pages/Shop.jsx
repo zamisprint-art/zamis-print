@@ -28,19 +28,22 @@ const Shop = () => {
   const queryCategory = searchParams.get('category') || 'All';
   const querySubcategory = searchParams.get('subcategory') || '';
   const querySort = searchParams.get('sort') || 'newest';
+  const queryPersonalization = searchParams.get('personalization') || '';
 
   const [search, setSearch]       = useState(querySearch);
   const [category, setCategory]   = useState(queryCategory);
   const [subcategory, setSubcategory] = useState(querySubcategory);
   const [sort, setSort]           = useState(querySort);
+  const [filterPersonalization, setFilterPersonalization] = useState(queryPersonalization);
 
   // Sync state to URL without overriding immediately on load
-  const updateUrl = (q, c, sub, s) => {
+  const updateUrl = (q, c, sub, s, p) => {
     const params = new URLSearchParams();
     if (q) params.set('q', q);
     if (c && c !== 'All') params.set('category', c);
     if (sub) params.set('subcategory', sub);
     if (s && s !== 'newest') params.set('sort', s);
+    if (p) params.set('personalization', p);
     setSearchParams(params);
   };
 
@@ -64,13 +67,13 @@ const Shop = () => {
     setCategory(queryCategory);
     setSubcategory(querySubcategory);
     setSort(querySort);
-  }, [querySearch, queryCategory, querySubcategory, querySort]);
+    setFilterPersonalization(queryPersonalization);
+  }, [querySearch, queryCategory, querySubcategory, querySort, queryPersonalization]);
 
   // Advanced filter states
   const [priceRange, setPriceRange] = useState([0, 5000000]);
   const [filterMaterial, setFilterMaterial] = useState('');
   const [filterSize, setFilterSize] = useState('');
-  const [filterPersonalization, setFilterPersonalization] = useState('');
   const [showOnlyOffers, setShowOnlyOffers] = useState(false);
 
   // Extract unique categories and subcategories from products
@@ -112,25 +115,63 @@ const Shop = () => {
     });
     if (filterMaterial) result = result.filter(p => p.material === filterMaterial);
     if (filterSize) result = result.filter(p => p.size === filterSize);
-    if (filterPersonalization) result = result.filter(p => p.personalizationLevel === filterPersonalization);
+    if (filterPersonalization) {
+      if (filterPersonalization === 'Estándar') {
+        result = result.filter(p => !p.isCustomizable && !p.requiresQuote);
+      } else if (filterPersonalization === 'Configurable') {
+        result = result.filter(p => p.isCustomizable && !p.requiresQuote);
+      } else if (filterPersonalization === 'A la Medida') {
+        result = result.filter(p => p.requiresQuote);
+      }
+    }
     if (showOnlyOffers) result = result.filter(p => p.isOnSale);
 
-    if (sort === 'price-asc')  result.sort((a, b) => a.price - b.price);
-    if (sort === 'price-desc') result.sort((a, b) => b.price - a.price);
-    if (sort === 'rating')     result.sort((a, b) => b.rating - a.rating);
-    if (sort === 'newest')     result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    if (sort === 'best-selling') result.sort((a, b) => (b.totalSold || 0) - (a.totalSold || 0));
+    if (sort === 'price-asc') {
+      result.sort((a, b) => {
+        if (a.requiresQuote && !b.requiresQuote) return 1;
+        if (!a.requiresQuote && b.requiresQuote) return -1;
+        return a.price - b.price;
+      });
+    }
+    if (sort === 'price-desc') {
+      result.sort((a, b) => {
+        if (a.requiresQuote && !b.requiresQuote) return 1;
+        if (!a.requiresQuote && b.requiresQuote) return -1;
+        return b.price - a.price;
+      });
+    }
+    if (sort === 'rating') {
+      result.sort((a, b) => {
+        if (a.requiresQuote && !b.requiresQuote) return 1;
+        if (!a.requiresQuote && b.requiresQuote) return -1;
+        return b.rating - a.rating;
+      });
+    }
+    if (sort === 'newest') {
+      result.sort((a, b) => {
+        if (a.requiresQuote && !b.requiresQuote) return 1;
+        if (!a.requiresQuote && b.requiresQuote) return -1;
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      });
+    }
+    if (sort === 'best-selling') {
+      result.sort((a, b) => {
+        if (a.requiresQuote && !b.requiresQuote) return 1;
+        if (!a.requiresQuote && b.requiresQuote) return -1;
+        return (b.totalSold || 0) - (a.totalSold || 0);
+      });
+    }
 
     setFiltered(result);
   }, [search, category, subcategory, sort, products, priceRange, filterMaterial, filterSize, filterPersonalization, showOnlyOffers]);
 
-  const handleSearchChange = (e) => { setSearch(e.target.value); updateUrl(e.target.value, category, subcategory, sort); };
-  const handleCategoryChange = (c) => { setCategory(c); setSubcategory(''); updateUrl(search, c, '', sort); };
-  const handleSubcategoryChange = (sub) => { const newSub = subcategory === sub ? '' : sub; setSubcategory(newSub); updateUrl(search, category, newSub, sort); };
-  const handleSortChange = (e) => { setSort(e.target.value); updateUrl(search, category, subcategory, e.target.value); };
+  const handleSearchChange = (e) => { setSearch(e.target.value); updateUrl(e.target.value, category, subcategory, sort, filterPersonalization); };
+  const handleCategoryChange = (c) => { setCategory(c); setSubcategory(''); updateUrl(search, c, '', sort, filterPersonalization); };
+  const handleSubcategoryChange = (sub) => { const newSub = subcategory === sub ? '' : sub; setSubcategory(newSub); updateUrl(search, category, newSub, sort, filterPersonalization); };
+  const handleSortChange = (e) => { setSort(e.target.value); updateUrl(search, category, subcategory, e.target.value, filterPersonalization); };
 
   const activeFiltersCount = [filterMaterial, filterSize, filterPersonalization, showOnlyOffers ? 'offer' : ''].filter(Boolean).length;
-  const resetAdvancedFilters = () => { setFilterMaterial(''); setFilterSize(''); setFilterPersonalization(''); setShowOnlyOffers(false); setPriceRange([0, maxPrice]); };
+  const resetAdvancedFilters = () => { setFilterMaterial(''); setFilterSize(''); setFilterPersonalization(''); setShowOnlyOffers(false); setPriceRange([0, maxPrice]); updateUrl(search, category, subcategory, sort, ''); };
 
   return (
     <div className="container-xl py-12">
@@ -271,10 +312,14 @@ const Shop = () => {
 
             {/* Personalization Level */}
             <div>
-              <h3 className="text-sm font-bold text-neutral-900 uppercase tracking-wider mb-3">Personalización</h3>
+              <h3 className="text-sm font-bold text-neutral-900 uppercase tracking-wider mb-3">Nivel de Compra</h3>
               <div className="flex flex-col gap-1.5">
-                {['Ninguna', 'Básica', 'Avanzada', 'Premium'].map(lvl => (
-                  <button key={lvl} onClick={() => setFilterPersonalization(filterPersonalization === lvl ? '' : lvl)}
+                {['Estándar', 'Configurable', 'A la Medida'].map(lvl => (
+                  <button key={lvl} onClick={() => {
+                      const newLvl = filterPersonalization === lvl ? '' : lvl;
+                      setFilterPersonalization(newLvl);
+                      updateUrl(search, category, subcategory, sort, newLvl);
+                    }}
                     className={`text-left px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center justify-between ${
                       filterPersonalization === lvl ? 'bg-brand-50 text-brand-700 font-bold' : 'text-neutral-600 hover:bg-neutral-50'
                     }`}>
