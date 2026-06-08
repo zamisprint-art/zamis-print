@@ -57,11 +57,11 @@ const Home = () => {
   }, []);
 
   // Derived sections
-  const featured = allProducts.filter(p => p.isFeatured).slice(0, 12);
-  const newArrivals = allProducts.filter(p => p.isNewArrival).slice(0, 12);
-  const onSale = allProducts.filter(p => p.isOnSale && p.salePrice).slice(0, 12);
+  const featured = allProducts.filter(p => p.isFeatured && !p.requiresQuote).slice(0, 12);
+  const newArrivals = allProducts.filter(p => p.isNewArrival && !p.requiresQuote).slice(0, 12);
+  const onSale = allProducts.filter(p => p.isOnSale && p.salePrice && !p.requiresQuote).slice(0, 12);
   // Fallback: if admin hasn't configured flags yet, show most recent
-  const recentProducts = allProducts.slice(0, 12);
+  const recentProducts = allProducts.filter(p => !p.requiresQuote).slice(0, 12);
 
   const ProductCarousel = ({ items, fallback }) => {
     const list = items.length > 0 ? items : fallback;
@@ -202,13 +202,15 @@ const Home = () => {
       {homeSections.map((section, index) => {
         let items = [];
         if (section.type === 'featured') {
-          items = allProducts.filter(p => p.isFeatured);
+          items = allProducts.filter(p => p.isFeatured && !p.requiresQuote);
         } else if (section.type === 'sale') {
-          items = allProducts.filter(p => p.isOnSale && p.salePrice);
+          items = allProducts.filter(p => p.isOnSale && p.salePrice && !p.requiresQuote);
         } else if (section.type === 'newest') {
-          items = [...allProducts].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+          items = allProducts.filter(p => !p.requiresQuote).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         } else if (section.type === 'category' && section.categoryFilter) {
-          items = allProducts.filter(p => p.category?.toLowerCase() === section.categoryFilter.toLowerCase());
+          items = allProducts.filter(p => p.category?.toLowerCase() === section.categoryFilter.toLowerCase() && !p.requiresQuote);
+        } else if (section.type === 'bespoke') {
+          items = allProducts.filter(p => p.requiresQuote);
         }
 
         // Aumentamos el límite para aprovechar el carrusel

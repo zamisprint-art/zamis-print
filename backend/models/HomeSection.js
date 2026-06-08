@@ -4,7 +4,7 @@ const homeSectionSchema = new mongoose.Schema({
   type: {
     type: String,
     required: true,
-    enum: ['featured', 'sale', 'newest', 'category'],
+    enum: ['featured', 'sale', 'newest', 'category', 'bespoke'],
   },
   categoryFilter: {
     type: String, // Solo se usa si type es 'category'

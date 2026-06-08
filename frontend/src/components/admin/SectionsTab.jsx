@@ -18,6 +18,10 @@ const TYPE_TEMPLATES = {
   'sale': {
     emoji: '🔥',
     title: 'Aprovecha Antes Que Vuelen'
+  },
+  'bespoke': {
+    emoji: '💎',
+    title: 'Galería de Proyectos Premium'
   }
 };
 
@@ -37,6 +41,7 @@ const TYPE_LABELS = {
   'sale': 'Ofertas',
   'newest': 'Recién Salidos (Novedades)',
   'category': 'Colección Temática / Nicho',
+  'bespoke': 'Proyectos a la Medida',
 };
 
 const SectionsTab = () => {
@@ -266,6 +271,7 @@ const SectionsTab = () => {
                     <option value="featured">Favoritos de la Comunidad (Más Vendidos)</option>
                     <option value="category">Colección Temática / Nicho Específico</option>
                     <option value="sale">Ofertas / Descuentos</option>
+                    <option value="bespoke">Proyectos a la Medida (Solo Nivel Cotización)</option>
                   </select>
                 </div>
 
