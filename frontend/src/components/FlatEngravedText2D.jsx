@@ -59,7 +59,7 @@ const FlatEngravedText2D = ({ text, font, color }) => {
         letterSpacing: '0.05em'
       }}
     >
-      <span className="text-3xl md:text-5xl">{text}</span>
+      <span className="text-2xl md:text-4xl">{text}</span>
     </div>
   );
 };
