@@ -120,7 +120,7 @@ const Shop = () => {
         result = result.filter(p => !p.isCustomizable && !p.requiresQuote);
       } else if (filterPersonalization === 'Configurable') {
         result = result.filter(p => p.isCustomizable && !p.requiresQuote);
-      } else if (filterPersonalization === 'A la Medida') {
+      } else if (filterPersonalization === 'Diseños Exclusivos') {
         result = result.filter(p => p.requiresQuote);
       }
     }
@@ -314,7 +314,7 @@ const Shop = () => {
             <div>
               <h3 className="text-sm font-bold text-neutral-900 uppercase tracking-wider mb-3">Nivel de Compra</h3>
               <div className="flex flex-col gap-1.5">
-                {['Estándar', 'Configurable', 'A la Medida'].map(lvl => (
+                {['Estándar', 'Configurable', 'Diseños Exclusivos'].map(lvl => (
                   <button key={lvl} onClick={() => {
                       const newLvl = filterPersonalization === lvl ? '' : lvl;
                       setFilterPersonalization(newLvl);

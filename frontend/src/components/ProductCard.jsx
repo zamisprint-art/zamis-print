@@ -69,7 +69,7 @@ const ProductCard = ({ product }) => {
           )}
           {product.requiresQuote ? (
             <span className="flex items-center gap-1 bg-[#25D366] text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow">
-              <MessageCircle className="w-3 h-3" /> A LA MEDIDA
+              <MessageCircle className="w-3 h-3" /> DISEÑO EXCLUSIVO
             </span>
           ) : product.isCustomizable ? (
             <span className="flex items-center gap-1 bg-brand-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow">
@@ -97,7 +97,7 @@ const ProductCard = ({ product }) => {
         <div className="mt-1 mb-2">
           {product.requiresQuote ? (
             <span className="font-bold text-neutral-500 italic text-sm leading-none block">
-              Proyecto a la medida
+              Diseño exclusivo
             </span>
           ) : product.isOnSale && product.salePrice ? (
             <div className="flex flex-col">
