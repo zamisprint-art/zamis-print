@@ -2,7 +2,7 @@ import { useState, useEffect, lazy, Suspense, useRef, useMemo } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
-import { ShoppingCart, ChevronLeft, ChevronRight, Maximize2, X, Home, ChevronRight as ChevronRightIcon } from 'lucide-react';
+import { ShoppingCart, ChevronLeft, ChevronRight, Maximize2, X, Home, ChevronRight as ChevronRightIcon, Check } from 'lucide-react';
 import { useCartStore } from '../store/useCartStore';
 import toast from 'react-hot-toast';
 import { useAuthStore } from '../store/useAuthStore';
@@ -144,7 +144,6 @@ const ProductDetail = () => {
   const getCustomPriceAdditions = () => {
     if (!product?.isCustomizable) return 0;
     let extra = 0;
-    if (customSize === '20 cms') extra += 20000;
     if (personalizationText.trim() !== '') extra += 10000;
     return extra;
   };
@@ -165,9 +164,9 @@ const ProductDetail = () => {
     let finalPersonalizationText = personalizationText;
     if (product.isCustomizable) {
       const details = [
-        `Tamaño: ${customSize}`
+        `Base: Figura básica`
       ];
-      if (personalizationText) details.push(`Texto: "${personalizationText}" | Fuente: ${customFont} | Color: ${customTextColor}`);
+      if (personalizationText) details.push(`Texto: "${personalizationText}" | Fuente: ${customFont} | Relieve: ${customTextColor}`);
       finalPersonalizationText = details.join(' | ');
     }
 
@@ -422,8 +421,8 @@ const ProductDetail = () => {
 
           <div className="w-full h-px bg-neutral-200/60 my-2" />
 
-          {/* Color Selection */}
-          {product.colors && product.colors.length > 0 && (
+          {/* Color Selection for Standard Products */}
+          {!product.isCustomizable && product.colors && product.colors.length > 0 && (
             <div className="mb-4">
               <h3 className="text-sm font-bold text-neutral-900 mb-3">Color: <span className="font-medium text-neutral-500">{selectedColor || 'Selecciona uno'}</span></h3>
               <div className="flex flex-wrap gap-3">
@@ -439,7 +438,9 @@ const ProductDetail = () => {
                       className={`relative w-10 h-10 rounded-full border-2 transition-transform hover:scale-110 flex items-center justify-center ${isSelected ? 'ring-2 ring-offset-2 ring-brand-500 scale-110' : ''}`}
                       style={{ background: colorData.hex, borderColor: isSelected ? 'transparent' : '#e5e7eb' }}
                       title={colorName}
-                    />
+                    >
+                      {isSelected && <Check size={16} className={colorName === 'Blanco' || colorName === 'Amarillo' || colorName === 'Glow (Brilla)' || colorName === 'Transparente' ? 'text-neutral-900' : 'text-white'} strokeWidth={3} />}
+                    </button>
                   );
                 })}
               </div>
@@ -457,34 +458,43 @@ const ProductDetail = () => {
                   <h3 className="text-lg font-bold text-neutral-900">Configurador Premium</h3>
                 </div>
 
-                {/* Step 1: Size */}
+                {/* Step 1: Base Product */}
                 <div className="relative z-10">
                   <label className="flex items-center gap-2 text-sm font-bold text-neutral-900 mb-3">
                     <span className="w-5 h-5 rounded-full bg-neutral-100 flex items-center justify-center text-xs text-neutral-500">1</span>
-                    Tamaño de la Figura
+                    Producto Base
                   </label>
-                  <div className="grid grid-cols-2 gap-3">
-                    {['15 cms', '20 cms'].map(opt => (
-                      <button
-                        key={opt}
-                        onClick={() => setCustomSize(opt)}
-                        className={`relative py-3 px-4 rounded-xl border-2 text-sm font-semibold transition-all flex flex-col items-start gap-1 overflow-hidden ${
-                          customSize === opt 
-                            ? 'bg-brand-50 border-brand-500 text-brand-900 shadow-md ring-1 ring-brand-500/20' 
-                            : 'bg-white border-neutral-200 text-neutral-600 hover:border-brand-300 hover:bg-neutral-50'
-                        }`}
-                      >
-                        {customSize === opt && (
-                          <div className="absolute top-0 right-0 w-0 h-0 border-t-[28px] border-l-[28px] border-t-brand-500 border-l-transparent">
-                            <span className="absolute -top-[24px] -left-[14px] text-white text-[10px] font-bold">✓</span>
-                          </div>
-                        )}
-                        <span>{opt}</span>
-                        <span className={`text-[11px] font-medium ${customSize === opt ? 'text-brand-600' : 'text-neutral-400'}`}>
-                          {opt === '15 cms' ? 'Incluido' : '+$20.000'}
-                        </span>
-                      </button>
-                    ))}
+                  
+                  <div className="bg-neutral-50 border-2 border-neutral-200 rounded-xl p-4 flex flex-col gap-4 transition-all hover:border-brand-300">
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-neutral-900">Figura básica</span>
+                      <span className="text-[11px] font-bold bg-brand-100 text-brand-700 px-2 py-0.5 rounded-md uppercase tracking-wider">Incluido</span>
+                    </div>
+                    
+                    {product.colors && product.colors.length > 0 && (
+                      <div className="pt-3 border-t border-neutral-200">
+                        <span className="text-xs font-bold text-neutral-500 uppercase tracking-wider block mb-3">Color de la figura: <span className="text-brand-600">{selectedColor || '(Obligatorio)'}</span></span>
+                        <div className="flex flex-wrap gap-3">
+                          {product.colors.map(colorName => {
+                            const colorData = PRODUCT_COLORS.find(c => c.name === colorName);
+                            if (!colorData) return null;
+                            const isSelected = selectedColor === colorName;
+                            
+                            return (
+                              <button
+                                key={colorName}
+                                onClick={() => setSelectedColor(colorName)}
+                                className={`relative w-10 h-10 rounded-full border-2 transition-transform hover:scale-110 flex items-center justify-center ${isSelected ? 'ring-2 ring-offset-2 ring-brand-500 scale-110' : ''}`}
+                                style={{ background: colorData.hex, borderColor: isSelected ? 'transparent' : '#e5e7eb' }}
+                                title={colorName}
+                              >
+                                {isSelected && <Check size={16} className={colorName === 'Blanco' || colorName === 'Amarillo' || colorName === 'Glow (Brilla)' || colorName === 'Transparente' ? 'text-neutral-900' : 'text-white'} strokeWidth={3} />}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
 
