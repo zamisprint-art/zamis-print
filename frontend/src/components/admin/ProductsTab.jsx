@@ -517,14 +517,50 @@ const ProductsTab = () => {
                 </div>
               </div>
 
+              {/* Nivel de Personalización */}
+              <div className="mt-4 p-4 border border-blue-200 rounded-xl bg-blue-50/30 space-y-3">
+                <h3 className="text-sm font-bold text-neutral-800 uppercase tracking-wide">Nivel de Personalización (Flujo de Venta)</h3>
+                <div className="space-y-2">
+                  <label className="flex items-center gap-3 p-2 rounded-lg hover:bg-blue-50/50 cursor-pointer border border-transparent hover:border-blue-100 transition-all">
+                    <input type="radio" name="personalizationLevel" 
+                      checked={!currentProduct.isCustomizable && !currentProduct.requiresQuote} 
+                      onChange={() => setCurrentProduct({...currentProduct, isCustomizable: false, requiresQuote: false})} 
+                      className="w-5 h-5 text-blue-600 focus:ring-blue-500 border-neutral-300" 
+                    />
+                    <div>
+                      <span className="block text-sm font-bold text-neutral-900">Estándar (Venta Directa)</span>
+                      <span className="block text-xs text-neutral-500">Producto de catálogo sin personalización. Botón "Añadir al Carrito".</span>
+                    </div>
+                  </label>
+                  <label className="flex items-center gap-3 p-2 rounded-lg hover:bg-brand-50/50 cursor-pointer border border-transparent hover:border-brand-100 transition-all">
+                    <input type="radio" name="personalizationLevel" 
+                      checked={currentProduct.isCustomizable && !currentProduct.requiresQuote} 
+                      onChange={() => setCurrentProduct({...currentProduct, isCustomizable: true, requiresQuote: false})} 
+                      className="w-5 h-5 text-brand-600 focus:ring-brand-500 border-neutral-300" 
+                    />
+                    <div>
+                      <span className="block text-sm font-bold text-neutral-900">Personalización Simple (Configurable)</span>
+                      <span className="block text-xs text-neutral-500">Habilita selector de tallas y grabado de texto. Botón "Añadir al Carrito".</span>
+                    </div>
+                  </label>
+                  <label className="flex items-center gap-3 p-2 rounded-lg hover:bg-green-50/50 cursor-pointer border border-transparent hover:border-green-100 transition-all">
+                    <input type="radio" name="personalizationLevel" 
+                      checked={currentProduct.requiresQuote} 
+                      onChange={() => setCurrentProduct({...currentProduct, isCustomizable: false, requiresQuote: true})} 
+                      className="w-5 h-5 text-green-600 focus:ring-green-500 border-neutral-300" 
+                    />
+                    <div>
+                      <span className="block text-sm font-bold text-neutral-900">A la Medida (Solicitar Cotización)</span>
+                      <span className="block text-xs text-neutral-500">Oculta el precio. Botón verde "Solicitar cotización WS".</span>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
               {/* Merchandising Flags */}
               <div className="mt-4 p-4 border border-brand-100 rounded-xl bg-brand-50/30 space-y-3">
                 <h3 className="text-sm font-bold text-neutral-800 uppercase tracking-wide">Destacar Producto</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <label className="flex items-center gap-3 cursor-pointer">
-                    <input type="checkbox" id="isCustomizable" checked={currentProduct.isCustomizable || false} onChange={(e) => setCurrentProduct({...currentProduct, isCustomizable: e.target.checked})} className="w-5 h-5 text-brand-600 rounded focus:ring-brand-500 border-neutral-300" />
-                    <span className="text-sm font-medium text-neutral-900">⚡ Habilitar Tallas y Grabado (PRO)</span>
-                  </label>
                   <label className="flex items-center gap-3 cursor-pointer">
                     <input type="checkbox" checked={currentProduct.isFeatured || false} onChange={(e) => setCurrentProduct({...currentProduct, isFeatured: e.target.checked})} className="w-5 h-5 text-amber-500 rounded focus:ring-amber-400 border-neutral-300" />
                     <span className="text-sm font-medium text-neutral-900">⭐ Producto Destacado</span>

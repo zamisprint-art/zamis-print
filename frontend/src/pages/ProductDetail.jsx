@@ -397,8 +397,14 @@ const ProductDetail = () => {
 
           {/* Price */}
           <div className="mt-2">
-            <PriceDisplay price={finalPrice} size="xl" />
-            <p className="text-sm text-neutral-500 font-medium mt-1">IVA Incluido. Envío calculado en el checkout.</p>
+            {product.requiresQuote ? (
+              <p className="text-xl md:text-2xl font-bold text-neutral-500 italic">Precio sujeto a cotización</p>
+            ) : (
+              <>
+                <PriceDisplay price={finalPrice} size="xl" />
+                <p className="text-sm text-neutral-500 font-medium mt-1">IVA Incluido. Envío calculado en el checkout.</p>
+              </>
+            )}
           </div>
 
           {/* Quick Features */}
@@ -566,36 +572,53 @@ const ProductDetail = () => {
             )}
 
             {/* Quantity Selector */}
-            <div className="flex items-center gap-4 mt-2">
-              <label className="label-base mb-0">Cantidad:</label>
-              <QuantitySelector
-                value={qty}
-                onChange={setQty}
-                min={1}
-                max={product.countInStock || 10}
-                disabled={isOutOfStock}
-              />
-              {isOutOfStock && (
-                <span className="badge stock-out">Agotado</span>
-              )}
-            </div>
+            {!product.requiresQuote && (
+              <div className="flex items-center gap-4 mt-2">
+                <label className="label-base mb-0">Cantidad:</label>
+                <QuantitySelector
+                  value={qty}
+                  onChange={setQty}
+                  min={1}
+                  max={product.countInStock || 10}
+                  disabled={isOutOfStock}
+                />
+                {isOutOfStock && (
+                  <span className="badge stock-out">Agotado</span>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Desktop CTA */}
-          <Button
-            variant="conversion"
-            size="xl"
-            fullWidth
-            disabled={isOutOfStock}
-            icon={<ShoppingCart className="w-5 h-5" />}
-            onClick={handleAddToCart}
-            className="hidden md:flex mt-2"
-          >
-            {isOutOfStock
-              ? 'Sin Stock'
-              : `Añadir al Carrito · ${new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(finalPrice * qty)}`
-            }
-          </Button>
+          {product.requiresQuote ? (
+            <div className="hidden md:flex flex-col mt-2">
+              <a
+                href={`https://wa.me/573107878192?text=${encodeURIComponent(`Hola ZAMIS Print, me interesa solicitar cotización para el producto: ${product.name}`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2"
+              >
+                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                Solicitar cotización WS
+              </a>
+              <p className="text-xs text-neutral-500 mt-2 text-center">Al solicitar cotización, un experto te atenderá personalmente para definir diseño, materiales y precio final.</p>
+            </div>
+          ) : (
+            <Button
+              variant="conversion"
+              size="xl"
+              fullWidth
+              disabled={isOutOfStock}
+              icon={<ShoppingCart className="w-5 h-5" />}
+              onClick={handleAddToCart}
+              className="hidden md:flex mt-2"
+            >
+              {isOutOfStock
+                ? 'Sin Stock'
+                : `Añadir al Carrito · ${new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(finalPrice * qty)}`
+              }
+            </Button>
+          )}
 
           {/* Trust Badges */}
           <TrustBadges variant="compact" className="mt-2" />
@@ -822,19 +845,31 @@ const ProductDetail = () => {
 
       {/* Mobile Sticky CTA */}
       <div className="fixed bottom-16 left-0 right-0 p-3 bg-surface-base/95 backdrop-blur-md border-t border-neutral-200 md:hidden z-[45]">
-        <Button
-          variant="conversion"
-          size="lg"
-          fullWidth
-          disabled={isOutOfStock}
-          icon={<ShoppingCart className="w-5 h-5" />}
-          onClick={handleAddToCart}
-        >
-          {isOutOfStock
-            ? 'Sin Stock'
-            : `Añadir · ${new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(finalPrice * qty)}`
-          }
-        </Button>
+        {product.requiresQuote ? (
+          <a
+            href={`https://wa.me/573107878192?text=${encodeURIComponent(`Hola ZAMIS Print, me interesa solicitar cotización para el producto: ${product.name}`)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold py-3 px-6 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2"
+          >
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+            Cotizar WS
+          </a>
+        ) : (
+          <Button
+            variant="conversion"
+            size="lg"
+            fullWidth
+            disabled={isOutOfStock}
+            icon={<ShoppingCart className="w-5 h-5" />}
+            onClick={handleAddToCart}
+          >
+            {isOutOfStock
+              ? 'Sin Stock'
+              : `Añadir · ${new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(finalPrice * qty)}`
+            }
+          </Button>
+        )}
       </div>
 
       {/* Lightbox Modal */}

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ShoppingCart, Box, Star, Zap } from 'lucide-react';
+import { ShoppingCart, Box, Star, Zap, MessageCircle } from 'lucide-react';
 import Rating from './Rating';
 import { Badge } from './ui';
 import PriceDisplay from './ecommerce/PriceDisplay';
@@ -67,11 +67,15 @@ const ProductCard = ({ product }) => {
               <Box className="w-3 h-3" />3D
             </span>
           )}
-          {product.isCustomizable && (
+          {product.requiresQuote ? (
+            <span className="flex items-center gap-1 bg-[#25D366] text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow">
+              <MessageCircle className="w-3 h-3" /> A LA MEDIDA
+            </span>
+          ) : product.isCustomizable ? (
             <span className="flex items-center gap-1 bg-brand-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow">
               <Zap className="w-3 h-3" /> PRO
             </span>
-          )}
+          ) : null}
         </div>
       </Link>
 
@@ -91,7 +95,11 @@ const ProductCard = ({ product }) => {
 
         {/* Price */}
         <div className="mt-1 mb-2">
-          {product.isOnSale && product.salePrice ? (
+          {product.requiresQuote ? (
+            <span className="font-bold text-neutral-500 italic text-sm leading-none block">
+              Proyecto a la medida
+            </span>
+          ) : product.isOnSale && product.salePrice ? (
             <div className="flex flex-col">
               <span className="text-[11px] text-neutral-500 line-through leading-none mb-1">
                 {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(product.price)}
@@ -114,10 +122,10 @@ const ProductCard = ({ product }) => {
           </div>
           <Link
             to={`/product/${product._id}`}
-            className={`w-8 h-8 flex items-center justify-center rounded-full bg-neutral-100 text-neutral-600 hover:bg-conversion-500 hover:text-white transition-colors ${isOutOfStock ? 'opacity-40 pointer-events-none' : ''}`}
-            aria-label={`Ver o comprar ${product.name}`}
+            className={`w-8 h-8 flex items-center justify-center rounded-full bg-neutral-100 text-neutral-600 transition-colors ${isOutOfStock ? 'opacity-40 pointer-events-none' : ''} ${product.requiresQuote ? 'hover:bg-[#25D366] hover:text-white' : 'hover:bg-conversion-500 hover:text-white'}`}
+            aria-label={`Ver detalles de ${product.name}`}
           >
-            <ShoppingCart className="w-4 h-4" />
+            {product.requiresQuote ? <MessageCircle className="w-4 h-4" /> : <ShoppingCart className="w-4 h-4" />}
           </Link>
         </div>
 
@@ -125,10 +133,10 @@ const ProductCard = ({ product }) => {
         <div className="hidden md:block absolute left-0 right-0 bottom-0 p-3 translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 ease-out bg-gradient-to-t from-white via-white to-transparent pt-8">
           <Link
             to={`/product/${product._id}`}
-            className={`w-full flex items-center justify-center py-2 rounded-xl bg-conversion-500 text-white font-bold hover:bg-conversion-600 hover:shadow-[0_4px_14px_rgba(249,115,22,0.3)] transition-colors ${isOutOfStock ? 'opacity-40 pointer-events-none bg-neutral-300 text-neutral-500 hover:shadow-none' : ''}`}
-            aria-label={isOutOfStock ? `Producto agotado` : `Agregar ${product.name} al carrito`}
+            className={`w-full flex items-center justify-center py-2 rounded-xl text-white font-bold transition-colors ${isOutOfStock ? 'opacity-40 pointer-events-none bg-neutral-300 text-neutral-500 hover:shadow-none' : product.requiresQuote ? 'bg-[#25D366] hover:bg-[#20bd5a] hover:shadow-[0_4px_14px_rgba(37,211,102,0.3)]' : 'bg-conversion-500 hover:bg-conversion-600 hover:shadow-[0_4px_14px_rgba(249,115,22,0.3)]'}`}
+            aria-label={`Ver detalles de ${product.name}`}
           >
-            <span className="text-sm">{isOutOfStock ? 'Agotado' : 'Agregar'}</span>
+            <span className="text-sm">{isOutOfStock ? 'Agotado' : product.requiresQuote ? 'Cotizar Proyecto' : 'Agregar'}</span>
           </Link>
         </div>
       </div>
