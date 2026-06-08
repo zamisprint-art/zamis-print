@@ -42,7 +42,6 @@ const ProductDetail = () => {
   const [qty, setQty]                             = useState(1);
   const [customSize, setCustomSize]                 = useState('15 cms');
   const [customFont, setCustomFont]                 = useState('Clásica');
-  const [customTextColor, setCustomTextColor]       = useState('Blanco');
   const [personalizationText, setPersonalizationText]   = useState('');
   const [personalizationImage, setPersonalizationImage] = useState(null);
   const [selectedColor, setSelectedColor]         = useState(null);
@@ -166,7 +165,7 @@ const ProductDetail = () => {
       const details = [
         `Base: Figura básica`
       ];
-      if (personalizationText) details.push(`Texto: "${personalizationText}" | Fuente: ${customFont} | Relieve: ${customTextColor}`);
+      if (personalizationText) details.push(`Texto: "${personalizationText}" | Fuente: ${customFont}`);
       finalPersonalizationText = details.join(' | ');
     }
 
@@ -203,18 +202,6 @@ const ProductDetail = () => {
   };
 
   /* ---------- Loading ---------- */
-  const getCustomTextColorHex = () => {
-    switch (customTextColor) {
-      case 'Dorado': return '#b45309';
-      case 'Negro': return '#0a0a0a';
-      case 'Rojo': return '#991b1b';
-      case 'Azul': return '#1e3a8a';
-      case 'Verde': return '#14532d';
-      case 'Blanco': return '#f8fafc';
-      default: return '#f8fafc';
-    }
-  };
-
   if (loading) return (
     <div className="container-xl py-12">
       <ProductDetailSkeleton />
@@ -263,8 +250,6 @@ const ProductDetail = () => {
               }>
                 <Product3DViewer 
                   modelUrl={currentMedia.url} 
-                  customText={personalizationText}
-                  customTextColorHex={getCustomTextColorHex()}
                 />
               </Suspense>
             ) : (
@@ -513,36 +498,15 @@ const ProductDetail = () => {
                   />
                 </div>
 
-                {/* Step 5: Typography & Color (Conditional based on text) */}
+                {/* Step 2b: Typography (Conditional based on text) */}
                 {personalizationText && (
-                  <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="relative z-10 grid grid-cols-1 sm:grid-cols-2 gap-6 border-t border-brand-200 pt-6 mt-2">
+                  <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="relative z-10 grid grid-cols-1 gap-6 border-t border-brand-200 pt-6 mt-2">
                     <div>
                       <label className="block text-sm font-bold text-neutral-900 mb-3">Estilo de Letra</label>
                       <select value={customFont} onChange={(e) => setCustomFont(e.target.value)} className="w-full border-2 border-neutral-200 rounded-xl px-4 py-2.5 bg-white text-sm font-semibold text-neutral-700 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 outline-none cursor-pointer transition-all">
                         <option value="Clásica">Clásica (Elegante)</option>
                         <option value="Divertida">Divertida (Estilo Cómic)</option>
                       </select>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-bold text-neutral-900 mb-3">Color del Relieve</label>
-                      <div className="flex flex-wrap gap-2 mt-1">
-                        {[
-                          { name: 'Blanco', bg: 'bg-white', border: 'border-neutral-200' },
-                          { name: 'Negro', bg: 'bg-neutral-900', border: 'border-neutral-900' },
-                          { name: 'Dorado', bg: 'bg-amber-400', border: 'border-amber-400' },
-                          { name: 'Rojo', bg: 'bg-red-500', border: 'border-red-600' },
-                          { name: 'Azul', bg: 'bg-blue-500', border: 'border-blue-600' },
-                          { name: 'Verde', bg: 'bg-green-500', border: 'border-green-600' },
-                        ].map(c => (
-                          <button
-                            key={c.name}
-                            type="button"
-                            onClick={() => setCustomTextColor(c.name)}
-                            title={c.name}
-                            className={`w-9 h-9 rounded-full shadow-sm transition-all relative ${c.bg} ${c.border} ${customTextColor === c.name ? 'scale-110 ring-4 ring-brand-100 border-2 border-brand-500 z-10' : 'hover:scale-105 border opacity-80 hover:opacity-100'}`}
-                          />
-                        ))}
-                      </div>
                     </div>
                   </motion.div>
                 )}
@@ -911,8 +875,6 @@ const ProductDetail = () => {
                   <Suspense fallback={<div className="animate-spin rounded-full h-12 w-12 border-t-2 border-brand-500 mx-auto mt-20" />}>
                     <Product3DViewer 
                       modelUrl={currentMedia.url} 
-                      customText={personalizationText}
-                      customTextColorHex={getCustomTextColorHex()}
                     />
                   </Suspense>
                 </div>
