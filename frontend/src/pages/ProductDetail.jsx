@@ -285,7 +285,6 @@ const ProductDetail = () => {
                       <CurvedEngravedText2D 
                         text={personalizationText}
                         font={customFont}
-                        color={customTextColor}
                       />
                       <p className="opacity-0 group-hover/text:opacity-100 text-white/90 text-[10px] uppercase tracking-widest text-center mt-3 flex items-center justify-center gap-1 select-none transition-opacity bg-black/50 px-2 py-1 rounded-full">
                         <span className="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span> Arrastra para ubicar
