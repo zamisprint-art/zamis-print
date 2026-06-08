@@ -136,7 +136,7 @@ const ProductCard = ({ product }) => {
             className={`w-full flex items-center justify-center py-2 rounded-xl text-white font-bold transition-colors ${isOutOfStock ? 'opacity-40 pointer-events-none bg-neutral-300 text-neutral-500 hover:shadow-none' : product.requiresQuote ? 'bg-[#25D366] hover:bg-[#20bd5a] hover:shadow-[0_4px_14px_rgba(37,211,102,0.3)]' : 'bg-conversion-500 hover:bg-conversion-600 hover:shadow-[0_4px_14px_rgba(249,115,22,0.3)]'}`}
             aria-label={`Ver detalles de ${product.name}`}
           >
-            <span className="text-sm">{isOutOfStock ? 'Agotado' : product.requiresQuote ? 'Solicitar cotización' : 'Agregar'}</span>
+            <span className="text-sm">{isOutOfStock ? 'Agotado' : product.requiresQuote ? 'Solicitar diseño' : 'Agregar'}</span>
           </Link>
         </div>
       </div>

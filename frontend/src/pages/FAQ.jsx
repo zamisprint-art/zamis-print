@@ -31,7 +31,7 @@ const FAQS = [
   },
   {
     q: '¿Puedo encargar un modelo 3D que no está en el catálogo?',
-    a: '¡Claro que sí! Contáctanos a través de la página de Contacto o por WhatsApp con tu idea. Evaluamos el proyecto sin costo y te enviamos una cotización personalizada.'
+    a: '¡Claro que sí! Contáctanos a través de la página de Contacto o por WhatsApp con tu idea. Evaluamos el proyecto sin costo y te enviamos una propuesta de diseño y valor personalizada.'
   },
 ];
 

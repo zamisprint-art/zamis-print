@@ -41,7 +41,7 @@ const TYPE_LABELS = {
   'sale': 'Ofertas',
   'newest': 'Recién Salidos (Novedades)',
   'category': 'Colección Temática / Nicho',
-  'bespoke': 'Diseños Exclusivos / Cotización',
+  'bespoke': 'Diseños Exclusivos / Por Diseño',
 };
 
 const SectionsTab = () => {

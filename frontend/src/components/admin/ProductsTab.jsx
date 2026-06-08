@@ -550,7 +550,7 @@ const ProductsTab = () => {
                       className="w-5 h-5 text-green-600 focus:ring-green-500 border-neutral-300" 
                     />
                     <div>
-                      <span className="block text-sm font-bold text-neutral-900">Diseño Exclusivo (Cotización)</span>
+                      <span className="block text-sm font-bold text-neutral-900">Diseño Exclusivo (Solicitar Diseño)</span>
                       <span className="block text-xs text-neutral-500 mt-0.5">Para proyectos grandes desde cero. Oculta el precio y muestra botón de WhatsApp.</span>
                     </div>
                   </label>
