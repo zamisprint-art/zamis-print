@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Plus, Edit2, Trash2, Tag, Check, X } from 'lucide-react';
-import { format } from 'date-fns';
 
 const CouponsTab = () => {
   const [coupons, setCoupons] = useState([]);
@@ -147,7 +146,7 @@ const CouponsTab = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4 text-neutral-600">
-                    {coupon.expiryDate ? format(new Date(coupon.expiryDate), 'dd/MM/yyyy') : 'Nunca'}
+                    {coupon.expiryDate ? new Date(coupon.expiryDate).toLocaleDateString('es-CO') : 'Nunca'}
                   </td>
                   <td className="px-6 py-4">
                     <button
