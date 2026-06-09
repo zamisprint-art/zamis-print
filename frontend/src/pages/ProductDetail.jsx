@@ -574,7 +574,7 @@ const ProductDetail = () => {
           {product.requiresQuote ? (
             <div className="hidden md:flex flex-col mt-2">
               <a
-                href={`https://wa.me/573107878192?text=${encodeURIComponent(`Hola ZAMIS Print, me interesa solicitar diseño para el producto: ${product.name}`)}`}
+                href={`https://wa.me/573107878192?text=${encodeURIComponent(`Hola ZAMIS Print, me interesa solicitar diseño para el producto: ${product.name}\n\nVer producto: ${window.location.origin}/product/${product._id}`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2"
@@ -828,7 +828,7 @@ const ProductDetail = () => {
       <div className="fixed bottom-16 left-0 right-0 p-3 bg-surface-base/95 backdrop-blur-md border-t border-neutral-200 md:hidden z-[45]">
         {product.requiresQuote ? (
           <a
-            href={`https://wa.me/573107878192?text=${encodeURIComponent(`Hola ZAMIS Print, me interesa solicitar diseño para el producto: ${product.name}`)}`}
+            href={`https://wa.me/573107878192?text=${encodeURIComponent(`Hola ZAMIS Print, me interesa solicitar diseño para el producto: ${product.name}\n\nVer producto: ${window.location.origin}/product/${product._id}`)}`}
             target="_blank"
             rel="noopener noreferrer"
             className="w-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold py-3 px-6 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2"
