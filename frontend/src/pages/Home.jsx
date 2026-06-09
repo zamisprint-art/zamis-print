@@ -206,7 +206,7 @@ const Home = () => {
         } else if (section.type === 'sale') {
           items = allProducts.filter(p => p.isOnSale && p.salePrice && !p.requiresQuote);
         } else if (section.type === 'newest') {
-          items = allProducts.filter(p => !p.requiresQuote).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+          items = allProducts.filter(p => p.isNewArrival && !p.requiresQuote);
         } else if (section.type === 'category' && section.categoryFilter) {
           items = allProducts.filter(p => p.category?.toLowerCase() === section.categoryFilter.toLowerCase() && !p.requiresQuote);
         } else if (section.type === 'bespoke') {
@@ -217,7 +217,7 @@ const Home = () => {
         items = items.slice(0, 12);
 
         // Si no hay productos para esta sección y no está cargando, la ocultamos (para evitar secciones vacías)
-        if (!loading && items.length === 0 && section.type !== 'newest') return null;
+        if (!loading && items.length === 0) return null;
 
         return (
           <div key={section._id} className={`w-full border-b border-neutral-200/60 shadow-[0_4px_16px_rgba(0,0,0,0.02)] relative z-10 ${index % 2 !== 0 ? 'bg-neutral-50/50' : 'bg-white'}`}>
@@ -227,7 +227,7 @@ const Home = () => {
                 linkTo={section.linkTo}
                 linkLabel={section.linkLabel}
               />
-              {loading ? <SectionSkeleton /> : <ProductCarousel items={items} fallback={recentProducts} />}
+              {loading ? <SectionSkeleton /> : <ProductCarousel items={items} fallback={[]} />}
             </section>
           </div>
         );
