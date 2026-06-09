@@ -121,7 +121,7 @@ const updateProduct = async (req, res) => {
         requiresTextPersonalization, requiresImagePersonalization, isCustomizable, requiresQuote,
         isFeatured, isNewArrival, isOnSale, salePrice,
         material, colors, size, measurements, personalizationLevel, isActive,
-        specifications,
+        specifications, engravingType
     } = req.body;
 
     const product = await Product.findById(req.params.id);
@@ -153,6 +153,7 @@ const updateProduct = async (req, res) => {
         product.personalizationLevel = personalizationLevel !== undefined ? personalizationLevel : product.personalizationLevel;
         product.isActive = isActive !== undefined ? isActive : product.isActive;
         product.specifications = specifications !== undefined ? specifications : product.specifications;
+        product.engravingType = engravingType !== undefined ? engravingType : product.engravingType;
 
         const updatedProduct = await product.save();
         res.json(updatedProduct);
