@@ -62,8 +62,7 @@ const Privacy = () => {
 
           <h2 className="text-2xl font-bold text-neutral-900 mt-8">5. Ejercicio de tus Derechos</h2>
           <p>
-            Para ejercer tus derechos de conocer, actualizar, rectificar y suprimir tu información, puedes enviar un correo electrónico a <strong>info@zamisprint.com</strong>
-            indicando en el asunto "Ejercicio Derecho Habeas Data". Daremos respuesta a tu solicitud en los tiempos establecidos por la ley.
+            Para ejercer tus derechos de conocer, actualizar, rectificar y suprimir tu información, puedes enviar un correo electrónico a <strong>info@zamisprint.com</strong> indicando en el asunto "Ejercicio Derecho Habeas Data". Daremos respuesta a tu solicitud en los tiempos establecidos por la ley.
           </p>
         </div>
       </motion.div>
