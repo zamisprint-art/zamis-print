@@ -96,6 +96,13 @@ const Shop = () => {
   const sizeOptions = useMemo(() => [...new Set(products.map(p => p.size).filter(Boolean))], [products]);
   const maxPrice = useMemo(() => Math.max(...products.map(p => p.price), 1000), [products]);
 
+  // Sincronizar el slider con el precio máximo real del sitio al cargar los productos
+  useEffect(() => {
+    if (maxPrice > 1000) {
+      setPriceRange([0, maxPrice]);
+    }
+  }, [maxPrice]);
+
   // Filter + Sort Logic
   useEffect(() => {
     let result = [...products];
