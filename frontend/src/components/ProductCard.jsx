@@ -62,20 +62,24 @@ const ProductCard = ({ product }) => {
 
         {/* Top-right badges */}
         <div className="absolute top-3 right-3 flex flex-col gap-1 items-end">
-          {product.model3D && (
-            <span className="badge badge-info gap-1">
-              <Box className="w-3 h-3" />3D
-            </span>
-          )}
           {product.requiresQuote ? (
             <span className="flex items-center gap-1 bg-[#25D366] text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow">
-              <MessageCircle className="w-3 h-3" /> DISEÑO EXCLUSIVO
+              <MessageCircle className="w-3 h-3" /> EXCLUSIVO
             </span>
           ) : product.isCustomizable ? (
             <span className="flex items-center gap-1 bg-brand-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow">
               <Zap className="w-3 h-3" /> PRO
             </span>
           ) : null}
+        </div>
+
+        {/* Bottom-right badges */}
+        <div className="absolute bottom-3 right-3 flex flex-col gap-1 items-end">
+          {product.model3D && (
+            <span className="flex items-center gap-1 bg-neutral-900/80 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded shadow-sm">
+              <Box className="w-3 h-3" /> 3D
+            </span>
+          )}
         </div>
       </Link>
 
