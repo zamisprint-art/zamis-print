@@ -1,5 +1,6 @@
 import Order from '../models/Order.js';
 import Product from '../models/Product.js';
+import Coupon from '../models/Coupon.js';
 import sendEmail from '../utils/sendEmail.js';
 import { orderConfirmationEmail, newOrderAdminEmail, orderShippedEmail } from '../utils/emailTemplates.js';
 
@@ -16,6 +17,7 @@ const addOrderItems = async (req, res) => {
         itemsPrice,
         shippingPrice,
         totalPrice,
+        couponCode,
     } = req.body;
 
     if (!orderItems || orderItems.length === 0) {
@@ -33,6 +35,55 @@ const addOrderItems = async (req, res) => {
             return res.status(400).json({ 
                 message: `Lo sentimos, "${item.name}" no tiene suficiente stock. (Disponible: ${productInDb.countInStock})` 
             });
+        }
+    }
+
+    let calculatedDiscountAmount = 0;
+    let finalTotalPrice = itemsPrice + shippingPrice;
+
+    if (couponCode) {
+        const coupon = await Coupon.findOne({ code: couponCode.toUpperCase() });
+        if (coupon && coupon.isActive) {
+            if (!coupon.expiryDate || new Date(coupon.expiryDate) >= new Date()) {
+                if (!coupon.usageLimit || coupon.usedCount < coupon.usageLimit) {
+                    const emailToTrack = shippingAddress.email ? shippingAddress.email.toLowerCase() : null;
+                    let canUse = true;
+                    if (emailToTrack && coupon.usageLimitPerUser) {
+                        const userUsages = coupon.usedBy.filter(e => e === emailToTrack).length;
+                        if (userUsages >= coupon.usageLimitPerUser) {
+                            canUse = false;
+                        }
+                    }
+
+                    if (canUse) {
+                        let discountableTotal = 0;
+                        for (const item of orderItems) {
+                            const p = await Product.findById(item.product);
+                            if (p && !p.requiresQuote) {
+                                discountableTotal += (item.price * item.qty);
+                            }
+                        }
+
+                        if (coupon.discountType === 'percent') {
+                            calculatedDiscountAmount = discountableTotal * (coupon.discountValue / 100);
+                        } else if (coupon.discountType === 'fixed') {
+                            calculatedDiscountAmount = coupon.discountValue;
+                        }
+                        
+                        if (calculatedDiscountAmount > finalTotalPrice) {
+                            calculatedDiscountAmount = finalTotalPrice;
+                        }
+
+                        finalTotalPrice -= calculatedDiscountAmount;
+
+                        coupon.usedCount += 1;
+                        if (emailToTrack) {
+                            coupon.usedBy.push(emailToTrack);
+                        }
+                        await coupon.save();
+                    }
+                }
+            }
         }
     }
 
@@ -54,7 +105,9 @@ const addOrderItems = async (req, res) => {
         paymentMethod,
         itemsPrice,
         shippingPrice,
-        totalPrice,
+        couponCode: calculatedDiscountAmount > 0 ? couponCode.toUpperCase() : null,
+        discountAmount: calculatedDiscountAmount,
+        totalPrice: finalTotalPrice,
     });
 
     const createdOrder = await order.save();

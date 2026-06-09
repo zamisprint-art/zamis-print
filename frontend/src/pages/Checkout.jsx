@@ -42,6 +42,10 @@ const Checkout = () => {
   const [processingStep, setProcessingStep] = useState(0);
   const [step, setStep] = useState(2); // 1: Cart, 2: Shipping, 3: Payment
 
+  const [couponCodeInput, setCouponCodeInput] = useState('');
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [validatingCoupon, setValidatingCoupon] = useState(false);
+
   useEffect(() => {
     if (cartItems.length === 0) {
       navigate('/cart');
@@ -56,6 +60,44 @@ const Checkout = () => {
   }, [cartItems, navigate, userInfo]);
 
   const total = cartItems.reduce((acc, item) => acc + item.qty * item.price, 0);
+
+  const discountableTotal = useMemo(() => {
+    return cartItems.reduce((acc, item) => {
+      if (!item.requiresQuote) return acc + (item.qty * item.price);
+      return acc;
+    }, 0);
+  }, [cartItems]);
+
+  const discountAmount = useMemo(() => {
+    if (!appliedCoupon) return 0;
+    if (appliedCoupon.discountType === 'percent') {
+      return discountableTotal * (appliedCoupon.discountValue / 100);
+    }
+    return appliedCoupon.discountValue > discountableTotal ? discountableTotal : appliedCoupon.discountValue;
+  }, [appliedCoupon, discountableTotal]);
+
+  const finalTotal = total - discountAmount;
+
+  const handleApplyCoupon = async () => {
+    if (!couponCodeInput.trim()) return;
+    try {
+      setValidatingCoupon(true);
+      const emailQuery = shippingAddress.email ? `?email=${encodeURIComponent(shippingAddress.email)}` : '';
+      const { data } = await axios.get(`/api/coupons/validate/${couponCodeInput}${emailQuery}`);
+      setAppliedCoupon(data);
+      toast.success('Cupón aplicado correctamente');
+    } catch (err) {
+      setAppliedCoupon(null);
+      toast.error(err.response?.data?.message || 'Cupón inválido');
+    } finally {
+      setValidatingCoupon(false);
+    }
+  };
+
+  const handleRemoveCoupon = () => {
+    setCouponCodeInput('');
+    setAppliedCoupon(null);
+  };
 
   const PROCESSING_STEPS = [
     { label: 'Verificando tu información...', icon: '🔐' },
@@ -93,7 +135,8 @@ const Checkout = () => {
         paymentMethod: 'MercadoPago',
         itemsPrice:   total,
         shippingPrice: 0,
-        totalPrice:   total,
+        totalPrice:   finalTotal,
+        couponCode: appliedCoupon ? appliedCoupon.code : null,
       });
 
       const { data: preferenceData } = await axios.post('/api/payments/create_preference', {
@@ -434,10 +477,38 @@ const Checkout = () => {
                 ))}
               </div>
               <div className="border-t border-neutral-200 pt-4 space-y-3 mb-6">
-                <div className="flex justify-between items-center text-neutral-700 text-sm">
+                
+                {/* Coupon UI */}
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    placeholder="Código de descuento"
+                    value={couponCodeInput}
+                    onChange={(e) => setCouponCodeInput(e.target.value.toUpperCase())}
+                    className="flex-1 px-3 py-2 rounded-lg border border-neutral-300 focus:border-brand-500 text-sm font-mono uppercase"
+                    disabled={appliedCoupon !== null}
+                  />
+                  {appliedCoupon ? (
+                    <button type="button" onClick={handleRemoveCoupon} className="px-4 py-2 bg-red-100 text-red-600 rounded-lg text-sm font-bold hover:bg-red-200 transition-colors">
+                      Quitar
+                    </button>
+                  ) : (
+                    <button type="button" onClick={handleApplyCoupon} disabled={validatingCoupon || !couponCodeInput} className="px-4 py-2 bg-neutral-900 text-white rounded-lg text-sm font-bold disabled:opacity-50 hover:bg-neutral-800 transition-colors">
+                      {validatingCoupon ? '...' : 'Aplicar'}
+                    </button>
+                  )}
+                </div>
+
+                <div className="flex justify-between items-center text-neutral-700 text-sm mt-4">
                   <span>Subtotal</span>
                   <PriceDisplay price={total} currency="COP" showDiscount={false} />
                 </div>
+                {appliedCoupon && (
+                  <div className="flex justify-between items-center text-brand-600 text-sm font-bold bg-brand-50 p-2 rounded-md border border-brand-100">
+                    <span>Descuento ({appliedCoupon.code})</span>
+                    <span>-<PriceDisplay price={discountAmount} currency="COP" showDiscount={false} /></span>
+                  </div>
+                )}
                 <div className="flex justify-between items-center text-neutral-700 text-sm">
                   <span>Envío estándar</span>
                   <span className="text-green-600 font-bold">Gratis</span>
@@ -445,7 +516,7 @@ const Checkout = () => {
               </div>
               <div className="flex justify-between items-center border-t border-neutral-200 pt-4 mb-8">
                 <span className="text-2xl font-bold">Total</span>
-                <PriceDisplay price={total} currency="COP" size="lg" showDiscount={false} />
+                <PriceDisplay price={finalTotal} currency="COP" size="lg" showDiscount={false} />
               </div>
 
               {/* Desktop Submit */}
@@ -490,7 +561,7 @@ const Checkout = () => {
           >
             {!isProcessing && <>
               Pagar <span className="mx-1 font-black bg-white/20 px-2 rounded-md">
-                {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(total)}
+                {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(finalTotal)}
               </span>
               <ChevronRight size={20} />
             </>}

@@ -15,6 +15,7 @@ import homeSectionRoutes from './routes/homeSectionRoutes.js';
 import categoryLinkRoutes from './routes/categoryLinkRoutes.js';
 import contactRoutes from './routes/contactRoutes.js';
 import expenseRoutes from './routes/expenseRoutes.js';
+import couponRoutes from './routes/couponRoutes.js';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
@@ -95,6 +96,7 @@ app.use('/api/homesections', homeSectionRoutes);
 app.use('/api/categorylinks', categoryLinkRoutes);
 app.use('/api/contacts', contactRoutes);
 app.use('/api/expenses', expenseRoutes);
+app.use('/api/coupons', couponRoutes);
 
 // Make uploads folder static
 const __dirname = path.resolve();

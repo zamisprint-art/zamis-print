@@ -10,6 +10,7 @@ import DashboardTab from '../components/admin/DashboardTab';
 import HomeDesignTab from '../components/admin/HomeDesignTab';
 import CustomersTab from '../components/admin/CustomersTab';
 import ExpensesTab from '../components/admin/ExpensesTab';
+import CouponsTab from '../components/admin/CouponsTab';
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -61,6 +62,12 @@ const AdminDashboard = () => {
           <DollarSign size={20} /> Gastos
         </button>
         <button 
+          onClick={() => setActiveTab('coupons')}
+          className={`flex items-center gap-3 p-4 rounded-xl transition-colors ${activeTab === 'coupons' ? 'bg-primary text-neutral-900' : 'glass-panel hover:bg-white/5'}`}
+        >
+          <Package size={20} /> Cupones
+        </button>
+        <button 
           onClick={() => setActiveTab('settings')}
           className={`flex items-center gap-3 p-4 rounded-xl transition-colors ${activeTab === 'settings' ? 'bg-primary text-neutral-900' : 'glass-panel hover:bg-white/5'}`}
         >
@@ -100,6 +107,10 @@ const AdminDashboard = () => {
 
         {activeTab === 'expenses' && (
           <ExpensesTab />
+        )}
+
+        {activeTab === 'coupons' && (
+          <CouponsTab />
         )}
 
         {activeTab === 'products' && (
