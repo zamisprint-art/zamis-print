@@ -45,6 +45,20 @@ const Checkout = () => {
   const [couponCodeInput, setCouponCodeInput] = useState('');
   const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [validatingCoupon, setValidatingCoupon] = useState(false);
+  const [couponsEnabled, setCouponsEnabled] = useState(false);
+
+  useEffect(() => {
+    // Check if any active coupons exist to toggle UI
+    const checkCoupons = async () => {
+      try {
+        const { data } = await axios.get('/api/coupons/active-exists');
+        setCouponsEnabled(data.hasActiveCoupons);
+      } catch (err) {
+        console.error('Failed to check coupons status', err);
+      }
+    };
+    checkCoupons();
+  }, []);
 
   useEffect(() => {
     if (cartItems.length === 0) {
@@ -479,25 +493,27 @@ const Checkout = () => {
               <div className="border-t border-neutral-200 pt-4 space-y-3 mb-6">
                 
                 {/* Coupon UI */}
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    placeholder="Código de descuento"
-                    value={couponCodeInput}
-                    onChange={(e) => setCouponCodeInput(e.target.value.toUpperCase())}
-                    className="flex-1 px-3 py-2 rounded-lg border border-neutral-300 focus:border-brand-500 text-sm font-mono uppercase"
-                    disabled={appliedCoupon !== null}
-                  />
-                  {appliedCoupon ? (
-                    <button type="button" onClick={handleRemoveCoupon} className="px-4 py-2 bg-red-100 text-red-600 rounded-lg text-sm font-bold hover:bg-red-200 transition-colors">
-                      Quitar
-                    </button>
-                  ) : (
-                    <button type="button" onClick={handleApplyCoupon} disabled={validatingCoupon || !couponCodeInput} className="px-4 py-2 bg-neutral-900 text-white rounded-lg text-sm font-bold disabled:opacity-50 hover:bg-neutral-800 transition-colors">
-                      {validatingCoupon ? '...' : 'Aplicar'}
-                    </button>
-                  )}
-                </div>
+                {couponsEnabled && (
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="Código de descuento"
+                      value={couponCodeInput}
+                      onChange={(e) => setCouponCodeInput(e.target.value.toUpperCase())}
+                      className="flex-1 px-3 py-2 rounded-lg border border-neutral-300 focus:border-brand-500 text-sm font-mono uppercase"
+                      disabled={appliedCoupon !== null}
+                    />
+                    {appliedCoupon ? (
+                      <button type="button" onClick={handleRemoveCoupon} className="px-4 py-2 bg-red-100 text-red-600 rounded-lg text-sm font-bold hover:bg-red-200 transition-colors">
+                        Quitar
+                      </button>
+                    ) : (
+                      <button type="button" onClick={handleApplyCoupon} disabled={validatingCoupon || !couponCodeInput} className="px-4 py-2 bg-neutral-900 text-white rounded-lg text-sm font-bold disabled:opacity-50 hover:bg-neutral-800 transition-colors">
+                        {validatingCoupon ? '...' : 'Aplicar'}
+                      </button>
+                    )}
+                  </div>
+                )}
 
                 <div className="flex justify-between items-center text-neutral-700 text-sm mt-4">
                   <span>Subtotal</span>

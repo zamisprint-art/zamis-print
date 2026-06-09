@@ -112,4 +112,19 @@ const validateCoupon = async (req, res) => {
     });
 };
 
-export { getCoupons, createCoupon, updateCoupon, deleteCoupon, validateCoupon };
+// @desc    Check if any active coupon exists (Public)
+// @route   GET /api/coupons/active-exists
+// @access  Public
+const checkActiveCouponsExists = async (req, res) => {
+    // Check if there is at least one coupon that is active, and either has no expiry or expiry is in the future
+    const activeCouponCount = await Coupon.countDocuments({
+        isActive: true,
+        $or: [
+            { expiryDate: null },
+            { expiryDate: { $gte: new Date() } }
+        ]
+    });
+    res.json({ hasActiveCoupons: activeCouponCount > 0 });
+};
+
+export { getCoupons, createCoupon, updateCoupon, deleteCoupon, validateCoupon, checkActiveCouponsExists };

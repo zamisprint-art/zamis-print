@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 const Privacy = () => {
   return (
     <div className="min-h-screen bg-surface-base py-12 px-4 sm:px-6 lg:px-8">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="max-w-4xl mx-auto bg-white rounded-3xl shadow-sm border border-neutral-200 overflow-hidden"
@@ -15,17 +15,17 @@ const Privacy = () => {
           <h1 className="text-3xl font-extrabold tracking-tight mb-2">Política de Privacidad</h1>
           <p className="text-brand-100 font-medium">Última actualización: {new Date().toLocaleDateString('es-CO')}</p>
         </div>
-        
+
         <div className="p-8 md:p-12 prose prose-brand max-w-none text-neutral-600">
           <p className="lead text-lg font-medium text-neutral-700">
-            En ZAMIS Print estamos comprometidos con la protección de tus datos personales. 
+            En ZAMIS Print estamos comprometidos con la protección de tus datos personales.
             Esta política explica cómo recolectamos, usamos y protegemos tu información en cumplimiento con la Ley 1581 de 2012 de Colombia.
           </p>
 
           <h2 className="text-2xl font-bold text-neutral-900 mt-8">1. Responsable del Tratamiento</h2>
           <p>
-            El responsable del tratamiento de tus datos personales es <strong>[NOMBRE_DE_TU_EMPRESA_O_TU_NOMBRE]</strong>, con NIT/CC <strong>[TU_NIT_O_CC]</strong>, 
-            ubicado en la ciudad de <strong>[CIUDAD_DOMICILIO]</strong>, Colombia. Correo de contacto: <strong>[TU_CORREO_DE_SOPORTE]</strong>.
+            El responsable del tratamiento de tus datos personales es <strong>ZAMIS Print</strong>, con NIT/CC <strong>1019996790</strong>,
+            ubicado en la ciudad de <strong>Bogotá, Colombia</strong>. Correo de contacto: <strong>info@zamisprint.com</strong>.
           </p>
 
           <h2 className="text-2xl font-bold text-neutral-900 mt-8">2. Datos Recolectados</h2>
@@ -62,7 +62,7 @@ const Privacy = () => {
 
           <h2 className="text-2xl font-bold text-neutral-900 mt-8">5. Ejercicio de tus Derechos</h2>
           <p>
-            Para ejercer tus derechos de conocer, actualizar, rectificar y suprimir tu información, puedes enviar un correo electrónico a <strong>[TU_CORREO_DE_SOPORTE]</strong> 
+            Para ejercer tus derechos de conocer, actualizar, rectificar y suprimir tu información, puedes enviar un correo electrónico a <strong>info@zamisprint.com</strong>
             indicando en el asunto "Ejercicio Derecho Habeas Data". Daremos respuesta a tu solicitud en los tiempos establecidos por la ley.
           </p>
         </div>

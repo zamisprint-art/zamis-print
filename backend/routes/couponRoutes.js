@@ -5,7 +5,8 @@ import {
     createCoupon,
     updateCoupon,
     deleteCoupon,
-    validateCoupon
+    validateCoupon,
+    checkActiveCouponsExists
 } from '../controllers/couponController.js';
 import { protect, admin } from '../middleware/authMiddleware.js';
 
@@ -18,7 +19,8 @@ router.route('/:id')
     .put(protect, admin, updateCoupon)
     .delete(protect, admin, deleteCoupon);
 
-// Ruta pública para validación en el checkout
+// Rutas públicas
+router.get('/active-exists', checkActiveCouponsExists);
 router.get('/validate/:code', validateCoupon);
 
 export default router;
