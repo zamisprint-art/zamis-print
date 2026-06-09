@@ -222,10 +222,12 @@ const CouponsTab = () => {
                     type="number"
                     required
                     min="1"
+                    max={currentCoupon.discountType === 'percent' ? 100 : undefined}
                     value={currentCoupon.discountValue}
                     onChange={(e) => setCurrentCoupon({ ...currentCoupon, discountValue: Number(e.target.value) })}
                     className="w-full px-4 py-2.5 rounded-lg border border-neutral-300 focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
                   />
+                  {currentCoupon.discountType === 'percent' && <p className="text-xs text-neutral-500 mt-1">Máximo 100%.</p>}
                 </div>
               </div>
 

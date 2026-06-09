@@ -85,7 +85,8 @@ const Checkout = () => {
   const discountAmount = useMemo(() => {
     if (!appliedCoupon) return 0;
     if (appliedCoupon.discountType === 'percent') {
-      return discountableTotal * (appliedCoupon.discountValue / 100);
+      const calc = discountableTotal * (appliedCoupon.discountValue / 100);
+      return calc > discountableTotal ? discountableTotal : calc;
     }
     return appliedCoupon.discountValue > discountableTotal ? discountableTotal : appliedCoupon.discountValue;
   }, [appliedCoupon, discountableTotal]);

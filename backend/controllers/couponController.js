@@ -14,6 +14,13 @@ const getCoupons = async (req, res) => {
 const createCoupon = async (req, res) => {
     const { code, discountType, discountValue, expiryDate, isActive, usageLimit, usageLimitPerUser } = req.body;
 
+    if (discountType === 'percent' && (discountValue <= 0 || discountValue > 100)) {
+        return res.status(400).json({ message: 'El porcentaje de descuento debe estar entre 1 y 100' });
+    }
+    if (discountType === 'fixed' && discountValue <= 0) {
+        return res.status(400).json({ message: 'El descuento fijo debe ser mayor a 0' });
+    }
+
     const couponExists = await Coupon.findOne({ code: code.toUpperCase() });
 
     if (couponExists) {
@@ -39,6 +46,13 @@ const createCoupon = async (req, res) => {
 // @access  Private/Admin
 const updateCoupon = async (req, res) => {
     const { code, discountType, discountValue, expiryDate, isActive, usageLimit, usageLimitPerUser } = req.body;
+
+    if (discountType === 'percent' && (discountValue <= 0 || discountValue > 100)) {
+        return res.status(400).json({ message: 'El porcentaje de descuento debe estar entre 1 y 100' });
+    }
+    if (discountType === 'fixed' && discountValue <= 0) {
+        return res.status(400).json({ message: 'El descuento fijo debe ser mayor a 0' });
+    }
 
     const coupon = await Coupon.findById(req.params.id);
 
