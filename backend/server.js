@@ -7,7 +7,6 @@ import cookieParser from 'cookie-parser';
 import userRoutes from './routes/userRoutes.js';
 import productRoutes from './routes/productRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
-import paymentRoutes from './routes/paymentRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
 import inventoryRoutes from './routes/inventoryRoutes.js';
 import slideRoutes from './routes/slideRoutes.js';
@@ -15,7 +14,11 @@ import homeSectionRoutes from './routes/homeSectionRoutes.js';
 import categoryLinkRoutes from './routes/categoryLinkRoutes.js';
 import contactRoutes from './routes/contactRoutes.js';
 import expenseRoutes from './routes/expenseRoutes.js';
+import paymentRoutes from './routes/paymentRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
 import couponRoutes from './routes/couponRoutes.js';
+import shippingZoneRoutes from './routes/shippingZoneRoutes.js';
+import { seedDefaultShippingZones } from './controllers/shippingZoneController.js';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
@@ -71,6 +74,7 @@ const connectDB = async () => {
         const uri = process.env.MONGODB_URI || process.env.MONGO_URI;
         const conn = await mongoose.connect(uri);
         console.log(`MongoDB Connected: ${conn.connection.host}`);
+        await seedDefaultShippingZones();
     } catch (error) {
         console.error(`Error: ${error.message}`);
         process.exit(1);
@@ -88,7 +92,6 @@ app.get('/api/ping', (req, res) => {
 
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
-app.use('/api/payments', paymentRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/inventory', inventoryRoutes);
 app.use('/api/slides', slideRoutes);
@@ -96,7 +99,10 @@ app.use('/api/homesections', homeSectionRoutes);
 app.use('/api/categorylinks', categoryLinkRoutes);
 app.use('/api/contacts', contactRoutes);
 app.use('/api/expenses', expenseRoutes);
+app.use('/api/payments', paymentRoutes);
+app.use('/api/admin', adminRoutes);
 app.use('/api/coupons', couponRoutes);
+app.use('/api/shipping-zones', shippingZoneRoutes);
 
 // Make uploads folder static
 const __dirname = path.resolve();

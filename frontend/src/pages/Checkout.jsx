@@ -47,6 +47,12 @@ const Checkout = () => {
   const [validatingCoupon, setValidatingCoupon] = useState(false);
   const [couponsEnabled, setCouponsEnabled] = useState(false);
 
+  const [shippingCostInfo, setShippingCostInfo] = useState({
+    cost: 0,
+    estimatedDays: '',
+    zoneName: 'Por defecto'
+  });
+
   useEffect(() => {
     // Check if any active coupons exist to toggle UI
     const checkCoupons = async () => {
@@ -91,7 +97,30 @@ const Checkout = () => {
     return appliedCoupon.discountValue > discountableTotal ? discountableTotal : appliedCoupon.discountValue;
   }, [appliedCoupon, discountableTotal]);
 
-  const finalTotal = total - discountAmount;
+  const itemsTotalAfterDiscount = total - discountAmount;
+
+  useEffect(() => {
+    // Calculate shipping whenever address or itemsTotalAfterDiscount changes
+    const fetchShipping = async () => {
+      if (shippingAddress.department && shippingAddress.city) {
+        try {
+          const { data } = await axios.post('/api/shipping-zones/calculate', {
+            department: shippingAddress.department,
+            city: shippingAddress.city,
+            subtotal: itemsTotalAfterDiscount
+          });
+          setShippingCostInfo(data);
+        } catch (err) {
+          console.error('Error calculando envío', err);
+        }
+      } else {
+        setShippingCostInfo({ cost: 0, estimatedDays: '', zoneName: '' });
+      }
+    };
+    fetchShipping();
+  }, [shippingAddress.department, shippingAddress.city, itemsTotalAfterDiscount]);
+
+  const orderTotal = itemsTotalAfterDiscount + shippingCostInfo.cost;
 
   const handleApplyCoupon = async () => {
     if (!couponCodeInput.trim()) return;
@@ -149,8 +178,8 @@ const Checkout = () => {
         shippingAddress,
         paymentMethod: 'MercadoPago',
         itemsPrice:   total,
-        shippingPrice: 0,
-        totalPrice:   finalTotal,
+        shippingPrice: shippingCostInfo.cost,
+        totalPrice:   orderTotal,
         couponCode: appliedCoupon ? appliedCoupon.code : null,
       });
 
@@ -526,14 +555,29 @@ const Checkout = () => {
                     <span>-<PriceDisplay price={discountAmount} currency="COP" showDiscount={false} /></span>
                   </div>
                 )}
-                <div className="flex justify-between items-center text-neutral-700 text-sm">
-                  <span>Envío estándar</span>
-                  <span className="text-green-600 font-bold">Gratis</span>
+                <div className="flex justify-between items-start text-neutral-700 text-sm">
+                  <div>
+                    <span className="block">Envío {shippingCostInfo.zoneName ? `(${shippingCostInfo.zoneName})` : ''}</span>
+                    {shippingCostInfo.estimatedDays && (
+                      <span className="text-[10px] text-brand-600 block bg-brand-50 px-1 py-0.5 rounded inline-block mt-0.5">
+                        Llega en {shippingCostInfo.estimatedDays}
+                      </span>
+                    )}
+                  </div>
+                  {shippingAddress.department && shippingAddress.city ? (
+                    shippingCostInfo.cost === 0 ? (
+                      <span className="text-green-600 font-bold">Gratis</span>
+                    ) : (
+                      <PriceDisplay price={shippingCostInfo.cost} currency="COP" showDiscount={false} />
+                    )
+                  ) : (
+                    <span className="text-neutral-400 text-xs text-right">Ingresa tu<br/>dirección</span>
+                  )}
                 </div>
               </div>
               <div className="flex justify-between items-center border-t border-neutral-200 pt-4 mb-8">
                 <span className="text-2xl font-bold">Total</span>
-                <PriceDisplay price={finalTotal} currency="COP" size="lg" showDiscount={false} />
+                <PriceDisplay price={orderTotal} currency="COP" size="lg" showDiscount={false} />
               </div>
 
               {/* Desktop Submit */}
@@ -578,7 +622,7 @@ const Checkout = () => {
           >
             {!isProcessing && <>
               Pagar <span className="mx-1 font-black bg-white/20 px-2 rounded-md">
-                {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(finalTotal)}
+                {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(orderTotal)}
               </span>
               <ChevronRight size={20} />
             </>}

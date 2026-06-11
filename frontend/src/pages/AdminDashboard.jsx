@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Package, ShoppingBag, PlusCircle, Settings, Edit, Trash2, X, Upload, ClipboardList, DollarSign, BarChart2, Layers, Users, Layout } from 'lucide-react';
+import { Package, ShoppingBag, PlusCircle, Settings, Edit, Trash2, X, Upload, ClipboardList, DollarSign, BarChart2, Layers, Users, Layout, Ticket, Truck } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
 import InventoryTab from '../components/admin/InventoryTab';
 import BillingTab from '../components/admin/BillingTab';
@@ -11,6 +11,7 @@ import HomeDesignTab from '../components/admin/HomeDesignTab';
 import CustomersTab from '../components/admin/CustomersTab';
 import ExpensesTab from '../components/admin/ExpensesTab';
 import CouponsTab from '../components/admin/CouponsTab';
+import ShippingTab from '../components/admin/ShippingTab';
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -65,7 +66,13 @@ const AdminDashboard = () => {
           onClick={() => setActiveTab('coupons')}
           className={`flex items-center gap-3 p-4 rounded-xl transition-colors ${activeTab === 'coupons' ? 'bg-primary text-neutral-900' : 'glass-panel hover:bg-white/5'}`}
         >
-          <Package size={20} /> Cupones
+          <Ticket size={20} /> Cupones
+        </button>
+        <button 
+          onClick={() => setActiveTab('shipping')}
+          className={`flex items-center gap-3 p-4 rounded-xl transition-colors ${activeTab === 'shipping' ? 'bg-primary text-neutral-900' : 'glass-panel hover:bg-white/5'}`}
+        >
+          <Truck size={20} /> Costos de Envío
         </button>
         <button 
           onClick={() => setActiveTab('settings')}
@@ -111,6 +118,10 @@ const AdminDashboard = () => {
 
         {activeTab === 'coupons' && (
           <CouponsTab />
+        )}
+
+        {activeTab === 'shipping' && (
+          <ShippingTab />
         )}
 
         {activeTab === 'products' && (
