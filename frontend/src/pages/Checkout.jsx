@@ -54,14 +54,79 @@ const Checkout = () => {
     zoneName: 'Por defecto'
   });
 
+  // Helper para normalizar strings (quitar tildes y poner en minúscula)
+  const normalizeStr = (str) => {
+    if (!str) return '';
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+  };
+
   const { ref: autocompleteRef } = usePlacesWidget({
     apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
     onPlaceSelected: (place) => {
       let formatted = place?.formatted_address || place?.name || '';
       formatted = formatted.split(',')[0].trim();
-      if (formatted) {
-        setShippingAddress(prev => ({ ...prev, address: formatted }));
+      
+      let googleDep = '';
+      let googleCity = '';
+
+      if (place?.address_components) {
+        for (const comp of place.address_components) {
+          if (comp.types.includes('administrative_area_level_1')) {
+            googleDep = comp.long_name;
+          }
+          if (comp.types.includes('locality') || comp.types.includes('administrative_area_level_2')) {
+            if (!googleCity) googleCity = comp.long_name;
+          }
+        }
       }
+
+      setShippingAddress(prev => {
+        const newState = { ...prev, address: formatted || prev.address };
+        
+        if (googleDep || googleCity) {
+          const normDep = normalizeStr(googleDep);
+          const normCity = normalizeStr(googleCity);
+          
+          let matchedDep = '';
+          let matchedCity = '';
+
+          // Buscar departamento
+          if (normDep) {
+            const depObj = COLOMBIA.find(d => 
+              normalizeStr(d.dep) === normDep || 
+              (normDep.includes('bogota') && normalizeStr(d.dep).includes('bogota'))
+            );
+            
+            if (depObj) {
+              matchedDep = depObj.dep;
+              // Buscar ciudad dentro del departamento
+              if (normCity) {
+                const cityStr = depObj.cities.find(c => normalizeStr(c) === normCity || normalizeStr(c).includes(normCity));
+                if (cityStr) matchedCity = cityStr;
+              }
+            }
+          }
+
+          // Fallback: Si no halló depto pero tiene ciudad, buscar en todo el país
+          if (!matchedDep && normCity) {
+            for (const d of COLOMBIA) {
+              const cityStr = d.cities.find(c => normalizeStr(c) === normCity);
+              if (cityStr) {
+                matchedDep = d.dep;
+                matchedCity = cityStr;
+                break;
+              }
+            }
+          }
+
+          if (matchedDep) {
+            newState.department = matchedDep;
+            newState.city = matchedCity || '';
+          }
+        }
+        
+        return newState;
+      });
     },
     options: {
       types: ["address"],
