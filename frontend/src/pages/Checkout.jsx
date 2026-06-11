@@ -10,6 +10,7 @@ import { Button } from '../components/ui';
 import { TrustBadges, PriceDisplay } from '../components/ecommerce';
 import { COLOMBIA, DOCUMENT_TYPES } from '../data/colombia';
 import SEOHead from '../components/SEOHead';
+import Autocomplete from 'react-google-autocomplete';
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -388,11 +389,41 @@ const Checkout = () => {
                 </div>
                 <div>
                   <label htmlFor="chk_address" className="block text-sm font-medium text-neutral-700 mb-1.5">Dirección completa</label>
-                  <input id="chk_address" type="text" name="address" required
-                    value={shippingAddress.address} onChange={handleChange}
-                    className={inputClass} placeholder="Calle 123 # 45-67, Apto 8"
-                    maxLength={100} minLength={5}
-                  />
+                  {import.meta.env.VITE_GOOGLE_MAPS_API_KEY ? (
+                    <Autocomplete
+                      id="chk_address"
+                      apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
+                      onPlaceSelected={(place) => {
+                        let formatted = place?.formatted_address || place?.name || '';
+                        // Remove "Colombia" and postal codes if Google appends them, to keep it cleaner
+                        formatted = formatted.split(',')[0].trim();
+                        if (formatted) {
+                          setShippingAddress(prev => ({ ...prev, address: formatted }));
+                        }
+                      }}
+                      options={{
+                        types: ["address"],
+                        componentRestrictions: { country: "co" },
+                      }}
+                      name="address"
+                      required
+                      value={shippingAddress.address}
+                      onChange={handleChange}
+                      className={inputClass}
+                      placeholder="Busca tu dirección (Ej: Cra 15 # 93)"
+                      maxLength={100} minLength={5}
+                    />
+                  ) : (
+                    <input id="chk_address" type="text" name="address" required
+                      value={shippingAddress.address} onChange={handleChange}
+                      className={inputClass} placeholder="Calle 123 # 45-67, Apto 8"
+                      maxLength={100} minLength={5}
+                    />
+                  )}
+                  <p className="text-[10px] text-neutral-500 mt-1 flex items-center gap-1">
+                     <MapPin size={10} className="text-brand-400" />
+                     Escribe y selecciona de la lista, o ingresa manualmente si no aparece.
+                  </p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
