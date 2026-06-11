@@ -15,7 +15,6 @@ import categoryLinkRoutes from './routes/categoryLinkRoutes.js';
 import contactRoutes from './routes/contactRoutes.js';
 import expenseRoutes from './routes/expenseRoutes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
-import adminRoutes from './routes/adminRoutes.js';
 import couponRoutes from './routes/couponRoutes.js';
 import shippingZoneRoutes from './routes/shippingZoneRoutes.js';
 import { seedDefaultShippingZones } from './controllers/shippingZoneController.js';
@@ -100,7 +99,6 @@ app.use('/api/categorylinks', categoryLinkRoutes);
 app.use('/api/contacts', contactRoutes);
 app.use('/api/expenses', expenseRoutes);
 app.use('/api/payments', paymentRoutes);
-app.use('/api/admin', adminRoutes);
 app.use('/api/coupons', couponRoutes);
 app.use('/api/shipping-zones', shippingZoneRoutes);
 
