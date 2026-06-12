@@ -63,6 +63,7 @@ const Shop = () => {
 
   // Sync internal state if URL changes externally (e.g., from Home search)
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSearch(querySearch);
     setCategory(queryCategory);
     setSubcategory(querySubcategory);
@@ -99,6 +100,7 @@ const Shop = () => {
   // Sincronizar el slider con el precio máximo real del sitio al cargar los productos
   useEffect(() => {
     if (maxPrice > 1000) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setPriceRange([0, maxPrice]);
     }
   }, [maxPrice]);
@@ -169,10 +171,11 @@ const Shop = () => {
       });
     }
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setFiltered(result);
   }, [search, category, subcategory, sort, products, priceRange, filterMaterial, filterSize, filterPersonalization, showOnlyOffers]);
 
-  const handleSearchChange = (e) => { setSearch(e.target.value); updateUrl(e.target.value, category, subcategory, sort, filterPersonalization); };
+
   const handleCategoryChange = (c) => { setCategory(c); setSubcategory(''); updateUrl(search, c, '', sort, filterPersonalization); };
   const handleSubcategoryChange = (sub) => { const newSub = subcategory === sub ? '' : sub; setSubcategory(newSub); updateUrl(search, category, newSub, sort, filterPersonalization); };
   const handleSortChange = (e) => { setSort(e.target.value); updateUrl(search, category, subcategory, e.target.value, filterPersonalization); };

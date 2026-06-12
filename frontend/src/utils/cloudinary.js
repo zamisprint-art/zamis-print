@@ -35,7 +35,7 @@ export const optimizeImage = (url, width = 'auto') => {
         urlObj.searchParams.set('w', width.toString()); // Cambiar a ancho óptimo
       }
       return urlObj.toString();
-    } catch (e) {
+    } catch (e) { // eslint-disable-line no-unused-vars
       return url;
     }
   }

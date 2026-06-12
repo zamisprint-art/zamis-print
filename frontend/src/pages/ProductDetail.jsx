@@ -41,7 +41,7 @@ const ProductDetail = () => {
 
   const [loading, setLoading]                     = useState(true);
   const [qty, setQty]                             = useState(1);
-  const [customSize, setCustomSize]                 = useState('15 cms');
+
   const [customFont, setCustomFont]                 = useState('Clásica');
   const [personalizationText, setPersonalizationText]   = useState('');
   const [personalizationImage, setPersonalizationImage] = useState(null);
@@ -76,6 +76,7 @@ const ProductDetail = () => {
     }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { fetchProduct(); }, [id]);
 
   const containerRef = useRef(null);
