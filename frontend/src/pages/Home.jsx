@@ -255,9 +255,9 @@ const Home = () => {
               {customCta?.description || 'Desde piezas de ingeniería hasta regalos únicos pintados a mano. Convierte tus ideas en plástico y resina de altísima calidad.'}
             </p>
             <div className="flex flex-wrap gap-4">
-              <Link to={customCta?.buttonLink || "/contact"}>
-                <Button variant="primary" className="h-14 px-8 text-lg font-bold shadow-brand-500/20 group">
-                  {customCta?.buttonText || 'Cotizar mi diseño'} <PenTool className="ml-2 w-5 h-5 group-hover:rotate-12 transition-transform" />
+              <Link to={customCta?.buttonLink || "/contact"} className="w-full sm:w-auto">
+                <Button variant="primary" className="h-14 px-8 text-lg font-bold shadow-brand-500/20 group flex items-center justify-center whitespace-nowrap w-full">
+                  {customCta?.buttonText || 'Cotizar mi diseño'} <PenTool className="ml-2 w-5 h-5 shrink-0 group-hover:rotate-12 transition-transform" />
                 </Button>
               </Link>
             </div>
@@ -290,37 +290,39 @@ const Home = () => {
               </div>
             ) : (
               /* Fallback 1 Image (If 5 images are not uploaded) */
-              <div className="aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl shadow-brand-500/10 border border-white/5 relative">
-                <img 
-                  src="https://images.unsplash.com/photo-1593376853899-fbb47a057fa0?q=80&w=1200&auto=format&fit=crop" 
-                  alt="Impresión 3D trabajando" 
-                  className="w-full h-full object-cover"
-                  onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1608222351212-18fe0ec7b13b?q=80&w=1200&auto=format&fit=crop' }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-tr from-brand-500/20 to-transparent mix-blend-overlay"></div>
+              <div className="relative w-full h-full">
+                <div className="aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl shadow-brand-500/10 border border-white/5 relative">
+                  <img 
+                    src="https://images.unsplash.com/photo-1593376853899-fbb47a057fa0?q=80&w=1200&auto=format&fit=crop" 
+                    alt="Impresión 3D trabajando" 
+                    className="w-full h-full object-cover"
+                    onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1608222351212-18fe0ec7b13b?q=80&w=1200&auto=format&fit=crop' }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-tr from-brand-500/20 to-transparent mix-blend-overlay"></div>
+                </div>
+                
+                {/* Floating detail boxes (Only shown on single fallback image) */}
+                <div className="absolute -bottom-6 -left-6 bg-neutral-800 border border-neutral-700 p-4 rounded-2xl shadow-xl flex items-center gap-4 animate-float hidden sm:flex z-20">
+                  <div className="w-12 h-12 bg-neutral-900 rounded-xl flex items-center justify-center text-brand-400">
+                    <Paintbrush size={24} />
+                  </div>
+                  <div>
+                    <p className="text-white font-bold text-sm">Pintado a Mano</p>
+                    <p className="text-neutral-400 text-xs">Acabados Premium</p>
+                  </div>
+                </div>
+                
+                <div className="absolute -top-6 -right-6 bg-neutral-800 border border-neutral-700 p-4 rounded-2xl shadow-xl flex items-center gap-4 animate-float hidden sm:flex z-20" style={{ animationDelay: '1s' }}>
+                  <div className="w-12 h-12 bg-neutral-900 rounded-xl flex items-center justify-center text-orange-400">
+                    <Zap size={24} />
+                  </div>
+                  <div>
+                    <p className="text-white font-bold text-sm">Prototipado Rápido</p>
+                    <p className="text-neutral-400 text-xs">Entrega en 48h</p>
+                  </div>
+                </div>
               </div>
             )}
-            
-            {/* Floating detail boxes */}
-            <div className="absolute -bottom-6 -left-6 bg-neutral-800 border border-neutral-700 p-4 rounded-2xl shadow-xl flex items-center gap-4 animate-float hidden sm:flex z-20">
-              <div className="w-12 h-12 bg-neutral-900 rounded-xl flex items-center justify-center text-brand-400">
-                <Paintbrush size={24} />
-              </div>
-              <div>
-                <p className="text-white font-bold text-sm">Pintado a Mano</p>
-                <p className="text-neutral-400 text-xs">Acabados Premium</p>
-              </div>
-            </div>
-            
-            <div className="absolute -top-6 -right-6 bg-neutral-800 border border-neutral-700 p-4 rounded-2xl shadow-xl flex items-center gap-4 animate-float hidden sm:flex z-20" style={{ animationDelay: '1s' }}>
-              <div className="w-12 h-12 bg-neutral-900 rounded-xl flex items-center justify-center text-orange-400">
-                <Zap size={24} />
-              </div>
-              <div>
-                <p className="text-white font-bold text-sm">Prototipado Rápido</p>
-                <p className="text-neutral-400 text-xs">Entrega en 48h</p>
-              </div>
-            </div>
           </div>
         </div>
       </section>
