@@ -81,7 +81,7 @@ const Shop = () => {
   const categoryTree = useMemo(() => {
     const tree = { All: [] };
     products.forEach(p => {
-      if (!p.category) return;
+      if (!p.category || p.requiresQuote) return;
       if (!tree[p.category]) tree[p.category] = new Set();
       if (p.subcategory) tree[p.category].add(p.subcategory);
     });
@@ -109,14 +109,32 @@ const Shop = () => {
   useEffect(() => {
     let result = [...products];
 
+    // Exclusives rule: they do NOT belong in standard categories.
+    // Show them ONLY if explicitly requested, and if so, ignore standard category selections.
+    if (filterPersonalization === 'Diseños Exclusivos') {
+      result = result.filter(p => p.requiresQuote);
+    } else {
+      // Normal products
+      result = result.filter(p => !p.requiresQuote);
+      
+      if (filterPersonalization === 'Estándar') {
+        result = result.filter(p => !p.isCustomizable);
+      } else if (filterPersonalization === 'Configurable') {
+        result = result.filter(p => p.isCustomizable);
+      }
+
+      // Only apply category filter to non-exclusive products
+      if (category && category !== 'All') {
+        result = result.filter(p => p.category === category);
+        if (subcategory) result = result.filter(p => p.subcategory === subcategory);
+      }
+    }
+
     if (search.trim()) {
       const q = search.toLowerCase();
       result = result.filter(p => p.name.toLowerCase().includes(q) || p.description?.toLowerCase().includes(q));
     }
-    if (category && category !== 'All') {
-      result = result.filter(p => p.category === category);
-      if (subcategory) result = result.filter(p => p.subcategory === subcategory);
-    }
+
     // Advanced filters
     result = result.filter(p => {
       const effectivePrice = p.isOnSale && p.salePrice ? p.salePrice : p.price;
@@ -124,15 +142,6 @@ const Shop = () => {
     });
     if (filterMaterial) result = result.filter(p => p.material === filterMaterial);
     if (filterSize) result = result.filter(p => p.size === filterSize);
-    if (filterPersonalization) {
-      if (filterPersonalization === 'Estándar') {
-        result = result.filter(p => !p.isCustomizable && !p.requiresQuote);
-      } else if (filterPersonalization === 'Configurable') {
-        result = result.filter(p => p.isCustomizable && !p.requiresQuote);
-      } else if (filterPersonalization === 'Diseños Exclusivos') {
-        result = result.filter(p => p.requiresQuote);
-      }
-    }
     if (showOnlyOffers) result = result.filter(p => p.isOnSale);
 
     if (sort === 'price-asc') {
