@@ -341,9 +341,9 @@ const Home = () => {
       </section>
 
       {/* 7. Value Proposition Section (Simplificada o mejorada visualmente) */}
-      <section className="py-24 bg-surface-base relative overflow-hidden">
+      <section className="py-12 bg-surface-base relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 relative z-10">
-          <div className="text-center mb-16">
+          <div className="text-center mb-8">
             <h2 className="text-2xl md:text-3xl font-bold mb-4">La Diferencia ZAMIS Print</h2>
             <div className="h-1 w-16 bg-primary mx-auto rounded-full"></div>
           </div>
