@@ -66,6 +66,21 @@ const Home = () => {
   // Fallback: if admin hasn't configured flags yet, show most recent
   const recentProducts = allProducts.filter(p => !p.requiresQuote).slice(0, 12);
 
+  // Dynamic Section Configurations
+  const getSectionConfig = (type, defaultTitle, defaultLink, defaultLabel) => {
+    const config = homeSections.find(s => s.type === type);
+    return {
+      title: config?.title || defaultTitle,
+      linkTo: config?.linkTo || defaultLink,
+      linkLabel: config?.linkLabel || defaultLabel,
+      isActive: config ? config.isActive : true
+    };
+  };
+
+  const newestConfig = getSectionConfig('newest', 'Recién Salidos de la Impresora', '/shop?sort=newest', 'Ver Todo lo Nuevo');
+  const categoryConfig = getSectionConfig('category', 'Diseños por Colección', '/shop', 'Ver catálogo completo');
+  const featuredConfig = getSectionConfig('featured', 'Favoritos de la Comunidad', '/shop?sort=best-selling', 'Ver Más Vendidos');
+
   const ProductCarousel = ({ items, fallback }) => {
     const list = items.length > 0 ? items : fallback;
     if (list.length === 0) return null;
@@ -136,19 +151,22 @@ const Home = () => {
       </div>
 
       {/* 3. Primer Carrusel (Lo Nuevo o Principal) */}
-      <div className="w-full relative z-10 bg-white pt-8 pb-4">
-        <section className="px-4 max-w-7xl mx-auto w-full">
-          <SectionHeader title="Recién Salidos de la Impresora"
-            linkTo="/shop?sort=newest" linkLabel="Ver Todo lo Nuevo" />
-          <ProductCarousel items={newArrivals} fallback={recentProducts} />
-        </section>
-      </div>
+      {newestConfig.isActive && (
+        <div className="w-full relative z-10 bg-white pt-8 pb-4">
+          <section className="px-4 max-w-7xl mx-auto w-full">
+            <SectionHeader title={newestConfig.title}
+              linkTo={newestConfig.linkTo} linkLabel={newestConfig.linkLabel} />
+            <ProductCarousel items={newArrivals} fallback={recentProducts} />
+          </section>
+        </div>
+      )}
 
       {/* 4. NUEVO: Categorías Bento Grid */}
-      <section className="py-10 max-w-7xl mx-auto px-4 w-full">
-        <SectionHeader title="Diseños por Colección" linkTo="/shop" linkLabel="Ver catálogo completo" />
+      {categoryConfig.isActive && (
+        <section className="py-10 max-w-7xl mx-auto px-4 w-full">
+          <SectionHeader title={categoryConfig.title} linkTo={categoryConfig.linkTo} linkLabel={categoryConfig.linkLabel} />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 auto-rows-[200px]">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 auto-rows-[200px]">
           {loading ? (
             [...Array(4)].map((_, i) => (
               <Skeleton key={i} className={`rounded-xl ${i === 0 ? 'lg:col-span-2 lg:row-span-2' : ''}`} />
@@ -227,15 +245,18 @@ const Home = () => {
           )}
         </div>
       </section>
+      )}
 
       {/* 5. Segundo Carrusel (Favoritos/Ofertas) */}
-      <div className="w-full relative z-10 bg-neutral-50/50 pt-8 pb-10 border-t border-neutral-100">
-        <section className="px-4 max-w-7xl mx-auto w-full">
-          <SectionHeader title="Favoritos de la Comunidad"
-            linkTo="/shop?sort=best-selling" linkLabel="Ver Más Vendidos" />
-          <ProductCarousel items={featured} fallback={recentProducts} />
-        </section>
-      </div>
+      {featuredConfig.isActive && (
+        <div className="w-full relative z-10 bg-neutral-50/50 pt-8 pb-10 border-t border-neutral-100">
+          <section className="px-4 max-w-7xl mx-auto w-full">
+            <SectionHeader title={featuredConfig.title}
+              linkTo={featuredConfig.linkTo} linkLabel={featuredConfig.linkLabel} />
+            <ProductCarousel items={featured} fallback={recentProducts} />
+          </section>
+        </div>
+      )}
 
       {/* 6. NUEVO: Franja Inmersiva "Cotiza tu Idea" (Custom CTA) */}
       <section className="relative py-8 lg:py-12 overflow-hidden isolate">
