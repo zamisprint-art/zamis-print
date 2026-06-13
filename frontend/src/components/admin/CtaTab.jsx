@@ -65,8 +65,8 @@ const CtaTab = () => {
       const dimensions = await checkImageDimensions(file);
       const isSquareSlot = index < 4;
       
-      if (isSquareSlot && dimensions.width !== dimensions.height) {
-        throw new Error(`La Imagen ${index + 1} debe ser perfectamente cuadrada (1:1). Ej: 800x800px. Tu imagen es ${dimensions.width}x${dimensions.height}px.`);
+      if (isSquareSlot && Math.abs(dimensions.width - dimensions.height) > 1) {
+        throw new Error(`La Imagen ${index + 1} debe ser cuadrada (1:1). Ej: 800x800px. Tu imagen mide ${dimensions.width}x${dimensions.height}px.`);
       }
       
       if (!isSquareSlot) {
@@ -88,7 +88,7 @@ const CtaTab = () => {
       setForm({ ...form, images: newImages });
       
     } catch (err) {
-      setError(err.response?.data?.message || 'Error subiendo imagen. Intenta con una URL.');
+      setError(err.response?.data?.message || err.message || 'Error subiendo imagen. Intenta con una URL.');
     } finally {
       setUploadingIdx(null);
       if (fileInputRefs[index].current) fileInputRefs[index].current.value = '';

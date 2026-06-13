@@ -54,8 +54,8 @@ const CategoryLinksTab = () => {
     
     try {
       const dimensions = await checkImageDimensions(file);
-      if (dimensions.width !== dimensions.height) {
-        throw new Error('Error de Proporción: La imagen debe ser perfectamente cuadrada (1:1). Ej: 800x800px. Tu imagen es ' + dimensions.width + 'x' + dimensions.height + 'px. Por favor recórtala primero.');
+      if (Math.abs(dimensions.width - dimensions.height) > 1) {
+        throw new Error('Error de Proporción: La imagen debe ser cuadrada (1:1). Ej: 800x800px. Tu imagen mide ' + dimensions.width + 'x' + dimensions.height + 'px. Por favor recórtala un poco.');
       }
 
       const formData = new FormData();
@@ -65,7 +65,7 @@ const CategoryLinksTab = () => {
       });
       setForm(f => ({ ...f, image: data.filePath }));
     } catch (err) {
-      setError(err.response?.data?.message || 'Error subiendo imagen.');
+      setError(err.response?.data?.message || err.message || 'Error subiendo imagen.');
     } finally {
       setUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = '';
