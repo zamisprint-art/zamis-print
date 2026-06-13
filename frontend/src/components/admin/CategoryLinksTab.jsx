@@ -19,6 +19,18 @@ const CategoryLinksTab = () => {
   const [linkToDelete, setLinkToDelete] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
+  const checkImageDimensions = (file) => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      const objectUrl = URL.createObjectURL(file);
+      img.onload = () => {
+        URL.revokeObjectURL(objectUrl);
+        resolve({ width: img.width, height: img.height });
+      };
+      img.src = objectUrl;
+    });
+  };
+
   const fetchLinks = async () => {
     try {
       setLoading(true);
@@ -36,9 +48,16 @@ const CategoryLinksTab = () => {
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
+    
     setUploading(true);
     setError('');
+    
     try {
+      const dimensions = await checkImageDimensions(file);
+      if (dimensions.width !== dimensions.height) {
+        throw new Error('Error de Proporción: La imagen debe ser perfectamente cuadrada (1:1). Ej: 800x800px. Tu imagen es ' + dimensions.width + 'x' + dimensions.height + 'px. Por favor recórtala primero.');
+      }
+
       const formData = new FormData();
       formData.append('file', file);
       const { data } = await axios.post('/api/upload', formData, {
@@ -205,7 +224,7 @@ const CategoryLinksTab = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-neutral-700 mb-1">Imagen (500x500px recomendado)</label>
+                <label className="block text-sm font-bold text-neutral-700 mb-1">Imagen (Requerido: Cuadrada 1:1. Recomendado: 800x800px)</label>
                 <div className="flex flex-col gap-3">
                   {form.image ? (
                     <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-neutral-100 mx-auto">

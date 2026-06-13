@@ -20,6 +20,18 @@ const CtaTab = () => {
 
   const fileInputRefs = [useRef(null), useRef(null), useRef(null), useRef(null), useRef(null)];
 
+  const checkImageDimensions = (file) => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      const objectUrl = URL.createObjectURL(file);
+      img.onload = () => {
+        URL.revokeObjectURL(objectUrl);
+        resolve({ width: img.width, height: img.height });
+      };
+      img.src = objectUrl;
+    });
+  };
+
   const fetchCta = async () => {
     try {
       setLoading(true);
@@ -48,7 +60,23 @@ const CtaTab = () => {
     if (!file) return;
     setUploadingIdx(index);
     setError('');
+    
     try {
+      const dimensions = await checkImageDimensions(file);
+      const isSquareSlot = index < 4;
+      
+      if (isSquareSlot && dimensions.width !== dimensions.height) {
+        throw new Error(`La Imagen ${index + 1} debe ser perfectamente cuadrada (1:1). Ej: 800x800px. Tu imagen es ${dimensions.width}x${dimensions.height}px.`);
+      }
+      
+      if (!isSquareSlot) {
+        // Tolerancia de 1 pixel por errores de redondeo en algunas exportaciones (ej 800x400)
+        const expectedHeight = Math.round(dimensions.width / 2);
+        if (Math.abs(dimensions.height - expectedHeight) > 1) {
+          throw new Error(`La Imagen 5 debe ser horizontal (proporción 2:1). Ej: 800x400px o 1000x500px. Tu imagen es ${dimensions.width}x${dimensions.height}px.`);
+        }
+      }
+
       const formData = new FormData();
       formData.append('file', file);
       const { data } = await axios.post('/api/upload', formData, {
@@ -160,8 +188,9 @@ const CtaTab = () => {
             <div>
               <strong>Guía de Collage:</strong>
               <ul className="list-disc pl-4 mt-1 opacity-80">
-                <li><strong>Imagen 1:</strong> Es el cuadro principal (Centro / Izquierda). Debe ser la más espectacular.</li>
-                <li><strong>Imágenes 2, 3, 4 y 5:</strong> Rodearán la imagen principal para formar la grilla asimétrica.</li>
+                <li><strong>Imagen 1 (Principal):</strong> Requiere ser Cuadrada (1:1). Sugerido: 800x800px.</li>
+                <li><strong>Imágenes 2, 3 y 4:</strong> Requieren ser Cuadradas (1:1). Sugerido: 400x400px.</li>
+                <li><strong>Imagen 5 (Inferior):</strong> Requiere ser Rectangular Horizontal (2:1). Sugerido: 800x400px.</li>
               </ul>
             </div>
           </div>
@@ -179,7 +208,10 @@ const CtaTab = () => {
                 
                 <div className="flex-1">
                   <label className="block text-xs font-bold text-neutral-700 mb-1">
-                    Imagen {index + 1} {index === 0 ? '(Destacada Principal)' : ''}
+                    Imagen {index + 1} {index === 0 ? '(Destacada Principal)' : ''} 
+                    <span className="text-brand-600 ml-1 font-normal">
+                      {index < 4 ? '(Req: Cuadrada 1:1)' : '(Req: Horizontal 2:1)'}
+                    </span>
                   </label>
                   <div className="flex gap-2">
                     <input 
