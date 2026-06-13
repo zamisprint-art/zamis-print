@@ -279,7 +279,7 @@ const Home = () => {
           <div className="w-full md:w-1/2 relative">
             {customCta?.images?.length === 5 ? (
               /* Asymmetric 5-Image Collage (CSS Grid) */
-              <div className="grid grid-cols-3 grid-rows-3 gap-3 aspect-square w-full max-w-lg mx-auto relative z-10">
+              <div className="grid grid-cols-3 grid-rows-3 gap-3 aspect-square w-full max-w-xl mx-auto relative z-10">
                 {/* Center / Main Large Image */}
                 <div className="col-span-2 row-span-2 rounded-xl overflow-hidden shadow-2xl shadow-brand-500/10 border border-white/5 bg-white group">
                   <img src={optimizeImage(customCta.images[0], 600)} alt="CTA 1" className="w-full h-full object-contain p-2 md:p-4 group-hover:scale-105 transition-transform duration-700" />
