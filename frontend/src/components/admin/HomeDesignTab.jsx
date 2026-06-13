@@ -2,6 +2,7 @@ import { useState } from 'react';
 import SliderTab from './SliderTab';
 import SectionsTab from './SectionsTab';
 import CategoryLinksTab from './CategoryLinksTab';
+import CtaTab from './CtaTab';
 
 const HomeDesignTab = () => {
   const [activeSubTab, setActiveSubTab] = useState('slider');
@@ -30,11 +31,18 @@ const HomeDesignTab = () => {
         >
           Secciones Dinámicas
         </button>
+        <button 
+          onClick={() => setActiveSubTab('cta')}
+          className={`px-4 py-2 rounded-lg font-bold transition-colors ${activeSubTab === 'cta' ? 'bg-brand-50 text-brand-600' : 'text-neutral-500 hover:bg-neutral-100'}`}
+        >
+          Sección CTA (Cotiza tu Idea)
+        </button>
       </div>
 
       {activeSubTab === 'slider' && <SliderTab />}
       {activeSubTab === 'quicklinks' && <CategoryLinksTab />}
       {activeSubTab === 'sections' && <SectionsTab />}
+      {activeSubTab === 'cta' && <CtaTab />}
     </div>
   );
 };

@@ -34,19 +34,22 @@ const Home = () => {
   const [allProducts, setAllProducts] = useState([]);
   const [homeSections, setHomeSections] = useState([]);
   const [categoryLinks, setCategoryLinks] = useState([]);
+  const [customCta, setCustomCta] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [prodRes, secRes, catRes] = await Promise.all([
+        const [prodRes, secRes, catRes, ctaRes] = await Promise.all([
           axios.get('/api/products?limit=100'), // Necesitamos suficientes para llenar las categorías dinámicas
           axios.get('/api/homesections'),
-          axios.get('/api/categorylinks')
+          axios.get('/api/categorylinks'),
+          axios.get('/api/customcta')
         ]);
         setAllProducts(prodRes.data.products || []);
         setHomeSections(secRes.data || []);
         setCategoryLinks(catRes.data.filter(link => link.isActive) || []);
+        setCustomCta(ctaRes.data);
       } catch (error) {
         console.error('Error fetching data for Home:', error);
       } finally {
@@ -242,37 +245,64 @@ const Home = () => {
           <div className="w-full md:w-1/2">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-brand-300 text-sm font-bold uppercase tracking-widest mb-6">
               <span className="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span>
-              Servicio a Medida
+              {customCta?.badgeText || 'Servicio a Medida'}
             </div>
-            <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-white leading-[1.1] mb-6">
-              ¿Lo imaginas?<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-brand-600">Nosotros lo imprimimos.</span>
-            </h2>
+            <h2 
+              className="text-3xl sm:text-4xl lg:text-6xl font-bold text-white leading-[1.1] mb-6"
+              dangerouslySetInnerHTML={{ __html: customCta?.title || '¿Lo imaginas?<br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-brand-600">Nosotros lo imprimimos.</span>' }}
+            ></h2>
             <p className="text-lg text-neutral-400 mb-8 max-w-lg">
-              Desde piezas de ingeniería hasta regalos únicos pintados a mano. Convierte tus ideas en plástico y resina de altísima calidad.
+              {customCta?.description || 'Desde piezas de ingeniería hasta regalos únicos pintados a mano. Convierte tus ideas en plástico y resina de altísima calidad.'}
             </p>
             <div className="flex flex-wrap gap-4">
-              <Link to="/contact">
+              <Link to={customCta?.buttonLink || "/contact"}>
                 <Button variant="primary" className="h-14 px-8 text-lg font-bold shadow-brand-500/20 group">
-                  Cotizar mi diseño <PenTool className="ml-2 w-5 h-5 group-hover:rotate-12 transition-transform" />
+                  {customCta?.buttonText || 'Cotizar mi diseño'} <PenTool className="ml-2 w-5 h-5 group-hover:rotate-12 transition-transform" />
                 </Button>
               </Link>
             </div>
           </div>
           
           <div className="w-full md:w-1/2 relative">
-            <div className="aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl shadow-brand-500/10 border border-white/5 relative">
-              <img 
-                src="https://images.unsplash.com/photo-1593376853899-fbb47a057fa0?q=80&w=1200&auto=format&fit=crop" 
-                alt="Impresión 3D trabajando" 
-                className="w-full h-full object-cover"
-                onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1608222351212-18fe0ec7b13b?q=80&w=1200&auto=format&fit=crop' }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-tr from-brand-500/20 to-transparent mix-blend-overlay"></div>
-            </div>
+            {customCta?.images?.length === 5 ? (
+              /* Asymmetric 5-Image Collage (CSS Grid) */
+              <div className="grid grid-cols-3 grid-rows-3 gap-3 aspect-square w-full max-w-lg mx-auto relative z-10">
+                {/* Center / Main Large Image */}
+                <div className="col-span-2 row-span-2 rounded-2xl overflow-hidden shadow-2xl shadow-brand-500/10 border border-white/5 group">
+                  <img src={optimizeImage(customCta.images[0], 600)} alt="CTA 1" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                </div>
+                {/* Top Right Small */}
+                <div className="col-span-1 row-span-1 rounded-2xl overflow-hidden border border-white/5 group">
+                  <img src={optimizeImage(customCta.images[1], 300)} alt="CTA 2" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                </div>
+                {/* Middle Right Small */}
+                <div className="col-span-1 row-span-1 rounded-2xl overflow-hidden border border-white/5 group">
+                  <img src={optimizeImage(customCta.images[2], 300)} alt="CTA 3" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                </div>
+                {/* Bottom Left Small */}
+                <div className="col-span-1 row-span-1 rounded-2xl overflow-hidden border border-white/5 group">
+                  <img src={optimizeImage(customCta.images[3], 300)} alt="CTA 4" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                </div>
+                {/* Bottom Middle/Right Wide */}
+                <div className="col-span-2 row-span-1 rounded-2xl overflow-hidden border border-white/5 group">
+                  <img src={optimizeImage(customCta.images[4], 500)} alt="CTA 5" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                </div>
+              </div>
+            ) : (
+              /* Fallback 1 Image (If 5 images are not uploaded) */
+              <div className="aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl shadow-brand-500/10 border border-white/5 relative">
+                <img 
+                  src="https://images.unsplash.com/photo-1593376853899-fbb47a057fa0?q=80&w=1200&auto=format&fit=crop" 
+                  alt="Impresión 3D trabajando" 
+                  className="w-full h-full object-cover"
+                  onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1608222351212-18fe0ec7b13b?q=80&w=1200&auto=format&fit=crop' }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-tr from-brand-500/20 to-transparent mix-blend-overlay"></div>
+              </div>
+            )}
             
             {/* Floating detail boxes */}
-            <div className="absolute -bottom-6 -left-6 bg-neutral-800 border border-neutral-700 p-4 rounded-2xl shadow-xl flex items-center gap-4 animate-float hidden sm:flex">
+            <div className="absolute -bottom-6 -left-6 bg-neutral-800 border border-neutral-700 p-4 rounded-2xl shadow-xl flex items-center gap-4 animate-float hidden sm:flex z-20">
               <div className="w-12 h-12 bg-neutral-900 rounded-xl flex items-center justify-center text-brand-400">
                 <Paintbrush size={24} />
               </div>
@@ -282,7 +312,7 @@ const Home = () => {
               </div>
             </div>
             
-            <div className="absolute -top-6 -right-6 bg-neutral-800 border border-neutral-700 p-4 rounded-2xl shadow-xl flex items-center gap-4 animate-float hidden sm:flex" style={{ animationDelay: '1s' }}>
+            <div className="absolute -top-6 -right-6 bg-neutral-800 border border-neutral-700 p-4 rounded-2xl shadow-xl flex items-center gap-4 animate-float hidden sm:flex z-20" style={{ animationDelay: '1s' }}>
               <div className="w-12 h-12 bg-neutral-900 rounded-xl flex items-center justify-center text-orange-400">
                 <Zap size={24} />
               </div>
