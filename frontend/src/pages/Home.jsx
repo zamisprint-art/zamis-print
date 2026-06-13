@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { motion } from 'framer-motion';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ArrowRight, Paintbrush, PenTool, Zap } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
 import HeroSlider from '../components/HeroSlider';
 import { Skeleton, Button, EmptyState } from '../components/ui';
@@ -122,198 +122,207 @@ const Home = () => {
         title="ZAMIS Print | Impresión 3D Personalizada en Colombia"
         description="Funkos, llaveros, esculturas y figuras 3D 100% personalizadas. Envíos a todo Colombia. Diseña tu regalo perfecto hoy."
       />
-      {/* Hero Section */}
+      {/* 1. Hero Section */}
       <HeroSlider />
 
-      {/* Categorías Principales (Quick Links) */}
-      <section className="py-10 max-w-7xl mx-auto px-4 w-full bg-surface-base">
-        <h2 className="text-lg md:text-xl font-bold text-neutral-900 mb-6 text-center">Explora nuestras categorías</h2>
-        <div className="flex justify-center gap-4 sm:gap-10 flex-wrap">
+      {/* 2. Trust Badges (Compact, immediately after Hero) */}
+      <div className="w-full bg-neutral-900 border-b border-neutral-800 text-white overflow-hidden py-3">
+        <div className="max-w-7xl mx-auto px-4">
+          <TrustBadges variant="compact" className="justify-center sm:justify-between text-xs sm:text-sm opacity-90" />
+        </div>
+      </div>
+
+      {/* 3. Primer Carrusel (Lo Nuevo o Principal) */}
+      <div className="w-full relative z-10 bg-white pt-10 pb-6">
+        <section className="px-4 max-w-7xl mx-auto w-full">
+          <SectionHeader title="Recién Salidos de la Impresora"
+            linkTo="/shop?sort=newest" linkLabel="Ver Todo lo Nuevo" />
+          <ProductCarousel items={newArrivals} fallback={recentProducts} />
+        </section>
+      </div>
+
+      {/* 4. NUEVO: Categorías Bento Grid */}
+      <section className="py-16 max-w-7xl mx-auto px-4 w-full">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8">
+          <div>
+            <h2 className="text-2xl md:text-4xl font-bold text-neutral-900 tracking-tight">Diseños por Colección</h2>
+            <p className="text-neutral-500 mt-2 font-medium">Encuentra exactamente la temática que te apasiona.</p>
+          </div>
+          <Link to="/shop" className="text-sm font-bold text-brand-600 hover:text-brand-700 flex items-center gap-1 mt-4 md:mt-0 group">
+            Ver catálogo completo <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 auto-rows-[240px]">
           {loading ? (
-            <div className="flex justify-center gap-4 sm:gap-10 flex-wrap">
-              {[...Array(4)].map((_, i) => (
-                <div key={i} className="flex flex-col items-center w-[80px] sm:w-[120px] animate-pulse">
-                  <div className="p-1 rounded-full bg-neutral-100 mb-3">
-                    <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-neutral-200 border-4 border-white" />
-                  </div>
-                  <div className="h-3 w-16 bg-neutral-200 rounded mt-1 mb-1" />
-                  <div className="h-3 w-12 bg-neutral-200 rounded" />
-                </div>
-              ))}
-            </div>
-          ) : categoryLinks.length > 0 ? (
-            categoryLinks.map(link => (
-              <Link key={link._id} to={link.linkTo} className="group flex flex-col items-center w-[80px] sm:w-[120px]">
-                <div className="p-1 rounded-full bg-gradient-to-tr from-brand-400 to-brand-600 shadow-lg group-hover:shadow-brand-500/40 group-hover:-translate-y-1 transition-all duration-300 mb-3">
-                  <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-white flex items-center justify-center border-4 border-white overflow-hidden">
-                    {link.image.length < 10 && /\p{Emoji}/u.test(link.image) ? (
-                      <span role="img" aria-hidden="true" className="text-3xl sm:text-5xl group-hover:scale-110 transition-transform duration-300">{link.image}</span>
-                    ) : (
-                      <img src={optimizeImage(link.image, 200)} alt={link.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" onError={(e) => { e.target.src = 'https://via.placeholder.com/150?text=Link' }} />
-                    )}
-                  </div>
-                </div>
-                <span className="font-bold text-neutral-800 text-xs sm:text-sm text-center group-hover:text-brand-600 transition-colors leading-tight" dangerouslySetInnerHTML={{ __html: link.title.replace('\\n', '<br/>') }}></span>
-              </Link>
+            [...Array(4)].map((_, i) => (
+              <Skeleton key={i} className={`rounded-3xl ${i === 0 ? 'lg:col-span-2 lg:row-span-2' : ''}`} />
             ))
+          ) : categoryLinks.length > 0 ? (
+            categoryLinks.slice(0, 5).map((link, i) => {
+              const isLarge = i === 0; // Primer item ocupa más espacio en pantallas grandes
+              return (
+                <Link key={link._id} to={link.linkTo} 
+                  className={`group relative overflow-hidden rounded-3xl isolate flex flex-col justify-end p-6 md:p-8 transition-transform duration-500 hover:-translate-y-1 hover:shadow-2xl hover:shadow-brand-500/20
+                    ${isLarge ? 'md:col-span-2 md:row-span-2' : 'col-span-1 row-span-1'}
+                  `}>
+                  
+                  {/* Background Image */}
+                  <div className="absolute inset-0 -z-10">
+                    <img 
+                      src={optimizeImage(link.image, isLarge ? 800 : 400)} 
+                      alt={link.title} 
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" 
+                      onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1612815154858-60aa4c59abe6?q=80&w=800&auto=format&fit=crop' }} 
+                    />
+                  </div>
+                  
+                  {/* Gradient Overlay */}
+                  <div className={`absolute inset-0 -z-10 transition-opacity duration-300
+                    ${isLarge ? 'bg-gradient-to-t from-black/80 via-black/30 to-transparent' : 'bg-gradient-to-t from-black/80 to-black/10 group-hover:from-black/90'}
+                  `}></div>
+
+                  {/* Content */}
+                  <div className="relative z-10 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                    <span className="inline-block px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-white text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-3 border border-white/10">Colección</span>
+                    <h3 className={`font-bold text-white leading-tight ${isLarge ? 'text-3xl sm:text-4xl lg:text-5xl' : 'text-xl sm:text-2xl'}`} dangerouslySetInnerHTML={{ __html: link.title.replace('\\n', ' ') }}></h3>
+                  </div>
+                </Link>
+              );
+            })
           ) : (
+            // Fallbacks si no hay categorias dinámicas configuradas
             <>
-              <Link to="/shop?category=Figuras y Coleccionables" className="group flex flex-col items-center w-[80px] sm:w-[120px]">
-                <div className="p-1 rounded-full bg-gradient-to-tr from-brand-400 to-brand-600 shadow-lg group-hover:shadow-brand-500/40 group-hover:-translate-y-1 transition-all duration-300 mb-3">
-                  <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-white flex items-center justify-center border-4 border-white overflow-hidden">
-                    <span role="img" aria-hidden="true" className="text-3xl sm:text-5xl group-hover:scale-110 transition-transform duration-300">🧸</span>
-                  </div>
+              <Link to="/shop?category=Figuras y Coleccionables" className="md:col-span-2 md:row-span-2 group relative overflow-hidden rounded-3xl isolate flex flex-col justify-end p-6 md:p-8 transition-transform duration-500 hover:-translate-y-1 hover:shadow-2xl">
+                <img src="https://images.unsplash.com/photo-1608222351212-18fe0ec7b13b?q=80&w=800&auto=format&fit=crop" className="absolute inset-0 -z-10 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Figuras" />
+                <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                <div className="relative z-10">
+                  <span className="inline-block px-3 py-1 bg-brand-500/80 backdrop-blur-md rounded-full text-white text-xs font-bold uppercase tracking-widest mb-3">Popular</span>
+                  <h3 className="font-bold text-white text-3xl md:text-5xl leading-tight">Figuras<br/>Coleccionables</h3>
                 </div>
-                <span className="font-bold text-neutral-800 text-xs sm:text-sm text-center group-hover:text-brand-600 transition-colors leading-tight">Figuras<br />Coleccionables</span>
               </Link>
 
-              <Link to="/shop?category=Hogar y Decoración" className="group flex flex-col items-center w-[80px] sm:w-[120px]">
-                <div className="p-1 rounded-full bg-gradient-to-tr from-brand-400 to-brand-600 shadow-lg group-hover:shadow-brand-500/40 group-hover:-translate-y-1 transition-all duration-300 mb-3">
-                  <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-white flex items-center justify-center border-4 border-white overflow-hidden">
-                    <span role="img" aria-hidden="true" className="text-3xl sm:text-5xl group-hover:scale-110 transition-transform duration-300">🪴</span>
-                  </div>
+              <Link to="/shop?category=Hogar y Decoración" className="group relative overflow-hidden rounded-3xl isolate flex flex-col justify-end p-6 transition-transform duration-500 hover:-translate-y-1 hover:shadow-xl">
+                <img src="https://images.unsplash.com/photo-1612815154858-60aa4c59abe6?q=80&w=400&auto=format&fit=crop" className="absolute inset-0 -z-10 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Hogar" />
+                <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/80 to-black/10"></div>
+                <div className="relative z-10 translate-y-2 group-hover:translate-y-0 transition-transform">
+                  <h3 className="font-bold text-white text-2xl leading-tight">Decoración<br/>Hogar</h3>
                 </div>
-                <span className="font-bold text-neutral-800 text-xs sm:text-sm text-center group-hover:text-brand-600 transition-colors leading-tight">Decoración<br />Hogar</span>
               </Link>
 
-              <Link to="/about" className="group flex flex-col items-center w-[80px] sm:w-[120px]">
-                <div className="p-1 rounded-full bg-gradient-to-tr from-neutral-400 to-neutral-600 shadow-lg group-hover:shadow-neutral-500/40 group-hover:-translate-y-1 transition-all duration-300 mb-3">
-                  <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-white flex items-center justify-center border-4 border-white overflow-hidden">
-                    <span role="img" aria-hidden="true" className="text-3xl sm:text-5xl group-hover:scale-110 transition-transform duration-300">⚙️</span>
-                  </div>
+              <Link to="/shop?sort=newest" className="group relative overflow-hidden rounded-3xl isolate flex flex-col justify-end p-6 transition-transform duration-500 hover:-translate-y-1 hover:shadow-xl">
+                <div className="absolute inset-0 -z-10 bg-gradient-to-tr from-brand-600 to-orange-500"></div>
+                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 mix-blend-overlay"></div>
+                <div className="relative z-10 translate-y-2 group-hover:translate-y-0 transition-transform">
+                  <span className="text-3xl mb-2 block">✨</span>
+                  <h3 className="font-bold text-white text-2xl leading-tight">Lo<br/>Nuevo</h3>
                 </div>
-                <span className="font-bold text-neutral-800 text-xs sm:text-sm text-center group-hover:text-neutral-600 transition-colors leading-tight">Prototipos<br />3D</span>
-              </Link>
-
-              <Link to="/shop?sort=newest" className="group flex flex-col items-center w-[80px] sm:w-[120px]">
-                <div className="p-1 rounded-full bg-gradient-to-tr from-yellow-400 to-orange-500 shadow-lg group-hover:shadow-orange-500/40 group-hover:-translate-y-1 transition-all duration-300 mb-3">
-                  <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-white flex items-center justify-center border-4 border-white overflow-hidden">
-                    <span role="img" aria-hidden="true" className="text-3xl sm:text-5xl group-hover:scale-110 transition-transform duration-300">✨</span>
-                  </div>
-                </div>
-                <span className="font-bold text-neutral-800 text-xs sm:text-sm text-center group-hover:text-orange-500 transition-colors leading-tight">Lo<br />Nuevo</span>
               </Link>
             </>
           )}
         </div>
       </section>
 
-      {/* Secciones Dinámicas */}
-      {homeSections.map((section, index) => {
-        let items = [];
-        if (section.type === 'featured') {
-          items = allProducts.filter(p => p.isFeatured && !p.requiresQuote);
-        } else if (section.type === 'sale') {
-          items = allProducts.filter(p => p.isOnSale && p.salePrice && !p.requiresQuote);
-        } else if (section.type === 'newest') {
-          items = allProducts.filter(p => p.isNewArrival && !p.requiresQuote);
-        } else if (section.type === 'category' && section.categoryFilter) {
-          items = allProducts.filter(p => p.category?.toLowerCase() === section.categoryFilter.toLowerCase() && !p.requiresQuote);
-        } else if (section.type === 'bespoke') {
-          items = allProducts.filter(p => p.requiresQuote);
-        }
+      {/* 5. Segundo Carrusel (Favoritos/Ofertas) */}
+      <div className="w-full relative z-10 bg-neutral-50/50 pt-10 pb-16 border-t border-neutral-100">
+        <section className="px-4 max-w-7xl mx-auto w-full">
+          <SectionHeader title="Favoritos de la Comunidad"
+            linkTo="/shop?sort=best-selling" linkLabel="Ver Más Vendidos" />
+          <ProductCarousel items={featured} fallback={recentProducts} />
+        </section>
+      </div>
 
-        // Aumentamos el límite para aprovechar el carrusel
-        items = items.slice(0, 12);
-
-        // Si no hay productos para esta sección y no está cargando, la ocultamos (para evitar secciones vacías)
-        if (!loading && items.length === 0) return null;
-
-        return (
-          <div key={section._id} className={`w-full border-b border-neutral-200/60 shadow-[0_4px_16px_rgba(0,0,0,0.02)] relative z-10 ${index % 2 !== 0 ? 'bg-neutral-50/50' : 'bg-white'}`}>
-            <section className={`pt-4 pb-0 md:pt-6 md:pb-0 px-4 max-w-7xl mx-auto w-full ${section.type === 'sale' ? 'bg-gradient-to-b from-red-50/40 to-transparent' : ''}`}>
-              <SectionHeader
-                title={section.title}
-                linkTo={section.linkTo}
-                linkLabel={section.linkLabel}
-              />
-              {loading ? <SectionSkeleton /> : <ProductCarousel items={items} fallback={[]} />}
-            </section>
-          </div>
-        );
-      })}
-
-      {/* Fallback si el admin no ha creado ninguna sección dinámica aún */}
-      {!loading && homeSections.length === 0 && (
-        <div className="w-full">
-          <div className="w-full border-b border-neutral-200/60 shadow-[0_4px_16px_rgba(0,0,0,0.02)] relative z-10">
-            <section id="newest" className="pt-4 pb-0 md:pt-6 md:pb-0 px-4 max-w-7xl mx-auto w-full">
-              <SectionHeader title="Recién Salidos de la Impresora"
-                linkTo="/shop?sort=newest" linkLabel="Ver Todo lo Nuevo" />
-              <ProductCarousel items={newArrivals} fallback={recentProducts} />
-            </section>
-          </div>
-
-          <div className="w-full border-b border-neutral-200/60 shadow-[0_4px_16px_rgba(0,0,0,0.02)] relative z-10">
-            <section id="featured" className="pt-4 pb-0 md:pt-6 md:pb-0 px-4 max-w-7xl mx-auto w-full">
-              <SectionHeader title="Favoritos de la Comunidad"
-                linkTo="/shop?sort=best-selling" linkLabel="Ver Más Vendidos" />
-              <ProductCarousel items={featured} fallback={recentProducts} />
-            </section>
-          </div>
-
-          {onSale.length > 0 && (
-            <div className="w-full border-b border-neutral-200/60 shadow-[0_4px_16px_rgba(0,0,0,0.02)] relative z-10">
-              <section className="pt-4 pb-0 md:pt-6 md:pb-0 px-4 max-w-7xl mx-auto w-full bg-gradient-to-b from-red-50/40 to-transparent">
-                <SectionHeader title="Aprovecha Antes Que Vuelen"
-                  linkTo="/shop" linkLabel="Ver Todas las Ofertas" />
-                <ProductCarousel items={onSale} fallback={[]} />
-              </section>
+      {/* 6. NUEVO: Franja Inmersiva "Cotiza tu Idea" (Custom CTA) */}
+      <section className="relative py-24 overflow-hidden isolate">
+        <div className="absolute inset-0 -z-20 bg-neutral-900"></div>
+        {/* Abstract glow */}
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-brand-900/40 via-neutral-900 to-neutral-900"></div>
+        
+        <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center gap-12 lg:gap-24">
+          <div className="w-full md:w-1/2">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-brand-300 text-sm font-bold uppercase tracking-widest mb-6">
+              <span className="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span>
+              Servicio a Medida
             </div>
-          )}
+            <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-white leading-[1.1] mb-6">
+              ¿Lo imaginas?<br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-brand-600">Nosotros lo imprimimos.</span>
+            </h2>
+            <p className="text-lg text-neutral-400 mb-8 max-w-lg">
+              Desde piezas de ingeniería hasta regalos únicos pintados a mano. Convierte tus ideas en plástico y resina de altísima calidad.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <Link to="/contact">
+                <Button variant="primary" className="h-14 px-8 text-lg font-bold shadow-brand-500/20 group">
+                  Cotizar mi diseño <PenTool className="ml-2 w-5 h-5 group-hover:rotate-12 transition-transform" />
+                </Button>
+              </Link>
+            </div>
+          </div>
+          
+          <div className="w-full md:w-1/2 relative">
+            <div className="aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl shadow-brand-500/10 border border-white/5 relative">
+              <img 
+                src="https://images.unsplash.com/photo-1631713217036-7451000b21ec?q=80&w=1200&auto=format&fit=crop" 
+                alt="Impresión 3D trabajando" 
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-tr from-brand-500/20 to-transparent mix-blend-overlay"></div>
+            </div>
+            
+            {/* Floating detail boxes */}
+            <div className="absolute -bottom-6 -left-6 bg-neutral-800 border border-neutral-700 p-4 rounded-2xl shadow-xl flex items-center gap-4 animate-float hidden sm:flex">
+              <div className="w-12 h-12 bg-neutral-900 rounded-xl flex items-center justify-center text-brand-400">
+                <Paintbrush size={24} />
+              </div>
+              <div>
+                <p className="text-white font-bold text-sm">Pintado a Mano</p>
+                <p className="text-neutral-400 text-xs">Acabados Premium</p>
+              </div>
+            </div>
+            
+            <div className="absolute -top-6 -right-6 bg-neutral-800 border border-neutral-700 p-4 rounded-2xl shadow-xl flex items-center gap-4 animate-float hidden sm:flex" style={{ animationDelay: '1s' }}>
+              <div className="w-12 h-12 bg-neutral-900 rounded-xl flex items-center justify-center text-orange-400">
+                <Zap size={24} />
+              </div>
+              <div>
+                <p className="text-white font-bold text-sm">Prototipado Rápido</p>
+                <p className="text-neutral-400 text-xs">Entrega en 48h</p>
+              </div>
+            </div>
+          </div>
         </div>
-      )}
+      </section>
 
-      {/* Value Proposition Section */}
-      <section className="py-24 bg-surface-card/50 border-t border-neutral-100 relative overflow-hidden">
-        {/* Decorative background glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-primary/5 blur-[120px] rounded-full pointer-events-none"></div>
-
+      {/* 7. Value Proposition Section (Simplificada o mejorada visualmente) */}
+      <section className="py-24 bg-surface-base relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 relative z-10">
           <div className="text-center mb-16">
-            <h2 className="text-2xl md:text-3xl font-bold mb-4">¿Por qué elegir ZAMIS Print?</h2>
+            <h2 className="text-2xl md:text-3xl font-bold mb-4">La Diferencia ZAMIS Print</h2>
             <div className="h-1 w-16 bg-primary mx-auto rounded-full"></div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 text-center mb-20">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="glass-panel p-10 rounded-3xl group hover:border-primary/30 transition-all duration-300 hover:-translate-y-2"
-            >
-              <div className="w-16 h-16 mx-auto bg-primary/10 text-primary rounded-2xl flex items-center justify-center mb-6 text-2xl group-hover:scale-110 group-hover:bg-primary/20 transition-transform">✨</div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12 text-center">
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+              className="bg-white p-10 rounded-3xl group hover:shadow-2xl hover:shadow-brand-500/5 border border-neutral-100 transition-all duration-300 hover:-translate-y-2">
+              <div className="w-16 h-16 mx-auto bg-brand-50 text-brand-600 rounded-2xl flex items-center justify-center mb-6 text-2xl group-hover:scale-110 group-hover:bg-brand-100 transition-transform">✨</div>
               <h3 className="text-lg md:text-xl font-bold mb-2">Calidad Premium</h3>
-              <p className="text-neutral-500">Usamos resina y PLA de la más alta calidad para asegurar detalles perfectos y durabilidad incomparable.</p>
+              <p className="text-neutral-500 text-sm">Usamos resina y PLA de la más alta calidad para asegurar detalles perfectos y durabilidad incomparable.</p>
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              className="glass-panel p-10 rounded-3xl group hover:border-accent/30 transition-all duration-300 hover:-translate-y-2"
-            >
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }}
+              className="bg-white p-10 rounded-3xl group hover:shadow-2xl hover:shadow-accent/5 border border-neutral-100 transition-all duration-300 hover:-translate-y-2">
               <div className="w-16 h-16 mx-auto bg-accent/10 text-accent rounded-2xl flex items-center justify-center mb-6 text-2xl group-hover:scale-110 group-hover:bg-accent/20 transition-transform">🎨</div>
               <h3 className="text-lg md:text-xl font-bold mb-2">100% Personalizable</h3>
-              <p className="text-neutral-500">Desde colores hasta grabados de texto o modelos a medida. Tu imaginación es nuestro único límite.</p>
+              <p className="text-neutral-500 text-sm">Desde colores hasta grabados de texto o modelos a medida. Tu imaginación es nuestro único límite.</p>
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.4 }}
-              className="glass-panel p-10 rounded-3xl group hover:border-green-500/30 transition-all duration-300 hover:-translate-y-2"
-            >
-              <div className="w-16 h-16 mx-auto bg-green-500/10 text-green-400 rounded-2xl flex items-center justify-center mb-6 text-2xl group-hover:scale-110 group-hover:bg-green-500/20 transition-transform">🚀</div>
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.4 }}
+              className="bg-white p-10 rounded-3xl group hover:shadow-2xl hover:shadow-green-500/5 border border-neutral-100 transition-all duration-300 hover:-translate-y-2">
+              <div className="w-16 h-16 mx-auto bg-green-50 text-green-500 rounded-2xl flex items-center justify-center mb-6 text-2xl group-hover:scale-110 group-hover:bg-green-100 transition-transform">🚀</div>
               <h3 className="text-lg md:text-xl font-bold mb-2">Envíos Rápidos</h3>
-              <p className="text-neutral-500">Producimos y enviamos en tiempo récord a toda Colombia para que tengas tu pieza cuanto antes.</p>
+              <p className="text-neutral-500 text-sm">Producimos y enviamos en tiempo récord a toda Colombia para que tengas tu pieza cuanto antes.</p>
             </motion.div>
-          </div>
-
-          <div className="max-w-4xl mx-auto">
-            <TrustBadges variant="default" />
           </div>
         </div>
       </section>
