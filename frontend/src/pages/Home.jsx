@@ -163,11 +163,11 @@ const Home = () => {
                   `}>
                   
                   {/* Background Image */}
-                  <div className="absolute inset-0 -z-10">
+                  <div className="absolute inset-0 -z-10 bg-white">
                     <img 
                       src={optimizeImage(link.image, isLarge ? 800 : 400)} 
                       alt={link.title} 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" 
+                      className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-700 ease-out" 
                       onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1612815154858-60aa4c59abe6?q=80&w=800&auto=format&fit=crop' }} 
                     />
                   </div>
@@ -188,28 +188,36 @@ const Home = () => {
             // Fallbacks si no hay categorias dinámicas configuradas
             <>
               <Link to="/shop?category=Figuras y Coleccionables" className="md:col-span-2 md:row-span-2 group relative overflow-hidden rounded-3xl isolate flex flex-col justify-end p-4 md:p-6 transition-transform duration-500 hover:-translate-y-1 hover:shadow-2xl">
-                <img src="https://images.unsplash.com/photo-1608222351212-18fe0ec7b13b?q=80&w=800&auto=format&fit=crop" className="absolute inset-0 -z-10 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Figuras" />
+                <div className="absolute inset-0 -z-10 bg-white">
+                  <img src="https://images.unsplash.com/photo-1608222351212-18fe0ec7b13b?q=80&w=800&auto=format&fit=crop" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Figuras" />
+                </div>
                 <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
                 <div className="relative z-10 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
                   <h3 className="font-bold text-white leading-tight drop-shadow-md text-2xl sm:text-3xl lg:text-4xl">Figuras y<br/>Coleccionables</h3>
                 </div>
               </Link>
               <Link to="/shop?category=Accesorios y Llaveros" className="col-span-1 row-span-1 group relative overflow-hidden rounded-3xl isolate flex flex-col justify-end p-4 md:p-6 transition-transform duration-500 hover:-translate-y-1 hover:shadow-2xl">
-                <img src="https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?q=80&w=400&auto=format&fit=crop" className="absolute inset-0 -z-10 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Llaveros" />
+                <div className="absolute inset-0 -z-10 bg-white">
+                  <img src="https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?q=80&w=400&auto=format&fit=crop" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Llaveros" />
+                </div>
                 <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/80 to-black/10 group-hover:from-black/90"></div>
                 <div className="relative z-10 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
                   <h3 className="font-bold text-white leading-tight drop-shadow-md text-lg sm:text-xl">Accesorios y<br/>Llaveros</h3>
                 </div>
               </Link>
               <Link to="/shop?category=Mascotas" className="col-span-1 row-span-1 group relative overflow-hidden rounded-3xl isolate flex flex-col justify-end p-4 md:p-6 transition-transform duration-500 hover:-translate-y-1 hover:shadow-2xl">
-                <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=400&auto=format&fit=crop" className="absolute inset-0 -z-10 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Mascotas" />
+                <div className="absolute inset-0 -z-10 bg-white">
+                  <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=400&auto=format&fit=crop" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Mascotas" />
+                </div>
                 <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/80 to-black/10 group-hover:from-black/90"></div>
                 <div className="relative z-10 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
                   <h3 className="font-bold text-white leading-tight drop-shadow-md text-lg sm:text-xl">Mascotas</h3>
                 </div>
               </Link>
               <Link to="/shop?category=Hogar y Decoración" className="col-span-1 row-span-1 md:col-span-2 group relative overflow-hidden rounded-3xl isolate flex flex-col justify-end p-4 md:p-6 transition-transform duration-500 hover:-translate-y-1 hover:shadow-2xl">
-                <img src="https://images.unsplash.com/photo-1612815154858-60aa4c59abe6?q=80&w=800&auto=format&fit=crop" className="absolute inset-0 -z-10 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Hogar" />
+                <div className="absolute inset-0 -z-10 bg-white">
+                  <img src="https://images.unsplash.com/photo-1612815154858-60aa4c59abe6?q=80&w=800&auto=format&fit=crop" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Hogar" />
+                </div>
                 <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/80 to-black/10 group-hover:from-black/90"></div>
                 <div className="relative z-10 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
                   <h3 className="font-bold text-white leading-tight drop-shadow-md text-lg sm:text-xl">Hogar y<br/>Decoración</h3>
