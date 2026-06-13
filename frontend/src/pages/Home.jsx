@@ -126,7 +126,7 @@ const Home = () => {
       <h2 className="text-xl md:text-2xl font-bold tracking-tight text-neutral-900">
         {title}
       </h2>
-      <Link to={linkTo} className="shrink-0 text-xs md:text-sm font-semibold uppercase tracking-wider text-brand-600 hover:text-brand-700 transition-colors flex items-center gap-0.5 group pb-1 border-b border-transparent hover:border-brand-600/30">
+      <Link to={linkTo} className="shrink-0 text-xs md:text-sm font-semibold text-brand-600 hover:text-brand-700 transition-colors flex items-center gap-0.5 group pb-1 border-b border-transparent hover:border-brand-600/30">
         <span className="hidden sm:inline">{linkLabel}</span>
         <span className="sm:hidden">Ver más</span>
         <ChevronRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
