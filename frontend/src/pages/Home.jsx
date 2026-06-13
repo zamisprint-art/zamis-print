@@ -247,17 +247,28 @@ const Home = () => {
               <span className="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span>
               {customCta?.badgeText || 'Servicio a Medida'}
             </div>
-            <h2 
-              className="text-3xl sm:text-4xl lg:text-6xl font-bold text-white leading-[1.1] mb-6"
-              dangerouslySetInnerHTML={{ __html: customCta?.title || '¿Lo imaginas?<br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-brand-600">Nosotros lo imprimimos.</span>' }}
-            ></h2>
+            <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-white leading-[1.1] mb-6">
+              {customCta?.title ? (
+                <>
+                  <span dangerouslySetInnerHTML={{ __html: customCta.title.split('<br/>')[0] }}></span>
+                  {customCta.title.includes('<br/>') && (
+                    <>
+                      <br/>
+                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-brand-600" dangerouslySetInnerHTML={{ __html: customCta.title.split('<br/>').slice(1).join('<br/>') }}></span>
+                    </>
+                  )}
+                </>
+              ) : (
+                <>¿Lo imaginas?<br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-brand-600">Nosotros lo imprimimos.</span></>
+              )}
+            </h2>
             <p className="text-lg text-neutral-400 mb-8 max-w-lg">
               {customCta?.description || 'Desde piezas de ingeniería hasta regalos únicos pintados a mano. Convierte tus ideas en plástico y resina de altísima calidad.'}
             </p>
             <div className="flex flex-wrap gap-4">
               <Link to={customCta?.buttonLink || "/contact"} className="w-full sm:w-auto">
                 <Button variant="primary" className="h-14 px-8 text-lg font-bold shadow-brand-500/20 group flex items-center justify-center whitespace-nowrap w-full">
-                  {customCta?.buttonText || 'Cotizar mi diseño'} <PenTool className="ml-2 w-5 h-5 shrink-0 group-hover:rotate-12 transition-transform" />
+                  {customCta?.buttonText || 'Cotizar mi diseño'}
                 </Button>
               </Link>
             </div>
