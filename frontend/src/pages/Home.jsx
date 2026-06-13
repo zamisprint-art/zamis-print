@@ -179,7 +179,7 @@ const Home = () => {
 
                   {/* Content */}
                   <div className="relative z-10 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                    <h3 className={`font-bold text-white leading-tight drop-shadow-md ${isLarge ? 'text-2xl sm:text-3xl lg:text-4xl' : 'text-lg sm:text-xl'}`} dangerouslySetInnerHTML={{ __html: link.title.replace('\\n', ' ') }}></h3>
+                    <h3 className={`font-bold text-white leading-tight drop-shadow-md ${isLarge ? 'text-xl sm:text-2xl lg:text-3xl' : 'text-base sm:text-lg'}`} dangerouslySetInnerHTML={{ __html: link.title.replace('\\n', ' ') }}></h3>
                   </div>
                 </Link>
               );
@@ -193,7 +193,7 @@ const Home = () => {
                 </div>
                 <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
                 <div className="relative z-10 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                  <h3 className="font-bold text-white leading-tight drop-shadow-md text-2xl sm:text-3xl lg:text-4xl">Figuras y<br/>Coleccionables</h3>
+                  <h3 className="font-bold text-white leading-tight drop-shadow-md text-xl sm:text-2xl lg:text-3xl">Figuras y<br/>Coleccionables</h3>
                 </div>
               </Link>
               <Link to="/shop?category=Accesorios y Llaveros" className="col-span-1 row-span-1 group relative overflow-hidden rounded-3xl isolate flex flex-col justify-end p-4 md:p-6 transition-transform duration-500 hover:-translate-y-1 hover:shadow-2xl">
@@ -202,7 +202,7 @@ const Home = () => {
                 </div>
                 <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/80 to-black/10 group-hover:from-black/90"></div>
                 <div className="relative z-10 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                  <h3 className="font-bold text-white leading-tight drop-shadow-md text-lg sm:text-xl">Accesorios y<br/>Llaveros</h3>
+                  <h3 className="font-bold text-white leading-tight drop-shadow-md text-base sm:text-lg">Accesorios y<br/>Llaveros</h3>
                 </div>
               </Link>
               <Link to="/shop?category=Mascotas" className="col-span-1 row-span-1 group relative overflow-hidden rounded-3xl isolate flex flex-col justify-end p-4 md:p-6 transition-transform duration-500 hover:-translate-y-1 hover:shadow-2xl">
@@ -211,7 +211,7 @@ const Home = () => {
                 </div>
                 <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/80 to-black/10 group-hover:from-black/90"></div>
                 <div className="relative z-10 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                  <h3 className="font-bold text-white leading-tight drop-shadow-md text-lg sm:text-xl">Mascotas</h3>
+                  <h3 className="font-bold text-white leading-tight drop-shadow-md text-base sm:text-lg">Mascotas</h3>
                 </div>
               </Link>
               <Link to="/shop?category=Hogar y Decoración" className="col-span-1 row-span-1 md:col-span-2 group relative overflow-hidden rounded-3xl isolate flex flex-col justify-end p-4 md:p-6 transition-transform duration-500 hover:-translate-y-1 hover:shadow-2xl">
@@ -220,7 +220,7 @@ const Home = () => {
                 </div>
                 <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/80 to-black/10 group-hover:from-black/90"></div>
                 <div className="relative z-10 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                  <h3 className="font-bold text-white leading-tight drop-shadow-md text-lg sm:text-xl">Hogar y<br/>Decoración</h3>
+                  <h3 className="font-bold text-white leading-tight drop-shadow-md text-base sm:text-lg">Hogar y<br/>Decoración</h3>
                 </div>
               </Link>
             </>
