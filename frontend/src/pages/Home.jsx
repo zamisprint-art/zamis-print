@@ -136,7 +136,7 @@ const Home = () => {
       </div>
 
       {/* 3. Primer Carrusel (Lo Nuevo o Principal) */}
-      <div className="w-full relative z-10 bg-white pt-10 pb-6">
+      <div className="w-full relative z-10 bg-white pt-8 pb-4">
         <section className="px-4 max-w-7xl mx-auto w-full">
           <SectionHeader title="Recién Salidos de la Impresora"
             linkTo="/shop?sort=newest" linkLabel="Ver Todo lo Nuevo" />
@@ -145,20 +145,20 @@ const Home = () => {
       </div>
 
       {/* 4. NUEVO: Categorías Bento Grid */}
-      <section className="py-16 max-w-7xl mx-auto px-4 w-full">
+      <section className="py-10 max-w-7xl mx-auto px-4 w-full">
         <SectionHeader title="Diseños por Colección" linkTo="/shop" linkLabel="Ver catálogo completo" />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 auto-rows-[200px]">
           {loading ? (
             [...Array(4)].map((_, i) => (
-              <Skeleton key={i} className={`rounded-3xl ${i === 0 ? 'lg:col-span-2 lg:row-span-2' : ''}`} />
+              <Skeleton key={i} className={`rounded-xl ${i === 0 ? 'lg:col-span-2 lg:row-span-2' : ''}`} />
             ))
           ) : categoryLinks.length > 0 ? (
             categoryLinks.slice(0, 5).map((link, i) => {
               const isLarge = i === 0; // Primer item ocupa más espacio en pantallas grandes
               return (
                 <Link key={link._id} to={link.linkTo} 
-                  className={`group relative overflow-hidden rounded-3xl isolate flex flex-col justify-end p-4 md:p-6 transition-transform duration-500 hover:-translate-y-1 hover:shadow-2xl hover:shadow-brand-500/20
+                  className={`group relative overflow-hidden rounded-xl isolate flex flex-col justify-end p-4 md:p-6 transition-transform duration-500 hover:-translate-y-1 hover:shadow-2xl hover:shadow-brand-500/20
                     ${isLarge ? 'md:col-span-2 md:row-span-2' : 'col-span-1 row-span-1'}
                   `}>
                   
@@ -187,7 +187,7 @@ const Home = () => {
           ) : (
             // Fallbacks si no hay categorias dinámicas configuradas
             <>
-              <Link to="/shop?category=Figuras y Coleccionables" className="md:col-span-2 md:row-span-2 group relative overflow-hidden rounded-3xl isolate flex flex-col justify-end p-4 md:p-6 transition-transform duration-500 hover:-translate-y-1 hover:shadow-2xl">
+              <Link to="/shop?category=Figuras y Coleccionables" className="md:col-span-2 md:row-span-2 group relative overflow-hidden rounded-xl isolate flex flex-col justify-end p-4 md:p-6 transition-transform duration-500 hover:-translate-y-1 hover:shadow-2xl">
                 <div className="absolute inset-0 -z-10 bg-white">
                   <img src="https://images.unsplash.com/photo-1608222351212-18fe0ec7b13b?q=80&w=800&auto=format&fit=crop" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Figuras" />
                 </div>
@@ -196,7 +196,7 @@ const Home = () => {
                   <h3 className="font-bold text-white leading-tight drop-shadow-md text-xl sm:text-2xl lg:text-3xl">Figuras y<br/>Coleccionables</h3>
                 </div>
               </Link>
-              <Link to="/shop?category=Accesorios y Llaveros" className="col-span-1 row-span-1 group relative overflow-hidden rounded-3xl isolate flex flex-col justify-end p-4 md:p-6 transition-transform duration-500 hover:-translate-y-1 hover:shadow-2xl">
+              <Link to="/shop?category=Accesorios y Llaveros" className="col-span-1 row-span-1 group relative overflow-hidden rounded-xl isolate flex flex-col justify-end p-4 md:p-6 transition-transform duration-500 hover:-translate-y-1 hover:shadow-2xl">
                 <div className="absolute inset-0 -z-10 bg-white">
                   <img src="https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?q=80&w=400&auto=format&fit=crop" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Llaveros" />
                 </div>
@@ -205,7 +205,7 @@ const Home = () => {
                   <h3 className="font-bold text-white leading-tight drop-shadow-md text-base sm:text-lg">Accesorios y<br/>Llaveros</h3>
                 </div>
               </Link>
-              <Link to="/shop?category=Mascotas" className="col-span-1 row-span-1 group relative overflow-hidden rounded-3xl isolate flex flex-col justify-end p-4 md:p-6 transition-transform duration-500 hover:-translate-y-1 hover:shadow-2xl">
+              <Link to="/shop?category=Mascotas" className="col-span-1 row-span-1 group relative overflow-hidden rounded-xl isolate flex flex-col justify-end p-4 md:p-6 transition-transform duration-500 hover:-translate-y-1 hover:shadow-2xl">
                 <div className="absolute inset-0 -z-10 bg-white">
                   <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=400&auto=format&fit=crop" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Mascotas" />
                 </div>
@@ -214,7 +214,7 @@ const Home = () => {
                   <h3 className="font-bold text-white leading-tight drop-shadow-md text-base sm:text-lg">Mascotas</h3>
                 </div>
               </Link>
-              <Link to="/shop?category=Hogar y Decoración" className="col-span-1 row-span-1 md:col-span-2 group relative overflow-hidden rounded-3xl isolate flex flex-col justify-end p-4 md:p-6 transition-transform duration-500 hover:-translate-y-1 hover:shadow-2xl">
+              <Link to="/shop?category=Hogar y Decoración" className="col-span-1 row-span-1 md:col-span-2 group relative overflow-hidden rounded-xl isolate flex flex-col justify-end p-4 md:p-6 transition-transform duration-500 hover:-translate-y-1 hover:shadow-2xl">
                 <div className="absolute inset-0 -z-10 bg-white">
                   <img src="https://images.unsplash.com/photo-1612815154858-60aa4c59abe6?q=80&w=800&auto=format&fit=crop" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="Hogar" />
                 </div>
@@ -229,7 +229,7 @@ const Home = () => {
       </section>
 
       {/* 5. Segundo Carrusel (Favoritos/Ofertas) */}
-      <div className="w-full relative z-10 bg-neutral-50/50 pt-10 pb-16 border-t border-neutral-100">
+      <div className="w-full relative z-10 bg-neutral-50/50 pt-8 pb-10 border-t border-neutral-100">
         <section className="px-4 max-w-7xl mx-auto w-full">
           <SectionHeader title="Favoritos de la Comunidad"
             linkTo="/shop?sort=best-selling" linkLabel="Ver Más Vendidos" />
@@ -238,7 +238,7 @@ const Home = () => {
       </div>
 
       {/* 6. NUEVO: Franja Inmersiva "Cotiza tu Idea" (Custom CTA) */}
-      <section className="relative py-12 lg:py-16 overflow-hidden isolate">
+      <section className="relative py-8 lg:py-12 overflow-hidden isolate">
         <div className="absolute inset-0 -z-20 bg-neutral-900"></div>
         {/* Abstract glow */}
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-brand-900/40 via-neutral-900 to-neutral-900"></div>
@@ -281,23 +281,23 @@ const Home = () => {
               /* Asymmetric 5-Image Collage (CSS Grid) */
               <div className="grid grid-cols-3 grid-rows-3 gap-3 aspect-square w-full max-w-lg mx-auto relative z-10">
                 {/* Center / Main Large Image */}
-                <div className="col-span-2 row-span-2 rounded-2xl overflow-hidden shadow-2xl shadow-brand-500/10 border border-white/5 bg-white group">
+                <div className="col-span-2 row-span-2 rounded-xl overflow-hidden shadow-2xl shadow-brand-500/10 border border-white/5 bg-white group">
                   <img src={optimizeImage(customCta.images[0], 600)} alt="CTA 1" className="w-full h-full object-contain p-2 md:p-4 group-hover:scale-105 transition-transform duration-700" />
                 </div>
                 {/* Top Right Small */}
-                <div className="col-span-1 row-span-1 rounded-2xl overflow-hidden border border-white/5 bg-white group">
+                <div className="col-span-1 row-span-1 rounded-xl overflow-hidden border border-white/5 bg-white group">
                   <img src={optimizeImage(customCta.images[1], 300)} alt="CTA 2" className="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-700" />
                 </div>
                 {/* Middle Right Small */}
-                <div className="col-span-1 row-span-1 rounded-2xl overflow-hidden border border-white/5 bg-white group">
+                <div className="col-span-1 row-span-1 rounded-xl overflow-hidden border border-white/5 bg-white group">
                   <img src={optimizeImage(customCta.images[2], 300)} alt="CTA 3" className="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-700" />
                 </div>
                 {/* Bottom Left Small */}
-                <div className="col-span-1 row-span-1 rounded-2xl overflow-hidden border border-white/5 bg-white group">
+                <div className="col-span-1 row-span-1 rounded-xl overflow-hidden border border-white/5 bg-white group">
                   <img src={optimizeImage(customCta.images[3], 300)} alt="CTA 4" className="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-700" />
                 </div>
                 {/* Bottom Middle/Right Wide */}
-                <div className="col-span-2 row-span-1 rounded-2xl overflow-hidden border border-white/5 bg-white group">
+                <div className="col-span-2 row-span-1 rounded-xl overflow-hidden border border-white/5 bg-white group">
                   <img src={optimizeImage(customCta.images[4], 500)} alt="CTA 5" className="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-700" />
                 </div>
               </div>
