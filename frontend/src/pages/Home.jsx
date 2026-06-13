@@ -263,9 +263,10 @@ const Home = () => {
           <div className="w-full md:w-1/2 relative">
             <div className="aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl shadow-brand-500/10 border border-white/5 relative">
               <img 
-                src="https://images.unsplash.com/photo-1631713217036-7451000b21ec?q=80&w=1200&auto=format&fit=crop" 
+                src="https://images.unsplash.com/photo-1593376853899-fbb47a057fa0?q=80&w=1200&auto=format&fit=crop" 
                 alt="Impresión 3D trabajando" 
                 className="w-full h-full object-cover"
+                onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1608222351212-18fe0ec7b13b?q=80&w=1200&auto=format&fit=crop' }}
               />
               <div className="absolute inset-0 bg-gradient-to-tr from-brand-500/20 to-transparent mix-blend-overlay"></div>
             </div>
