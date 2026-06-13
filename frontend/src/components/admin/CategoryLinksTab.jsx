@@ -21,7 +21,7 @@ const CategoryLinksTab = () => {
 
   const checkImageDimensions = (file) => {
     return new Promise((resolve) => {
-      const img = new Image();
+      const img = new window.Image();
       const objectUrl = URL.createObjectURL(file);
       img.onload = () => {
         URL.revokeObjectURL(objectUrl);
